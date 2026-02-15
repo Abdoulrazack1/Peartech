@@ -556,6 +556,14 @@ body {
     overflow: hidden;
     position: relative;
     height: 400px;
+    animation: autoSlide 15s infinite;
+}
+
+/* Animation automatique (nécessite JavaScript pour être pleinement fonctionnelle) */
+@keyframes autoSlide {
+    0%, 30% { }
+    33%, 63% { }
+    66%, 96% { }
 }
 
 /* Cacher les radio buttons */
@@ -576,7 +584,7 @@ body {
     position: relative;
 }
 
-/* Animation automatique du carrousel avec CSS */
+/* Navigation par radio */
 #slide1:checked ~ .carousel-slides {
     transform: translateX(0%);
 }
@@ -587,23 +595,6 @@ body {
 
 #slide3:checked ~ .carousel-slides {
     transform: translateX(-200%);
-}
-
-/* Défilement automatique avec animation CSS */
-.carousel-container {
-    animation: autoSlide 15s infinite;
-}
-
-@keyframes autoSlide {
-    0%, 30% {
-        /* Slide 1 */
-    }
-    33%, 63% {
-        /* Slide 2 */
-    }
-    66%, 96% {
-        /* Slide 3 */
-    }
 }
 
 /* Pause animation au hover */
@@ -752,14 +743,6 @@ body {
     border-color: var(--primary);
     background: rgba(59, 130, 246, 0.1);
     transform: translateX(-4px);
-}
-
-/* Activer le slide-item correspondant */
-#slide1:checked ~ .slide-menu label:nth-child(1),
-#slide2:checked ~ .slide-menu label:nth-child(2),
-#slide3:checked ~ .slide-menu label:nth-child(3) {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.1);
 }
 
 /* ============================================
@@ -1467,8 +1450,6 @@ body {
         display: flex;
     }
     
-    .nav-menu,
-    .nav-actions .connect-btn,
     .nav-dropdown {
         display: none !important;
     }
@@ -1481,18 +1462,18 @@ body {
         gap: 1rem;
     }
     
-    .nav-actions {
+    .header-nav {
         gap: 0.5rem;
         margin-left: auto;
     }
     
-    .nav-actions .icon-btn {
+    .header-nav .icon-btn {
         padding: 0.6rem;
         width: 44px;
         height: 44px;
     }
     
-    .nav-actions .icon-btn span:not(.material-symbols-outlined) {
+    .header-nav .icon-btn span:not(.material-symbols-outlined) {
         display: none;
     }
     
@@ -1686,7 +1667,7 @@ body {
         gap: 2rem;
     }
     
-    .footer-section h4 {
+    .footer-column h4 {
         margin-bottom: 1rem;
     }
 }
@@ -1702,12 +1683,12 @@ body {
         display: none;
     }
     
-    .logo-image {
+    .logo-icon {
         width: 32px;
         height: 32px;
     }
     
-    .nav-actions .icon-btn {
+    .header-nav .icon-btn {
         width: 40px;
         height: 40px;
         padding: 0.5rem;

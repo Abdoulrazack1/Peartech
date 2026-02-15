@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NovaCompute - Boutique d'ordinateurs</title>
-    <link rel="stylesheet" href="novacompute.css">
+    <link rel="stylesheet" href="asset/css/page_accueil.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="/asset/css/page_accueil.css">
 </head>
 <body>
 
@@ -108,33 +107,28 @@
                         </div>
                     </div>
 
-                    <!-- Carrousel droite (CSS pur) -->
+                    <!-- Carrousel droite -->
                     <div class="hero-right">
                         <div class="carousel-container">
-                            <!-- Radio inputs cachés pour contrôler le carrousel -->
+                            <!-- Radio inputs cachés -->
                             <input type="radio" name="carousel" id="slide1" class="carousel-radio" checked>
                             <input type="radio" name="carousel" id="slide2" class="carousel-radio">
                             <input type="radio" name="carousel" id="slide3" class="carousel-radio">
                             
                             <!-- Slides -->
                             <div class="carousel-slides">
-                                <!-- Slide 1 -->
                                 <div class="carousel-slide">
                                     <div class="carousel-image">
                                         <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800" alt="PC Setup">
                                     </div>
                                     <div class="carousel-caption">Carrousel d'offres et de gammes d'ordinateurs</div>
                                 </div>
-
-                                <!-- Slide 2 -->
                                 <div class="carousel-slide">
                                     <div class="carousel-image">
                                         <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800" alt="Gaming Setup">
                                     </div>
                                     <div class="carousel-caption">Carrousel d'offres et de gammes d'ordinateurs</div>
                                 </div>
-
-                                <!-- Slide 3 -->
                                 <div class="carousel-slide">
                                     <div class="carousel-image">
                                         <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800" alt="Laptop">
@@ -143,7 +137,7 @@
                                 </div>
                             </div>
 
-                            <!-- Navigation avec labels -->
+                            <!-- Navigation -->
                             <div class="carousel-nav">
                                 <label for="slide1" class="carousel-prev" aria-label="Slide précédent"></label>
                                 <label for="slide3" class="carousel-next" aria-label="Slide suivant"></label>
@@ -186,19 +180,16 @@
                         <h3 class="category-title">PC portables</h3>
                         <p class="category-description">Pour le bureau, les études et le télétravail.</p>
                     </div>
-
                     <div class="category-card">
                         <div class="category-label">Visuel - PC gamer</div>
                         <h3 class="category-title">PC gamer</h3>
                         <p class="category-description">Haute performance, RGB et refroidissement optimisé.</p>
                     </div>
-
                     <div class="category-card">
                         <div class="category-label">Visuel - Bureautique</div>
                         <h3 class="category-title">PC bureautique</h3>
                         <p class="category-description">Fiables et silencieux pour une productivité maximale.</p>
                     </div>
-
                     <div class="category-card">
                         <div class="category-label">Visuel - Accessoires</div>
                         <h3 class="category-title">Accessoires & périphériques</h3>
@@ -253,12 +244,10 @@
                         <h3>Livraison rapide & suivie</h3>
                         <p>Expédition sous 24/48h et suivi détaillé de votre commande en ligne.</p>
                     </div>
-
                     <div class="service-card">
                         <h3>Garantie 2 ans minimum</h3>
                         <p>Tous nos PC sont testés et garantis 2 ans, avec des options d'extension.</p>
                     </div>
-
                     <div class="service-card">
                         <h3>Support technique expert</h3>
                         <p>Des spécialistes vous accompagnent pour l'installation et les questions techniques.</p>
@@ -292,7 +281,6 @@
                         <li><a href="#">Retours & garanties</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-column">
                     <h4>À propos</h4>
                     <ul>
@@ -301,7 +289,6 @@
                         <li><a href="#">Carrières</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-column">
                     <h4>Légal</h4>
                     <ul>
@@ -319,15 +306,16 @@
     </footer>
 
     <!-- Scripts modulaires - Ordre important -->
-    <script src="/asset/js/data.js"></script>               <!-- Base de données -->
-    <script src="/asset/js/product_grid.js"></script>       <!-- Génération dynamique des produits -->
-    <script src="/asset/js/darkmode.js"></script>
-    <script src="/asset/js/recherche.js"></script>
-    <script src="/asset/js/dropdown.js"></script>
-    <script src="/asset/js/animation.js"></script>
-    <script src="/asset/js/filtre.js"></script>
-    <script src="/asset/js/panier.js"></script>
-    <script src="/asset/js/main.js"></script>
-    <!-- Le script menu_burger.js peut être ajouté si nécessaire -->
+    <script src="asset/js/data.js"></script>
+    <script src="asset/js/product-grid.js"></script>
+    <script src="asset/js/darkmode.js"></script>
+    <script src="asset/js/recherche.js"></script>
+    <script src="asset/js/dropdown.js"></script>
+    <script src="asset/js/animation.js"></script>
+    <script src="asset/js/filtre.js"></script>
+    <script src="asset/js/panier.js"></script>
+    <script src="asset/js/main.js"></script>
+    <!-- Script du carrousel automatique -->
+    <script src="asset/js/carousel.js"></script>
 </body>
 </html>
