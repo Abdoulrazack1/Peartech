@@ -68,7 +68,7 @@
     ];
 
     // ------------------------------------------------------------
-    // PRODUITS
+    // PRODUITS avec options de personnalisation
     // ------------------------------------------------------------
     const products = [
         {
@@ -76,7 +76,7 @@
             name: 'Ultrabook Nova 14" Pro',
             slug: 'ultrabook-nova-14-pro',
             categoryId: 'cat_portable',
-            price: 1299.00,
+            basePrice: 1299.00,
             oldPrice: null,
             specs: {
                 processor: 'Intel Core i5-1240P',
@@ -96,14 +96,29 @@
             isNew: true,
             isBestSeller: false,
             rating: 4.7,
-            reviews: 23
+            reviews: 23,
+            // Options disponibles pour ce produit
+            options: {
+                ram: [
+                    { label: '16 Go', price: 0 },
+                    { label: '32 Go', price: 200 }
+                ],
+                storage: [
+                    { label: '1 To SSD', price: 0 },
+                    { label: '2 To SSD', price: 150 }
+                ],
+                color: [
+                    { label: 'Gris métal', price: 0 },
+                    { label: 'Argent', price: 0 }
+                ]
+            }
         },
         {
             id: 2,
             name: 'Setup Gamer Orion',
             slug: 'setup-gamer-orion',
             categoryId: 'cat_gamer',
-            price: 1899.00,
+            basePrice: 1899.00,
             oldPrice: 2099.00,
             specs: {
                 processor: 'AMD Ryzen 7 7800X3D',
@@ -123,14 +138,29 @@
             isNew: false,
             isBestSeller: true,
             rating: 4.9,
-            reviews: 47
+            reviews: 47,
+            options: {
+                ram: [
+                    { label: '32 Go', price: 0 },
+                    { label: '64 Go', price: 250 }
+                ],
+                storage: [
+                    { label: '1 To SSD', price: 0 },
+                    { label: '2 To SSD', price: 150 },
+                    { label: '4 To SSD', price: 400 }
+                ],
+                rgb: [
+                    { label: 'RGB standard', price: 0 },
+                    { label: 'RGB avancé', price: 80 }
+                ]
+            }
         },
         {
             id: 3,
             name: 'Studio Créatif 27"',
             slug: 'studio-creatif-27',
             categoryId: 'cat_creation',
-            price: 2299.00,
+            basePrice: 2299.00,
             oldPrice: null,
             specs: {
                 processor: 'Intel Core i9-13900K',
@@ -150,14 +180,28 @@
             isNew: true,
             isBestSeller: false,
             rating: 4.8,
-            reviews: 12
+            reviews: 12,
+            options: {
+                ram: [
+                    { label: '32 Go', price: 0 },
+                    { label: '64 Go', price: 300 }
+                ],
+                storage: [
+                    { label: '2 To SSD', price: 0 },
+                    { label: '4 To SSD', price: 200 }
+                ],
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Blanc', price: 0 }
+                ]
+            }
         },
         {
             id: 4,
             name: 'Mini PC Bureau Essentiel',
             slug: 'mini-pc-bureau-essentiel',
             categoryId: 'cat_fixe',
-            price: 699.00,
+            basePrice: 699.00,
             oldPrice: 799.00,
             specs: {
                 processor: 'Intel Core i3-12100',
@@ -176,14 +220,24 @@
             isNew: false,
             isBestSeller: false,
             rating: 4.5,
-            reviews: 31
+            reviews: 31,
+            options: {
+                ram: [
+                    { label: '8 Go', price: 0 },
+                    { label: '16 Go', price: 60 }
+                ],
+                storage: [
+                    { label: '512 Go SSD', price: 0 },
+                    { label: '1 To SSD', price: 70 }
+                ]
+            }
         },
         {
             id: 5,
             name: 'Laptop Gaming ROG 15"',
             slug: 'laptop-gaming-rog-15',
             categoryId: 'cat_portable',
-            price: 1799.00,
+            basePrice: 1799.00,
             oldPrice: 1999.00,
             specs: {
                 processor: 'Intel Core i7-13700H',
@@ -203,14 +257,28 @@
             isNew: false,
             isBestSeller: true,
             rating: 4.8,
-            reviews: 54
+            reviews: 54,
+            options: {
+                ram: [
+                    { label: '16 Go', price: 0 },
+                    { label: '32 Go', price: 200 }
+                ],
+                storage: [
+                    { label: '1 To SSD', price: 0 },
+                    { label: '2 To SSD', price: 150 }
+                ],
+                screen: [
+                    { label: 'FHD 144Hz', price: 0 },
+                    { label: 'QHD 165Hz', price: 150 }
+                ]
+            }
         },
         {
             id: 6,
             name: 'MacBook Pro 16" Alternative',
             slug: 'macbook-pro-16-alternative',
             categoryId: 'cat_creation',
-            price: 2499.00,
+            basePrice: 2499.00,
             oldPrice: null,
             specs: {
                 processor: 'Intel Core i9-13950HX',
@@ -230,14 +298,24 @@
             isNew: true,
             isBestSeller: false,
             rating: 5.0,
-            reviews: 8
+            reviews: 8,
+            options: {
+                ram: [
+                    { label: '32 Go', price: 0 },
+                    { label: '64 Go', price: 400 }
+                ],
+                storage: [
+                    { label: '2 To SSD', price: 0 },
+                    { label: '4 To SSD', price: 300 }
+                ]
+            }
         },
         {
             id: 7,
             name: 'PC Gamer Predator',
             slug: 'pc-gamer-predator',
             categoryId: 'cat_gamer',
-            price: 2899.00,
+            basePrice: 2899.00,
             oldPrice: 3199.00,
             specs: {
                 processor: 'AMD Ryzen 9 7950X3D',
@@ -257,14 +335,28 @@
             isNew: false,
             isBestSeller: false,
             rating: 4.9,
-            reviews: 19
+            reviews: 19,
+            options: {
+                ram: [
+                    { label: '64 Go', price: 0 },
+                    { label: '128 Go', price: 500 }
+                ],
+                storage: [
+                    { label: '2 To SSD', price: 0 },
+                    { label: '4 To SSD', price: 250 }
+                ],
+                rgb: [
+                    { label: 'RGB standard', price: 0 },
+                    { label: 'RGB premium', price: 100 }
+                ]
+            }
         },
         {
             id: 8,
             name: 'Chromebook Ultra 13"',
             slug: 'chromebook-ultra-13',
             categoryId: 'cat_portable',
-            price: 499.00,
+            basePrice: 499.00,
             oldPrice: 549.00,
             specs: {
                 processor: 'Intel Celeron N4500',
@@ -283,14 +375,24 @@
             isNew: true,
             isBestSeller: false,
             rating: 4.3,
-            reviews: 62
+            reviews: 62,
+            options: {
+                ram: [
+                    { label: '8 Go', price: 0 },
+                    { label: '16 Go', price: 80 }
+                ],
+                storage: [
+                    { label: '256 Go eMMC', price: 0 },
+                    { label: '512 Go SSD', price: 100 }
+                ]
+            }
         },
         {
             id: 9,
             name: 'Écran Gaming 27" 165Hz',
             slug: 'ecran-gaming-27-165hz',
             categoryId: 'cat_peripheriques',
-            price: 349.00,
+            basePrice: 349.00,
             oldPrice: 399.00,
             specs: {
                 size: '27"',
@@ -310,14 +412,15 @@
             isNew: false,
             isBestSeller: true,
             rating: 4.7,
-            reviews: 33
+            reviews: 33,
+            options: {} // pas d'options pour cet écran
         },
         {
             id: 10,
             name: 'Clavier Mécanique RGB',
             slug: 'clavier-mecanique-rgb',
             categoryId: 'cat_peripheriques',
-            price: 129.00,
+            basePrice: 129.00,
             oldPrice: null,
             specs: {
                 type: 'Mécanique',
@@ -336,45 +439,26 @@
             isNew: true,
             isBestSeller: false,
             rating: 4.6,
-            reviews: 27
+            reviews: 27,
+            options: {
+                switches: [
+                    { label: 'Cherry MX Red', price: 0 },
+                    { label: 'Cherry MX Blue', price: 0 },
+                    { label: 'Cherry MX Brown', price: 0 }
+                ]
+            }
         }
     ];
 
     // ------------------------------------------------------------
-    // PROMOTIONS / Bannières
-    // ------------------------------------------------------------
-    const promotions = [
-        {
-            id: 'promo_printemps',
-            title: 'Printemps du Gaming',
-            description: '-15% sur tous les PC gamers avec le code PRINTEMPS15',
-            bannerImage: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800',
-            startDate: '2025-03-20',
-            endDate: '2025-04-10',
-            discountPercent: 15,
-            targetCategories: ['cat_gamer']
-        },
-        {
-            id: 'promo_rentree',
-            title: 'Rentrée étudiante',
-            description: 'Économisez jusqu\'à 100€ sur les PC portables',
-            bannerImage: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800',
-            startDate: '2025-08-15',
-            endDate: '2025-09-30',
-            discountPercent: null,
-            targetCategories: ['cat_portable']
-        }
-    ];
-
-    // ------------------------------------------------------------
-    // FONCTIONS UTILITAIRES (optionnelles)
+    // FONCTIONS UTILITAIRES
     // ------------------------------------------------------------
     const helpers = {
         // Récupérer un produit par son ID
         getProductById: function(id) {
             return products.find(p => p.id === parseInt(id));
         },
-        // Récupérer les produits d'une catégorie
+        // Récupérer les produits d'une catégorie (par slug)
         getProductsByCategory: function(categorySlug) {
             const cat = categories.find(c => c.slug === categorySlug);
             if (!cat) return [];
@@ -400,6 +484,11 @@
         // Obtenir une catégorie par son slug
         getCategoryBySlug: function(slug) {
             return categories.find(c => c.slug === slug);
+        },
+        // Obtenir le slug d'une catégorie à partir de son ID
+        getCategorySlugFromId: function(categoryId) {
+            const cat = categories.find(c => c.id === categoryId);
+            return cat ? cat.slug : '';
         }
     };
 
@@ -409,11 +498,10 @@
     window.NovaComputeDB = {
         categories: categories,
         products: products,
-        promotions: promotions,
-        ...helpers  // intègre les fonctions helpers
+        promotions: [], // à remplir si besoin
+        ...helpers
     };
 
-    // Pour les modules ES6 (si vous utilisez des imports)
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = window.NovaComputeDB;
     }

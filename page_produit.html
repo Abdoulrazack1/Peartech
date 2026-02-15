@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaCompute - Détail produit</title>
+    <link rel="stylesheet" href="asset/css/page_accueil.css">
+    <link rel="stylesheet" href="asset/css/page_produit.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+
+    <!-- HEADER (identique à la page d'accueil) -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">PC</div>
+                    <div class="logo-text">
+                        <div class="logo-title">NovaCompute</div>
+                        <div class="logo-subtitle">Boutique d'ordinateurs</div>
+                    </div>
+                </div>
+                <div class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="search-input" placeholder="Rechercher un PC, une marque ou une configuration">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <nav class="header-nav">
+                    <button class="nav-dropdown">
+                        CATÉGORIES
+                        <span>Tous les PC</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">history</span>
+                    </button>
+                    <button class="icon-btn" id="theme-toggle">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
+                    </button>
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Fil d'Ariane -->
+            <div class="breadcrumb" id="breadcrumb"></div>
+
+            <!-- Section produit -->
+            <div class="product-detail" id="product-detail">
+                <!-- Le contenu sera injecté par JS -->
+            </div>
+
+            <!-- Produits similaires -->
+            <section class="similar-products">
+                <h2>Produits similaires recommandés</h2>
+                <div class="products-grid" id="similar-products-grid"></div>
+                <div class="text-center">
+                    <a href="#" class="link-arrow">Voir tous les produits similaires</a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- FOOTER (identique) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Aide & services</h4>
+                    <ul>
+                        <li><a href="#">FAQ & centre d'aide</a></li>
+                        <li><a href="#">Suivi de commande</a></li>
+                        <li><a href="#">Retours & garanties</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>À propos</h4>
+                    <ul>
+                        <li><a href="#">Notre histoire</a></li>
+                        <li><a href="#">Magasins & rendez-vous</a></li>
+                        <li><a href="#">Carrières</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Conditions générales</a></li>
+                        <li><a href="#">Confidentialité & cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 NovaCompute. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="asset/js/data.js"></script>
+    <script src="asset/js/darkmode.js"></script>
+    <script src="asset/js/recherche.js"></script>
+    <script src="asset/js/dropdown.js"></script>
+    <script src="asset/js/panier.js"></script>
+    <script src="asset/js/main.js"></script>
+    <script src="asset/js/product_detail.js"></script>
+</body>
+</html>
