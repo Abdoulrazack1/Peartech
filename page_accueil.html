@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaCompute - Boutique d'ordinateurs</title>
+    <link rel="stylesheet" href="novacompute.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="/asset/css/page_accueil.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <div class="logo-icon">PC</div>
+                    <div class="logo-text">
+                        <div class="logo-title">NovaCompute</div>
+                        <div class="logo-subtitle">Boutique d'ordinateurs</div>
+                    </div>
+                </div>
+
+                <!-- Barre de recherche -->
+                <div class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="search-input" placeholder="Rechercher un PC, une marque ou une configuration">
+                    
+                    <!-- Résultats de recherche -->
+                    <div class="search-results" id="search-results"></div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="header-nav">
+                    <button class="nav-dropdown">
+                        CATÉGORIES
+                        <span>Tous les PC</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">history</span>
+                    </button>
+
+                    <button class="icon-btn" id="theme-toggle">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
+                    </button>
+
+                    <button class="icon-btn">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+        <!-- HERO SECTION avec Carrousel -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <!-- Contenu gauche -->
+                    <div class="hero-left">
+                        <div class="hero-badge">
+                            Nouvelle collection
+                            <span>PC portables & gamers 2025</span>
+                        </div>
+
+                        <h1 class="hero-title">
+                            Des ordinateurs pensés pour la 
+                            <span class="text-primary">performance</span> et la
+                            <span class="text-secondary">fiabilité</span>.
+                        </h1>
+
+                        <p class="hero-description">
+                            Configurez le PC qui vous ressemble : travail, gaming ou création.<br>
+                            Livraison rapide, garantie 2 ans et support technique dédié.
+                        </p>
+
+                        <div class="hero-actions">
+                            <button class="btn-primary">Voir les PC portables</button>
+                            <button class="btn-secondary">Explorer les PC gamer</button>
+                        </div>
+
+                        <div class="hero-features">
+                            <div class="feature">
+                                <span class="feature-label">Livraison</span>
+                                <span class="feature-value">Offerte dès 999 €</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-label">Garantie</span>
+                                <span class="feature-value">2 ans incluse</span>
+                            </div>
+                            <div class="feature">
+                                <span class="feature-label">Support</span>
+                                <span class="feature-value">Experts basés en France</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carrousel droite (CSS pur) -->
+                    <div class="hero-right">
+                        <div class="carousel-container">
+                            <!-- Radio inputs cachés pour contrôler le carrousel -->
+                            <input type="radio" name="carousel" id="slide1" class="carousel-radio" checked>
+                            <input type="radio" name="carousel" id="slide2" class="carousel-radio">
+                            <input type="radio" name="carousel" id="slide3" class="carousel-radio">
+                            
+                            <!-- Slides -->
+                            <div class="carousel-slides">
+                                <!-- Slide 1 -->
+                                <div class="carousel-slide">
+                                    <div class="carousel-image">
+                                        <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800" alt="PC Setup">
+                                    </div>
+                                    <div class="carousel-caption">Carrousel d'offres et de gammes d'ordinateurs</div>
+                                </div>
+
+                                <!-- Slide 2 -->
+                                <div class="carousel-slide">
+                                    <div class="carousel-image">
+                                        <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=800" alt="Gaming Setup">
+                                    </div>
+                                    <div class="carousel-caption">Carrousel d'offres et de gammes d'ordinateurs</div>
+                                </div>
+
+                                <!-- Slide 3 -->
+                                <div class="carousel-slide">
+                                    <div class="carousel-image">
+                                        <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800" alt="Laptop">
+                                    </div>
+                                    <div class="carousel-caption">Carrousel d'offres et de gammes d'ordinateurs</div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation avec labels -->
+                            <div class="carousel-nav">
+                                <label for="slide1" class="carousel-prev" aria-label="Slide précédent"></label>
+                                <label for="slide3" class="carousel-next" aria-label="Slide suivant"></label>
+                            </div>
+
+                            <!-- Indicateurs -->
+                            <div class="carousel-indicators">
+                                <label for="slide1" class="indicator"></label>
+                                <label for="slide2" class="indicator"></label>
+                                <label for="slide3" class="indicator"></label>
+                            </div>
+                        </div>
+
+                        <!-- Menu latéral -->
+                        <div class="slide-menu">
+                            <label for="slide1" class="slide-item">Slide 1 - PC<br>portable</label>
+                            <label for="slide2" class="slide-item">Slide 2 - Setup<br>gamer</label>
+                            <label for="slide3" class="slide-item">Slide 3 - Station<br>créative</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES PRINCIPALES -->
+        <section class="categories-section">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <div class="section-label">PARCOURIR PAR BESOIN</div>
+                        <h2 class="section-title">Catégories principales</h2>
+                        <p class="section-description">Trouvez rapidement le type d'ordinateur adapté à votre usage.</p>
+                    </div>
+                    <a href="#" class="link-arrow">Voir toutes les catégories</a>
+                </div>
+
+                <div class="categories-grid">
+                    <div class="category-card">
+                        <div class="category-label">Visuel - PC portables</div>
+                        <h3 class="category-title">PC portables</h3>
+                        <p class="category-description">Pour le bureau, les études et le télétravail.</p>
+                    </div>
+
+                    <div class="category-card">
+                        <div class="category-label">Visuel - PC gamer</div>
+                        <h3 class="category-title">PC gamer</h3>
+                        <p class="category-description">Haute performance, RGB et refroidissement optimisé.</p>
+                    </div>
+
+                    <div class="category-card">
+                        <div class="category-label">Visuel - Bureautique</div>
+                        <h3 class="category-title">PC bureautique</h3>
+                        <p class="category-description">Fiables et silencieux pour une productivité maximale.</p>
+                    </div>
+
+                    <div class="category-card">
+                        <div class="category-label">Visuel - Accessoires</div>
+                        <h3 class="category-title">Accessoires & périphériques</h3>
+                        <p class="category-description">Écrans, claviers, souris et clous encore.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BEST-SELLERS -->
+        <section class="products-section">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <div class="section-label">SÉLECTION</div>
+                        <h2 class="section-title">Best-sellers & nouveautés</h2>
+                        <p class="section-description">Les configurations les plus appréciées par nos clients.</p>
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="tab active">Tous</button>
+                        <button class="tab">Portables</button>
+                        <button class="tab">Gamer</button>
+                        <button class="tab">Création</button>
+                    </div>
+                </div>
+
+                <!-- Grille des produits générée dynamiquement -->
+                <div class="products-grid" id="products-grid">
+                    <!-- Les produits seront insérés ici par product-grid.js -->
+                </div>
+
+                <!-- Collection Banner -->
+                <div class="collection-banner">
+                    <div class="collection-content">
+                        <h3>Collection "Setup gaming complet"</h3>
+                        <p>Des PC, écrans et périphériques coordonnés pour un espace de jeu prêt à l'emploi.</p>
+                    </div>
+                    <button class="btn-secondary">Voir la collection</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section class="services-section">
+            <div class="container">
+                <div class="section-label">POURQUOI NOVACOMPUTE</div>
+                <h2 class="section-title">Des services pensés pour durer</h2>
+                <p class="section-description">Un écosystème complet pour choisir, recevoir et faire évoluer votre ordinateur.</p>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <h3>Livraison rapide & suivie</h3>
+                        <p>Expédition sous 24/48h et suivi détaillé de votre commande en ligne.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <h3>Garantie 2 ans minimum</h3>
+                        <p>Tous nos PC sont testés et garantis 2 ans, avec des options d'extension.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <h3>Support technique expert</h3>
+                        <p>Des spécialistes vous accompagnent pour l'installation et les questions techniques.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEWSLETTER -->
+        <section class="newsletter-section">
+            <div class="container">
+                <h2>Recevez nos sélections & conseils</h2>
+                <p>Promos exclusives, guides d'achat et nouvelles configurations directement dans votre boite mail.</p>
+                <div class="newsletter-form">
+                    <input type="email" placeholder="Entrez votre adresse e-mail">
+                    <button class="btn-primary">S'inscrire</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Aide & services</h4>
+                    <ul>
+                        <li><a href="#">FAQ & centre d'aide</a></li>
+                        <li><a href="#">Suivi de commande</a></li>
+                        <li><a href="#">Retours & garanties</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>À propos</h4>
+                    <ul>
+                        <li><a href="#">Notre histoire</a></li>
+                        <li><a href="#">Magasins & rendez-vous</a></li>
+                        <li><a href="#">Carrières</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Conditions générales</a></li>
+                        <li><a href="#">Confidentialité & cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 NovaCompute. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts modulaires - Ordre important -->
+    <script src="/asset/js/data.js"></script>               <!-- Base de données -->
+    <script src="/asset/js/product_grid.js"></script>       <!-- Génération dynamique des produits -->
+    <script src="/asset/js/darkmode.js"></script>
+    <script src="/asset/js/recherche.js"></script>
+    <script src="/asset/js/dropdown.js"></script>
+    <script src="/asset/js/animation.js"></script>
+    <script src="/asset/js/filtre.js"></script>
+    <script src="/asset/js/panier.js"></script>
+    <script src="/asset/js/main.js"></script>
+    <!-- Le script menu_burger.js peut être ajouté si nécessaire -->
+</body>
+</html>
