@@ -1,3 +1,6 @@
+<!-- ============================================
+     page_catalogue.html - Page catalogue complète avec badge panier
+     ============================================ -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,8 +13,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-
-    <!-- HEADER -->
     <header class="header">
         <div class="container">
             <div class="header-content">
@@ -24,13 +25,13 @@
                 </a>
                 <div class="search-bar">
                     <span class="material-symbols-outlined">search</span>
-                    <input type="text" id="search-input" placeholder="Rechercher un PC, une marque ou une configuration">
+                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
                     <div class="search-results" id="search-results"></div>
                 </div>
                 <nav class="header-nav">
                     <button class="nav-dropdown">
                         CATÉGORIES
-                        <span>Tous les PC</span>
+                        <span>Tous les produits</span>
                         <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_historique.html" class="icon-btn">
@@ -39,45 +40,38 @@
                     <button class="icon-btn" id="theme-toggle">
                         <span class="material-symbols-outlined">light_mode</span>
                     </button>
-                    <a href="page_compte.html" class="icon-btn">
+                    <a href="page_profil.html" class="icon-btn">
                         <span class="material-symbols-outlined">person</span>
                         <span>Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn">
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
-
     <main>
         <div class="container">
-            <!-- Fil d'Ariane -->
             <div class="breadcrumb" id="breadcrumb">
                 <a href="page_accueil.html">Accueil</a>
                 <span>/</span>
                 <a href="page_catalogue.html">Toutes les catégories</a>
                 <span>/</span>
-                <span id="current-category-name">PC portables</span>
+                <span id="current-category-name">Apple</span>
             </div>
-
             <div class="catalogue-layout">
-                <!-- Sidebar filtres -->
                 <aside class="filters-sidebar" id="filters-sidebar">
                     <div class="filters-header">
                         <h3>Filtrer les résultats</h3>
                         <button class="reset-filters" id="reset-filters">Réinitialiser les filtres</button>
                     </div>
-
-                    <!-- Sous-catégories -->
                     <div class="filter-section">
                         <h4>Sous-catégories</h4>
                         <div id="subcategories-filter" class="checkbox-list"></div>
                     </div>
-
-                    <!-- Prix -->
                     <div class="filter-section">
                         <h4>Prix</h4>
                         <div class="price-range">
@@ -88,26 +82,20 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Marques -->
                     <div class="filter-section">
                         <h4>Marques</h4>
                         <div id="brands-filter" class="checkbox-list"></div>
                     </div>
-
-                    <!-- Caractéristiques supplémentaires -->
                     <div class="filter-section">
                         <h4>Caractéristiques</h4>
                         <div id="features-filter" class="checkbox-list"></div>
                     </div>
                 </aside>
-
-                <!-- Résultats -->
                 <div class="catalogue-results">
                     <div class="results-header">
                         <div>
-                            <h1 class="category-title" id="category-title">PC portables</h1>
-                            <p class="category-description" id="category-description">Ordinateurs portables pensés pour le travail, les études et les déplacements.</p>
+                            <h1 class="category-title" id="category-title">Apple</h1>
+                            <p class="category-description" id="category-description">iPhone, iPad, Apple Watch et accessoires Apple</p>
                             <p class="results-count" id="results-count">124 résultats</p>
                         </div>
                         <div class="results-toolbar">
@@ -131,43 +119,38 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Grille des produits -->
                     <div class="products-grid" id="products-grid"></div>
-
-                    <!-- Pagination -->
                     <div class="pagination" id="pagination"></div>
                 </div>
             </div>
         </div>
     </main>
-
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
                     <h4>Aide & services</h4>
                     <ul>
-                        <li><a href="page_faq.html">FAQ & centre d'aide</a></li>
-                        <li><a href="page_suivi.html">Suivi de commande</a></li>
-                        <li><a href="page_retours.html">Retours & garanties</a></li>
+                        <li><a href="#">FAQ & centre d'aide</a></li>
+                        <li><a href="#">Suivi de commande</a></li>
+                        <li><a href="#">Retours & échanges</a></li>
+                        <li><a href="#">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
                     <ul>
-                        <li><a href="page_histoire.html">Notre histoire</a></li>
-                        <li><a href="page_magasins.html">Magasins & rendez-vous</a></li>
-                        <li><a href="page_carrieres.html">Carrières</a></li>
+                        <li><a href="#">Notre histoire</a></li>
+                        <li><a href="#">Magasins physiques</a></li>
+                        <li><a href="#">Carrières</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
                     <ul>
-                        <li><a href="page_mentions.html">Mentions légales</a></li>
-                        <li><a href="page_cgv.html">Conditions générales</a></li>
-                        <li><a href="page_confidentialite.html">Confidentialité & cookies</a></li>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Conditions générales</a></li>
+                        <li><a href="#">Confidentialité & cookies</a></li>
                     </ul>
                 </div>
             </div>
@@ -176,8 +159,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Scripts -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

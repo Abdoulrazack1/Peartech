@@ -1,0 +1,293 @@
+<!-- ============================================
+     page_paiement.html - Page paiement complète avec badge panier
+     ============================================ -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaCompute - Finaliser ma commande</title>
+    <link rel="stylesheet" href="asset/css/page_accueil.css">
+    <link rel="stylesheet" href="asset/css/page_paiement.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="page_accueil.html" class="logo">
+                    <div class="logo-icon">PC</div>
+                    <div class="logo-text">
+                        <div class="logo-title">NovaCompute</div>
+                        <div class="logo-subtitle">Boutique d'ordinateurs</div>
+                    </div>
+                </a>
+                <div class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <nav class="header-nav">
+                    <button class="nav-dropdown">
+                        CATÉGORIES
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <a href="page_historique.html" class="icon-btn">
+                        <span class="material-symbols-outlined">history</span>
+                    </a>
+                    <button class="icon-btn" id="theme-toggle">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+                    <a href="page_profil.html" class="icon-btn">
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
+                    </a>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="page_accueil.html">Accueil</a>
+                <span>/</span>
+                <a href="page_panier.html">Mon panier</a>
+                <span>/</span>
+                <span>Finaliser ma commande</span>
+            </div>
+            <h1 class="page-title">Finaliser ma commande</h1>
+            <div class="checkout-steps">
+                <div class="step completed">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Panier</span>
+                </div>
+                <div class="step active">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Livraison & paiement</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Confirmation</span>
+                </div>
+            </div>
+            <div class="checkout-layout">
+                <div class="checkout-form">
+                    <section class="checkout-section">
+                        <h2>Adresse de livraison</h2>
+                        <form id="address-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="prenom">Prénom</label>
+                                    <input type="text" id="prenom" value="Jean" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nom">Nom</label>
+                                    <input type="text" id="nom" value="Dupont" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="adresse">Adresse principale</label>
+                                <input type="text" id="adresse" value="15 rue de la Paix" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="complement">Complément d'adresse (optionnel)</label>
+                                <input type="text" id="complement" placeholder="Bâtiment, étage, etc.">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="code-postal">Code postal</label>
+                                    <input type="text" id="code-postal" value="75001" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ville">Ville</label>
+                                    <input type="text" id="ville" value="Paris" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="pays">Pays</label>
+                                <select id="pays" required>
+                                    <option value="FR" selected>France</option>
+                                    <option value="BE">Belgique</option>
+                                    <option value="CH">Suisse</option>
+                                    <option value="LU">Luxembourg</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="telephone">Téléphone</label>
+                                    <input type="tel" id="telephone" value="0612345678" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">E-mail</label>
+                                    <input type="email" id="email" value="jean.dupont@email.com" required>
+                                </div>
+                            </div>
+                        </form>
+                    </section>
+                    <section class="checkout-section">
+                        <h2>Mode de livraison</h2>
+                        <div class="delivery-options" id="delivery-options">
+                            <label class="delivery-option">
+                                <input type="radio" name="delivery" value="standard" checked>
+                                <div class="option-content">
+                                    <span class="option-title">Livraison standard à domicile</span>
+                                    <span class="option-desc">3-5 jours ouvrés</span>
+                                    <span class="option-price">+ 5,90 €</span>
+                                </div>
+                            </label>
+                            <label class="delivery-option">
+                                <input type="radio" name="delivery" value="express">
+                                <div class="option-content">
+                                    <span class="option-title">Livraison express</span>
+                                    <span class="option-desc">24-48h</span>
+                                    <span class="option-price">+ 12,90 €</span>
+                                </div>
+                            </label>
+                            <label class="delivery-option">
+                                <input type="radio" name="delivery" value="relais">
+                                <div class="option-content">
+                                    <span class="option-title">Retrait en point relais</span>
+                                    <span class="option-desc">2-4 jours ouvrés</span>
+                                    <span class="option-price">Gratuit</span>
+                                </div>
+                            </label>
+                        </div>
+                    </section>
+                    <section class="checkout-section">
+                        <h2>Moyen de paiement</h2>
+                        <div class="payment-options" id="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="cb" checked>
+                                <div class="option-content">
+                                    <span class="option-title">Carte bancaire</span>
+                                    <span class="option-icons">Visa Mastercard American Express</span>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="paypal">
+                                <div class="option-content">
+                                    <span class="option-title">PayPal</span>
+                                    <span class="option-desc">Paiement sécurisé</span>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="xfois">
+                                <div class="option-content">
+                                    <span class="option-title">Paiement en 3x sans frais</span>
+                                    <span class="option-desc">Dès 100€ d'achat</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="cb-fields" class="payment-details">
+                            <div class="form-group">
+                                <label for="card-number">Numéro de carte</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="form-group">
+                                <label for="card-name">Nom sur la carte</label>
+                                <input type="text" id="card-name" placeholder="JEAN DUPONT">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="card-expiry">Date d'expiration</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/AA">
+                                </div>
+                                <div class="form-group">
+                                    <label for="card-cvv">Cryptogramme (CVV)</label>
+                                    <input type="text" id="card-cvv" placeholder="123">
+                                </div>
+                            </div>
+                            <p class="security-note">
+                                <span class="material-symbols-outlined">lock</span>
+                                Paiement sécurisé 3D Secure
+                            </p>
+                        </div>
+                    </section>
+                    <section class="checkout-section">
+                        <div class="validation-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accept-cgv" required>
+                                <span>J'accepte les conditions générales de vente</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="accept-newsletter">
+                                <span>Recevoir des offres et actualités (optionnel)</span>
+                            </label>
+                        </div>
+                    </section>
+                    <div class="form-actions">
+                        <button type="button" class="btn-primary" id="confirm-order">Confirmer la commande</button>
+                        <a href="page_panier.html" class="btn-secondary">Retour au panier</a>
+                    </div>
+                </div>
+                <aside class="order-summary">
+                    <h2>Votre commande</h2>
+                    <div class="summary-items" id="summary-items"></div>
+                    <div class="summary-totals">
+                        <div class="summary-line">
+                            <span>Sous-total</span>
+                            <span id="subtotal">1678,00 €</span>
+                        </div>
+                        <div class="summary-line">
+                            <span>Livraison</span>
+                            <span id="delivery-cost">5,90 €</span>
+                        </div>
+                        <div class="summary-line total">
+                            <span>Total</span>
+                            <span id="total">1683,90 €</span>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Aide & services</h4>
+                    <ul>
+                        <li><a href="#">FAQ & centre d'aide</a></li>
+                        <li><a href="#">Suivi de commande</a></li>
+                        <li><a href="#">Retours & échanges</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>À propos</h4>
+                    <ul>
+                        <li><a href="#">Notre histoire</a></li>
+                        <li><a href="#">Magasins physiques</a></li>
+                        <li><a href="#">Carrières</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="#">Mentions légales</a></li>
+                        <li><a href="#">Conditions générales</a></li>
+                        <li><a href="#">Confidentialité & cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 NovaCompute. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="asset/js/data.js"></script>
+    <script src="asset/js/darkmode.js"></script>
+    <script src="asset/js/recherche.js"></script>
+    <script src="asset/js/dropdown.js"></script>
+    <script src="asset/js/panier.js"></script>
+    <script src="asset/js/main.js"></script>
+    <script src="asset/js/paiement.js"></script>
+</body>
+</html>
