@@ -14,21 +14,19 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <!-- Logo -->
-                <div class="logo">
+                <!-- Logo cliquable vers accueil -->
+                <a href="page_accueil.html" class="logo">
                     <div class="logo-icon">PC</div>
                     <div class="logo-text">
                         <div class="logo-title">NovaCompute</div>
                         <div class="logo-subtitle">Boutique d'ordinateurs</div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Barre de recherche -->
                 <div class="search-bar">
                     <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input" placeholder="Rechercher un PC, une marque ou une configuration">
-                    
-                    <!-- Résultats de recherche -->
                     <div class="search-results" id="search-results"></div>
                 </div>
 
@@ -40,23 +38,23 @@
                         <span class="material-symbols-outlined">expand_more</span>
                     </button>
 
-                    <button class="icon-btn">
+                    <a href="page_historique.html" class="icon-btn">
                         <span class="material-symbols-outlined">history</span>
-                    </button>
+                    </a>
 
                     <button class="icon-btn" id="theme-toggle">
                         <span class="material-symbols-outlined">light_mode</span>
                     </button>
 
-                    <button class="icon-btn">
+                    <a href="page_compte.html" class="icon-btn">
                         <span class="material-symbols-outlined">person</span>
                         <span>Compte</span>
-                    </button>
+                    </a>
 
-                    <button class="icon-btn">
+                    <a href="page_panier.html" class="icon-btn">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         <span>Panier</span>
-                    </button>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -87,8 +85,8 @@
                         </p>
 
                         <div class="hero-actions">
-                            <button class="btn-primary">Voir les PC portables</button>
-                            <button class="btn-secondary">Explorer les PC gamer</button>
+                            <a href="page_catalogue.html?categorie=portables" class="btn-primary">Voir les PC portables</a>
+                            <a href="page_catalogue.html?categorie=gamers" class="btn-secondary">Explorer les PC gamer</a>
                         </div>
 
                         <div class="hero-features">
@@ -110,12 +108,10 @@
                     <!-- Carrousel droite -->
                     <div class="hero-right">
                         <div class="carousel-container">
-                            <!-- Radio inputs cachés -->
                             <input type="radio" name="carousel" id="slide1" class="carousel-radio" checked>
                             <input type="radio" name="carousel" id="slide2" class="carousel-radio">
                             <input type="radio" name="carousel" id="slide3" class="carousel-radio">
                             
-                            <!-- Slides -->
                             <div class="carousel-slides">
                                 <div class="carousel-slide">
                                     <div class="carousel-image">
@@ -137,13 +133,11 @@
                                 </div>
                             </div>
 
-                            <!-- Navigation -->
                             <div class="carousel-nav">
                                 <label for="slide1" class="carousel-prev" aria-label="Slide précédent"></label>
                                 <label for="slide3" class="carousel-next" aria-label="Slide suivant"></label>
                             </div>
 
-                            <!-- Indicateurs -->
                             <div class="carousel-indicators">
                                 <label for="slide1" class="indicator"></label>
                                 <label for="slide2" class="indicator"></label>
@@ -151,7 +145,6 @@
                             </div>
                         </div>
 
-                        <!-- Menu latéral -->
                         <div class="slide-menu">
                             <label for="slide1" class="slide-item">Slide 1 - PC<br>portable</label>
                             <label for="slide2" class="slide-item">Slide 2 - Setup<br>gamer</label>
@@ -171,30 +164,30 @@
                         <h2 class="section-title">Catégories principales</h2>
                         <p class="section-description">Trouvez rapidement le type d'ordinateur adapté à votre usage.</p>
                     </div>
-                    <a href="#" class="link-arrow">Voir toutes les catégories</a>
+                    <a href="page_catalogue.html" class="link-arrow">Voir toutes les catégories</a>
                 </div>
 
                 <div class="categories-grid">
-                    <div class="category-card">
+                    <a href="page_catalogue.html?categorie=portables" class="category-card">
                         <div class="category-label">Visuel - PC portables</div>
                         <h3 class="category-title">PC portables</h3>
                         <p class="category-description">Pour le bureau, les études et le télétravail.</p>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="page_catalogue.html?categorie=gamers" class="category-card">
                         <div class="category-label">Visuel - PC gamer</div>
                         <h3 class="category-title">PC gamer</h3>
                         <p class="category-description">Haute performance, RGB et refroidissement optimisé.</p>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="page_catalogue.html?categorie=fixes" class="category-card">
                         <div class="category-label">Visuel - Bureautique</div>
                         <h3 class="category-title">PC bureautique</h3>
                         <p class="category-description">Fiables et silencieux pour une productivité maximale.</p>
-                    </div>
-                    <div class="category-card">
+                    </a>
+                    <a href="page_catalogue.html?categorie=peripheriques" class="category-card">
                         <div class="category-label">Visuel - Accessoires</div>
                         <h3 class="category-title">Accessoires & périphériques</h3>
                         <p class="category-description">Écrans, claviers, souris et clous encore.</p>
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
@@ -209,17 +202,15 @@
                         <p class="section-description">Les configurations les plus appréciées par nos clients.</p>
                     </div>
                     <div class="filter-tabs">
-                        <button class="tab active">Tous</button>
-                        <button class="tab">Portables</button>
-                        <button class="tab">Gamer</button>
-                        <button class="tab">Création</button>
+                        <button class="tab active" data-filter="tous">Tous</button>
+                        <button class="tab" data-filter="portables">Portables</button>
+                        <button class="tab" data-filter="gamers">Gamer</button>
+                        <button class="tab" data-filter="creation">Création</button>
                     </div>
                 </div>
 
                 <!-- Grille des produits générée dynamiquement -->
-                <div class="products-grid" id="products-grid">
-                    <!-- Les produits seront insérés ici par product-grid.js -->
-                </div>
+                <div class="products-grid" id="products-grid"></div>
 
                 <!-- Collection Banner -->
                 <div class="collection-banner">
@@ -227,7 +218,7 @@
                         <h3>Collection "Setup gaming complet"</h3>
                         <p>Des PC, écrans et périphériques coordonnés pour un espace de jeu prêt à l'emploi.</p>
                     </div>
-                    <button class="btn-secondary">Voir la collection</button>
+                    <a href="page_catalogue.html?categorie=gamers&collection=setup" class="btn-secondary">Voir la collection</a>
                 </div>
             </div>
         </section>
@@ -276,36 +267,35 @@
                 <div class="footer-column">
                     <h4>Aide & services</h4>
                     <ul>
-                        <li><a href="#">FAQ & centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours & garanties</a></li>
+                        <li><a href="page_faq.html">FAQ & centre d'aide</a></li>
+                        <li><a href="page_suivi.html">Suivi de commande</a></li>
+                        <li><a href="page_retours.html">Retours & garanties</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
                     <ul>
-                        <li><a href="#">Notre histoire</a></li>
-                        <li><a href="#">Magasins & rendez-vous</a></li>
-                        <li><a href="#">Carrières</a></li>
+                        <li><a href="page_histoire.html">Notre histoire</a></li>
+                        <li><a href="page_magasins.html">Magasins & rendez-vous</a></li>
+                        <li><a href="page_carrieres.html">Carrières</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
                     <ul>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales</a></li>
-                        <li><a href="#">Confidentialité & cookies</a></li>
+                        <li><a href="page_mentions.html">Mentions légales</a></li>
+                        <li><a href="page_cgv.html">Conditions générales</a></li>
+                        <li><a href="page_confidentialite.html">Confidentialité & cookies</a></li>
                     </ul>
                 </div>
             </div>
-
             <div class="footer-bottom">
                 <p>© 2025 NovaCompute. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts modulaires - Ordre important -->
+    <!-- Scripts modulaires -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/product_grid.js"></script>
     <script src="asset/js/darkmode.js"></script>
@@ -315,7 +305,6 @@
     <script src="asset/js/filtre.js"></script>
     <script src="asset/js/panier.js"></script>
     <script src="asset/js/main.js"></script>
-    <!-- Script du carrousel automatique -->
     <script src="asset/js/carousel.js"></script>
 </body>
 </html>

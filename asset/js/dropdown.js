@@ -56,51 +56,63 @@
             const menu = document.createElement('div');
             menu.className = 'dropdown-menu';
             
-            // Catégories du menu
-            const categories = [
-                {
-                    icon: 'laptop',
-                    title: 'Ordinateurs Portables',
-                    description: 'Ultrabooks, laptops professionnels et étudiants',
-                    subcategories: ['Ultrabooks', 'Gaming Laptops', 'Professionnels', 'Étudiants'],
-                    link: '#portables'
-                },
-                {
-                    icon: 'desktop_windows',
-                    title: 'Ordinateurs Fixes',
-                    description: 'Tours bureautiques, stations de travail',
-                    subcategories: ['Bureautique', 'Stations de travail', 'Mini PC', 'All-in-One'],
-                    link: '#fixes'
-                },
-                {
-                    icon: 'stadia_controller',
-                    title: 'PC Gamers',
-                    description: 'Gaming haute performance et configurations sur mesure',
-                    subcategories: ['Setup complet', 'Tours gaming', 'RGB', 'Watercooling'],
-                    link: '#gamers'
-                },
-                {
-                    icon: 'brush',
-                    title: 'Création & Design',
-                    description: 'Pour montage vidéo, 3D et design graphique',
-                    subcategories: ['Video editing', 'Rendu 3D', 'Design graphique'],
-                    link: '#creation'
-                },
-                {
-                    icon: 'memory',
-                    title: 'Composants',
-                    description: 'Processeurs, cartes graphiques, RAM, stockage',
-                    subcategories: ['CPU', 'GPU', 'RAM', 'SSD/HDD', 'Cartes mères'],
-                    link: '#composants'
-                },
-                {
-                    icon: 'devices',
-                    title: 'Périphériques',
-                    description: 'Écrans, claviers, souris et accessoires',
-                    subcategories: ['Écrans', 'Claviers', 'Souris', 'Casques', 'Webcams'],
-                    link: '#peripheriques'
-                }
-            ];
+            // Récupérer les catégories depuis la base de données si disponible
+            let categories = [];
+            if (window.NovaComputeDB && window.NovaComputeDB.categories) {
+                categories = window.NovaComputeDB.categories.map(cat => ({
+                    icon: cat.icon,
+                    title: cat.name,
+                    description: cat.description,
+                    subcategories: cat.subcategories,
+                    slug: cat.slug
+                }));
+            } else {
+                // Fallback si la DB n'est pas chargée
+                categories = [
+                    {
+                        icon: 'laptop',
+                        title: 'Ordinateurs Portables',
+                        description: 'Ultrabooks, laptops professionnels et étudiants',
+                        subcategories: ['Ultrabooks', 'Gaming Laptops', 'Professionnels', 'Étudiants'],
+                        slug: 'portables'
+                    },
+                    {
+                        icon: 'desktop_windows',
+                        title: 'Ordinateurs Fixes',
+                        description: 'Tours bureautiques, stations de travail',
+                        subcategories: ['Bureautique', 'Stations de travail', 'Mini PC', 'All-in-One'],
+                        slug: 'fixes'
+                    },
+                    {
+                        icon: 'stadia_controller',
+                        title: 'PC Gamers',
+                        description: 'Gaming haute performance et configurations sur mesure',
+                        subcategories: ['Setup complet', 'Tours gaming', 'RGB', 'Watercooling'],
+                        slug: 'gamers'
+                    },
+                    {
+                        icon: 'brush',
+                        title: 'Création & Design',
+                        description: 'Pour montage vidéo, 3D et design graphique',
+                        subcategories: ['Video editing', 'Rendu 3D', 'Design graphique'],
+                        slug: 'creation'
+                    },
+                    {
+                        icon: 'memory',
+                        title: 'Composants',
+                        description: 'Processeurs, cartes graphiques, RAM, stockage',
+                        subcategories: ['CPU', 'GPU', 'RAM', 'SSD/HDD', 'Cartes mères'],
+                        slug: 'composants'
+                    },
+                    {
+                        icon: 'devices',
+                        title: 'Périphériques',
+                        description: 'Écrans, claviers, souris et accessoires',
+                        subcategories: ['Écrans', 'Claviers', 'Souris', 'Casques', 'Webcams'],
+                        slug: 'peripheriques'
+                    }
+                ];
+            }
             
             // Générer le HTML du menu
             let html = '<div class="dropdown-header">Toutes les catégories</div>';
@@ -108,7 +120,7 @@
             
             categories.forEach(function(cat) {
                 html += `
-                    <a href="${cat.link}" class="dropdown-item" data-category="${cat.title}">
+                    <a href="page_catalogue.html?categorie=${cat.slug}" class="dropdown-item" data-category="${cat.title}">
                         <span class="material-symbols-outlined dropdown-icon">${cat.icon}</span>
                         <div class="dropdown-content">
                             <div class="dropdown-title">${cat.title}</div>
@@ -124,7 +136,7 @@
             });
             
             html += '</div>';
-            html += '<div class="dropdown-footer"><a href="#catalogue" class="dropdown-view-all">Voir tout le catalogue →</a></div>';
+            html += '<div class="dropdown-footer"><a href="page_catalogue.html" class="dropdown-view-all">Voir tout le catalogue →</a></div>';
             
             menu.innerHTML = html;
             
@@ -193,24 +205,17 @@
             
             items.forEach(function(item) {
                 item.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
                     const category = this.getAttribute('data-category');
-                    const link = this.getAttribute('href');
-                    
                     console.log('Catégorie sélectionnée:', category);
                     
                     // Déclencher un événement custom
                     const event = new CustomEvent('categorySelected', {
-                        detail: { category: category, link: link }
+                        detail: { category: category, link: this.href }
                     });
                     document.dispatchEvent(event);
                     
-                    // Fermer le dropdown
+                    // Fermer le dropdown (le lien sera suivi après)
                     closeDropdown();
-                    
-                    // Ici tu peux rediriger vers la page catégorie
-                    // window.location.href = link;
                 });
             });
         }

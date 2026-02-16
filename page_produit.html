@@ -11,17 +11,17 @@
 </head>
 <body>
 
-    <!-- HEADER (identique à la page d'accueil) -->
+    <!-- HEADER -->
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <a href="page_accueil.html" class="logo">
                     <div class="logo-icon">PC</div>
                     <div class="logo-text">
                         <div class="logo-title">NovaCompute</div>
                         <div class="logo-subtitle">Boutique d'ordinateurs</div>
                     </div>
-                </div>
+                </a>
                 <div class="search-bar">
                     <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input" placeholder="Rechercher un PC, une marque ou une configuration">
@@ -33,20 +33,20 @@
                         <span>Tous les PC</span>
                         <span class="material-symbols-outlined">expand_more</span>
                     </button>
-                    <button class="icon-btn">
+                    <a href="page_historique.html" class="icon-btn">
                         <span class="material-symbols-outlined">history</span>
-                    </button>
+                    </a>
                     <button class="icon-btn" id="theme-toggle">
                         <span class="material-symbols-outlined">light_mode</span>
                     </button>
-                    <button class="icon-btn">
+                    <a href="page_compte.html" class="icon-btn">
                         <span class="material-symbols-outlined">person</span>
                         <span>Compte</span>
-                    </button>
-                    <button class="icon-btn">
+                    </a>
+                    <a href="page_panier.html" class="icon-btn">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         <span>Panier</span>
-                    </button>
+                    </a>
                 </nav>
             </div>
         </div>
@@ -54,51 +54,49 @@
 
     <main>
         <div class="container">
-            <!-- Fil d'Ariane -->
+            <!-- Fil d'Ariane (rempli dynamiquement par product-detail.js) -->
             <div class="breadcrumb" id="breadcrumb"></div>
 
-            <!-- Section produit -->
-            <div class="product-detail" id="product-detail">
-                <!-- Le contenu sera injecté par JS -->
-            </div>
+            <!-- Section produit (remplie dynamiquement) -->
+            <div class="product-detail" id="product-detail"></div>
 
             <!-- Produits similaires -->
             <section class="similar-products">
                 <h2>Produits similaires recommandés</h2>
                 <div class="products-grid" id="similar-products-grid"></div>
                 <div class="text-center">
-                    <a href="#" class="link-arrow">Voir tous les produits similaires</a>
+                    <a href="page_catalogue.html" class="link-arrow">Voir tous les produits similaires</a>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- FOOTER (identique) -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
                     <h4>Aide & services</h4>
                     <ul>
-                        <li><a href="#">FAQ & centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours & garanties</a></li>
+                        <li><a href="page_faq.html">FAQ & centre d'aide</a></li>
+                        <li><a href="page_suivi.html">Suivi de commande</a></li>
+                        <li><a href="page_retours.html">Retours & garanties</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
                     <ul>
-                        <li><a href="#">Notre histoire</a></li>
-                        <li><a href="#">Magasins & rendez-vous</a></li>
-                        <li><a href="#">Carrières</a></li>
+                        <li><a href="page_histoire.html">Notre histoire</a></li>
+                        <li><a href="page_magasins.html">Magasins & rendez-vous</a></li>
+                        <li><a href="page_carrieres.html">Carrières</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
                     <ul>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales</a></li>
-                        <li><a href="#">Confidentialité & cookies</a></li>
+                        <li><a href="page_mentions.html">Mentions légales</a></li>
+                        <li><a href="page_cgv.html">Conditions générales</a></li>
+                        <li><a href="page_confidentialite.html">Confidentialité & cookies</a></li>
                     </ul>
                 </div>
             </div>
@@ -115,6 +113,6 @@
     <script src="asset/js/dropdown.js"></script>
     <script src="asset/js/panier.js"></script>
     <script src="asset/js/main.js"></script>
-    <script src="asset/js/product_detail.js"></script>
+    <script src="asset/js/product-detail.js"></script>
 </body>
 </html>

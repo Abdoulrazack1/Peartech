@@ -1,9 +1,7 @@
 /* ============================================
    Page produit - NovaCompute
-   Styles spécifiques à la page produit
    ============================================ */
 
-/* Fil d'Ariane */
 .breadcrumb {
     padding: 1rem 0;
     font-size: 0.85rem;
@@ -21,7 +19,7 @@
     margin: 0 0.3rem;
 }
 
-/* Layout principal */
+/* Layout produit */
 .product-detail {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -29,7 +27,7 @@
     margin-bottom: var(--spacing-xl);
 }
 
-/* Galerie d'images */
+/* Galerie */
 .product-gallery {
     display: flex;
     flex-direction: column;
@@ -51,7 +49,6 @@
 .thumbnail-list {
     display: flex;
     gap: 0.5rem;
-    flex-wrap: wrap;
 }
 .thumbnail {
     width: 80px;
@@ -71,7 +68,7 @@
     object-fit: cover;
 }
 
-/* Informations produit */
+/* Infos produit */
 .product-info {
     display: flex;
     flex-direction: column;
@@ -138,8 +135,6 @@
 .stock-status.out {
     color: #ef4444;
 }
-
-/* Options produit */
 .product-options {
     margin: 1rem 0;
 }
@@ -162,22 +157,16 @@
     background: var(--secondary);
     border: 1px solid var(--border);
     border-radius: 6px;
-    color: var(--text-primary);
-    font-size: 0.9rem;
     cursor: pointer;
     transition: all var(--transition-fast);
+    font-family: inherit;
+    color: var(--text-primary);
 }
-.option-btn:hover {
+.option-btn:hover,
+.option-btn.active {
     border-color: var(--primary);
     background: rgba(59, 130, 246, 0.1);
 }
-.option-btn.active {
-    border-color: var(--primary);
-    background: var(--primary);
-    color: white;
-}
-
-/* Boutons d'action */
 .product-actions {
     display: flex;
     gap: 1rem;
@@ -198,23 +187,15 @@
     background: transparent;
     border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--text-primary);
     cursor: pointer;
     transition: var(--transition-fast);
+    font-family: inherit;
+    color: var(--text-primary);
 }
 .wishlist-btn:hover {
     border-color: var(--primary);
     color: var(--primary);
 }
-.wishlist-btn .material-symbols-outlined {
-    color: var(--text-secondary);
-    transition: color var(--transition-fast);
-}
-.wishlist-btn:hover .material-symbols-outlined {
-    color: var(--primary);
-}
-
-/* Services */
 .product-services {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -233,25 +214,15 @@
     color: var(--primary);
     margin-bottom: 0.5rem;
 }
-.service-item div {
-    font-weight: 600;
-    color: var(--text-primary);
-}
-.service-item small {
-    color: var(--text-muted);
-}
 
 /* Onglets */
 .product-tabs {
     margin: 2rem 0;
-    grid-column: 1 / -1;
 }
 .tabs-header {
     display: flex;
     gap: 1rem;
     border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-    padding-bottom: 2px;
 }
 .tab-btn {
     padding: 0.8rem 1.5rem;
@@ -262,7 +233,7 @@
     color: var(--text-secondary);
     cursor: pointer;
     transition: all var(--transition-fast);
-    white-space: nowrap;
+    font-family: inherit;
 }
 .tab-btn.active {
     color: var(--primary);
@@ -271,31 +242,25 @@
 .tab-content {
     padding: 2rem 0;
     display: none;
-    color: var(--text-primary);
 }
 .tab-content.active {
     display: block;
 }
-.tab-content p {
-    line-height: 1.6;
-    color: var(--text-secondary);
-}
-
-/* Tableau des spécifications */
 .specs-table {
     width: 100%;
     border-collapse: collapse;
-    color: var(--text-primary);
 }
 .specs-table tr {
     border-bottom: 1px solid var(--border);
 }
 .specs-table td {
     padding: 0.8rem;
+    color: var(--text-secondary);
 }
 .specs-table td:first-child {
     font-weight: 600;
     width: 200px;
+    color: var(--text-primary);
 }
 
 /* Avis clients */
@@ -304,7 +269,6 @@
     gap: 2rem;
     align-items: center;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
 }
 .average-rating {
     font-size: 3rem;
@@ -313,7 +277,6 @@
 }
 .review-bars {
     flex: 1;
-    min-width: 200px;
 }
 .review-bar-item {
     display: flex;
@@ -323,7 +286,7 @@
 }
 .bar-label {
     width: 30px;
-    color: var(--text-primary);
+    color: var(--text-secondary);
 }
 .bar {
     flex: 1;
@@ -336,15 +299,11 @@
     height: 100%;
     background: var(--primary);
 }
-.reviews-list {
-    margin-top: 2rem;
-}
 .review-card {
     padding: 1.5rem;
     background: var(--secondary);
     border-radius: 8px;
     margin-bottom: 1rem;
-    border: 1px solid var(--border);
 }
 .review-header {
     display: flex;
@@ -376,38 +335,19 @@
     text-align: center;
     margin-top: 2rem;
 }
-#similar-products-grid {
-    margin-bottom: 1rem;
-}
 
 /* Responsive */
-@media (max-width: 968px) {
+@media (max-width: 768px) {
     .product-detail {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
     }
     .product-services {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-@media (max-width: 768px) {
-    .product-title {
-        font-size: 1.6rem;
+        grid-template-columns: 1fr;
     }
     .product-actions {
         flex-direction: column;
     }
     .btn-large {
         width: 100%;
-    }
-    .product-services {
-        grid-template-columns: 1fr;
-    }
-    .tabs-header {
-        gap: 0.5rem;
-    }
-    .tab-btn {
-        padding: 0.6rem 1rem;
-        font-size: 0.9rem;
     }
 }
