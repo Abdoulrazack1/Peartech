@@ -1,194 +1,843 @@
 // ============================================
-// data.js - Base de données centralisée NovaCompute
-// Contient tous les produits, catégories et données statiques
-// Utilisation : window.NovaComputeDB
+// data.js - Base de données NovaCompute
+// Catégories : Apple, Android, Montres, Tablettes
 // ============================================
 
 (function() {
     'use strict';
 
-    // ------------------------------------------------------------
-    // CATÉGORIES
-    // ------------------------------------------------------------
     const categories = [
         {
-            id: 'cat_portable',
-            name: 'Ordinateurs Portables',
-            slug: 'portables',
-            description: 'Ultrabooks, laptops professionnels et étudiants',
-            icon: 'laptop',
-            image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400',
-            subcategories: ['Ultrabooks', 'Gaming Laptops', 'Professionnels', 'Étudiants']
+            id: 'cat_apple',
+            name: 'Apple',
+            slug: 'apple',
+            description: 'iPhone, iPad, Apple Watch et accessoires Apple',
+            icon: 'apple',
+            image: 'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400',
+            subcategories: ['iPhone', 'iPad', 'Apple Watch', 'Accessoires']
         },
         {
-            id: 'cat_fixe',
-            name: 'Ordinateurs Fixes',
-            slug: 'fixes',
-            description: 'Tours bureautiques, stations de travail',
-            icon: 'desktop_windows',
-            image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400',
-            subcategories: ['Bureautique', 'Stations de travail', 'Mini PC', 'All-in-One']
+            id: 'cat_android',
+            name: 'Android',
+            slug: 'android',
+            description: 'Smartphones Android, tablettes et montres sous Android',
+            icon: 'android',
+            image: 'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+            subcategories: ['Samsung', 'Google Pixel', 'Xiaomi', 'OnePlus', 'Autres']
         },
         {
-            id: 'cat_gamer',
-            name: 'PC Gamers',
-            slug: 'gamers',
-            description: 'Gaming haute performance et configurations sur mesure',
-            icon: 'stadia_controller',
-            image: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400',
-            subcategories: ['Setup complet', 'Tours gaming', 'RGB', 'Watercooling']
+            id: 'cat_wearables',
+            name: 'Montres connectées',
+            slug: 'montres',
+            description: 'Montres connectées pour le sport, la santé et le quotidien',
+            icon: 'watch',
+            image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+            subcategories: ['Apple Watch', 'Samsung Galaxy Watch', 'Fitbit', 'Garmin', 'Autres']
         },
         {
-            id: 'cat_creation',
-            name: 'Création & Design',
-            slug: 'creation',
-            description: 'Pour montage vidéo, 3D et design graphique',
-            icon: 'brush',
-            image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400',
-            subcategories: ['Video editing', 'Rendu 3D', 'Design graphique']
-        },
-        {
-            id: 'cat_composants',
-            name: 'Composants',
-            slug: 'composants',
-            description: 'Processeurs, cartes graphiques, RAM, stockage',
-            icon: 'memory',
-            image: 'https://images.unsplash.com/photo-1555618254-6c0b3a3e0b7a?w=400',
-            subcategories: ['CPU', 'GPU', 'RAM', 'SSD/HDD', 'Cartes mères']
-        },
-        {
-            id: 'cat_peripheriques',
-            name: 'Périphériques',
-            slug: 'peripheriques',
-            description: 'Écrans, claviers, souris et accessoires',
-            icon: 'devices',
-            image: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400',
-            subcategories: ['Écrans', 'Claviers', 'Souris', 'Casques', 'Webcams']
+            id: 'cat_tablets',
+            name: 'Tablettes',
+            slug: 'tablettes',
+            description: 'Tablettes pour le travail, les études et le divertissement',
+            icon: 'tablet',
+            image: 'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
+            subcategories: ['iPad', 'Samsung Galaxy Tab', 'Amazon Fire', 'Xiaomi', 'Autres']
         }
     ];
 
-    // ------------------------------------------------------------
-    // PRODUITS avec options de personnalisation
-    // ------------------------------------------------------------
     const products = [
+        // ---- APPLE - iPhones (5) ----
         {
             id: 1,
-            name: 'Ultrabook Nova 14" Pro',
-            slug: 'ultrabook-nova-14-pro',
-            categoryId: 'cat_portable',
-            basePrice: 1299.00,
-            oldPrice: null,
+            name: 'iPhone 15 Pro Max',
+            slug: 'iphone-15-pro-max',
+            categoryId: 'cat_apple',
+            basePrice: 1479.00,
+            oldPrice: 1599.00,
             specs: {
-                processor: 'Intel Core i5-1240P',
-                ram: '16 Go LPDDR5',
-                storage: '1 To SSD NVMe',
-                screen: '14" QHD+ (2560x1600) IPS',
-                graphics: 'Intel Iris Xe',
-                os: 'Windows 11 Pro'
+                processor: 'A17 Pro',
+                ram: '8 Go',
+                storage: '256 Go',
+                screen: '6.7" Super Retina XDR',
+                camera: '48 Mpx + 12 Mpx + 12 Mpx + LiDAR',
+                battery: 'Autonomie jusqu\'à 29h',
+                os: 'iOS 17'
             },
-            description: 'Ultrabook léger et puissant pour les professionnels en déplacement. Autonomie exceptionnelle de 12h.',
+            description: 'L\'iPhone 15 Pro Max, le plus puissant des iPhone avec un zoom optique x5 et un design en titane.',
             images: [
-                'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400',
-                'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400'
+                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400',
+                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400'
             ],
-            tags: ['intel', 'ultrabook', '14 pouces', 'ssd', 'professionnel'],
-            stock: 15,
+            tags: ['iphone', 'apple', '15 pro max', 'ios'],
+            stock: 18,
             isNew: true,
-            isBestSeller: false,
-            rating: 4.7,
-            reviews: 23,
-            // Options disponibles pour ce produit
+            isBestSeller: true,
+            rating: 4.9,
+            reviews: 245,
             options: {
-                ram: [
-                    { label: '16 Go', price: 0 },
-                    { label: '32 Go', price: 200 }
-                ],
                 storage: [
-                    { label: '1 To SSD', price: 0 },
-                    { label: '2 To SSD', price: 150 }
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 230 },
+                    { label: '1 To', price: 460 }
                 ],
                 color: [
-                    { label: 'Gris métal', price: 0 },
-                    { label: 'Argent', price: 0 }
+                    { label: 'Titane naturel', price: 0 },
+                    { label: 'Titane bleu', price: 0 },
+                    { label: 'Titane noir', price: 0 }
                 ]
             }
         },
         {
             id: 2,
-            name: 'Setup Gamer Orion',
-            slug: 'setup-gamer-orion',
-            categoryId: 'cat_gamer',
-            basePrice: 1899.00,
-            oldPrice: 2099.00,
+            name: 'iPhone 15 Pro',
+            slug: 'iphone-15-pro',
+            categoryId: 'cat_apple',
+            basePrice: 1229.00,
+            oldPrice: 1329.00,
             specs: {
-                processor: 'AMD Ryzen 7 7800X3D',
-                ram: '32 Go DDR5',
-                storage: '1 To SSD NVMe',
-                graphics: 'NVIDIA RTX 4070 12 Go',
-                cooling: 'Watercooling 240mm RGB',
-                os: 'Windows 11 Famille'
+                processor: 'A17 Pro',
+                ram: '8 Go',
+                storage: '128 Go',
+                screen: '6.1" Super Retina XDR',
+                camera: '48 Mpx + 12 Mpx + 12 Mpx',
+                battery: 'Autonomie jusqu\'à 23h',
+                os: 'iOS 17'
             },
-            description: 'Configuration gaming ultra-fluide pour jouer en 1440p et 4K. Boîtier RGB et ventilation optimisée.',
+            description: 'L\'iPhone 15 Pro, puissance et élégance dans un format compact.',
             images: [
-                'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400',
-                'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400'
+                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400',
+                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400'
             ],
-            tags: ['ryzen', 'rtx', 'gaming', 'desktop', 'rgb'],
-            stock: 8,
-            isNew: false,
-            isBestSeller: true,
-            rating: 4.9,
-            reviews: 47,
+            tags: ['iphone', 'apple', '15 pro', 'ios'],
+            stock: 22,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.8,
+            reviews: 178,
             options: {
-                ram: [
-                    { label: '32 Go', price: 0 },
-                    { label: '64 Go', price: 250 }
-                ],
                 storage: [
-                    { label: '1 To SSD', price: 0 },
-                    { label: '2 To SSD', price: 150 },
-                    { label: '4 To SSD', price: 400 }
+                    { label: '128 Go', price: 0 },
+                    { label: '256 Go', price: 120 },
+                    { label: '512 Go', price: 250 }
                 ],
-                rgb: [
-                    { label: 'RGB standard', price: 0 },
-                    { label: 'RGB avancé', price: 80 }
+                color: [
+                    { label: 'Titane naturel', price: 0 },
+                    { label: 'Titane bleu', price: 0 },
+                    { label: 'Titane noir', price: 0 }
                 ]
             }
         },
         {
             id: 3,
-            name: 'Studio Créatif 27"',
-            slug: 'studio-creatif-27',
-            categoryId: 'cat_creation',
-            basePrice: 2299.00,
+            name: 'iPhone 15',
+            slug: 'iphone-15',
+            categoryId: 'cat_apple',
+            basePrice: 969.00,
             oldPrice: null,
             specs: {
-                processor: 'Intel Core i9-13900K',
-                ram: '32 Go DDR5',
-                storage: '2 To SSD NVMe',
-                graphics: 'NVIDIA RTX 4060 8 Go',
-                screen: '27" 4K IPS (inclus)',
-                os: 'Windows 11 Pro'
+                processor: 'A16 Bionic',
+                ram: '6 Go',
+                storage: '128 Go',
+                screen: '6.1" Super Retina XDR',
+                camera: '48 Mpx + 12 Mpx',
+                battery: 'Autonomie jusqu\'à 20h',
+                os: 'iOS 17'
             },
-            description: 'Station de travail complète pour créatifs : montage vidéo, 3D, design. Écran calibré inclus.',
+            description: 'L\'iPhone 15, l\'essentiel avec l\'îlot dynamique et un appareil photo de 48 Mpx.',
             images: [
-                'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400',
-                'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400'
+                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400',
+                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400'
             ],
-            tags: ['intel', 'rtx', 'workstation', '27 pouces', '4k'],
-            stock: 5,
+            tags: ['iphone', 'apple', '15', 'ios'],
+            stock: 35,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.7,
+            reviews: 210,
+            options: {
+                storage: [
+                    { label: '128 Go', price: 0 },
+                    { label: '256 Go', price: 110 },
+                    { label: '512 Go', price: 230 }
+                ],
+                color: [
+                    { label: 'Rose', price: 0 },
+                    { label: 'Jaune', price: 0 },
+                    { label: 'Vert', price: 0 },
+                    { label: 'Bleu', price: 0 },
+                    { label: 'Noir', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 4,
+            name: 'iPhone 14 Pro',
+            slug: 'iphone-14-pro',
+            categoryId: 'cat_apple',
+            basePrice: 1099.00,
+            oldPrice: 1199.00,
+            specs: {
+                processor: 'A16 Bionic',
+                ram: '6 Go',
+                storage: '256 Go',
+                screen: '6.1" Super Retina XDR',
+                camera: '48 Mpx + 12 Mpx + 12 Mpx',
+                battery: 'Autonomie jusqu\'à 23h',
+                os: 'iOS 16'
+            },
+            description: 'L\'iPhone 14 Pro, encore performant avec son écran Always-On et la Dynamic Island.',
+            images: [
+                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400',
+                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400'
+            ],
+            tags: ['iphone', 'apple', '14 pro', 'ios'],
+            stock: 12,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.7,
+            reviews: 324,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 200 },
+                    { label: '1 To', price: 400 }
+                ],
+                color: [
+                    { label: 'Violet intense', price: 0 },
+                    { label: 'Or', price: 0 },
+                    { label: 'Argent', price: 0 },
+                    { label: 'Noir sidéral', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 5,
+            name: 'iPhone 14',
+            slug: 'iphone-14',
+            categoryId: 'cat_apple',
+            basePrice: 809.00,
+            oldPrice: 899.00,
+            specs: {
+                processor: 'A15 Bionic',
+                ram: '6 Go',
+                storage: '128 Go',
+                screen: '6.1" Super Retina XDR',
+                camera: '12 Mpx + 12 Mpx',
+                battery: 'Autonomie jusqu\'à 20h',
+                os: 'iOS 16'
+            },
+            description: 'L\'iPhone 14, un excellent rapport qualité-prix pour profiter de l\'écosystème Apple.',
+            images: [
+                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400',
+                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400'
+            ],
+            tags: ['iphone', 'apple', '14', 'ios'],
+            stock: 28,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.6,
+            reviews: 412,
+            options: {
+                storage: [
+                    { label: '128 Go', price: 0 },
+                    { label: '256 Go', price: 100 },
+                    { label: '512 Go', price: 220 }
+                ],
+                color: [
+                    { label: 'Bleu', price: 0 },
+                    { label: 'Violet', price: 0 },
+                    { label: 'Minuit', price: 0 },
+                    { label: 'Lumière stellaire', price: 0 }
+                ]
+            }
+        },
+
+        // ---- APPLE - Apple Watch (5) ----
+        {
+            id: 6,
+            name: 'Apple Watch Series 9',
+            slug: 'apple-watch-series-9',
+            categoryId: 'cat_apple',
+            basePrice: 449.00,
+            oldPrice: 499.00,
+            specs: {
+                processor: 'S9 SiP',
+                screen: 'Always-On Retina',
+                size: '45 mm',
+                connectivity: 'GPS + Cellular',
+                battery: 'Jusqu\'à 18h',
+                sensors: 'ECG, SpO2, accéléromètre'
+            },
+            description: 'L\'Apple Watch Series 9, avec le geste Double Tap et l\'écran le plus lumineux.',
+            images: [
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400'
+            ],
+            tags: ['apple', 'watch', 'montre'],
+            stock: 30,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.9,
+            reviews: 187,
+            options: {
+                size: [
+                    { label: '41 mm', price: 0 },
+                    { label: '45 mm', price: 30 }
+                ],
+                connectivity: [
+                    { label: 'GPS', price: 0 },
+                    { label: 'GPS + Cellular', price: 80 }
+                ],
+                color: [
+                    { label: 'Aluminium minuit', price: 0 },
+                    { label: 'Aluminium rose', price: 0 },
+                    { label: 'Aluminium argent', price: 0 },
+                    { label: 'Acier inox', price: 200 }
+                ]
+            }
+        },
+        {
+            id: 7,
+            name: 'Apple Watch SE (2e génération)',
+            slug: 'apple-watch-se-2',
+            categoryId: 'cat_apple',
+            basePrice: 299.00,
+            oldPrice: 329.00,
+            specs: {
+                processor: 'S8 SiP',
+                screen: 'Retina',
+                size: '44 mm',
+                connectivity: 'GPS',
+                battery: 'Jusqu\'à 18h',
+                sensors: 'Accéléromètre, gyroscope'
+            },
+            description: 'L\'Apple Watch SE, toutes les essentiels à un prix abordable.',
+            images: [
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+            ],
+            tags: ['apple', 'watch', 'montre'],
+            stock: 45,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.7,
+            reviews: 256,
+            options: {
+                size: [
+                    { label: '40 mm', price: 0 },
+                    { label: '44 mm', price: 20 }
+                ],
+                connectivity: [
+                    { label: 'GPS', price: 0 },
+                    { label: 'GPS + Cellular', price: 60 }
+                ],
+                color: [
+                    { label: 'Argent', price: 0 },
+                    { label: 'Minuit', price: 0 },
+                    { label: 'Rose', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 8,
+            name: 'Apple Watch Ultra 2',
+            slug: 'apple-watch-ultra-2',
+            categoryId: 'cat_apple',
+            basePrice: 899.00,
+            oldPrice: 949.00,
+            specs: {
+                processor: 'S9 SiP',
+                screen: 'Always-On Retina',
+                size: '49 mm',
+                connectivity: 'GPS + Cellular',
+                battery: 'Jusqu\'à 36h',
+                sensors: 'ECG, SpO2, sirène 86dB'
+            },
+            description: 'L\'Apple Watch Ultra 2, conçue pour les sports extrêmes et l\'aventure.',
+            images: [
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400'
+            ],
+            tags: ['apple', 'watch', 'ultra', 'montre'],
+            stock: 8,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.9,
+            reviews: 67,
+            options: {
+                bracelet: [
+                    { label: 'Alpine Loop', price: 0 },
+                    { label: 'Trail Loop', price: 0 },
+                    { label: 'Ocean Band', price: 0 }
+                ]
+            }
+        },
+
+        // ---- APPLE - iPad (5) ----
+        {
+            id: 9,
+            name: 'iPad Pro 12.9" (6e génération)',
+            slug: 'ipad-pro-12-9',
+            categoryId: 'cat_apple',
+            basePrice: 1299.00,
+            oldPrice: 1399.00,
+            specs: {
+                processor: 'M2',
+                ram: '16 Go',
+                storage: '512 Go',
+                screen: '12.9" Liquid Retina XDR',
+                camera: '12 Mpx + 10 Mpx',
+                battery: 'Jusqu\'à 10h',
+                os: 'iPadOS 17'
+            },
+            description: 'L\'iPad Pro avec puce M2, écran XDR et compatibilité Apple Pencil.',
+            images: [
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400'
+            ],
+            tags: ['ipad', 'apple', 'pro', 'tablette'],
+            stock: 10,
+            isNew: false,
+            isBestSeller: true,
+            rating: 4.9,
+            reviews: 145,
+            options: {
+                storage: [
+                    { label: '512 Go', price: 0 },
+                    { label: '1 To', price: 300 },
+                    { label: '2 To', price: 600 }
+                ],
+                connectivity: [
+                    { label: 'Wi-Fi', price: 0 },
+                    { label: 'Wi-Fi + Cellular', price: 200 }
+                ]
+            }
+        },
+        {
+            id: 10,
+            name: 'iPad Air 11" (5e génération)',
+            slug: 'ipad-air-11',
+            categoryId: 'cat_apple',
+            basePrice: 699.00,
+            oldPrice: 749.00,
+            specs: {
+                processor: 'M1',
+                ram: '8 Go',
+                storage: '256 Go',
+                screen: '11" Liquid Retina',
+                camera: '12 Mpx',
+                battery: 'Jusqu\'à 10h',
+                os: 'iPadOS 17'
+            },
+            description: 'L\'iPad Air avec puce M1, un excellent compromis puissance/prix.',
+            images: [
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+            ],
+            tags: ['ipad', 'apple', 'air', 'tablette'],
+            stock: 20,
+            isNew: false,
+            isBestSeller: true,
+            rating: 4.8,
+            reviews: 203,
+            options: {
+                storage: [
+                    { label: '64 Go', price: 0 },
+                    { label: '256 Go', price: 150 }
+                ],
+                connectivity: [
+                    { label: 'Wi-Fi', price: 0 },
+                    { label: 'Wi-Fi + Cellular', price: 150 }
+                ]
+            }
+        },
+        {
+            id: 11,
+            name: 'iPad (10e génération)',
+            slug: 'ipad-10',
+            categoryId: 'cat_apple',
+            basePrice: 449.00,
+            oldPrice: 499.00,
+            specs: {
+                processor: 'A14 Bionic',
+                ram: '4 Go',
+                storage: '64 Go',
+                screen: '10.9" Liquid Retina',
+                camera: '12 Mpx',
+                battery: 'Jusqu\'à 10h',
+                os: 'iPadOS 17'
+            },
+            description: 'L\'iPad tout écran, parfait pour le quotidien et les études.',
+            images: [
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+            ],
+            tags: ['ipad', 'apple', 'tablette'],
+            stock: 35,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.7,
+            reviews: 98,
+            options: {
+                storage: [
+                    { label: '64 Go', price: 0 },
+                    { label: '256 Go', price: 120 }
+                ],
+                color: [
+                    { label: 'Bleu', price: 0 },
+                    { label: 'Rose', price: 0 },
+                    { label: 'Argent', price: 0 },
+                    { label: 'Jaune', price: 0 }
+                ]
+            }
+        },
+
+        // ---- ANDROID - Samsung (6) ----
+        {
+            id: 12,
+            name: 'Samsung Galaxy S24 Ultra',
+            slug: 'samsung-galaxy-s24-ultra',
+            categoryId: 'cat_android',
+            basePrice: 1399.00,
+            oldPrice: 1499.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 3',
+                ram: '12 Go',
+                storage: '512 Go',
+                screen: '6.8" Dynamic AMOLED 2X 120Hz',
+                camera: '200 Mpx + 12 Mpx + 50 Mpx + 10 Mpx',
+                battery: '5000 mAh',
+                os: 'Android 14'
+            },
+            description: 'Le Samsung Galaxy S24 Ultra, l\'ultime smartphone avec S Pen et zoom x100.',
+            images: [
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400',
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400'
+            ],
+            tags: ['samsung', 'android', 'galaxy s24'],
+            stock: 12,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.9,
+            reviews: 178,
+            options: {
+                storage: [
+                    { label: '512 Go', price: 0 },
+                    { label: '1 To', price: 200 }
+                ],
+                color: [
+                    { label: 'Titane gris', price: 0 },
+                    { label: 'Titane violet', price: 0 },
+                    { label: 'Titane noir', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 13,
+            name: 'Samsung Galaxy S24+',
+            slug: 'samsung-galaxy-s24-plus',
+            categoryId: 'cat_android',
+            basePrice: 1119.00,
+            oldPrice: 1199.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 3',
+                ram: '12 Go',
+                storage: '256 Go',
+                screen: '6.7" Dynamic AMOLED 2X 120Hz',
+                camera: '50 Mpx + 12 Mpx + 10 Mpx',
+                battery: '4900 mAh',
+                os: 'Android 14'
+            },
+            description: 'Le Samsung Galaxy S24+, le grand format sans compromis.',
+            images: [
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400',
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400'
+            ],
+            tags: ['samsung', 'android', 'galaxy s24'],
+            stock: 15,
             isNew: true,
             isBestSeller: false,
             rating: 4.8,
-            reviews: 12,
+            reviews: 92,
             options: {
-                ram: [
-                    { label: '32 Go', price: 0 },
-                    { label: '64 Go', price: 300 }
-                ],
                 storage: [
-                    { label: '2 To SSD', price: 0 },
-                    { label: '4 To SSD', price: 200 }
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 120 }
+                ],
+                color: [
+                    { label: 'Onyx noir', price: 0 },
+                    { label: 'Jade vert', price: 0 },
+                    { label: 'Violet', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 14,
+            name: 'Samsung Galaxy Z Fold5',
+            slug: 'samsung-galaxy-z-fold5',
+            categoryId: 'cat_android',
+            basePrice: 1799.00,
+            oldPrice: 1899.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 2',
+                ram: '12 Go',
+                storage: '512 Go',
+                screen: '7.6" Dynamic AMOLED 120Hz',
+                camera: '50 Mpx + 12 Mpx + 10 Mpx',
+                battery: '4400 mAh',
+                os: 'Android 13'
+            },
+            description: 'Le Galaxy Z Fold5, le smartphone pliable qui se transforme en tablette.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['samsung', 'android', 'fold', 'pliable'],
+            stock: 5,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.8,
+            reviews: 67,
+            options: {
+                storage: [
+                    { label: '512 Go', price: 0 },
+                    { label: '1 To', price: 200 }
+                ],
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Crème', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 15,
+            name: 'Samsung Galaxy Z Flip5',
+            slug: 'samsung-galaxy-z-flip5',
+            categoryId: 'cat_android',
+            basePrice: 1099.00,
+            oldPrice: 1199.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 2',
+                ram: '8 Go',
+                storage: '256 Go',
+                screen: '6.7" Dynamic AMOLED 120Hz',
+                camera: '12 Mpx + 12 Mpx',
+                battery: '3700 mAh',
+                os: 'Android 13'
+            },
+            description: 'Le Galaxy Z Flip5, le compact pliable avec grand écran externe.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['samsung', 'android', 'flip', 'pliable'],
+            stock: 18,
+            isNew: false,
+            isBestSeller: true,
+            rating: 4.7,
+            reviews: 134,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 120 }
+                ],
+                color: [
+                    { label: 'Menthe', price: 0 },
+                    { label: 'Lavande', price: 0 },
+                    { label: 'Noir', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 16,
+            name: 'Samsung Galaxy A55',
+            slug: 'samsung-galaxy-a55',
+            categoryId: 'cat_android',
+            basePrice: 479.00,
+            oldPrice: 529.00,
+            specs: {
+                processor: 'Exynos 1480',
+                ram: '8 Go',
+                storage: '128 Go',
+                screen: '6.6" Super AMOLED 120Hz',
+                camera: '50 Mpx + 12 Mpx + 5 Mpx',
+                battery: '5000 mAh',
+                os: 'Android 14'
+            },
+            description: 'Le Samsung Galaxy A55, un excellent milieu de gamme pour tous les jours.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['samsung', 'android', 'galaxy a'],
+            stock: 40,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.6,
+            reviews: 56,
+            options: {
+                storage: [
+                    { label: '128 Go', price: 0 },
+                    { label: '256 Go', price: 60 }
+                ],
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Bleu', price: 0 },
+                    { label: 'Violet', price: 0 }
+                ]
+            }
+        },
+
+        // ---- ANDROID - Google Pixel (5) ----
+        {
+            id: 17,
+            name: 'Google Pixel 8 Pro',
+            slug: 'google-pixel-8-pro',
+            categoryId: 'cat_android',
+            basePrice: 1099.00,
+            oldPrice: null,
+            specs: {
+                processor: 'Google Tensor G3',
+                ram: '12 Go',
+                storage: '256 Go',
+                screen: '6.7" LTPO OLED 120Hz',
+                camera: '50 Mpx + 48 Mpx + 48 Mpx',
+                battery: '5050 mAh',
+                os: 'Android 14'
+            },
+            description: 'Le Pixel 8 Pro, avec l\'IA de Google et un appareil photo exceptionnel.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['google', 'pixel', 'android'],
+            stock: 20,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.9,
+            reviews: 92,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 150 }
+                ],
+                color: [
+                    { label: 'Baie', price: 0 },
+                    { label: 'Porcelaine', price: 0 },
+                    { label: 'Noir', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 18,
+            name: 'Google Pixel 8',
+            slug: 'google-pixel-8',
+            categoryId: 'cat_android',
+            basePrice: 799.00,
+            oldPrice: 849.00,
+            specs: {
+                processor: 'Google Tensor G3',
+                ram: '8 Go',
+                storage: '128 Go',
+                screen: '6.2" OLED 120Hz',
+                camera: '50 Mpx + 12 Mpx',
+                battery: '4575 mAh',
+                os: 'Android 14'
+            },
+            description: 'Le Pixel 8, compact et puissant avec les fonctionnalités IA de Google.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['google', 'pixel', 'android'],
+            stock: 25,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.8,
+            reviews: 78,
+            options: {
+                storage: [
+                    { label: '128 Go', price: 0 },
+                    { label: '256 Go', price: 100 }
+                ],
+                color: [
+                    { label: 'Rose', price: 0 },
+                    { label: 'Vert', price: 0 },
+                    { label: 'Noir', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 19,
+            name: 'Google Pixel 7 Pro',
+            slug: 'google-pixel-7-pro',
+            categoryId: 'cat_android',
+            basePrice: 899.00,
+            oldPrice: 999.00,
+            specs: {
+                processor: 'Google Tensor G2',
+                ram: '12 Go',
+                storage: '256 Go',
+                screen: '6.7" LTPO OLED 120Hz',
+                camera: '50 Mpx + 48 Mpx + 12 Mpx',
+                battery: '5000 mAh',
+                os: 'Android 13'
+            },
+            description: 'Le Pixel 7 Pro, un excellent choix pour la photo avec son téléobjectif.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['google', 'pixel', 'android'],
+            stock: 15,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.7,
+            reviews: 210,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 130 }
+                ],
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Blanc', price: 0 }
+                ]
+            }
+        },
+
+        // ---- ANDROID - Xiaomi (5) ----
+        {
+            id: 20,
+            name: 'Xiaomi 14 Ultra',
+            slug: 'xiaomi-14-ultra',
+            categoryId: 'cat_android',
+            basePrice: 1299.00,
+            oldPrice: 1399.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 3',
+                ram: '16 Go',
+                storage: '512 Go',
+                screen: '6.73" AMOLED 120Hz',
+                camera: '50 Mpx + 50 Mpx + 50 Mpx + 50 Mpx',
+                battery: '5300 mAh',
+                os: 'Android 14'
+            },
+            description: 'Le Xiaomi 14 Ultra, un appareil photo Leica quadri-capteur et une puissance exceptionnelle.',
+            images: [
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+            ],
+            tags: ['xiaomi', 'android', 'smartphone'],
+            stock: 8,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.8,
+            reviews: 45,
+            options: {
+                storage: [
+                    { label: '512 Go', price: 0 },
+                    { label: '1 To', price: 200 }
                 ],
                 color: [
                     { label: 'Noir', price: 0 },
@@ -197,254 +846,377 @@
             }
         },
         {
-            id: 4,
-            name: 'Mini PC Bureau Essentiel',
-            slug: 'mini-pc-bureau-essentiel',
-            categoryId: 'cat_fixe',
-            basePrice: 699.00,
-            oldPrice: 799.00,
+            id: 21,
+            name: 'Xiaomi 13T Pro',
+            slug: 'xiaomi-13t-pro',
+            categoryId: 'cat_android',
+            basePrice: 649.00,
+            oldPrice: 699.00,
             specs: {
-                processor: 'Intel Core i3-12100',
-                ram: '8 Go DDR4',
-                storage: '512 Go SSD',
-                graphics: 'Intel UHD 730',
-                os: 'Windows 11 Famille'
+                processor: 'Dimensity 9200+',
+                ram: '12 Go',
+                storage: '256 Go',
+                screen: '6.67" AMOLED 144Hz',
+                camera: '50 Mpx + 50 Mpx + 12 Mpx',
+                battery: '5000 mAh',
+                os: 'Android 13'
             },
-            description: 'PC compact et silencieux pour la bureautique, le télétravail et le multimédia.',
+            description: 'Le Xiaomi 13T Pro, co-développé avec Leica pour des photos sublimes.',
             images: [
-                'https://images.unsplash.com/photo-1555618254-6c0b3a3e0b7a?w=400',
-                'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400'
+                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
             ],
-            tags: ['intel', 'mini pc', 'bureau', 'compact', 'ssd'],
-            stock: 25,
-            isNew: false,
-            isBestSeller: false,
-            rating: 4.5,
-            reviews: 31,
-            options: {
-                ram: [
-                    { label: '8 Go', price: 0 },
-                    { label: '16 Go', price: 60 }
-                ],
-                storage: [
-                    { label: '512 Go SSD', price: 0 },
-                    { label: '1 To SSD', price: 70 }
-                ]
-            }
-        },
-        {
-            id: 5,
-            name: 'Laptop Gaming ROG 15"',
-            slug: 'laptop-gaming-rog-15',
-            categoryId: 'cat_portable',
-            basePrice: 1799.00,
-            oldPrice: 1999.00,
-            specs: {
-                processor: 'Intel Core i7-13700H',
-                ram: '16 Go DDR5',
-                storage: '1 To SSD NVMe',
-                graphics: 'NVIDIA RTX 4060 8 Go',
-                screen: '15.6" Full HD 144Hz',
-                os: 'Windows 11 Famille'
-            },
-            description: 'PC portable gaming avec écran 144Hz, clavier RGB et système de refroidissement avancé.',
-            images: [
-                'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400',
-                'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400'
-            ],
-            tags: ['intel', 'rtx', 'gaming', 'portable', '15 pouces'],
-            stock: 10,
-            isNew: false,
-            isBestSeller: true,
-            rating: 4.8,
-            reviews: 54,
-            options: {
-                ram: [
-                    { label: '16 Go', price: 0 },
-                    { label: '32 Go', price: 200 }
-                ],
-                storage: [
-                    { label: '1 To SSD', price: 0 },
-                    { label: '2 To SSD', price: 150 }
-                ],
-                screen: [
-                    { label: 'FHD 144Hz', price: 0 },
-                    { label: 'QHD 165Hz', price: 150 }
-                ]
-            }
-        },
-        {
-            id: 6,
-            name: 'MacBook Pro 16" Alternative',
-            slug: 'macbook-pro-16-alternative',
-            categoryId: 'cat_creation',
-            basePrice: 2499.00,
-            oldPrice: null,
-            specs: {
-                processor: 'Intel Core i9-13950HX',
-                ram: '32 Go DDR5',
-                storage: '2 To SSD NVMe',
-                graphics: 'NVIDIA RTX 4080 12 Go',
-                screen: '16" 4K Mini-LED',
-                os: 'Windows 11 Pro'
-            },
-            description: 'PC portable ultra-puissant pour les créateurs exigeants, rivalisant avec les meilleurs MacBook.',
-            images: [
-                'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400',
-                'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400'
-            ],
-            tags: ['intel', 'rtx', 'creation', '16 pouces', '4k'],
-            stock: 3,
-            isNew: true,
-            isBestSeller: false,
-            rating: 5.0,
-            reviews: 8,
-            options: {
-                ram: [
-                    { label: '32 Go', price: 0 },
-                    { label: '64 Go', price: 400 }
-                ],
-                storage: [
-                    { label: '2 To SSD', price: 0 },
-                    { label: '4 To SSD', price: 300 }
-                ]
-            }
-        },
-        {
-            id: 7,
-            name: 'PC Gamer Predator',
-            slug: 'pc-gamer-predator',
-            categoryId: 'cat_gamer',
-            basePrice: 2899.00,
-            oldPrice: 3199.00,
-            specs: {
-                processor: 'AMD Ryzen 9 7950X3D',
-                ram: '64 Go DDR5',
-                storage: '2 To SSD NVMe',
-                graphics: 'NVIDIA RTX 4080 16 Go',
-                cooling: 'Watercooling 360mm RGB',
-                os: 'Windows 11 Famille'
-            },
-            description: 'La bête de course pour le gaming en 4K et la réalité virtuelle. Design agressif et RGB personnalisable.',
-            images: [
-                'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400',
-                'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400'
-            ],
-            tags: ['ryzen', 'rtx', 'gaming', 'haut de gamme', 'watercooling'],
-            stock: 2,
-            isNew: false,
-            isBestSeller: false,
-            rating: 4.9,
-            reviews: 19,
-            options: {
-                ram: [
-                    { label: '64 Go', price: 0 },
-                    { label: '128 Go', price: 500 }
-                ],
-                storage: [
-                    { label: '2 To SSD', price: 0 },
-                    { label: '4 To SSD', price: 250 }
-                ],
-                rgb: [
-                    { label: 'RGB standard', price: 0 },
-                    { label: 'RGB premium', price: 100 }
-                ]
-            }
-        },
-        {
-            id: 8,
-            name: 'Chromebook Ultra 13"',
-            slug: 'chromebook-ultra-13',
-            categoryId: 'cat_portable',
-            basePrice: 499.00,
-            oldPrice: 549.00,
-            specs: {
-                processor: 'Intel Celeron N4500',
-                ram: '8 Go LPDDR4',
-                storage: '256 Go eMMC',
-                screen: '13.3" Full HD',
-                os: 'Chrome OS'
-            },
-            description: 'Ultra-léger, autonomie de 15h, idéal pour les étudiants et la navigation web.',
-            images: [
-                'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400',
-                'https://images.unsplash.com/photo-1555618254-6c0b3a3e0b7a?w=400'
-            ],
-            tags: ['chromebook', '13 pouces', 'leger', 'etudiant'],
-            stock: 40,
-            isNew: true,
-            isBestSeller: false,
-            rating: 4.3,
-            reviews: 62,
-            options: {
-                ram: [
-                    { label: '8 Go', price: 0 },
-                    { label: '16 Go', price: 80 }
-                ],
-                storage: [
-                    { label: '256 Go eMMC', price: 0 },
-                    { label: '512 Go SSD', price: 100 }
-                ]
-            }
-        },
-        {
-            id: 9,
-            name: 'Écran Gaming 27" 165Hz',
-            slug: 'ecran-gaming-27-165hz',
-            categoryId: 'cat_peripheriques',
-            basePrice: 349.00,
-            oldPrice: 399.00,
-            specs: {
-                size: '27"',
-                resolution: '2560x1440 (QHD)',
-                refresh: '165Hz',
-                panel: 'IPS',
-                response: '1ms',
-                features: ['FreeSync', 'G-Sync compatible', 'HDR10']
-            },
-            description: 'Écran gaming immersif avec taux de rafraîchissement élevé et couleurs précises.',
-            images: [
-                'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400',
-                'https://images.unsplash.com/photo-1555618254-6c0b3a3e0b7a?w=400'
-            ],
-            tags: ['ecran', 'gaming', '27 pouces', '165hz', 'qhd'],
-            stock: 18,
+            tags: ['xiaomi', 'android'],
+            stock: 22,
             isNew: false,
             isBestSeller: true,
             rating: 4.7,
-            reviews: 33,
-            options: {} // pas d'options pour cet écran
+            reviews: 112,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 100 }
+                ],
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Bleu', price: 0 }
+                ]
+            }
+        },
+
+        // ---- MONTREs - Samsung Galaxy Watch (5) ----
+        {
+            id: 22,
+            name: 'Samsung Galaxy Watch 6 Classic',
+            slug: 'samsung-galaxy-watch-6-classic',
+            categoryId: 'cat_wearables',
+            basePrice: 399.00,
+            oldPrice: 449.00,
+            specs: {
+                processor: 'Exynos W930',
+                screen: '1.5" Super AMOLED',
+                size: '47 mm',
+                connectivity: 'Bluetooth',
+                battery: '425 mAh',
+                sensors: 'ECG, accéléromètre, gyroscope'
+            },
+            description: 'La Galaxy Watch 6 Classic avec sa lunette tournante, idéale pour le sport et la santé.',
+            images: [
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+            ],
+            tags: ['samsung', 'watch', 'android'],
+            stock: 25,
+            isNew: false,
+            isBestSeller: true,
+            rating: 4.7,
+            reviews: 98,
+            options: {
+                size: [
+                    { label: '43 mm', price: 0 },
+                    { label: '47 mm', price: 30 }
+                ],
+                connectivity: [
+                    { label: 'Bluetooth', price: 0 },
+                    { label: '4G', price: 50 }
+                ]
+            }
         },
         {
-            id: 10,
-            name: 'Clavier Mécanique RGB',
-            slug: 'clavier-mecanique-rgb',
-            categoryId: 'cat_peripheriques',
-            basePrice: 129.00,
-            oldPrice: null,
+            id: 23,
+            name: 'Samsung Galaxy Watch 6',
+            slug: 'samsung-galaxy-watch-6',
+            categoryId: 'cat_wearables',
+            basePrice: 299.00,
+            oldPrice: 329.00,
             specs: {
-                type: 'Mécanique',
-                switches: 'Cherry MX Red',
-                layout: 'AZERTY Français',
-                backlight: 'RGB par touche',
-                features: ['Repose-poignet', 'Touches multimedia']
+                processor: 'Exynos W930',
+                screen: '1.3" Super AMOLED',
+                size: '40 mm',
+                connectivity: 'Bluetooth',
+                battery: '300 mAh',
+                sensors: 'ECG, accéléromètre'
             },
-            description: 'Clavier mécanique premium pour gaming et productivité, switches linéaires et silence.',
+            description: 'La Galaxy Watch 6, le modèle compact pour un suivi santé précis.',
             images: [
-                'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400',
-                'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400'
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
             ],
-            tags: ['clavier', 'mecanique', 'rgb', 'azerty'],
+            tags: ['samsung', 'watch', 'android'],
             stock: 30,
-            isNew: true,
+            isNew: false,
             isBestSeller: false,
             rating: 4.6,
-            reviews: 27,
+            reviews: 134,
             options: {
-                switches: [
-                    { label: 'Cherry MX Red', price: 0 },
-                    { label: 'Cherry MX Blue', price: 0 },
-                    { label: 'Cherry MX Brown', price: 0 }
+                size: [
+                    { label: '40 mm', price: 0 },
+                    { label: '44 mm', price: 20 }
+                ],
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Argent', price: 0 }
+                ]
+            }
+        },
+
+        // ---- MONTREs - Fitbit (5) ----
+        {
+            id: 24,
+            name: 'Fitbit Charge 6',
+            slug: 'fitbit-charge-6',
+            categoryId: 'cat_wearables',
+            basePrice: 159.00,
+            oldPrice: 179.00,
+            specs: {
+                screen: 'OLED tactile',
+                battery: 'Jusqu\'à 7 jours',
+                sensors: 'ECG, SpO2, fréquence cardiaque, GPS connecté',
+                features: 'Suivi d\'activité, sommeil, stress'
+            },
+            description: 'Le Fitbit Charge 6, le tracker d\'activité ultime pour la santé et la forme.',
+            images: [
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400'
+            ],
+            tags: ['fitbit', 'tracker'],
+            stock: 60,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.6,
+            reviews: 210,
+            options: {
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Blanc', price: 0 },
+                    { label: 'Bleu', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 25,
+            name: 'Fitbit Versa 4',
+            slug: 'fitbit-versa-4',
+            categoryId: 'cat_wearables',
+            basePrice: 199.00,
+            oldPrice: 229.00,
+            specs: {
+                screen: 'AMOLED',
+                battery: 'Jusqu\'à 6 jours',
+                sensors: 'Fréquence cardiaque, SpO2',
+                features: 'GPS intégré, suivi d\'activité'
+            },
+            description: 'La Fitbit Versa 4, une montre connectée complète pour le sport et le quotidien.',
+            images: [
+                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
+                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+            ],
+            tags: ['fitbit', 'montre'],
+            stock: 35,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.5,
+            reviews: 145,
+            options: {
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Rose', price: 0 },
+                    { label: 'Bleu', price: 0 }
+                ]
+            }
+        },
+
+        // ---- TABLETTES - Samsung Galaxy Tab (5) ----
+        {
+            id: 26,
+            name: 'Samsung Galaxy Tab S9 Ultra',
+            slug: 'samsung-galaxy-tab-s9-ultra',
+            categoryId: 'cat_tablets',
+            basePrice: 1199.00,
+            oldPrice: 1299.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 2',
+                ram: '12 Go',
+                storage: '256 Go',
+                screen: '14.6" Dynamic AMOLED 2X 120Hz',
+                camera: '13 Mpx + 8 Mpx',
+                battery: '11200 mAh',
+                os: 'Android 13'
+            },
+            description: 'La Galaxy Tab S9 Ultra, une tablette géante avec S Pen inclus.',
+            images: [
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+            ],
+            tags: ['samsung', 'android', 'tablette'],
+            stock: 8,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.8,
+            reviews: 67,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 150 },
+                    { label: '1 To', price: 300 }
+                ],
+                connectivity: [
+                    { label: 'Wi-Fi', price: 0 },
+                    { label: '5G', price: 150 }
+                ]
+            }
+        },
+        {
+            id: 27,
+            name: 'Samsung Galaxy Tab S9+',
+            slug: 'samsung-galaxy-tab-s9-plus',
+            categoryId: 'cat_tablets',
+            basePrice: 999.00,
+            oldPrice: 1099.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 2',
+                ram: '12 Go',
+                storage: '256 Go',
+                screen: '12.4" Dynamic AMOLED 2X 120Hz',
+                camera: '13 Mpx + 8 Mpx',
+                battery: '10090 mAh',
+                os: 'Android 13'
+            },
+            description: 'La Galaxy Tab S9+, le grand format polyvalent.',
+            images: [
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+            ],
+            tags: ['samsung', 'android', 'tablette'],
+            stock: 12,
+            isNew: true,
+            isBestSeller: false,
+            rating: 4.8,
+            reviews: 42,
+            options: {
+                storage: [
+                    { label: '256 Go', price: 0 },
+                    { label: '512 Go', price: 150 }
+                ],
+                connectivity: [
+                    { label: 'Wi-Fi', price: 0 },
+                    { label: '5G', price: 130 }
+                ]
+            }
+        },
+        {
+            id: 28,
+            name: 'Samsung Galaxy Tab S9',
+            slug: 'samsung-galaxy-tab-s9',
+            categoryId: 'cat_tablets',
+            basePrice: 799.00,
+            oldPrice: 899.00,
+            specs: {
+                processor: 'Snapdragon 8 Gen 2',
+                ram: '8 Go',
+                storage: '128 Go',
+                screen: '11" Dynamic AMOLED 2X 120Hz',
+                camera: '13 Mpx',
+                battery: '8400 mAh',
+                os: 'Android 13'
+            },
+            description: 'La Galaxy Tab S9, la tablette compacte et puissante.',
+            images: [
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+            ],
+            tags: ['samsung', 'android', 'tablette'],
+            stock: 18,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.7,
+            reviews: 89,
+            options: {
+                storage: [
+                    { label: '128 Go', price: 0 },
+                    { label: '256 Go', price: 100 }
+                ],
+                connectivity: [
+                    { label: 'Wi-Fi', price: 0 },
+                    { label: '5G', price: 120 }
+                ]
+            }
+        },
+
+        // ---- TABLETTES - Amazon Fire (5) ----
+        {
+            id: 29,
+            name: 'Amazon Fire Max 11',
+            slug: 'amazon-fire-max-11',
+            categoryId: 'cat_tablets',
+            basePrice: 249.99,
+            oldPrice: 279.99,
+            specs: {
+                processor: 'MediaTek MT8188',
+                ram: '4 Go',
+                storage: '64 Go',
+                screen: '11" LCD',
+                camera: '8 Mpx',
+                battery: 'Jusqu\'à 14h',
+                os: 'Fire OS 8'
+            },
+            description: 'La Fire Max 11, la tablette Amazon pour le divertissement et la productivité.',
+            images: [
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400'
+            ],
+            tags: ['amazon', 'fire', 'tablette'],
+            stock: 45,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.5,
+            reviews: 312,
+            options: {
+                storage: [
+                    { label: '64 Go', price: 0 },
+                    { label: '128 Go', price: 40 }
+                ],
+                with_ads: [
+                    { label: 'Avec publicités', price: 0 },
+                    { label: 'Sans publicités', price: 15 }
+                ]
+            }
+        },
+        {
+            id: 30,
+            name: 'Amazon Fire HD 10',
+            slug: 'amazon-fire-hd-10',
+            categoryId: 'cat_tablets',
+            basePrice: 149.99,
+            oldPrice: 169.99,
+            specs: {
+                processor: 'Octa-core',
+                ram: '3 Go',
+                storage: '32 Go',
+                screen: '10.1" 1080p',
+                camera: '5 Mpx',
+                battery: 'Jusqu\'à 12h',
+                os: 'Fire OS 8'
+            },
+            description: 'La Fire HD 10, le meilleur rapport qualité-prix pour les films et les apps.',
+            images: [
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400'
+            ],
+            tags: ['amazon', 'fire', 'tablette'],
+            stock: 60,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.4,
+            reviews: 567,
+            options: {
+                storage: [
+                    { label: '32 Go', price: 0 },
+                    { label: '64 Go', price: 30 }
+                ],
+                with_ads: [
+                    { label: 'Avec publicités', price: 0 },
+                    { label: 'Sans publicités', price: 15 }
                 ]
             }
         }
@@ -454,25 +1226,20 @@
     // FONCTIONS UTILITAIRES
     // ------------------------------------------------------------
     const helpers = {
-        // Récupérer un produit par son ID
         getProductById: function(id) {
             return products.find(p => p.id === parseInt(id));
         },
-        // Récupérer les produits d'une catégorie (par slug)
         getProductsByCategory: function(categorySlug) {
             const cat = categories.find(c => c.slug === categorySlug);
             if (!cat) return [];
             return products.filter(p => p.categoryId === cat.id);
         },
-        // Récupérer les meilleures ventes
         getBestSellers: function(limit = 4) {
             return products.filter(p => p.isBestSeller).slice(0, limit);
         },
-        // Récupérer les nouveaux produits
         getNewProducts: function(limit = 4) {
             return products.filter(p => p.isNew).slice(0, limit);
         },
-        // Recherche full-text simplifiée
         search: function(query) {
             const q = query.toLowerCase();
             return products.filter(p => 
@@ -481,11 +1248,9 @@
                 p.tags.some(tag => tag.includes(q))
             );
         },
-        // Obtenir une catégorie par son slug
         getCategoryBySlug: function(slug) {
             return categories.find(c => c.slug === slug);
         },
-        // Obtenir le slug d'une catégorie à partir de son ID
         getCategorySlugFromId: function(categoryId) {
             const cat = categories.find(c => c.id === categoryId);
             return cat ? cat.slug : '';
@@ -493,12 +1258,12 @@
     };
 
     // ------------------------------------------------------------
-    // EXPOSITION GLOBALE
+    // EXPOSITION GLOBALE (on garde le même nom)
     // ------------------------------------------------------------
     window.NovaComputeDB = {
         categories: categories,
         products: products,
-        promotions: [], // à remplir si besoin
+        promotions: [],
         ...helpers
     };
 

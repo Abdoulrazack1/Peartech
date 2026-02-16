@@ -1,4 +1,6 @@
-// filtre.js
+// ============================================
+// filtre.js - Filtrage par onglets (page accueil)
+// ============================================
 (function() {
     'use strict';
 
@@ -9,7 +11,7 @@
         function filterProducts(filter) {
             const productCards = document.querySelectorAll('.product-card');
             productCards.forEach(card => {
-                const category = card.dataset.category; // ex: "portables", "gamers", "creation"
+                const category = card.dataset.category; // apple, android, montres, tablettes
                 if (filter === 'tous' || category === filter) {
                     card.style.display = 'block';
                     card.style.animation = 'fadeIn 0.3s ease';
@@ -21,23 +23,15 @@
 
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
-                // Retirer la classe active de tous les onglets
                 tabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
-
-                // Déterminer le filtre à partir du texte de l'onglet
-                const tabText = this.textContent.trim().toLowerCase();
-                let filter = 'tous';
-                if (tabText === 'portables') filter = 'portables';
-                else if (tabText === 'gamer') filter = 'gamers';
-                else if (tabText === 'création') filter = 'creation';
-
+                const filter = this.dataset.filter; // 'tous', 'apple', etc.
                 filterProducts(filter);
                 console.log('Filtre appliqué :', filter);
             });
         });
 
-        // Initialisation : afficher tous les produits
+        // Initialisation
         filterProducts('tous');
     });
 })();
