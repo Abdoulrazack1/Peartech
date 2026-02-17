@@ -1,6 +1,7 @@
 // ============================================
 // data.js - Base de données NovaCompute
 // Catégories : Apple, Android, Montres, Tablettes
+// Prix réalistes (mise à jour 2025)
 // ============================================
 
 (function() {
@@ -13,7 +14,7 @@
             slug: 'apple',
             description: 'iPhone, iPad, Apple Watch et accessoires Apple',
             icon: 'apple',
-            image: 'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400',
+            image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400',
             subcategories: ['iPhone', 'iPad', 'Apple Watch', 'Accessoires']
         },
         {
@@ -65,8 +66,8 @@
             },
             description: 'L\'iPhone 15 Pro Max, le plus puissant des iPhone avec un zoom optique x5 et un design en titane.',
             images: [
-                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400',
-                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400'
+                'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400',
+                'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400'
             ],
             tags: ['iphone', 'apple', '15 pro max', 'ios'],
             stock: 18,
@@ -105,8 +106,8 @@
             },
             description: 'L\'iPhone 15 Pro, puissance et élégance dans un format compact.',
             images: [
-                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400',
-                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400'
+                'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400',
+                'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400'
             ],
             tags: ['iphone', 'apple', '15 pro', 'ios'],
             stock: 22,
@@ -145,8 +146,8 @@
             },
             description: 'L\'iPhone 15, l\'essentiel avec l\'îlot dynamique et un appareil photo de 48 Mpx.',
             images: [
-                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400',
-                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400'
+                'https://images.unsplash.com/photo-1695048132533-7f246a8c7d3e?w=400',
+                'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400'
             ],
             tags: ['iphone', 'apple', '15', 'ios'],
             stock: 35,
@@ -187,8 +188,8 @@
             },
             description: 'L\'iPhone 14 Pro, encore performant avec son écran Always-On et la Dynamic Island.',
             images: [
-                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400',
-                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400'
+                'https://images.unsplash.com/photo-1664478546384-57c27c0a2f23?w=400',
+                'https://images.unsplash.com/photo-1664478546423-2a7b6e1b8d9a?w=400'
             ],
             tags: ['iphone', 'apple', '14 pro', 'ios'],
             stock: 12,
@@ -228,8 +229,8 @@
             },
             description: 'L\'iPhone 14, un excellent rapport qualité-prix pour profiter de l\'écosystème Apple.',
             images: [
-                'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400',
-                'https://images.unsplash.com/photo-1696426051006-32f07d3c1a4e?w=400'
+                'https://images.unsplash.com/photo-1664478546392-9c8e7b2b1c3d?w=400',
+                'https://images.unsplash.com/photo-1664478546384-57c27c0a2f23?w=400'
             ],
             tags: ['iphone', 'apple', '14', 'ios'],
             stock: 28,
@@ -270,8 +271,8 @@
             },
             description: 'L\'Apple Watch Series 9, avec le geste Double Tap et l\'écran le plus lumineux.',
             images: [
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400'
+                'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400',
+                'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400'
             ],
             tags: ['apple', 'watch', 'montre'],
             stock: 30,
@@ -313,8 +314,8 @@
             },
             description: 'L\'Apple Watch SE, toutes les essentiels à un prix abordable.',
             images: [
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+                'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400',
+                'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400'
             ],
             tags: ['apple', 'watch', 'montre'],
             stock: 45,
@@ -355,8 +356,8 @@
             },
             description: 'L\'Apple Watch Ultra 2, conçue pour les sports extrêmes et l\'aventure.',
             images: [
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400'
+                'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400',
+                'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400'
             ],
             tags: ['apple', 'watch', 'ultra', 'montre'],
             stock: 8,
@@ -392,8 +393,8 @@
             },
             description: 'L\'iPad Pro avec puce M2, écran XDR et compatibilité Apple Pencil.',
             images: [
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400'
+                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
+                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
             ],
             tags: ['ipad', 'apple', 'pro', 'tablette'],
             stock: 10,
@@ -492,7 +493,7 @@
             }
         },
 
-        // ---- ANDROID - Samsung (6) ----
+        // ---- ANDROID - Samsung (5) ----
         {
             id: 12,
             name: 'Samsung Galaxy S24 Ultra',
@@ -688,7 +689,7 @@
             }
         },
 
-        // ---- ANDROID - Google Pixel (5) ----
+        // ---- ANDROID - Google Pixel (3) ----
         {
             id: 17,
             name: 'Google Pixel 8 Pro',
@@ -806,7 +807,7 @@
             }
         },
 
-        // ---- ANDROID - Xiaomi (5) ----
+        // ---- ANDROID - Xiaomi (3) ----
         {
             id: 20,
             name: 'Xiaomi 14 Ultra',
@@ -884,7 +885,7 @@
             }
         },
 
-        // ---- MONTREs - Samsung Galaxy Watch (5) ----
+        // ---- MONTRES - Samsung Galaxy Watch (3) ----
         {
             id: 22,
             name: 'Samsung Galaxy Watch 6 Classic',
@@ -960,7 +961,7 @@
             }
         },
 
-        // ---- MONTREs - Fitbit (5) ----
+        // ---- MONTRES - Fitbit (2) ----
         {
             id: 24,
             name: 'Fitbit Charge 6',
@@ -1026,7 +1027,7 @@
             }
         },
 
-        // ---- TABLETTES - Samsung Galaxy Tab (5) ----
+        // ---- TABLETTES - Samsung Galaxy Tab (3) ----
         {
             id: 26,
             name: 'Samsung Galaxy Tab S9 Ultra',
@@ -1143,7 +1144,7 @@
             }
         },
 
-        // ---- TABLETTES - Amazon Fire (5) ----
+        // ---- TABLETTES - Amazon Fire (2) ----
         {
             id: 29,
             name: 'Amazon Fire Max 11',
@@ -1222,9 +1223,7 @@
         }
     ];
 
-    // ------------------------------------------------------------
-    // FONCTIONS UTILITAIRES
-    // ------------------------------------------------------------
+    // Fonctions utilitaires
     const helpers = {
         getProductById: function(id) {
             return products.find(p => p.id === parseInt(id));
@@ -1257,9 +1256,7 @@
         }
     };
 
-    // ------------------------------------------------------------
-    // EXPOSITION GLOBALE (on garde le même nom)
-    // ------------------------------------------------------------
+    // Exposition globale
     window.NovaComputeDB = {
         categories: categories,
         products: products,

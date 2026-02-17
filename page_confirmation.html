@@ -1,26 +1,27 @@
 <!-- ============================================
-     page_catalogue.html - Page catalogue complète avec badge panier
+     page_confirmation.html - Page de confirmation de commande
      ============================================ -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaCompute - Catalogue</title>
+    <title>NovaCompute - Confirmation de commande</title>
     <link rel="stylesheet" href="asset/css/page_accueil.css">
-    <link rel="stylesheet" href="asset/css/page_catalogue.css">
+    <link rel="stylesheet" href="asset/css/page_confirmation.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
+    <!-- HEADER -->
     <header class="header">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo">
                     <div class="logo-icon">PC</div>
                     <div class="logo-text">
-                        <div class="logo-title">PearTech</div>
-                        <div class="logo-subtitle">L</div>
+                        <div class="logo-title">NovaCompute</div>
+                        <div class="logo-subtitle">Boutique d'ordinateurs</div>
                     </div>
                 </a>
                 <div class="search-bar">
@@ -53,78 +54,85 @@
             </div>
         </div>
     </header>
+
     <main>
         <div class="container">
-            <div class="breadcrumb" id="breadcrumb">
+            <!-- Fil d'Ariane -->
+            <div class="breadcrumb">
                 <a href="page_accueil.html">Accueil</a>
                 <span>/</span>
-                <a href="page_catalogue.html">Toutes les catégories</a>
+                <a href="page_panier.html">Mon panier</a>
                 <span>/</span>
-                <span id="current-category-name">Apple</span>
+                <a href="page_paiement.html">Finaliser ma commande</a>
+                <span>/</span>
+                <span>Confirmation</span>
             </div>
-            <div class="catalogue-layout">
-                <aside class="filters-sidebar" id="filters-sidebar">
-                    <div class="filters-header">
-                        <h3>Filtrer les résultats</h3>
-                        <button class="reset-filters" id="reset-filters">Réinitialiser les filtres</button>
-                    </div>
-                    <div class="filter-section">
-                        <h4>Sous-catégories</h4>
-                        <div id="subcategories-filter" class="checkbox-list"></div>
-                    </div>
-                    <div class="filter-section">
-                        <h4>Prix</h4>
-                        <div class="price-range">
-                            <input type="range" id="price-min" class="price-slider" min="0" max="5000" step="10" value="0">
-                            <input type="range" id="price-max" class="price-slider" min="0" max="5000" step="10" value="5000">
-                            <div class="price-values">
-                                <span id="price-min-display">0 €</span> - <span id="price-max-display">5000 €</span>
+
+            <!-- Message de remerciement -->
+            <div class="confirmation-header">
+                <div class="checkmark-circle">
+                    <span class="material-symbols-outlined">check_circle</span>
+                </div>
+                <h1 class="confirmation-title">Merci pour votre commande !</h1>
+                <p class="confirmation-subtitle">Commande n° <span id="order-number">123456789</span></p>
+                <p class="confirmation-email">Un email récapitulatif vient d'être envoyé à <span id="customer-email">jean.dupont@email.com</span></p>
+            </div>
+
+            <div class="confirmation-layout">
+                <!-- Colonne gauche : infos livraison et résumé -->
+                <div class="confirmation-left">
+                    <section class="info-section">
+                        <h2>Informations de livraison</h2>
+                        <div class="info-grid">
+                            <div class="info-row">
+                                <span class="info-label">Destinataire</span>
+                                <span class="info-value" id="delivery-name">Jean Dupont</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Adresse</span>
+                                <span class="info-value" id="delivery-address">15 rue de la Paix, 75001 Paris, France</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Mode de livraison</span>
+                                <span class="info-value" id="delivery-mode">Livraison standard (3-5 jours)</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Paiement</span>
+                                <span class="info-value" id="payment-method">Carte bancaire **** 4242</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="filter-section">
-                        <h4>Marques</h4>
-                        <div id="brands-filter" class="checkbox-list"></div>
-                    </div>
-                    <div class="filter-section">
-                        <h4>Caractéristiques</h4>
-                        <div id="features-filter" class="checkbox-list"></div>
-                    </div>
-                </aside>
-                <div class="catalogue-results">
-                    <div class="results-header">
-                        <div>
-                            <h1 class="category-title" id="category-title">Apple</h1>
-                            <p class="category-description" id="category-description">iPhone, iPad, Apple Watch et accessoires Apple</p>
-                            <p class="results-count" id="results-count">124 résultats</p>
+                    </section>
+
+                    <section class="order-summary">
+                        <h2>Résumé de la commande</h2>
+                        <div class="order-items" id="order-items">
+                            <!-- Généré dynamiquement -->
                         </div>
-                        <div class="results-toolbar">
-                            <div class="active-filters" id="active-filters"></div>
-                            <div class="sort-selector">
-                                <label for="sort">Trier par :</label>
-                                <select id="sort">
-                                    <option value="relevance">Pertinence</option>
-                                    <option value="price-asc">Prix croissant</option>
-                                    <option value="price-desc">Prix décroissant</option>
-                                    <option value="rating">Meilleures notes</option>
-                                </select>
+                        <div class="order-totals">
+                            <div class="total-row">
+                                <span>Livraison</span>
+                                <span id="shipping-cost">Gratuit</span>
                             </div>
-                            <div class="view-toggle">
-                                <button class="view-btn active" data-view="grid">
-                                    <span class="material-symbols-outlined">grid_view</span>
-                                </button>
-                                <button class="view-btn" data-view="list">
-                                    <span class="material-symbols-outlined">view_list</span>
-                                </button>
+                            <div class="total-row grand-total">
+                                <span>Total payé</span>
+                                <span id="total-paid">1280,00 €</span>
                             </div>
                         </div>
+                    </section>
+                </div>
+
+                <!-- Colonne droite : actions -->
+                <div class="confirmation-right">
+                    <div class="actions-card">
+                        <a href="page_catalogue.html" class="btn-primary">Continuer mes achats</a>
+                        <a href="page_profil.html?section=commandes" class="btn-secondary">Voir mon compte / Suivre ma commande</a>
                     </div>
-                    <div class="products-grid" id="products-grid"></div>
-                    <div class="pagination" id="pagination"></div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
@@ -159,12 +167,13 @@
             </div>
         </div>
     </footer>
+
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>
     <script src="asset/js/dropdown.js"></script>
     <script src="asset/js/panier.js"></script>
     <script src="asset/js/main.js"></script>
-    <script src="asset/js/catalogue.js"></script>
+    <script src="asset/js/confirmation.js"></script>
 </body>
 </html>
