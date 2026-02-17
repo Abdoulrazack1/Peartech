@@ -14,7 +14,7 @@
             slug: 'apple',
             description: 'iPhone, iPad, Apple Watch et accessoires Apple',
             icon: 'apple',
-            image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400',
+            image: '/asset/image/category_apple.jpeg',
             subcategories: ['iPhone', 'iPad', 'Apple Watch', 'Accessoires']
         },
         {
@@ -66,7 +66,7 @@
             },
             description: 'L\'iPhone 15 Pro Max, le plus puissant des iPhone avec un zoom optique x5 et un design en titane.',
             images: [
-                'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400',
+                '/asset/image/category_apple.jpeg',
                 'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400'
             ],
             tags: ['iphone', 'apple', '15 pro max', 'ios'],
