@@ -1,0 +1,69 @@
+/* ============================================
+   page_legal.css - Styles pour les pages légales (mentions, CGV, CGU)
+   ============================================ */
+
+.legal-content {
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
+}
+
+.legal-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: var(--spacing-sm);
+}
+
+.legal-content h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: var(--spacing-lg) 0 var(--spacing-sm);
+    color: var(--text-primary);
+}
+
+.legal-content p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.legal-content section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.legal-content .legal-update {
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.9rem;
+}
+
+/* Pour les listes éventuelles */
+.legal-content ul {
+    margin-left: var(--spacing-lg);
+    list-style-type: disc;
+    color: var(--text-secondary);
+}
+
+.legal-content li {
+    margin-bottom: 0.3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .legal-content {
+        padding: var(--spacing-md);
+    }
+    .legal-content h1 {
+        font-size: 1.6rem;
+    }
+    .legal-content h2 {
+        font-size: 1.2rem;
+    }
+}
