@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PearTech - CGV</title>
+    <link rel="stylesheet" href="asset/css/page_accueil.css">
+    <link rel="stylesheet" href="asset/css/page_legal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="page_accueil.html" class="logo">
+                    <div class="logo-icon">PC</div>
+                    <div class="logo-text">
+                        <div class="logo-title">NovaCompute</div>
+                        <div class="logo-subtitle">Boutique d'ordinateurs</div>
+                    </div>
+                </a>
+                <div class="search-bar">
+                    <span class="material-symbols-outlined">search</span>
+                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <nav class="header-nav">
+                    <button class="nav-dropdown">
+                        CATÉGORIES
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <a href="page_historique.html" class="icon-btn">
+                        <span class="material-symbols-outlined">history</span>
+                    </a>
+                    <button class="icon-btn" id="theme-toggle">
+                        <span class="material-symbols-outlined">light_mode</span>
+                    </button>
+                    <a href="page_profil.html" class="icon-btn">
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
+                    </a>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="page_accueil.html">Accueil</a>
+                <span>/</span>
+                <span>Conditions générales de vente</span>
+            </div>
+
+            <div class="legal-content">
+                <h1>Conditions Générales de Vente</h1>
+                <p class="legal-update">Dernière mise à jour : 1er janvier 2025</p>
+
+                <section>
+                    <h2>Article 1 - Champ d'application</h2>
+                    <p>Les présentes conditions générales de vente (CGV) s'appliquent à toutes les ventes conclues sur le site PearTech entre la société PearTech SAS et tout acheteur.</p>
+                </section>
+
+                <section>
+                    <h2>Article 2 - Produits</h2>
+                    <p>Les produits proposés à la vente sont ceux figurant sur le site PearTech, dans la limite des stocks disponibles. Chaque produit est décrit avec ses caractéristiques essentielles. Les photographies sont fournies à titre indicatif et ne sont pas contractuelles.</p>
+                </section>
+
+                <section>
+                    <h2>Article 3 - Prix</h2>
+                    <p>Les prix sont indiqués en euros, toutes taxes comprises (TTC), hors frais de livraison. La TVA applicable est celle en vigueur au jour de la commande. PearTech se réserve le droit de modifier ses prix à tout moment, les produits étant facturés au tarif en vigueur au moment de la validation de la commande.</p>
+                </section>
+
+                <section>
+                    <h2>Article 4 - Commande</h2>
+                    <p>Le Client passe commande sur le site selon le processus suivant : ajout au panier, validation du panier, saisie des informations de livraison et de paiement, acceptation des CGV, confirmation de la commande. La commande est réputée acceptée à réception du paiement intégral par PearTech. Un email de confirmation est envoyé au Client.</p>
+                </section>
+
+                <section>
+                    <h2>Article 5 - Paiement</h2>
+                    <p>Le paiement s'effectue en ligne par carte bancaire (Visa, Mastercard, American Express) ou par PayPal. Les transactions sont sécurisées par le prestataire de paiement Stripe. PearTech ne conserve pas les données bancaires.</p>
+                </section>
+
+                <section>
+                    <h2>Article 6 - Livraison</h2>
+                    <p>Les produits sont livrés à l'adresse indiquée par le Client. Les délais de livraison sont donnés à titre indicatif et varient selon le mode choisi (standard : 3-5 jours ouvrés, express : 24-48h). En cas de retard, le Client peut contacter le service client. NovaCompute ne peut être tenu responsable des retards imputables au transporteur.</p>
+                </section>
+
+                <section>
+                    <h2>Article 7 - Droit de rétractation</h2>
+                    <p>Conformément à l'article L.221-18 du Code de la consommation, le Client dispose d'un délai de 14 jours à compter de la réception du produit pour exercer son droit de rétractation, sans avoir à justifier de motifs ni à payer de pénalité. Les frais de retour sont à la charge du Client.</p>
+                </section>
+
+                <section>
+                    <h2>Article 8 - Garantie</h2>
+                    <p>Tous les produits bénéficient de la garantie légale de conformité (2 ans) et de la garantie contre les vices cachés (article 1641 du Code civil). En cas de défaut, le Client doit contacter le service client pour obtenir un remboursement ou un échange.</p>
+                </section>
+
+                <section>
+                    <h2>Article 9 - Données personnelles</h2>
+                    <p>Les informations recueillies lors de la commande sont nécessaires à son traitement. Elles peuvent être communiquées aux partenaires de NovaCompute pour les besoins de la livraison et du paiement. Conformément au RGPD, le Client dispose d'un droit d'accès, de rectification et de suppression.</p>
+                </section>
+
+                <section>
+                    <h2>Article 10 - Litiges</h2>
+                    <p>Les présentes CGV sont soumises au droit français. En cas de litige, le Client peut recourir à une médiation (CNPM) ou saisir les tribunaux compétents.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h4>Aide & services</h4>
+                    <ul>
+                        <li><a href="#">FAQ & centre d'aide</a></li>
+                        <li><a href="#">Suivi de commande</a></li>
+                        <li><a href="#">Retours & échanges</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>À propos</h4>
+                    <ul>
+                        <li><a href="page_histoire.html">Notre histoire</a></li>
+                        <li><a href="#">Magasins physiques</a></li>
+                        <li><a href="#">Carrières</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Légal</h4>
+                    <ul>
+                        <li><a href="page_mentions.html">Mentions légales</a></li>
+                        <li><a href="page_cgv.html">Conditions générales de vente</a></li>
+                        <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
+                        <li><a href="#">Confidentialité & cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 PearTech. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="asset/js/data.js"></script>
+    <script src="asset/js/darkmode.js"></script>
+    <script src="asset/js/recherche.js"></script>
+    <script src="asset/js/dropdown.js"></script>
+    <script src="asset/js/panier.js"></script>
+    <script src="asset/js/main.js"></script>
+</body>
+</html>
