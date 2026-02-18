@@ -1,5 +1,6 @@
 /* ============================================
-   Page panier - NovaCompute
+   page_panier.css - Styles pour la page panier
+   Compatible dark mode
    ============================================ */
 
 .page-title {
@@ -16,7 +17,6 @@
     margin-bottom: var(--spacing-xl);
 }
 
-/* Liste des articles */
 .cart-items {
     background: var(--secondary);
     border: 1px solid var(--border);
@@ -30,7 +30,7 @@
     gap: var(--spacing-md);
     padding: var(--spacing-md) 0;
     border-bottom: 1px solid var(--border);
-    align-items: center;
+    align-items: start;
 }
 
 .cart-item:last-child {
@@ -73,6 +73,13 @@
     color: var(--text-muted);
 }
 
+.item-options {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.2rem;
+    font-style: italic;
+}
+
 .item-stock {
     font-size: 0.8rem;
     color: #10b981;
@@ -105,6 +112,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-primary);
 }
 
 .quantity-btn:hover {
@@ -156,7 +164,6 @@
     text-decoration: underline;
 }
 
-/* Récapitulatif */
 .cart-summary {
     background: var(--secondary);
     border: 1px solid var(--border);
@@ -189,7 +196,6 @@
     margin-top: 0.8rem;
 }
 
-/* Code promo */
 .promo-code {
     margin: var(--spacing-md) 0;
     padding: var(--spacing-md) 0;
@@ -219,6 +225,10 @@
     color: var(--text-primary);
 }
 
+.promo-input-group input::placeholder {
+    color: var(--text-muted);
+}
+
 .promo-input-group button {
     padding: 0.7rem 1.2rem;
 }
@@ -236,7 +246,6 @@
     color: #ef4444;
 }
 
-/* Bouton de validation */
 .checkout-btn {
     width: 100%;
     margin-bottom: 1rem;
@@ -254,7 +263,6 @@
     color: var(--primary);
 }
 
-/* Informations de confiance */
 .trust-info {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -279,7 +287,6 @@
     color: var(--primary);
 }
 
-/* Recommandations */
 .recommendations {
     margin-top: var(--spacing-xl);
 }
@@ -318,6 +325,7 @@
     font-size: 0.95rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
+    color: var(--text-primary);
 }
 
 .recommendation-card p {
@@ -330,7 +338,6 @@
     text-align: center;
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .cart-layout {
         grid-template-columns: 1fr;

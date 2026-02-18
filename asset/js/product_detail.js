@@ -138,10 +138,10 @@
 
                 <div class="product-price-box">
                     <div>
-                        <span class="current-price" id="current-price">${product.basePrice.toFixed(2).replace('.',',')} €</span>
+                        <span class="current-price" id="current-price">${(product.basePrice || product.price).toFixed(2).replace('.',',')} €</span>
                         ${oldPriceHtml}
                     </div>
-                    <div class="payment-info">ou 12 × ${(product.basePrice/12).toFixed(2).replace('.',',')} € sans frais</div>
+                    <div class="payment-info">ou 12 × ${((product.basePrice || product.price)/12).toFixed(2).replace('.',',')} € sans frais</div>
                     <div class="stock-status ${stockClass}">
                         <span class="material-symbols-outlined">${stockIcon}</span>
                         ${stockText}
@@ -151,7 +151,7 @@
                 ${optionsHtml}
 
                 <div class="product-actions">
-                    <button class="btn-primary btn-large" id="add-to-cart">Ajouter au panier</button>
+                    <button class="btn-primary btn-large btn-add-cart" data-product-id="${product.id}">Ajouter au panier</button>
                     <button class="btn-secondary btn-large" id="buy-now">Acheter maintenant</button>
                     <button class="wishlist-btn">
                         <span class="material-symbols-outlined">favorite</span>
@@ -189,7 +189,7 @@
                 <div class="tab-content active" id="tab-desc">
                     <p>${product.description}</p>
                     <h3>Pensé pour la mobilité et les journées intenses</h3>
-                    <p>Ouverture instantanée, autonomie jusqu'à 15 heures et châssis aluminium ultrafin : l'Ultrabook Nova 14" Pro est conçu pour vous suivre partout sans compromis sur le confort.</p>
+                    <p>Ouverture instantanée, autonomie jusqu'à 15 heures et châssis aluminium ultrafin : ce produit est conçu pour vous suivre partout sans compromis sur le confort.</p>
                 </div>
                 <div class="tab-content" id="tab-specs">
                     <table class="specs-table">
@@ -280,7 +280,7 @@
         if (!priceElement) return;
 
         // Prix de base
-        let basePrice = product.basePrice;
+        let basePrice = product.basePrice || product.price;
 
         // Fonction pour mettre à jour le prix total
         function updatePrice() {
@@ -335,7 +335,7 @@
         grid.innerHTML = similar.map(p => {
             const badge = p.isNew ? '<span class="product-badge badge-new">Nouveau</span>' : '';
             return `
-                <div class="product-card" data-category="${categorySlug}">
+                <div class="product-card" data-product-id="${p.id}">
                     <div class="product-image">
                         <img src="${p.images[0]}" alt="${p.name}">
                         ${badge}
@@ -344,7 +344,7 @@
                         <h3 class="product-name">${p.name}</h3>
                         <p class="product-specs">${p.specs.processor} - ${p.specs.ram}</p>
                         <div class="product-footer">
-                            <div class="product-price">${p.basePrice.toFixed(2).replace('.',',')} €</div>
+                            <div class="product-price">${(p.basePrice || p.price).toFixed(2).replace('.',',')} €</div>
                             <button class="btn-add-cart">Ajouter au panier</button>
                         </div>
                         <button class="btn-view-product" onclick="window.location.href='page_produit.html?id=${p.id}'">Voir le produit</button>

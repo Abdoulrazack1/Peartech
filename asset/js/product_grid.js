@@ -35,7 +35,7 @@
             const specsArray = Object.values(product.specs).slice(0,3).join(' - ');
 
             return `
-                <div class="product-card" data-category="${categorySlug}">
+                <div class="product-card" data-category="${categorySlug}" data-product-id="${product.id}">
                     <div class="product-image">
                         <img src="${product.images[0]}" alt="${product.name}">
                         ${badge}
@@ -44,7 +44,7 @@
                         <h3 class="product-name">${product.name}</h3>
                         <p class="product-specs">${specsArray}</p>
                         <div class="product-footer">
-                            <div class="product-price">${product.basePrice.toFixed(2).replace('.',',')} €</div>
+                            <div class="product-price">${(product.basePrice || product.price).toFixed(2).replace('.',',')} €</div>
                             <button class="btn-add-cart">Ajouter au panier</button>
                         </div>
                         <button class="btn-view-product" onclick="window.location.href='page_produit.html?id=${product.id}'">Voir le produit</button>

@@ -1,40 +1,12 @@
 // ============================================
-// cart.js - Gestion de la page panier
+// cart.js - Page panier avec options et persistance
 // ============================================
 
 (function() {
     'use strict';
 
-    // Données simulées du panier
-    let cartItems = [
-        {
-            id: 1,
-            name: 'iPhone 15 Pro',
-            image: 'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400',
-            specs: 'A17 Pro, 8 Go RAM, 256 Go',
-            price: 1229.00,
-            quantity: 1,
-            stock: 10
-        },
-        {
-            id: 2,
-            name: 'Apple Watch Series 9',
-            image: 'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400',
-            specs: '45 mm, GPS + Cellular',
-            price: 449.00,
-            quantity: 1,
-            stock: 5
-        },
-        {
-            id: 3,
-            name: 'iPad Air 11"',
-            image: 'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-            specs: 'M1, 256 Go, Wi-Fi',
-            price: 699.00,
-            quantity: 1,
-            stock: 3
-        }
-    ];
+    const CART_STORAGE_KEY = 'nova-cart';
+    let cartItems = JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
 
     const validPromoCodes = {
         'PROMO10': 0.10,
@@ -55,8 +27,9 @@
     const checkoutBtn = document.getElementById('checkout-btn');
     const recommendationsGrid = document.getElementById('recommendations-grid');
 
-    // Fonction pour synchroniser le badge panier global
-    function syncCartCount() {
+    // Sauvegarder et mettre à jour le badge
+    function saveCart() {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
         const total = cartItems.reduce((acc, item) => acc + item.quantity, 0);
         localStorage.setItem('nova-cart-count', total);
         const badge = document.getElementById('cart-count');
@@ -93,6 +66,8 @@
 
         let html = '';
         cartItems.forEach((item, index) => {
+            const optionsHtml = item.options && item.options.length ? 
+                `<div class="item-options">${item.options.map(opt => `${opt.name}: ${opt.value}`).join(', ')}</div>` : '';
             html += `
                 <div class="cart-item" data-index="${index}">
                     <div class="item-image">
@@ -100,7 +75,8 @@
                     </div>
                     <div class="item-details">
                         <a href="page_produit.html?id=${item.id}" class="item-name">${item.name}</a>
-                        <div class="item-specs">${item.specs}</div>
+                        <div class="item-specs">${item.specs || ''}</div>
+                        ${optionsHtml}
                         <div class="item-stock">
                             <span class="material-symbols-outlined">check_circle</span>
                             En stock - Livraison estimée sous 3 jours
@@ -126,13 +102,14 @@
         });
         cartContainer.innerHTML = html;
 
+        // Événements
         document.querySelectorAll('.plus').forEach(btn => {
             btn.addEventListener('click', function() {
                 const index = this.dataset.index;
                 cartItems[index].quantity++;
                 renderCart();
                 calculateTotals();
-                syncCartCount();
+                saveCart();
             });
         });
 
@@ -144,15 +121,17 @@
                 } else {
                     if (confirm('Supprimer cet article du panier ?')) {
                         cartItems.splice(index, 1);
+                    } else {
+                        return;
                     }
                 }
                 renderCart();
                 calculateTotals();
-                syncCartCount();
+                saveCart();
             });
         });
 
-        document.querySelectorAll('.remove-item').forEach((link, idx) => {
+        document.querySelectorAll('.remove-item').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const index = this.closest('.cart-item').dataset.index;
@@ -160,7 +139,7 @@
                     cartItems.splice(index, 1);
                     renderCart();
                     calculateTotals();
-                    syncCartCount();
+                    saveCart();
                 }
             });
         });
@@ -220,16 +199,13 @@
         recommendationsGrid.innerHTML = html;
     }
 
-    function init() {
-        renderCart();
-        calculateTotals();
-        syncCartCount(); // Initialiser le badge
-        if (window.NovaComputeDB) {
-            loadRecommendations();
-        } else {
-            setTimeout(loadRecommendations, 500);
-        }
+    // Initialisation
+    renderCart();
+    calculateTotals();
+    saveCart(); // synchronise le badge
+    if (window.NovaComputeDB) {
+        loadRecommendations();
+    } else {
+        setTimeout(loadRecommendations, 500);
     }
-
-    init();
 })();

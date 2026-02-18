@@ -105,9 +105,9 @@ a {
     cursor: pointer;
     text-decoration: none;
     color: var(--text-primary);
+    width: auto; /* Empêche le logo de prendre toute la largeur */
 }
 
-/* Logo image */
 .logo-img {
     height: 48px;
     width: 48px;
@@ -115,11 +115,6 @@ a {
     border-radius: 10px;
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
     transition: var(--transition-normal);
-}
-
-.logo:hover .logo-img {
-    transform: scale(1.08);
-    filter: drop-shadow(0 0 14px rgba(59, 130, 246, 0.8));
 }
 
 .logo-icon {
@@ -793,6 +788,7 @@ a {
     font-size: 2rem;
     font-weight: 700;
     margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
 }
 
 .section-description {
@@ -1444,7 +1440,7 @@ a {
     font-size: 1.5rem;
 }
 
-/* Media Queries */
+/* Media Queries - Optimisées */
 @media (max-width: 1024px) {
     .container { padding: 0 1.5rem; }
     .hero-content { grid-template-columns: 1fr; gap: 2rem; }
