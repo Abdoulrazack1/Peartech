@@ -66,8 +66,8 @@
             },
             description: 'L\'iPhone 15 Pro Max, le plus puissant des iPhone avec un zoom optique x5 et un design en titane.',
             images: [
-                '/asset/image/category_apple.jpeg',
-                'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400'
+                '/asset/image/apple/iphone-15-pro-max.jpg',
+                '/asset/image/apple/iphone-15-pro-max-2.jpg'
             ],
             tags: ['iphone', 'apple', '15 pro max', 'ios'],
             stock: 18,
@@ -106,8 +106,8 @@
             },
             description: 'L\'iPhone 15 Pro, puissance et élégance dans un format compact.',
             images: [
-                'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400',
-                'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400'
+                '/asset/image/apple/iphone-15-pro.jpg',
+                '/asset/image/apple/iphone-15-pro-2.jpg'
             ],
             tags: ['iphone', 'apple', '15 pro', 'ios'],
             stock: 22,
@@ -146,8 +146,8 @@
             },
             description: 'L\'iPhone 15, l\'essentiel avec l\'îlot dynamique et un appareil photo de 48 Mpx.',
             images: [
-                'https://images.unsplash.com/photo-1695048132533-7f246a8c7d3e?w=400',
-                'https://images.unsplash.com/photo-1695048132924-405b5b5c2448?w=400'
+                '/asset/image/apple/iphone-15-2.jpg',
+                '/asset/image/apple/iphone-15.jpeg'
             ],
             tags: ['iphone', 'apple', '15', 'ios'],
             stock: 35,
@@ -188,8 +188,8 @@
             },
             description: 'L\'iPhone 14 Pro, encore performant avec son écran Always-On et la Dynamic Island.',
             images: [
-                'https://images.unsplash.com/photo-1664478546384-57c27c0a2f23?w=400',
-                'https://images.unsplash.com/photo-1664478546423-2a7b6e1b8d9a?w=400'
+                '/asset/image/apple/iphone-14-pro.jpg',
+                '/asset/image/apple/iphone-14-pro-2.jpg'
             ],
             tags: ['iphone', 'apple', '14 pro', 'ios'],
             stock: 12,
@@ -229,8 +229,8 @@
             },
             description: 'L\'iPhone 14, un excellent rapport qualité-prix pour profiter de l\'écosystème Apple.',
             images: [
-                'https://images.unsplash.com/photo-1664478546392-9c8e7b2b1c3d?w=400',
-                'https://images.unsplash.com/photo-1664478546384-57c27c0a2f23?w=400'
+                '/asset/image/apple/iphone-14.jpg',
+                '/asset/image/apple/iphone-14-2.jpg'
             ],
             tags: ['iphone', 'apple', '14', 'ios'],
             stock: 28,
@@ -271,8 +271,8 @@
             },
             description: 'L\'Apple Watch Series 9, avec le geste Double Tap et l\'écran le plus lumineux.',
             images: [
-                'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400',
-                'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400'
+                '/asset/image/apple/apple watch series 9.jpg',
+                '/asset/image/apple/apple watch series 9_2.jpg'
             ],
             tags: ['apple', 'watch', 'montre'],
             stock: 30,
@@ -314,8 +314,8 @@
             },
             description: 'L\'Apple Watch SE, toutes les essentiels à un prix abordable.',
             images: [
-                'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400',
-                'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400'
+                '/asset/image/apple/apple watch SE.jpg',
+                '/asset/image/apple/apple watch SE_2.jpg'
             ],
             tags: ['apple', 'watch', 'montre'],
             stock: 45,
@@ -356,8 +356,8 @@
             },
             description: 'L\'Apple Watch Ultra 2, conçue pour les sports extrêmes et l\'aventure.',
             images: [
-                'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400',
-                'https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=400'
+                '/asset/image/apple/apple watch ultra 2.jpg',
+                '/asset/image/apple/apple watch ultra 2_2.jpg'
             ],
             tags: ['apple', 'watch', 'ultra', 'montre'],
             stock: 8,
@@ -393,8 +393,8 @@
             },
             description: 'L\'iPad Pro avec puce M2, écran XDR et compatibilité Apple Pencil.',
             images: [
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+                '/asset/image/apple/apple ipad pro 12.9.jpg',
+                '/asset/image/apple/apple ipad pro 12.9_2.jpg'
             ],
             tags: ['ipad', 'apple', 'pro', 'tablette'],
             stock: 10,
@@ -432,8 +432,8 @@
             },
             description: 'L\'iPad Air avec puce M1, un excellent compromis puissance/prix.',
             images: [
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+                '/asset/image/apple/apple ipad air 11.jpg',
+                '/asset/image/apple/ipad air 11_2.jpg'
             ],
             tags: ['ipad', 'apple', 'air', 'tablette'],
             stock: 20,
@@ -470,8 +470,8 @@
             },
             description: 'L\'iPad tout écran, parfait pour le quotidien et les études.',
             images: [
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+                '/asset/image/apple/ipad air 10ème.png',
+                '/asset/image/apple/ipad air 10ème_2.jpg'
             ],
             tags: ['ipad', 'apple', 'tablette'],
             stock: 35,
@@ -512,8 +512,8 @@
             },
             description: 'Le Samsung Galaxy S24 Ultra, l\'ultime smartphone avec S Pen et zoom x100.',
             images: [
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400',
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400'
+                '/asset/image/android/samsungs24-ultra.jpg',
+                '/asset/image/android/samsungs24-ultra2.jpg'
             ],
             tags: ['samsung', 'android', 'galaxy s24'],
             stock: 12,
@@ -551,8 +551,8 @@
             },
             description: 'Le Samsung Galaxy S24+, le grand format sans compromis.',
             images: [
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400',
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400'
+                '/asset/image/android/samsungs24.jpg',
+                '/asset/image/android/samsungs24_2.jpg'
             ],
             tags: ['samsung', 'android', 'galaxy s24'],
             stock: 15,
@@ -590,8 +590,8 @@
             },
             description: 'Le Galaxy Z Fold5, le smartphone pliable qui se transforme en tablette.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/samsung_galaxy_zfold5.jpg',
+                '/asset/image/android/samsung_galaxyzfold5.jpg'
             ],
             tags: ['samsung', 'android', 'fold', 'pliable'],
             stock: 5,
@@ -628,8 +628,8 @@
             },
             description: 'Le Galaxy Z Flip5, le compact pliable avec grand écran externe.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/Galaxy-Z-Flip-5.jpg',
+                '/asset/image/android/Galaxy-Z-Flip-5-2.jpg'
             ],
             tags: ['samsung', 'android', 'flip', 'pliable'],
             stock: 18,
@@ -667,8 +667,8 @@
             },
             description: 'Le Samsung Galaxy A55, un excellent milieu de gamme pour tous les jours.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/samsung_galaxy_a55_2.webp',
+                '/asset/image/android/samsung_galaxy_a55.jpg'
             ],
             tags: ['samsung', 'android', 'galaxy a'],
             stock: 40,
