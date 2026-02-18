@@ -786,8 +786,8 @@
             },
             description: 'Le Pixel 7 Pro, un excellent choix pour la photo avec son téléobjectif.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/google_pixel7pro.jpg',
+                '/asset/image/android/google_pixel7pro_2.webp'
             ],
             tags: ['google', 'pixel', 'android'],
             stock: 15,
@@ -826,8 +826,8 @@
             },
             description: 'Le Xiaomi 14 Ultra, un appareil photo Leica quadri-capteur et une puissance exceptionnelle.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/xiaomi14ultra.webp',
+                '/asset/image/android/xiaomi14ultra2.webp'
             ],
             tags: ['xiaomi', 'android', 'smartphone'],
             stock: 8,
@@ -864,8 +864,8 @@
             },
             description: 'Le Xiaomi 13T Pro, co-développé avec Leica pour des photos sublimes.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/xiaomi13tpro.jpg',
+                '/asset/image/android/xiaomi13tpro2.webp'
             ],
             tags: ['xiaomi', 'android'],
             stock: 22,
@@ -903,8 +903,8 @@
             },
             description: 'La Galaxy Watch 6 Classic avec sa lunette tournante, idéale pour le sport et la santé.',
             images: [
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+                '/asset/image/android/samsung_galaxywatch6_classic.webp',
+                '/asset/image/android/samsunggalaxywatch6_classic.jpg'
             ],
             tags: ['samsung', 'watch', 'android'],
             stock: 25,
@@ -940,8 +940,8 @@
             },
             description: 'La Galaxy Watch 6, le modèle compact pour un suivi santé précis.',
             images: [
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+                '/asset/image/android/samsung_galaxywatch_6.webp',
+                '/asset/image/android/samsung_galaxywatch_6_2.webp'
             ],
             tags: ['samsung', 'watch', 'android'],
             stock: 30,
@@ -977,8 +977,8 @@
             },
             description: 'Le Fitbit Charge 6, le tracker d\'activité ultime pour la santé et la forme.',
             images: [
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400'
+                '/asset/image/android/fitbit6charge.webp',
+                '/asset/image/android/fitbitcharge.webp'
             ],
             tags: ['fitbit', 'tracker'],
             stock: 60,
@@ -1009,8 +1009,8 @@
             },
             description: 'La Fitbit Versa 4, une montre connectée complète pour le sport et le quotidien.',
             images: [
-                'https://images.unsplash.com/photo-1546868871-0f9361656b9e?w=400',
-                'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+                '/asset/image/android/fitbitversa4.jpg',
+                '/asset/image/android/fitbitversa4_2.jpeg'
             ],
             tags: ['fitbit', 'montre'],
             stock: 35,
@@ -1046,8 +1046,8 @@
             },
             description: 'La Galaxy Tab S9 Ultra, une tablette géante avec S Pen inclus.',
             images: [
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+                '/asset/image/android/galaxytabs9ultra.jpg',
+                '/asset/image/android/galaxytabs9ultra__2.webp'
             ],
             tags: ['samsung', 'android', 'tablette'],
             stock: 8,
@@ -1085,8 +1085,8 @@
             },
             description: 'La Galaxy Tab S9+, le grand format polyvalent.',
             images: [
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+                '/asset/image/android/galaxytabs9+.jpg',
+                '/asset/image/android/galaxytabs9+_2.jpg'
             ],
             tags: ['samsung', 'android', 'tablette'],
             stock: 12,
@@ -1123,8 +1123,8 @@
             },
             description: 'La Galaxy Tab S9, la tablette compacte et puissante.',
             images: [
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400',
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400'
+                '/asset/image/android/galaxys9tab.webp',
+                '/asset/image/android/galaxys9tab_2.jpg'
             ],
             tags: ['samsung', 'android', 'tablette'],
             stock: 18,
@@ -1163,8 +1163,8 @@
             },
             description: 'La Fire Max 11, la tablette Amazon pour le divertissement et la productivité.',
             images: [
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400'
+                '/asset/image/android/amazonfire_max_11.webp',
+                '/asset/image/android/amazonfire_max_11_2.webp'
             ],
             tags: ['amazon', 'fire', 'tablette'],
             stock: 45,
@@ -1201,8 +1201,8 @@
             },
             description: 'La Fire HD 10, le meilleur rapport qualité-prix pour les films et les apps.',
             images: [
-                'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
-                'https://images.unsplash.com/photo-1544244011-9bbdf3b3b69f?w=400'
+                '/asset/image/android/amazonfire_hd_10.webp',
+                '/asset/image/android/amazonfire_hd_10_2.jpg'
             ],
             tags: ['amazon', 'fire', 'tablette'],
             stock: 60,
