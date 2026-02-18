@@ -42,7 +42,12 @@
         // FONCTION DE RECHERCHE
         // ============================================
         function performSearch(query) {
-            // Utiliser la fonction de recherche de la base de données
+            if (!window.NovaComputeDB) {
+                console.warn('NovaComputeDB non chargé, recherche impossible');
+                searchResults.innerHTML = '<div class="search-no-results">Chargement en cours...</div>';
+                searchResults.classList.add('active');
+                return;
+            }
             const results = NovaComputeDB.search(query);
             displaySearchResults(results);
         }
@@ -112,6 +117,7 @@
             }
         });
 
-        console.log('Recherche initialisée avec', NovaComputeDB.products.length, 'produits');
+        const productCount = window.NovaComputeDB ? NovaComputeDB.products.length : 0;
+        console.log('Recherche initialisée avec', productCount, 'produits');
     });
 })();

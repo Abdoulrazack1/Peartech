@@ -381,23 +381,7 @@
     background: var(--primary-hover);
 }
 
-/* Breadcrumb */
-.breadcrumb {
-    padding: 1rem 0;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-.breadcrumb a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-.breadcrumb a:hover {
-    color: var(--primary);
-}
-.breadcrumb span {
-    margin: 0 0.3rem;
-}
+/* Breadcrumb : défini dans page_accueil.css (global) */
 
 /* Responsive */
 @media (max-width: 1024px) {

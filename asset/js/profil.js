@@ -73,7 +73,12 @@
     function loadUserData() {
         const stored = localStorage.getItem('novaUser');
         if (stored) {
-            return JSON.parse(stored);
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                console.warn('Données utilisateur corrompues, réinitialisation', e);
+                localStorage.removeItem('novaUser');
+            }
         }
         return JSON.parse(JSON.stringify(DEFAULT_USER)); // copie profonde
     }
@@ -85,11 +90,30 @@
 
     let userData = loadUserData();
 
-    // Éléments DOM
-    const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    const contentDiv = document.getElementById('profil-content');
+    // Éléments DOM — initialisés dans DOMContentLoaded pour éviter les crashes si le script se charge tôt
+    let sidebarLinks, contentDiv;
 
-    // Fonction pour afficher la section active
+    document.addEventListener('DOMContentLoaded', function() {
+        sidebarLinks = document.querySelectorAll('.sidebar-link');
+        contentDiv = document.getElementById('profil-content');
+
+        if (!contentDiv) {
+            console.error('Élément #profil-content introuvable');
+            return;
+        }
+
+        // Initialisation : afficher la section par défaut (info)
+        showSection('info');
+
+        // Gestion des clics sur la sidebar
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.dataset.section;
+                showSection(section);
+            });
+        });
+    });
     function showSection(sectionId) {
         // Mettre à jour la classe active sur les liens
         sidebarLinks.forEach(link => {
@@ -822,15 +846,4 @@
         }, 3000);
     }
 
-    // Initialisation : afficher la section par défaut (info)
-    showSection('info');
-
-    // Gestion des clics sur la sidebar
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const section = this.dataset.section;
-            showSection(section);
-        });
-    });
 })();

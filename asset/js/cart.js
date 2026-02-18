@@ -1,12 +1,23 @@
 // ============================================
 // cart.js - Page panier avec options et persistance
+// Gestion des images avec fallback local
 // ============================================
 
 (function() {
     'use strict';
 
     const CART_STORAGE_KEY = 'nova-cart';
-    let cartItems = JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
+    // Normalise l'image : certaines pages produit stockent `images[]` au lieu de `image`
+    let cartItems = (JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || []).map(item => {
+        if (!item.image) {
+            if (Array.isArray(item.images) && item.images.length > 0) {
+                item.image = item.images[0];
+            } else if (typeof item.images === 'string') {
+                item.image = item.images;
+            }
+        }
+        return item;
+    });
 
     const validPromoCodes = {
         'PROMO10': 0.10,
@@ -27,7 +38,9 @@
     const checkoutBtn = document.getElementById('checkout-btn');
     const recommendationsGrid = document.getElementById('recommendations-grid');
 
-    // Sauvegarder et mettre à jour le badge
+    // URL du placeholder local
+    const PLACEHOLDER_IMAGE = '/asset/image/no-image.png'; // à créer
+
     function saveCart() {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
         const total = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -58,6 +71,14 @@
         return price.toFixed(2).replace('.', ',') + ' €';
     }
 
+    function handleImageError(img) {
+        // Empêcher la boucle en supprimant l'attribut onerror
+        img.onerror = null;
+        img.src = PLACEHOLDER_IMAGE;
+        // Optionnel : log pour debug
+        console.warn('Image non trouvée, utilisation du placeholder', img.dataset.originalSrc || img.src);
+    }
+
     function renderCart() {
         if (cartItems.length === 0) {
             cartContainer.innerHTML = '<p class="empty-cart">Votre panier est vide.</p>';
@@ -71,7 +92,9 @@
             html += `
                 <div class="cart-item" data-index="${index}">
                     <div class="item-image">
-                        <img src="${item.image}" alt="${item.name}">
+                        <img src="${item.image || '/asset/image/no-image.png'}" alt="${item.name}" 
+                             data-original-src="${item.image}"
+                             onerror="this.onerror=null;this.src='/asset/image/no-image.png';">
                     </div>
                     <div class="item-details">
                         <a href="page_produit.html?id=${item.id}" class="item-name">${item.name}</a>
@@ -102,7 +125,7 @@
         });
         cartContainer.innerHTML = html;
 
-        // Événements
+        // Réattacher les événements
         document.querySelectorAll('.plus').forEach(btn => {
             btn.addEventListener('click', function() {
                 const index = this.dataset.index;
@@ -189,7 +212,8 @@
         recommendations.forEach(prod => {
             html += `
                 <div class="recommendation-card">
-                    <img src="${prod.images[0]}" alt="${prod.name}">
+                    <img src="${prod.images[0]}" alt="${prod.name}" 
+                         onerror="this.onerror=null; this.src='${PLACEHOLDER_IMAGE}';">
                     <h3>${prod.name}</h3>
                     <p>${formatPrice(prod.basePrice || prod.price)}</p>
                     <a href="page_produit.html?id=${prod.id}" class="btn-view-product">Voir</a>
@@ -202,10 +226,13 @@
     // Initialisation
     renderCart();
     calculateTotals();
-    saveCart(); // synchronise le badge
+    saveCart();
     if (window.NovaComputeDB) {
         loadRecommendations();
     } else {
         setTimeout(loadRecommendations, 500);
     }
+
+    // Exposer la fonction de gestion d'erreur globalement
+    window.handleImageError = handleImageError;
 })();

@@ -83,8 +83,9 @@
         const halfStar = product.rating % 1 >= 0.5;
         const stars = '★'.repeat(fullStars) + (halfStar ? '½' : '');
 
-        // Construction des spécifications pour l'affichage rapide
-        const specsShort = `${product.specs.processor} - ${product.specs.ram} - ${product.specs.storage}`;
+        // Construction des spécifications pour l'affichage rapide (certains produits n'ont pas ces champs)
+        const specsShort = [product.specs.processor, product.specs.ram, product.specs.storage]
+            .filter(Boolean).join(' - ') || 'Voir les caractéristiques';
 
         // Génération des options de personnalisation
         let optionsHtml = '';
@@ -342,7 +343,7 @@
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${p.name}</h3>
-                        <p class="product-specs">${p.specs.processor} - ${p.specs.ram}</p>
+                        <p class="product-specs">${[p.specs.processor, p.specs.ram].filter(Boolean).join(' - ') || 'Voir la fiche'}</p>
                         <div class="product-footer">
                             <div class="product-price">${(p.basePrice || p.price).toFixed(2).replace('.',',')} €</div>
                             <button class="btn-add-cart">Ajouter au panier</button>

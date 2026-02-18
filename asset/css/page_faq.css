@@ -116,15 +116,16 @@
 .faq-answer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-out;
+    padding: 0 1.5rem; /* Padding horizontal fixe, vertical animé */
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
     background: var(--background);
     border-top: 1px solid transparent;
 }
 
 .faq-item.active .faq-answer {
-    max-height: 300px; /* assez grand pour le contenu */
-    border-top-color: var(--border);
+    max-height: 300px;
     padding: 1rem 1.5rem;
+    border-top-color: var(--border);
 }
 
 .faq-answer p {

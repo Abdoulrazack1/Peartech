@@ -22,23 +22,27 @@
     };
     let viewMode = 'grid'; // grid ou list
 
-    // Éléments DOM
-    const categoryTitle = document.getElementById('category-title');
-    const categoryDescription = document.getElementById('category-description');
-    const resultsCount = document.getElementById('results-count');
-    const productsGrid = document.getElementById('products-grid');
-    const paginationDiv = document.getElementById('pagination');
-    const resetFiltersBtn = document.getElementById('reset-filters');
-    const sortSelect = document.getElementById('sort');
-    const viewBtns = document.querySelectorAll('.view-btn');
-    const priceMinSlider = document.getElementById('price-min');
-    const priceMaxSlider = document.getElementById('price-max');
-    const priceMinDisplay = document.getElementById('price-min-display');
-    const priceMaxDisplay = document.getElementById('price-max-display');
-    const breadcrumb = document.getElementById('breadcrumb');
+    // Éléments DOM — déclarés ici, initialisés dans DOMContentLoaded
+    let categoryTitle, categoryDescription, resultsCount, productsGrid,
+        paginationDiv, resetFiltersBtn, sortSelect, viewBtns,
+        priceMinSlider, priceMaxSlider, priceMinDisplay, priceMaxDisplay, breadcrumb;
 
     // Initialisation
     document.addEventListener('DOMContentLoaded', function() {
+        // Initialiser les références DOM ici, une fois le DOM prêt
+        categoryTitle       = document.getElementById('category-title');
+        categoryDescription = document.getElementById('category-description');
+        resultsCount        = document.getElementById('results-count');
+        productsGrid        = document.getElementById('products-grid');
+        paginationDiv       = document.getElementById('pagination');
+        resetFiltersBtn     = document.getElementById('reset-filters');
+        sortSelect          = document.getElementById('sort');
+        viewBtns            = document.querySelectorAll('.view-btn');
+        priceMinSlider      = document.getElementById('price-min');
+        priceMaxSlider      = document.getElementById('price-max');
+        priceMinDisplay     = document.getElementById('price-min-display');
+        priceMaxDisplay     = document.getElementById('price-max-display');
+        breadcrumb          = document.getElementById('breadcrumb');
         // Récupérer la catégorie depuis l'URL
         const urlParams = new URLSearchParams(window.location.search);
         const categorySlug = urlParams.get('categorie');
@@ -251,14 +255,22 @@
                 if (!filters.brands.includes(brand)) return false;
             }
 
-            // Filtre caractéristiques (simplifié)
+            // Filtre caractéristiques
             if (filters.features.length > 0) {
-                // Logique à adapter selon vos besoins
                 let ok = true;
                 filters.features.forEach(f => {
-                    if (f === 'Carte graphique dédiée' && !product.specs.graphics) ok = false;
-                    if (f.includes('Processeur') && product.specs.processor && !product.specs.processor.includes(f.replace('Processeur ', ''))) ok = false;
-                    if (f.includes('RAM') && product.specs.ram && !product.specs.ram.includes(f.replace('RAM ', '').replace(' Go', ''))) ok = false;
+                    if (f === 'Carte graphique dédiée') {
+                        if (!product.specs.graphics) ok = false;
+                    }
+                    if (f.includes('Processeur')) {
+                        const chip = f.replace('Processeur ', '');
+                        // Si le produit n'a pas de processeur OU que le processeur ne correspond pas → exclu
+                        if (!product.specs.processor || !product.specs.processor.includes(chip)) ok = false;
+                    }
+                    if (f.includes('RAM')) {
+                        const ramSize = f.replace('RAM ', '').replace(' Go', '');
+                        if (!product.specs.ram || !product.specs.ram.includes(ramSize)) ok = false;
+                    }
                 });
                 return ok;
             }
@@ -309,26 +321,32 @@
             return;
         }
 
+        const PLACEHOLDER = '/asset/image/no-image.png';
+
         const html = products.map(product => {
             const price = product.basePrice || product.price;
             const badge = product.isNew ? '<span class="product-badge badge-new">Nouveau</span>' :
                          product.isBestSeller ? '<span class="product-badge badge-bestseller">Meilleure vente</span>' : '';
+            // Affichage sécurisé des specs (certains produits n'ont pas processor/ram/storage)
+            const specsText = [product.specs.processor, product.specs.ram, product.specs.storage]
+                .filter(Boolean).join(' - ') || 'Voir la fiche produit';
             return `
                 <div class="product-card">
                     <div class="product-image">
-                        <img src="${product.images[0]}" alt="${product.name}">
+                        <img src="${product.images[0]}" alt="${product.name}"
+                             onerror="this.onerror=null;this.src='${PLACEHOLDER}';">
                         ${badge}
                     </div>
                     <div class="product-info">
                         <h3 class="product-name">${product.name}</h3>
-                        <p class="product-specs">${product.specs.processor} - ${product.specs.ram} - ${product.specs.storage}</p>
+                        <p class="product-specs">${specsText}</p>
                         <div class="product-rating">
                             <span class="stars">${'★'.repeat(Math.floor(product.rating))}${product.rating % 1 >= 0.5 ? '½' : ''}</span>
                             <span class="rating-count">${product.reviews} avis</span>
                         </div>
                         <div class="product-footer">
                             <div class="product-price">${price.toFixed(2).replace('.',',')} €</div>
-                            <button class="btn-add-cart">Ajouter au panier</button>
+                            <button class="btn-add-cart" data-id="${product.id}">Ajouter au panier</button>
                         </div>
                         <button class="btn-view-product" onclick="window.location.href='page_produit.html?id=${product.id}'">Voir la fiche produit</button>
                     </div>
@@ -337,6 +355,44 @@
         }).join('');
 
         productsGrid.innerHTML = html;
+
+        // Attacher les listeners "Ajouter au panier"
+        productsGrid.querySelectorAll('.btn-add-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const productId = parseInt(this.dataset.id);
+                const product = allProducts.find(p => p.id === productId);
+                if (!product) return;
+
+                const cartKey = 'nova-cart';
+                const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+                const existing = cart.find(item => item.id === productId);
+
+                if (existing) {
+                    existing.quantity++;
+                } else {
+                    cart.push({
+                        id: product.id,
+                        name: product.name,
+                        image: product.images[0] || '',
+                        price: product.basePrice || product.price,
+                        specs: [product.specs.processor, product.specs.ram, product.specs.storage].filter(Boolean).join(' - '),
+                        quantity: 1
+                    });
+                }
+
+                localStorage.setItem(cartKey, JSON.stringify(cart));
+                const total = cart.reduce((acc, i) => acc + i.quantity, 0);
+                localStorage.setItem('nova-cart-count', total);
+                const badge = document.getElementById('cart-count');
+                if (badge) {
+                    badge.textContent = total;
+                    badge.style.display = 'flex';
+                }
+                this.textContent = '✓ Ajouté';
+                this.disabled = true;
+                setTimeout(() => { this.textContent = 'Ajouter au panier'; this.disabled = false; }, 1500);
+            });
+        });
     }
 
     // Mettre à jour la pagination

@@ -17,6 +17,8 @@
             return;
         }
 
+        const PLACEHOLDER = '/asset/image/no-image.png';
+
         const html = productsToRender.map(product => {
             // Déterminer le badge
             let badge = '';
@@ -37,7 +39,8 @@
             return `
                 <div class="product-card" data-category="${categorySlug}" data-product-id="${product.id}">
                     <div class="product-image">
-                        <img src="${product.images[0]}" alt="${product.name}">
+                        <img src="${product.images[0]}" alt="${product.name}"
+                             onerror="this.onerror=null;this.src='${PLACEHOLDER}';">
                         ${badge}
                     </div>
                     <div class="product-info">
@@ -57,13 +60,17 @@
         console.log('Grille produits générée avec', productsToRender.length, 'produits');
     }
 
-    // Initialisation : attendre que la DB soit chargée
-    function init() {
+    // Initialisation : attendre que la DB soit chargée (max 50 tentatives = 5 secondes)
+    function init(attempts) {
+        attempts = attempts || 0;
         if (window.NovaComputeDB) {
             renderProducts(NovaComputeDB.products);
+        } else if (attempts < 50) {
+            setTimeout(function() { init(attempts + 1); }, 100);
         } else {
-            // Réessayer dans 100ms
-            setTimeout(init, 100);
+            const grid = document.getElementById('products-grid');
+            if (grid) grid.innerHTML = '<p>Impossible de charger les produits. Rechargez la page.</p>';
+            console.error('NovaComputeDB non disponible après 5 secondes');
         }
     }
 
