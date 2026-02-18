@@ -1,9 +1,3 @@
-// ============================================
-// data.js - Base de données NovaCompute
-// Catégories : Apple, Android, Montres, Tablettes
-// Prix réalistes (mise à jour 2025)
-// ============================================
-
 (function() {
     'use strict';
 
