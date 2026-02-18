@@ -708,8 +708,8 @@
             },
             description: 'Le Pixel 8 Pro, avec l\'IA de Google et un appareil photo exceptionnel.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/google_pixel8pro.jpg',
+                '/asset/image/android/google_pixel8pro_2.jpg'
             ],
             tags: ['google', 'pixel', 'android'],
             stock: 20,
@@ -747,8 +747,8 @@
             },
             description: 'Le Pixel 8, compact et puissant avec les fonctionnalités IA de Google.',
             images: [
-                'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
-                'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400'
+                '/asset/image/android/google_pixel8.jpg',
+                '/asset/image/android/google_pixel8_2.jpg'
             ],
             tags: ['google', 'pixel', 'android'],
             stock: 25,
