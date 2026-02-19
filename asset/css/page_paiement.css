@@ -1,44 +1,8 @@
 /* ============================================
-   page_paiement.css - Styles pour la page de paiement
-   Conçu pour s'intégrer parfaitement au design system NovaCompute
+   page_paiement.css - Page de paiement - PearTech
    ============================================ */
 
-/* Import des variables globales depuis page_accueil.css si non incluses */
-:root {
-    --primary: #3B82F6;
-    --primary-hover: #5c9afc;
-    --destructive: #EF4444;
-    --background: #ffffff;
-    --secondary: #f8f9fa;
-    --text-primary: #0F1419;
-    --text-secondary: #4B5563;
-    --text-muted: #6B7280;
-    --border: #e5e7eb;
-    --button-hover-rose-light: #ec4899;
-    --button-active-rose-dark: #e83e8c;
-    --input-hover-blue-light: #93c5fd;
-    --input-focus-white: #3B82F6;
-    --container-max: 1280px;
-    --spacing-xs: 0.5rem;
-    --spacing-sm: 1rem;
-    --spacing-md: 1.5rem;
-    --spacing-lg: 2rem;
-    --spacing-xl: 3rem;
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
-}
-
-body.dark-mode {
-    --background: #0F1419;
-    --secondary: #1A202C;
-    --text-primary: #ffffff;
-    --text-secondary: #9CA3AF;
-    --text-muted: #6B7280;
-    --border: #2D3748;
-}
-
-/* Titre de page */
+/* ── Titre de page ── */
 .page-title {
     font-size: 2rem;
     font-weight: 700;
@@ -46,10 +10,13 @@ body.dark-mode {
     color: var(--text-primary);
 }
 
-/* Indicateur d'étapes (checkout steps) */
+/* ── Indicateur d'étapes ── */
 .checkout-steps {
+    list-style: none;
+    padding: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 2rem;
     margin-bottom: var(--spacing-xl);
     padding: var(--spacing-md) 0;
@@ -58,6 +25,7 @@ body.dark-mode {
 }
 
 .step {
+    list-style: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,19 +33,6 @@ body.dark-mode {
     color: var(--text-muted);
     position: relative;
     text-align: center;
-}
-
-.step.completed .step-number {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
-.step.active .step-number {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    border-color: var(--primary);
 }
 
 .step-number {
@@ -93,30 +48,50 @@ body.dark-mode {
     transition: var(--transition-fast);
 }
 
+.step.completed .step-number {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.step.active .step-number {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
 .step-label {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
-/* Layout principal à deux colonnes */
+.step.active .step-label {
+    color: var(--primary);
+}
+
+/* ── Layout principal ── */
 .checkout-layout {
     display: grid;
     grid-template-columns: 1fr 350px;
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
+    align-items: start;
 }
 
-/* Formulaire principal */
+/* ── Formulaire principal ── */
 .checkout-form {
     background: var(--secondary);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: var(--spacing-lg);
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    min-width: 0;
 }
 
-/* Sections du formulaire */
+/* ── Sections du formulaire ── */
 .checkout-section {
     margin-bottom: var(--spacing-xl);
     padding-bottom: var(--spacing-lg);
@@ -136,7 +111,7 @@ body.dark-mode {
     color: var(--text-primary);
 }
 
-/* Grille pour les champs */
+/* ── Grille pour les champs ── */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -176,13 +151,14 @@ body.dark-mode {
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
     outline: none;
-    border-color: var(--input-focus-white);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
-/* Options de livraison et paiement */
+/* ── Options de livraison et paiement ── */
 .delivery-options,
 .payment-options {
     display: flex;
@@ -216,6 +192,7 @@ body.dark-mode {
     width: 18px;
     height: 18px;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .option-content {
@@ -224,23 +201,27 @@ body.dark-mode {
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
+    min-width: 0;
 }
 
 .option-title {
     font-weight: 600;
     color: var(--text-primary);
     flex: 1;
+    min-width: 0;
 }
 
 .option-desc {
     font-size: 0.85rem;
     color: var(--text-muted);
+    width: 100%;
 }
 
 .option-price {
     font-weight: 600;
     color: var(--primary);
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .option-icons {
@@ -248,7 +229,7 @@ body.dark-mode {
     color: var(--text-secondary);
 }
 
-/* Détails de paiement (champs carte) */
+/* ── Détails de paiement ── */
 .payment-details {
     margin-top: var(--spacing-md);
     padding: var(--spacing-md);
@@ -269,9 +250,10 @@ body.dark-mode {
 .security-note .material-symbols-outlined {
     font-size: 1rem;
     color: var(--primary);
+    flex-shrink: 0;
 }
 
-/* Validation et cases à cocher */
+/* ── Validation ── */
 .validation-group {
     display: flex;
     flex-direction: column;
@@ -280,12 +262,13 @@ body.dark-mode {
 
 .checkbox-label {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     font-size: 0.9rem;
     cursor: pointer;
     color: var(--text-secondary);
-    transition: var(--transition-fast);
+    line-height: 1.5;
+    transition: color var(--transition-fast);
 }
 
 .checkbox-label:hover {
@@ -297,9 +280,11 @@ body.dark-mode {
     height: 16px;
     accent-color: var(--primary);
     cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
 }
 
-/* Boutons d'action */
+/* ── Boutons d'action ── */
 .form-actions {
     display: flex;
     gap: var(--spacing-md);
@@ -307,7 +292,8 @@ body.dark-mode {
     flex-wrap: wrap;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
     padding: 0.8rem 1.6rem;
     border-radius: 8px;
     font-weight: 600;
@@ -321,6 +307,7 @@ body.dark-mode {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    font-family: inherit;
 }
 
 .btn-primary {
@@ -346,7 +333,7 @@ body.dark-mode {
     transform: translateY(-2px);
 }
 
-/* Récapitulatif de commande */
+/* ── Récapitulatif ── */
 .order-summary {
     background: var(--secondary);
     border: 1px solid var(--border);
@@ -354,6 +341,8 @@ body.dark-mode {
     padding: var(--spacing-lg);
     height: fit-content;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 80px;
 }
 
 .order-summary h2 {
@@ -372,18 +361,28 @@ body.dark-mode {
 .summary-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 0;
     border-bottom: 1px dashed var(--border);
     font-size: 0.9rem;
 }
 
+.summary-item:last-child {
+    border-bottom: none;
+}
+
 .item-name {
     color: var(--text-secondary);
+    flex: 1;
+    min-width: 0;
 }
 
 .item-price {
     font-weight: 600;
     color: var(--text-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .summary-totals {
@@ -394,6 +393,8 @@ body.dark-mode {
 .summary-line {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -408,8 +409,9 @@ body.dark-mode {
     border-top: 1px solid var(--border);
 }
 
-/* Messages de confirmation/erreur */
-.message-success, .message-error {
+/* ── Messages ── */
+.message-success,
+.message-error {
     padding: 1rem;
     border-radius: 8px;
     margin-bottom: 1rem;
@@ -429,7 +431,7 @@ body.dark-mode {
     color: #ef4444;
 }
 
-/* Modale de confirmation (optionnelle) */
+/* ── Modale de confirmation ── */
 .confirmation-modal {
     position: fixed;
     top: 0;
@@ -444,6 +446,7 @@ body.dark-mode {
     opacity: 0;
     visibility: hidden;
     transition: var(--transition-normal);
+    padding: var(--spacing-sm);
 }
 
 .confirmation-modal.active {
@@ -456,7 +459,7 @@ body.dark-mode {
     border-radius: 12px;
     padding: var(--spacing-lg);
     max-width: 400px;
-    width: 90%;
+    width: 100%;
     border: 1px solid var(--border);
     text-align: center;
 }
@@ -476,58 +479,126 @@ body.dark-mode {
     display: flex;
     gap: var(--spacing-sm);
     justify-content: center;
+    flex-wrap: wrap;
 }
 
-/* Améliorations responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
 @media (max-width: 1024px) {
     .checkout-layout {
         grid-template-columns: 1fr;
         gap: var(--spacing-md);
     }
+
     .order-summary {
-        order: -1;
+        position: static;
+        order: -1; /* récap en haut sur tablette */
     }
 }
 
 @media (max-width: 768px) {
+    .page-title {
+        font-size: 1.6rem;
+    }
+
     .checkout-steps {
         gap: 1rem;
+        justify-content: space-around;
     }
+
     .step-label {
         font-size: 0.8rem;
     }
+
     .form-row {
         grid-template-columns: 1fr;
         gap: var(--spacing-sm);
     }
+
     .delivery-option .option-content,
     .payment-option .option-content {
         flex-direction: column;
         align-items: flex-start;
     }
+
     .option-price {
         align-self: flex-start;
     }
+
     .form-actions {
         flex-direction: column;
     }
+
     .form-actions .btn-primary,
     .form-actions .btn-secondary {
         width: 100%;
+        justify-content: center;
+    }
+
+    .checkout-form {
+        padding: var(--spacing-md);
     }
 }
 
 @media (max-width: 480px) {
-    .container {
-        padding: 0 1rem;
-    }
     .page-title {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
     }
+
+    .checkout-steps {
+        gap: 0.5rem;
+    }
+
+    .step-number {
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+    }
+
+    .step-label {
+        font-size: 0.72rem;
+    }
+
     .checkout-section h2 {
         font-size: 1.1rem;
     }
+
+    .checkout-form {
+        padding: var(--spacing-sm);
+    }
+
+    .order-summary {
+        padding: var(--spacing-sm);
+    }
+
     .summary-item {
         font-size: 0.85rem;
+    }
+
+    .modal-content {
+        padding: var(--spacing-md);
+    }
+}
+
+/* ── Connecteur visuel entre les étapes ── */
+.step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 20px; /* centre vertical du step-number */
+    left: calc(50% + 20px);
+    width: calc(2rem + 0.3rem); /* gap approximatif */
+    height: 2px;
+    background: var(--border);
+}
+
+.step.completed:not(:last-child)::after {
+    background: var(--primary);
+}
+
+@media (max-width: 480px) {
+    .step:not(:last-child)::after {
+        display: none;
     }
 }

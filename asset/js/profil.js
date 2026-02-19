@@ -165,7 +165,7 @@
             <div class="photo-section">
                 <div class="photo-container">
                     <div class="photo-placeholder" id="photo-preview">
-                        ${user.photo ? `<img src="${user.photo}" alt="Photo de profil">` : '<span class="material-symbols-outlined">person</span>'}
+                        ${user.photo ? `<img src="${user.photo}" alt="Photo de profil">` : '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'}
                     </div>
                     <div class="photo-upload">
                         <label for="photo-input" class="btn-secondary">Changer la photo</label>
@@ -242,9 +242,9 @@
                     <p>${escapeHtml(addr.codePostal)} ${escapeHtml(addr.ville)}</p>
                     <p>${escapeHtml(addr.pays)}</p>
                     <div class="adresse-actions">
-                        <button class="btn-icon edit-adresse" title="Modifier"><span class="material-symbols-outlined">edit</span></button>
-                        <button class="btn-icon delete-adresse" title="Supprimer"><span class="material-symbols-outlined">delete</span></button>
-                        ${!addr.principale ? '<button class="btn-icon set-principale" title="Définir comme principale"><span class="material-symbols-outlined">star</span></button>' : ''}
+                        <button class="btn-icon edit-adresse" title="Modifier"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="btn-icon delete-adresse" title="Supprimer"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+                        ${!addr.principale ? '<button class="btn-icon set-principale" title="Définir comme principale"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>' : ''}
                     </div>
                 </div>
             `;
@@ -267,8 +267,8 @@
                             <p>Expire le ${pm.expire} - ${pm.titulaire}</p>
                         </div>
                         <div class="paiement-actions">
-                            <button class="btn-icon edit-paiement" title="Modifier"><span class="material-symbols-outlined">edit</span></button>
-                            <button class="btn-icon delete-paiement" title="Supprimer"><span class="material-symbols-outlined">delete</span></button>
+                            <button class="btn-icon edit-paiement" title="Modifier"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                            <button class="btn-icon delete-paiement" title="Supprimer"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                         </div>
                     </div>
                 `;
@@ -281,8 +281,8 @@
                             <p>${pm.email}</p>
                         </div>
                         <div class="paiement-actions">
-                            <button class="btn-icon edit-paiement" title="Modifier"><span class="material-symbols-outlined">edit</span></button>
-                            <button class="btn-icon delete-paiement" title="Supprimer"><span class="material-symbols-outlined">delete</span></button>
+                            <button class="btn-icon edit-paiement" title="Modifier"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                            <button class="btn-icon delete-paiement" title="Supprimer"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
                         </div>
                     </div>
                 `;

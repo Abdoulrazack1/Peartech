@@ -1,0 +1,418 @@
+/* ============================================
+   page_favoris.css – Page favoris - PearTech
+   ============================================ */
+
+/* ── Fil d'Ariane ── */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: var(--spacing-md) 0 var(--spacing-lg);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.breadcrumb a:hover {
+    color: var(--primary);
+}
+
+.breadcrumb span[aria-current] {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* ── En-tête de la page ── */
+.favoris-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.favoris-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+}
+
+.favoris-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex-wrap: wrap;
+}
+
+.favoris-title .material-symbols-outlined {
+    color: #ef4444;
+    font-size: 2rem;
+    font-variation-settings: 'FILL' 1;
+    flex-shrink: 0;
+}
+
+.favoris-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.btn-clear-all {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-clear-all:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.06);
+}
+
+.btn-clear-all .material-symbols-outlined {
+    font-size: 1.1rem;
+}
+
+/* ── Grille favoris ── */
+.favoris-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    align-items: start;
+}
+
+/* ── Card produit favori ── */
+.favoris-grid .product-card {
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    transition:
+        border-color var(--transition-normal),
+        box-shadow var(--transition-normal),
+        opacity 0.5s ease,
+        transform 0.5s ease;
+    position: relative;
+}
+
+.favoris-grid .product-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+}
+
+/* ── Bouton supprimer ── */
+.btn-remove-fav {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 5;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(239, 68, 68, 0.85);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    backdrop-filter: blur(4px);
+}
+
+.btn-remove-fav:hover {
+    background: #ef4444;
+    transform: scale(1.1);
+}
+
+.btn-remove-fav .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+/* ── Image ── */
+.favoris-grid .product-image {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: var(--background);
+    border-radius: 12px 12px 0 0;
+    flex-shrink: 0;
+}
+
+.favoris-grid .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.favoris-grid .product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+/* ── Infos ── */
+.favoris-grid .product-info {
+    padding: var(--spacing-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.favoris-grid .product-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    color: var(--text-primary);
+}
+
+.favoris-grid .product-specs {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.favoris-grid .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.favoris-grid .product-rating .stars {
+    color: #f59e0b;
+    font-size: 0.95rem;
+    letter-spacing: -1px;
+}
+
+.favoris-grid .product-rating .rating-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ── Footer card ── */
+.favoris-grid .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--spacing-sm);
+    gap: 0.5rem;
+    min-height: 52px;
+}
+
+.favoris-grid .product-price-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+}
+
+.favoris-grid .product-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.favoris-grid .product-old-price {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.favoris-grid .product-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+/* ── Bouton voir la fiche ── */
+.favoris-grid .btn-view-product {
+    width: 100%;
+    padding: 0.7rem;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    margin-top: auto;
+    font-family: inherit;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+}
+
+.favoris-grid .btn-view-product:hover {
+    border-color: var(--primary);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* ── État vide ── */
+.favoris-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    text-align: center;
+    gap: 1.2rem;
+}
+
+.favoris-empty[hidden] {
+    display: none;
+}
+
+.empty-icon .material-symbols-outlined {
+    font-size: 5rem;
+    color: var(--border);
+    font-variation-settings: 'FILL' 0;
+    display: block;
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.empty-description {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 420px;
+}
+
+.empty-description .inline-icon {
+    font-size: 1rem;
+    vertical-align: middle;
+    color: #ef4444;
+    font-variation-settings: 'FILL' 0;
+}
+
+/* ── Toast notification ── */
+.fav-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    z-index: 9999;
+    animation: toastIn 0.3s ease;
+    max-width: calc(100vw - 3rem);
+}
+
+.fav-toast .material-symbols-outlined {
+    color: #ef4444;
+    font-size: 1.2rem;
+    font-variation-settings: 'FILL' 1;
+    flex-shrink: 0;
+}
+
+@keyframes toastIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .favoris-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .favoris-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 768px) {
+    .favoris-title {
+        font-size: 1.4rem;
+    }
+
+    .favoris-header {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .favoris-grid .product-image {
+        height: 180px;
+    }
+
+    .fav-toast {
+        bottom: 1rem;
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .favoris-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .favoris-title {
+        font-size: 1.3rem;
+    }
+
+    .favoris-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .favoris-grid .product-image {
+        height: 220px;
+    }
+
+    .empty-title {
+        font-size: 1.3rem;
+    }
+
+    .favoris-empty {
+        padding: 3rem 1rem;
+    }
+}

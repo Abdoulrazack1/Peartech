@@ -56,6 +56,28 @@
             productDetail.innerHTML = generateProductHTML(product);
         }
 
+        // Bouton "Acheter maintenant" : ajouter au panier puis rediriger
+        const buyNowBtn = document.getElementById('buy-now');
+        if (buyNowBtn) {
+            buyNowBtn.addEventListener('click', function() {
+                // Déclencher le clic sur btn-add-cart pour ajouter au panier
+                const addBtn = document.querySelector('.btn-add-cart[data-product-id]');
+                if (addBtn) addBtn.click();
+                // Rediriger après un court délai
+                setTimeout(() => { window.location.href = 'page_panier.html'; }, 300);
+            });
+        }
+
+        // Synchroniser title avec aria-label sur le bouton wishlist (pour tooltip natif)
+        const wishlistBtn = document.querySelector('.wishlist-btn');
+        if (wishlistBtn) {
+            const syncTitle = () => {
+                const label = wishlistBtn.getAttribute('aria-label');
+                if (label) wishlistBtn.setAttribute('title', label);
+            };
+            new MutationObserver(syncTitle).observe(wishlistBtn, { attributes: true, attributeFilter: ['aria-label'] });
+        }
+
         // Initialiser les onglets
         initTabs();
 
@@ -73,7 +95,10 @@
         // Calcul du badge de stock
         const stockClass = product.stock > 0 ? 'in-stock' : 'out';
         const stockText = product.stock > 0 ? 'En stock - livraison offerte' : 'Rupture de stock';
-        const stockIcon = product.stock > 0 ? 'check_circle' : 'cancel';
+        const stockIcon = product.stock > 0 ? 'check_circle' : 'cancel'; // conservé pour rétrocompat
+        const stockSvg  = product.stock > 0
+            ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+            : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
 
         // Prix barré si oldPrice existe
         const oldPriceHtml = product.oldPrice ? `<span class="old-price">${product.oldPrice.toFixed(2).replace('.',',')} €</span>` : '';
@@ -113,6 +138,9 @@
             optionsHtml += '</div>';
         }
 
+        // État favori via favoris.js
+        const isFav = (typeof window.Favoris !== 'undefined') && window.Favoris.isFavori(product.id);
+
         return `
             <div class="product-gallery">
                 <div class="main-image" id="main-image">
@@ -144,7 +172,7 @@
                     </div>
                     <div class="payment-info">ou 12 × ${((product.basePrice || product.price)/12).toFixed(2).replace('.',',')} € sans frais</div>
                     <div class="stock-status ${stockClass}">
-                        <span class="material-symbols-outlined">${stockIcon}</span>
+                        ${stockSvg}
                         ${stockText}
                     </div>
                 </div>
@@ -154,25 +182,32 @@
                 <div class="product-actions">
                     <button class="btn-primary btn-large btn-add-cart" data-product-id="${product.id}">Ajouter au panier</button>
                     <button class="btn-secondary btn-large" id="buy-now">Acheter maintenant</button>
-                    <button class="wishlist-btn">
-                        <span class="material-symbols-outlined">favorite</span>
-                        <span>Ajouter à ma liste</span>
+                    <button class="wishlist-btn btn-fav" data-fav-btn="${product.id}"
+                            aria-label="${isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}"
+                            title="${isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}">
+                        <svg viewBox="0 0 24 24" width="22" height="22"
+                             fill="${isFav ? '#ef4444' : 'none'}"
+                             stroke="${isFav ? '#ef4444' : 'currentColor'}"
+                             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
                     </button>
                 </div>
 
                 <div class="product-services">
                     <div class="service-item">
-                        <span class="material-symbols-outlined">verified</span>
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
                         <div>Extension de garantie</div>
                         <small>Prolongez jusqu'à 5 ans</small>
                     </div>
                     <div class="service-item">
-                        <span class="material-symbols-outlined">build</span>
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                         <div>Installation & transfert</div>
                         <small>Logiciels et données</small>
                     </div>
                     <div class="service-item">
-                        <span class="material-symbols-outlined">assignment_return</span>
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
                         <div>Retour 30 jours</div>
                         <small>Gratuit</small>
                     </div>
@@ -265,9 +300,10 @@
 
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', () => {
-                const index = thumb.dataset.index;
+                const index = parseInt(thumb.dataset.index);
                 if (product.images[index]) {
                     mainImage.src = product.images[index];
+                    mainImage.alt = `${product.name} - image ${index + 1}`;
                     thumbnails.forEach(t => t.classList.remove('active'));
                     thumb.classList.add('active');
                 }
@@ -335,22 +371,44 @@
 
         grid.innerHTML = similar.map(p => {
             const badge = p.isNew ? '<span class="product-badge badge-new">Nouveau</span>' : '';
+            const isFavSim = (typeof window.Favoris !== 'undefined') && window.Favoris.isFavori(p.id);
             return `
-                <div class="product-card" data-product-id="${p.id}">
-                    <div class="product-image">
-                        <img src="${p.images[0]}" alt="${p.name}">
+                <article class="product-card" data-product-id="${p.id}" aria-label="${p.name}">
+                    <a href="page_produit.html?id=${p.id}" class="product-image"
+                       aria-label="Voir la fiche de ${p.name}">
+                        <img src="${p.images[0]}" alt="${p.name}" loading="lazy"
+                             onerror="this.onerror=null;this.src='/asset/image/no-image.png';">
                         ${badge}
-                    </div>
+                    </a>
                     <div class="product-info">
                         <h3 class="product-name">${p.name}</h3>
-                        <p class="product-specs">${[p.specs.processor, p.specs.ram].filter(Boolean).join(' - ') || 'Voir la fiche'}</p>
+                        <p class="product-specs">${[p.specs.processor, p.specs.ram].filter(Boolean).join(' · ') || 'Voir la fiche'}</p>
                         <div class="product-footer">
-                            <div class="product-price">${(p.basePrice || p.price).toFixed(2).replace('.',',')} €</div>
-                            <button class="btn-add-cart">Ajouter au panier</button>
+                            <div class="product-price-block">
+                                <span class="product-price">${(p.basePrice || p.price).toFixed(2).replace('.',',')} €</span>
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn-add-cart"
+                                        data-id="${p.id}"
+                                        aria-label="Ajouter ${p.name} au panier">
+                                    <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                                </button>
+                                <button class="btn-fav"
+                                        data-fav-btn="${p.id}"
+                                        aria-label="${isFavSim ? 'Retirer des favoris' : 'Ajouter aux favoris'}">
+                                    <svg viewBox="0 0 24 24" width="18" height="18"
+                                         fill="${isFavSim ? '#ef4444' : 'none'}"
+                                         stroke="${isFavSim ? '#ef4444' : 'currentColor'}"
+                                         stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                         aria-hidden="true">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                        <button class="btn-view-product" onclick="window.location.href='page_produit.html?id=${p.id}'">Voir le produit</button>
+                        <a href="page_produit.html?id=${p.id}" class="btn-view-product">Voir le produit</a>
                     </div>
-                </div>
+                </article>
             `;
         }).join('');
     }

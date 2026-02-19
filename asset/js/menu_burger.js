@@ -93,10 +93,10 @@
             menu.innerHTML = `
                 <div class="mobile-menu-header">
                     <div class="mobile-logo">
-                        <div class="logo-icon">PC</div>
+                        <div class="logo-icon"><img src="asset/image/LogoProjetEcf.png" alt=""</div>
                         <div>
-                            <div class="logo-title">NovaCompute</div>
-                            <div class="logo-subtitle">Boutique d'ordinateurs</div>
+                            <div class="logo-title">PearTech</div>
+                            <div class="logo-subtitle">Boutique high-tech</div>
                         </div>
                     </div>
                     <button class="mobile-close" id="mobile-close">
@@ -114,63 +114,55 @@
                     <!-- Navigation principale -->
                     <nav class="mobile-nav">
                         <h3 class="mobile-nav-title">Navigation</h3>
-                        <a href="/page_accueil.html" class="mobile-nav-item">
+                        <a href="page_accueil.html" class="mobile-nav-item">
                             <span class="material-symbols-outlined">home</span>
                             Accueil
                         </a>
-                        <a href="/page_catalogue.html" class="mobile-nav-item">
+                        <a href="page_catalogue.html" class="mobile-nav-item">
                             <span class="material-symbols-outlined">grid_view</span>
                             Catalogue
                         </a>
-                        <a href="/page_promotion.html" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">local_offer</span>
-                            Promotions
+                        <a href="page_favoris.html" class="mobile-nav-item">
+                            <span class="material-symbols-outlined">favorite</span>
+                            Mes favoris
                         </a>
                     </nav>
                     
                     <!-- Catégories -->
                     <nav class="mobile-nav">
                         <h3 class="mobile-nav-title">Catégories</h3>
-                        <a href="#portables" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">laptop</span>
-                            Ordinateurs Portables
+                        <a href="page_catalogue.html?categorie=apple" class="mobile-nav-item">
+                            <span class="material-symbols-outlined">phone_iphone</span>
+                            Apple
                         </a>
-                        <a href="#fixes" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">desktop_windows</span>
-                            Ordinateurs Fixes
+                        <a href="page_catalogue.html?categorie=android" class="mobile-nav-item">
+                            <span class="material-symbols-outlined">android</span>
+                            Android
                         </a>
-                        <a href="#gamers" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">stadia_controller</span>
-                            PC Gamers
+                        <a href="page_catalogue.html?categorie=montres" class="mobile-nav-item">
+                            <span class="material-symbols-outlined">watch</span>
+                            Montres connectées
                         </a>
-                        <a href="#creation" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">brush</span>
-                            Création & Design
-                        </a>
-                        <a href="#composants" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">memory</span>
-                            Composants
-                        </a>
-                        <a href="#peripheriques" class="mobile-nav-item">
-                            <span class="material-symbols-outlined">devices</span>
-                            Périphériques
+                        <a href="page_catalogue.html?categorie=tablettes" class="mobile-nav-item">
+                            <span class="material-symbols-outlined">tablet</span>
+                            Tablettes
                         </a>
                     </nav>
                     
                     <!-- Actions -->
                     <div class="mobile-actions">
-                        <button class="mobile-action-btn">
+                        <a href="page_profil.html" class="mobile-action-btn">
                             <span class="material-symbols-outlined">person</span>
                             Mon compte
-                        </button>
-                        <button class="mobile-action-btn">
+                        </a>
+                        <a href="page_favoris.html" class="mobile-action-btn">
                             <span class="material-symbols-outlined">favorite</span>
                             Favoris
-                        </button>
-                        <button class="mobile-action-btn">
+                        </a>
+                        <a href="page_panier.html" class="mobile-action-btn">
                             <span class="material-symbols-outlined">shopping_cart</span>
                             Panier
-                        </button>
+                        </a>
                     </div>
                 </div>
             `;

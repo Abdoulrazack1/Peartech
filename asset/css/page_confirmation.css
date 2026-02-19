@@ -1,8 +1,8 @@
 /* ============================================
-   page_confirmation.css - Styles pour la page de confirmation
+   page_confirmation.css - Confirmation de commande
    ============================================ */
 
-/* En-tête de confirmation */
+/* ── En-tête de confirmation ── */
 .confirmation-header {
     text-align: center;
     margin: var(--spacing-xl) 0;
@@ -47,29 +47,33 @@
     color: var(--text-primary);
 }
 
-/* Layout deux colonnes */
+/* ── Layout deux colonnes ── */
 .confirmation-layout {
     display: grid;
     grid-template-columns: 1fr 350px;
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
+    align-items: start;
 }
 
-/* Colonne gauche */
+/* ── Colonne gauche ── */
 .confirmation-left {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-lg);
+    min-width: 0; /* évite le débordement */
 }
 
-.info-section, .order-summary {
+.info-section,
+.order-summary {
     background: var(--secondary);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: var(--spacing-lg);
 }
 
-.info-section h2, .order-summary h2 {
+.info-section h2,
+.order-summary h2 {
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: var(--spacing-md);
@@ -94,14 +98,17 @@
     font-weight: 600;
     min-width: 140px;
     color: var(--text-primary);
+    flex-shrink: 0;
 }
 
 .info-value {
     color: var(--text-secondary);
     flex: 1;
+    min-width: 0;
+    word-break: break-word;
 }
 
-/* Résumé commande */
+/* ── Résumé commande ── */
 .order-items {
     margin-bottom: var(--spacing-md);
 }
@@ -109,6 +116,8 @@
 .order-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
     padding: 0.5rem 0;
     border-bottom: 1px dashed var(--border);
 }
@@ -120,11 +129,15 @@
 .item-name {
     font-size: 0.95rem;
     color: var(--text-primary);
+    flex: 1;
+    min-width: 0;
 }
 
 .item-price {
     font-weight: 600;
     color: var(--text-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .order-totals {
@@ -136,6 +149,8 @@
 .total-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 0.5rem;
     font-size: 0.95rem;
     color: var(--text-secondary);
@@ -150,9 +165,11 @@
     margin-top: 0.8rem;
 }
 
-/* Colonne droite */
+/* ── Colonne droite ── */
 .confirmation-right {
     align-self: start;
+    position: sticky;
+    top: 80px; /* colle sous le header sticky */
 }
 
 .actions-card {
@@ -172,19 +189,69 @@
     padding: 0.9rem 1.2rem;
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .confirmation-layout {
+        grid-template-columns: 1fr 300px;
+    }
+}
+
 @media (max-width: 768px) {
     .confirmation-layout {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
+
+    .confirmation-right {
+        position: static;
+        order: -1; /* le bouton "Continuer" en haut sur mobile */
+    }
+
     .info-row {
         flex-direction: column;
         gap: 0.2rem;
     }
+
     .info-label {
         min-width: auto;
     }
+
     .confirmation-title {
         font-size: 1.6rem;
+    }
+
+    .confirmation-header {
+        margin: var(--spacing-md) 0;
+        padding: var(--spacing-md);
+    }
+
+    .checkmark-circle .material-symbols-outlined {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .confirmation-title {
+        font-size: 1.4rem;
+    }
+
+    .confirmation-subtitle {
+        font-size: 1rem;
+    }
+
+    .info-section,
+    .order-summary {
+        padding: var(--spacing-sm);
+    }
+
+    .actions-card {
+        padding: var(--spacing-sm);
+    }
+
+    .total-row.grand-total {
+        font-size: 1.1rem;
     }
 }

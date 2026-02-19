@@ -42,8 +42,10 @@
                         <span aria-hidden="true">Tous les produits</span>
                         <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
-                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
+                    <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
+                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+                        <span aria-hidden="true">Favoris</span>
+                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
                     </a>
                     <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
                         <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
@@ -80,7 +82,7 @@
                 </div>
                 <h1 class="confirmation-title">Merci pour votre commande !</h1>
                 <p class="confirmation-subtitle">Commande n° <span id="order-number">123456789</span></p>
-                <p class="confirmation-email">Un email récapitulatif vient d'être envoyé à <span id="customer-email">jean.dupont@email.com</span></p>
+                <p class="confirmation-email">Un email récapitulatif vient d'être envoyé à <span id="customer-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2c8c7c3cc8cc6d7d2cdccd6e2c7cfc3cbce8cc1cdcf">[email&#160;protected]</a></span></p>
             </div>
 
             <div class="confirmation-layout">
@@ -177,12 +179,15 @@
         </div>
     </footer>
 
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>
     <script src="asset/js/dropdown.js"></script>
     <script src="asset/js/panier.js"></script>
+    <script src="asset/js/favoris.js"></script>
     <script src="asset/js/main.js"></script>
     <script src="asset/js/confirmation.js"></script>
+    <script src="asset/js/menu_burger.js"></script>
 </body>
 </html>

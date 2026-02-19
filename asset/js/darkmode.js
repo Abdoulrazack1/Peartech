@@ -18,7 +18,7 @@
         const themeIcon = themeToggle.querySelector('.material-symbols-outlined');
         
         // Récupérer le thème sauvegardé (défaut: dark)
-        const savedTheme = localStorage.getItem('novacompute-theme') || 'dark';
+        const savedTheme = localStorage.getItem('peartech-theme') || 'dark';
         
         // Appliquer le thème au chargement
         applyTheme(savedTheme);
@@ -29,7 +29,7 @@
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
             applyTheme(newTheme);
-            localStorage.setItem('novacompute-theme', newTheme);
+            localStorage.setItem('peartech-theme', newTheme);
             
             console.log('Thème changé:', newTheme);
         });

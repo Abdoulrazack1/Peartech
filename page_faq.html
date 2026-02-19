@@ -43,8 +43,10 @@
                         <span aria-hidden="true">Tous les produits</span>
                         <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
-                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
+                    <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
+                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+                        <span aria-hidden="true">Favoris</span>
+                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
                     </a>
                     <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
                         <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
@@ -253,7 +255,7 @@
 
             <div class="faq-contact" aria-labelledby="faq-contact-heading">
                 <h2 id="faq-contact-heading">Vous n'avez pas trouvé votre réponse ?</h2>
-                <p>Contactez notre service client par email à <a href="mailto:contact@peartech.fr">contact@peartech.fr</a> ou par téléphone au <a href="tel:+33123456789">01 23 45 67 89</a> (du lundi au vendredi, 9h-18h).</p>
+                <p>Contactez notre service client par email à <a href="/cdn-cgi/l/email-protection#9ffcf0f1ebfefcebdfeffafeedebfafcf7b1f9ed"><span class="__cf_email__" data-cfemail="62010d0c1603011622120703101607010a4c0410">[email&#160;protected]</span></a> ou par téléphone au <a href="tel:+33123456789">01 23 45 67 89</a> (du lundi au vendredi, 9h-18h).</p>
                 <a href="page_contact.html" class="btn-primary">Nous contacter</a>
             </div>
         </div>
@@ -301,12 +303,15 @@
         </div>
     </footer>
 
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>
     <script src="asset/js/dropdown.js"></script>
     <script src="asset/js/panier.js"></script>
+    <script src="asset/js/favoris.js"></script>
     <script src="asset/js/main.js"></script>
     <script src="asset/js/faq.js"></script>
+    <script src="asset/js/menu_burger.js"></script>
 </body>
 </html>

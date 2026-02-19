@@ -134,11 +134,8 @@
         });
 
         // ── Favoris ─────────────────────────────────────────────────
-        if (typeof window.updateHeartBtn === 'function') {
-            grid.querySelectorAll('[data-fav-btn]').forEach(btn => {
-                window.updateHeartBtn(btn, window.Favoris.isFavori(btn.dataset.favBtn));
-            });
-        }
+        // La délégation globale de favoris.js gère tous les clics [data-fav-btn]
+        // Les états initiaux sont déjà rendus via isFav dans le HTML ci-dessus
 
         console.log('Grille produits générée :', productsToRender.length, 'produits');
     }
@@ -180,7 +177,7 @@
 
         // Feedback
         const orig = btn.innerHTML;
-        btn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">check</span>';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
         btn.disabled  = true;
         setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 1600);
     }

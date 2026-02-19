@@ -43,8 +43,10 @@
                         <span aria-hidden="true">Tous les produits</span>
                         <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
-                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
+                    <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
+                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+                        <span aria-hidden="true">Favoris</span>
+                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
                     </a>
                     <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
                         <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
@@ -127,7 +129,7 @@
                             <span class="material-symbols-outlined" aria-hidden="true">mail</span>
                             <div>
                                 <h3>Email</h3>
-                                <p><a href="mailto:contact@peartech.fr">contact@peartech.fr</a></p>
+                                <p><a href="/cdn-cgi/l/email-protection#660509081207051226160307141203050e480014"><span class="__cf_email__" data-cfemail="96f5f9f8e2f7f5e2d6e6f3f7e4e2f3f5feb8f0e4">[email&#160;protected]</span></a></p>
                             </div>
                         </div>
                         <div class="info-item">
@@ -201,12 +203,15 @@
         </div>
     </footer>
 
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>
     <script src="asset/js/dropdown.js"></script>
     <script src="asset/js/panier.js"></script>
+    <script src="asset/js/favoris.js"></script>
     <script src="asset/js/main.js"></script>
     <script src="asset/js/contact.js"></script>
+    <script src="asset/js/menu_burger.js"></script>
 </body>
 </html>

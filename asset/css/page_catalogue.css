@@ -9,7 +9,7 @@
     margin: var(--spacing-lg) 0;
 }
 
-/* Sidebar filtres */
+/* ── Sidebar filtres ── */
 .filters-sidebar {
     background: var(--secondary);
     border: 1px solid var(--border);
@@ -17,6 +17,8 @@
     padding: var(--spacing-md);
     height: fit-content;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 80px; /* colle sous le header sticky */
 }
 
 .filters-header {
@@ -28,7 +30,7 @@
     border-bottom: 1px solid var(--border);
 }
 
-.filters-header h3 {
+.filters-header h2 {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -40,7 +42,7 @@
     color: var(--primary);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: color var(--transition-fast);
     text-decoration: underline;
     font-family: inherit;
 }
@@ -53,7 +55,7 @@
     margin-bottom: var(--spacing-lg);
 }
 
-.filter-section h4 {
+.filter-section-title {
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: var(--spacing-sm);
@@ -62,7 +64,7 @@
     letter-spacing: 0.5px;
 }
 
-/* Checkbox list */
+/* ── Checkbox list ── */
 .checkbox-list {
     display: flex;
     flex-direction: column;
@@ -79,7 +81,7 @@
     font-size: 0.9rem;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: color var(--transition-fast);
 }
 
 .checkbox-item:hover {
@@ -91,6 +93,7 @@
     height: 16px;
     accent-color: var(--primary);
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .checkbox-item span:first-of-type {
@@ -103,9 +106,10 @@
     background: var(--border);
     padding: 0.1rem 0.4rem;
     border-radius: 12px;
+    white-space: nowrap;
 }
 
-/* Slider prix */
+/* ── Slider prix ── */
 .price-range {
     padding: 0.5rem 0;
 }
@@ -119,6 +123,7 @@
     background: var(--border);
     border-radius: 3px;
     outline: none;
+    cursor: pointer;
 }
 
 .price-slider::-webkit-slider-thumb {
@@ -129,7 +134,7 @@
     background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: transform var(--transition-fast);
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -143,7 +148,6 @@
     background: var(--primary);
     border-radius: 50%;
     cursor: pointer;
-    transition: var(--transition-fast);
     border: none;
 }
 
@@ -159,7 +163,7 @@
     margin-top: 0.5rem;
 }
 
-/* Résultats */
+/* ── Résultats ── */
 .results-header {
     margin-bottom: var(--spacing-md);
 }
@@ -199,6 +203,7 @@
     flex-wrap: wrap;
     gap: 0.5rem;
     flex: 1;
+    min-width: 0;
 }
 
 .filter-tag {
@@ -212,16 +217,15 @@
     font-size: 0.8rem;
     color: var(--primary);
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .filter-tag .remove {
-    /* reset bouton */
     background: none;
     border: none;
     padding: 0;
     margin-left: 0.2rem;
     font-family: inherit;
-    /* style */
     cursor: pointer;
     font-size: 1rem;
     line-height: 1;
@@ -236,13 +240,12 @@
     color: #ef4444;
 }
 
-/* ── Badge promo (ajout JS) ── */
+/* ── Badges & stock ── */
 .badge-promo {
     background: #ef4444;
     color: white;
 }
 
-/* ── Indicateurs de stock ── */
 .stock-alert,
 .stock-low {
     position: absolute;
@@ -265,15 +268,15 @@
     color: white;
 }
 
-/* ── Bloc prix (prix actuel + prix barré) ── */
+/* ── Bloc prix ── */
 .product-price-block {
     display: flex;
-    flex-direction: column; /* prix principal au-dessus, barré en-dessous */
+    flex-direction: column;
     align-items: flex-start;
     gap: 0.15rem;
 }
 
-/* ── Footer carte : prix + boutons toujours alignés en bas ── */
+/* ── Footer carte ── */
 .product-footer {
     display: flex;
     justify-content: space-between;
@@ -290,7 +293,7 @@
     font-weight: 400;
 }
 
-/* ── Actions carte (panier + favori) ── */
+/* ── Actions carte ── */
 .product-actions {
     display: flex;
     align-items: center;
@@ -298,7 +301,6 @@
     flex-shrink: 0;
 }
 
-/* Bouton panier — icône uniquement */
 .btn-add-cart {
     width: 36px;
     height: 36px;
@@ -330,7 +332,6 @@
     font-size: 1.1rem;
 }
 
-/* Bouton favori — coeur SVG */
 .btn-fav {
     width: 36px;
     height: 36px;
@@ -358,15 +359,18 @@
     pointer-events: none;
 }
 
+/* ── Tri & vues ── */
 .sort-selector {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .sort-selector label {
     font-size: 0.85rem;
     color: var(--text-secondary);
+    white-space: nowrap;
 }
 
 .sort-selector select {
@@ -377,7 +381,7 @@
     color: var(--text-primary);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: border-color var(--transition-fast);
     font-family: inherit;
 }
 
@@ -391,6 +395,7 @@
     background: var(--secondary);
     border-radius: 8px;
     padding: 0.2rem;
+    flex-shrink: 0;
 }
 
 .view-btn {
@@ -420,7 +425,7 @@
     color: white;
 }
 
-/* Grille des produits (réutilisation de l'accueil) */
+/* ── Grille produits ── */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -428,7 +433,7 @@
     margin: var(--spacing-lg) 0;
 }
 
-/* Vue liste */
+/* ── Vue liste ── */
 .products-grid.list-view {
     grid-template-columns: 1fr;
 }
@@ -467,7 +472,7 @@
     align-self: flex-start;
 }
 
-/* Pagination */
+/* ── Pagination ── */
 .pagination {
     display: flex;
     justify-content: center;
@@ -488,6 +493,7 @@
     text-align: center;
     text-decoration: none;
     font-family: inherit;
+    font-size: 0.9rem;
 }
 
 .page-btn:hover {
@@ -512,68 +518,163 @@
     color: var(--text-muted);
 }
 
-/* Scrollbar personnalisée */
-.checkbox-list::-webkit-scrollbar {
-    width: 6px;
-}
-.checkbox-list::-webkit-scrollbar-track {
-    background: var(--border);
-    border-radius: 3px;
-}
-.checkbox-list::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 3px;
-}
-.checkbox-list::-webkit-scrollbar-thumb:hover {
-    background: var(--primary-hover);
-}
+/* ── Scrollbar personnalisée ── */
+.checkbox-list::-webkit-scrollbar { width: 6px; }
+.checkbox-list::-webkit-scrollbar-track { background: var(--border); border-radius: 3px; }
+.checkbox-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+.checkbox-list::-webkit-scrollbar-thumb:hover { background: var(--primary-hover); }
 
-/* Breadcrumb */
+/* ── Breadcrumb ── */
 .breadcrumb {
     padding: 1rem 0;
     font-size: 0.85rem;
     color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.2rem;
 }
+
 .breadcrumb a {
     color: var(--text-secondary);
     text-decoration: none;
     transition: color var(--transition-fast);
 }
+
 .breadcrumb a:hover {
     color: var(--primary);
 }
+
 .breadcrumb span {
     margin: 0 0.3rem;
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablette large */
+@media (max-width: 1200px) {
+    .catalogue-layout {
+        grid-template-columns: 240px 1fr;
+        gap: var(--spacing-md);
+    }
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablette */
 @media (max-width: 1024px) {
     .catalogue-layout {
         grid-template-columns: 1fr;
     }
+
     .filters-sidebar {
-        order: 2;
+        position: static; /* retire le sticky sur tablette */
+        order: -1;        /* sidebar EN HAUT sur tablette */
+    }
+
+    /* Filtres en accordéon horizontal scrollable sur tablette */
+    .filter-section {
+        display: inline-block;
+        margin-right: var(--spacing-md);
     }
 }
 
-@media (max-width: 768px) {
+/* Tablette portrait / grand mobile */
+@media (max-width: 900px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
     }
+
     .results-toolbar {
         flex-direction: column;
         align-items: stretch;
     }
+
     .active-filters {
         order: 3;
     }
+
     .sort-selector {
         justify-content: space-between;
     }
+
+    .view-toggle {
+        align-self: flex-end;
+    }
+
+    /* Vue liste : image plus petite */
+    .products-grid.list-view .product-image {
+        width: 150px;
+        height: 150px;
+    }
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+    .catalogue-layout {
+        gap: var(--spacing-sm);
+        margin: var(--spacing-sm) 0;
+    }
+
+    .filters-sidebar {
+        padding: var(--spacing-sm);
+        border-radius: 8px;
+    }
+
+    .category-title {
+        font-size: 1.5rem;
+    }
+
+    /* Filtres en grille 2 colonnes sur mobile */
+    .filter-section {
+        display: block;
+        margin-right: 0;
+        margin-bottom: var(--spacing-sm);
+    }
+}
+
+/* Petit mobile */
 @media (max-width: 480px) {
     .products-grid {
         grid-template-columns: 1fr;
     }
+
+    /* Vue liste → vue colonne sur très petit écran */
+    .products-grid.list-view .product-card {
+        flex-direction: column;
+    }
+
+    .products-grid.list-view .product-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .category-title {
+        font-size: 1.3rem;
+    }
+
+    .results-toolbar {
+        gap: 0.75rem;
+    }
+
+    .sort-selector select {
+        flex: 1;
+    }
+
+    .page-btn {
+        padding: 0.4rem 0.7rem;
+        min-width: 36px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ── Wrapper colonne résultats ── */
+.catalogue-results {
+    min-width: 0; /* empêche le débordement */
+    display: flex;
+    flex-direction: column;
 }

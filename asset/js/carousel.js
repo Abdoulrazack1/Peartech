@@ -1,6 +1,6 @@
 // ============================================
 // carousel.js - Défilement automatique du carrousel
-// Compatible avec le carrousel à radios de NovaCompute
+// Compatible avec le carrousel à radios de PearTech
 // ============================================
 
 (function() {

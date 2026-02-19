@@ -11,7 +11,7 @@
     // ============================================
     
     const CONFIG = {
-        siteName: 'NovaCompute',
+        siteName: 'PearTech',
         version: '1.0.0',
         debug: true
     };
@@ -63,7 +63,7 @@
         // ============================================
         
         // Exposer des fonctions utiles globalement
-        window.NovaCompute = {
+        window.PearTech = {
             version: CONFIG.version,
             
             // Fonction pour afficher une notification depuis n'importe où
@@ -83,10 +83,10 @@
             setTheme: function(theme) {
                 if (theme === 'dark') {
                     document.body.classList.add('dark-mode');
-                    localStorage.setItem('novacompute-theme', 'dark');
+                    localStorage.setItem('peartech-theme', 'dark');
                 } else {
                     document.body.classList.remove('dark-mode');
-                    localStorage.setItem('novacompute-theme', 'light');
+                    localStorage.setItem('peartech-theme', 'light');
                 }
             }
         };

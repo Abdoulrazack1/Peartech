@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PearTech - Catalogue</title>
-    <meta name="description" content="Parcourez le catalogue PearTech : smartphones, tablettes et montres connectées.">
+    <title>Mes Favoris - PearTech</title>
+    <meta name="description" content="Retrouvez tous vos produits favoris PearTech.">
     <link rel="stylesheet" href="asset/css/page_accueil.css">
-    <link rel="stylesheet" href="asset/css/page_catalogue.css">
+    <link rel="stylesheet" href="asset/css/page_favoris.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
+    <!-- HEADER -->
     <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
@@ -43,7 +44,7 @@
                         <span aria-hidden="true">Tous les produits</span>
                         <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
+                    <a href="page_favoris.html" class="icon-btn active" aria-label="Mes favoris" aria-current="page">
                         <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
                         <span aria-hidden="true">Favoris</span>
                         <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
@@ -67,81 +68,56 @@
 
     <main id="main-content">
         <div class="container">
+
+            <!-- Fil d'Ariane -->
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
                 <span aria-hidden="true">/</span>
-                <a href="page_catalogue.html">Toutes les catégories</a>
-                <span aria-hidden="true">/</span>
-                <span id="current-category-name" aria-current="page">Apple</span>
+                <span aria-current="page">Mes favoris</span>
             </nav>
 
-            <div class="catalogue-layout">
-                <aside class="filters-sidebar" id="filters-sidebar" aria-label="Filtres de recherche">
-                    <div class="filters-header">
-                        <h2 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);">Filtrer les résultats</h2>
-                        <button class="reset-filters" id="reset-filters" aria-label="Réinitialiser tous les filtres">Réinitialiser</button>
-                    </div>
-                    <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Sous-catégories</h3>
-                        <div id="subcategories-filter" class="checkbox-list" role="group" aria-label="Filtrer par sous-catégorie"></div>
-                    </div>
-                    <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Prix</h3>
-                        <div class="price-range">
-                            <label for="price-min" class="sr-only">Prix minimum</label>
-                            <input type="range" id="price-min" class="price-slider" min="0" max="5000" step="10" value="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="5000">
-                            <label for="price-max" class="sr-only">Prix maximum</label>
-                            <input type="range" id="price-max" class="price-slider" min="0" max="5000" step="10" value="5000" aria-valuenow="5000" aria-valuemin="0" aria-valuemax="5000">
-                            <div class="price-values" aria-live="polite" aria-label="Plage de prix sélectionnée">
-                                <span id="price-min-display">0 €</span> - <span id="price-max-display">5000 €</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Marques</h3>
-                        <div id="brands-filter" class="checkbox-list" role="group" aria-label="Filtrer par marque"></div>
-                    </div>
-                    <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Caractéristiques</h3>
-                        <div id="features-filter" class="checkbox-list" role="group" aria-label="Filtrer par caractéristique"></div>
-                    </div>
-                </aside>
-
-                <div class="catalogue-results">
-                    <div class="results-header">
-                        <div>
-                            <h1 class="category-title" id="category-title">Apple</h1>
-                            <p class="category-description" id="category-description">iPhone, iPad, Apple Watch et accessoires Apple</p>
-                            <p class="results-count" id="results-count" aria-live="polite">Chargement…</p>
-                        </div>
-                        <div class="results-toolbar">
-                            <div class="active-filters" id="active-filters" aria-label="Filtres actifs" aria-live="polite"></div>
-                            <div class="sort-selector">
-                                <label for="sort">Trier par :</label>
-                                <select id="sort" aria-label="Trier les résultats">
-                                    <option value="relevance">Pertinence</option>
-                                    <option value="price-asc">Prix croissant</option>
-                                    <option value="price-desc">Prix décroissant</option>
-                                    <option value="rating">Meilleures notes</option>
-                                </select>
-                            </div>
-                            <div class="view-toggle" role="group" aria-label="Mode d'affichage">
-                                <button class="view-btn active" data-view="grid" aria-pressed="true" aria-label="Affichage en grille">
-                                    <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
-                                </button>
-                                <button class="view-btn" data-view="list" aria-pressed="false" aria-label="Affichage en liste">
-                                    <span class="material-symbols-outlined" aria-hidden="true">view_list</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="products-grid" id="products-grid" role="list" aria-label="Produits"></div>
-                    <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
+            <!-- En-tête page -->
+            <div class="favoris-header">
+                <div class="favoris-header-left">
+                    <h1 class="favoris-title">
+                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+                        Mes favoris
+                    </h1>
+                    <p class="favoris-subtitle" id="favoris-count-label">Chargement…</p>
+                </div>
+                <div class="favoris-header-actions">
+                    <button class="btn-clear-all" id="btn-clear-all" aria-label="Vider tous les favoris">
+                        <span class="material-symbols-outlined" aria-hidden="true">delete_sweep</span>
+                        Tout supprimer
+                    </button>
                 </div>
             </div>
+
+            <!-- Grille des favoris -->
+            <div id="favoris-grid" class="favoris-grid" aria-live="polite" aria-label="Produits favoris">
+                <!-- Injecté par favoris.js -->
+            </div>
+
+            <!-- État vide -->
+            <div id="favoris-empty" class="favoris-empty" hidden>
+                <div class="empty-icon" aria-hidden="true">
+                    <span class="material-symbols-outlined">favorite_border</span>
+                </div>
+                <h2 class="empty-title">Aucun favori pour l'instant</h2>
+                <p class="empty-description">
+                    Parcourez notre catalogue et ajoutez des produits à vos favoris<br>
+                    en cliquant sur l'icône <span class="material-symbols-outlined inline-icon" aria-hidden="true">favorite_border</span> sur les fiches produit.
+                </p>
+                <a href="page_catalogue.html" class="btn-primary">
+                    <span class="material-symbols-outlined" aria-hidden="true">storefront</span>
+                    Découvrir le catalogue
+                </a>
+            </div>
+
         </div>
     </main>
 
+    <!-- FOOTER -->
     <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
@@ -183,6 +159,7 @@
             </div>
         </div>
     </footer>
+
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>
@@ -190,7 +167,6 @@
     <script src="asset/js/panier.js"></script>
     <script src="asset/js/favoris.js"></script>
     <script src="asset/js/main.js"></script>
-    <script src="asset/js/catalogue.js"></script>
     <script src="asset/js/menu_burger.js"></script>
 </body>
 </html>

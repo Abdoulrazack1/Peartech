@@ -463,7 +463,7 @@
                         <div class="product-actions">
                             <button class="btn-add-cart" data-id="${product.id}"
                                     aria-label="Ajouter ${product.name} au panier">
-                                <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                             </button>
                             <button class="btn-fav" data-fav-btn="${product.id}"
                                     aria-label="${isFav ? 'Retirer' : 'Ajouter'} ${product.name} ${isFav ? 'des' : 'aux'} favoris">
@@ -494,12 +494,8 @@
             });
         });
 
-        // Favoris
-        if (typeof window.updateHeartBtn === 'function') {
-            productsGrid.querySelectorAll('[data-fav-btn]').forEach(btn => {
-                window.updateHeartBtn(btn, window.Favoris.isFavori(btn.dataset.favBtn));
-            });
-        }
+        // Favoris — état initial rendu par favoris.js via window.Favoris.isFavori()
+        // La délégation globale de favoris.js gère tous les clics [data-fav-btn]
     }
 
     // ── Ajout au panier ──────────────────────────────────────────────
@@ -536,7 +532,7 @@
         }
 
         const orig = btn.innerHTML;
-        btn.innerHTML = '<span class="material-symbols-outlined" aria-hidden="true">check</span>';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
         btn.disabled  = true;
         setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 1600);
     }
