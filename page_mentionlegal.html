@@ -10,125 +10,142 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <header class="header">
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
-                <a href="page_accueil.html" class="logo">
-                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech Logo" class="logo-img">
-                    <div class="logo-text">
+                <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
+                    <div class="logo-text" aria-hidden="true">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
-                    <div class="search-results" id="search-results"></div>
+                <div class="search-bar" role="search">
+                    <label for="search-input" class="sr-only">Rechercher un produit</label>
+                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <input type="text" id="search-input"
+                        placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="search-results">
+                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
-                <nav class="header-nav">
-                    <button class="nav-dropdown">
+                <nav class="header-nav" aria-label="Navigation principale">
+                    <button class="nav-dropdown"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                        aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span>Tous les produits</span>
-                        <span class="material-symbols-outlined">expand_more</span>
+                        <span aria-hidden="true">Tous les produits</span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn">
-                        <span class="material-symbols-outlined">history</span>
+                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
+                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle">
-                        <span class="material-symbols-outlined">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
                     </button>
-                    <a href="page_profil.html" class="icon-btn">
-                        <span class="material-symbols-outlined">person</span>
-                        <span>Compte</span>
+                    <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
+                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                        <span aria-hidden="true">Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        <span>Panier</span>
-                        <span class="cart-badge" id="cart-count">0</span>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
+                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                        <span aria-hidden="true">Panier</span>
+                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <div class="container">
-            <div class="breadcrumb">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span>/</span>
-                <span>Mentions légales</span>
-            </div>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">Mentions légales</span>
+            </nav>
 
-            <div class="legal-content">
+            <article class="legal-content">
                 <h1>Mentions légales</h1>
 
-                <section>
-                    <h2>1. Édition du site</h2>
-                    <p>Le site PearTech est édité par la société PearTech, au capital de 100 000 euros, immatriculée au Registre du Commerce et des Sociétés de Paris sous le numéro 123 456 789 R.C.S. Paris, dont le siège social est situé au 15 rue de la Paix, 75001 Paris.</p>
+                <section aria-labelledby="ml-art1">
+                    <h2 id="ml-art1">1. Édition du site</h2>
+                    <p>Le site PearTech est édité par la société PearTech SAS, au capital de 100 000 euros, immatriculée au Registre du Commerce et des Sociétés de Paris sous le numéro 123 456 789 R.C.S. Paris, dont le siège social est situé au 15 rue de la Paix, 75001 Paris.</p>
                     <p>Directeur de la publication : Jean Dupont, Président-directeur général.</p>
-                    <p>Contact : contact@novacompute.fr | Téléphone : 01 23 45 67 89</p>
+                    <p>Contact : <a href="mailto:contact@peartech.fr">contact@peartech.fr</a> | Téléphone : <a href="tel:+33123456789">01 23 45 67 89</a></p>
                 </section>
 
-                <section>
-                    <h2>2. Hébergement</h2>
-                    <p>Le Site est hébergé par OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. www.ovh.com</p>
+                <section aria-labelledby="ml-art2">
+                    <h2 id="ml-art2">2. Hébergement</h2>
+                    <p>Le Site est hébergé par OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. <a href="https://www.ovh.com" target="_blank" rel="noopener noreferrer">www.ovh.com</a></p>
                 </section>
 
-                <section>
-                    <h2>3. Propriété intellectuelle</h2>
-                    <p>L'ensemble des éléments constituant le Site (textes, graphismes, logiciels, icônes, etc.) sont la propriété exclusive de NovaCompute SAS, à l'exception des marques, logos ou contenus appartenant à d'autres sociétés partenaires ou auteurs. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du Site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de la société NovaCompute SAS.</p>
+                <section aria-labelledby="ml-art3">
+                    <h2 id="ml-art3">3. Propriété intellectuelle</h2>
+                    <p>L'ensemble des éléments constituant le Site (textes, graphismes, logiciels, icônes, etc.) sont la propriété exclusive de PearTech SAS, à l'exception des marques, logos ou contenus appartenant à d'autres sociétés partenaires ou auteurs. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du Site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de la société PearTech SAS.</p>
                 </section>
 
-                <section>
-                    <h2>4. Données personnelles</h2>
-                    <p>Les informations recueillies sur le Site font l'objet d'un traitement informatique destiné à la gestion des commandes et à la relation client. Conformément à la loi « informatique et libertés » du 6 janvier 1978 modifiée et au Règlement Général sur la Protection des Données (RGPD), vous bénéficiez d'un droit d'accès, de rectification et d'effacement des données vous concernant, ainsi que du droit de définir des directives relatives au sort de vos données après votre décès. Vous pouvez exercer ces droits en nous contactant à l'adresse suivante : dpo@novacompute.fr.</p>
+                <section aria-labelledby="ml-art4">
+                    <h2 id="ml-art4">4. Données personnelles</h2>
+                    <p>Les informations recueillies sur le Site font l'objet d'un traitement informatique destiné à la gestion des commandes et à la relation client. Conformément à la loi « informatique et libertés » du 6 janvier 1978 modifiée et au Règlement Général sur la Protection des Données (RGPD), vous bénéficiez d'un droit d'accès, de rectification et d'effacement des données vous concernant, ainsi que du droit de définir des directives relatives au sort de vos données après votre décès. Vous pouvez exercer ces droits en nous contactant à l'adresse suivante : <a href="mailto:dpo@peartech.fr">dpo@peartech.fr</a>.</p>
                 </section>
 
-                <section>
-                    <h2>5. Cookies</h2>
+                <section aria-labelledby="ml-art5">
+                    <h2 id="ml-art5">5. Cookies</h2>
                     <p>Le Site utilise des cookies pour améliorer l'expérience utilisateur et réaliser des statistiques de visite. En poursuivant votre navigation sur le Site, vous acceptez l'utilisation de ces cookies. Vous pouvez à tout moment paramétrer vos préférences en matière de cookies dans les réglages de votre navigateur.</p>
                 </section>
 
-                <section>
-                    <h2>6. Médiation</h2>
-                    <p>Conformément aux articles L.616-1 et R.616-1 du code de la consommation, le Site propose un dispositif de médiation de la consommation. Le médiateur désigné est : CNPM - Médiation de la Consommation, dont les coordonnées sont disponibles sur le site www.cnpm.fr.</p>
+                <section aria-labelledby="ml-art6">
+                    <h2 id="ml-art6">6. Médiation</h2>
+                    <p>Conformément aux articles L.616-1 et R.616-1 du code de la consommation, le Site propose un dispositif de médiation de la consommation. Le médiateur désigné est : CNPM - Médiation de la Consommation, dont les coordonnées sont disponibles sur le site <a href="https://www.cnpm-mediation-consommation.eu" target="_blank" rel="noopener noreferrer">www.cnpm-mediation-consommation.eu</a>.</p>
                 </section>
-            </div>
+            </article>
         </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
-                    <h4>Aide & services</h4>
-                    <ul>
-                        <li><a href="/page_faq.html">FAQ & centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours & échanges</a></li>
-                        <li><a href="/page_contact.html">Contact</a></li>
-                    </ul>
+                    <h4>Aide &amp; services</h4>
+                    <nav aria-label="Aide et services">
+                        <ul>
+                            <li><a href="page_faq.html">FAQ &amp; centre d'aide</a></li>
+                            <li><a href="#">Suivi de commande</a></li>
+                            <li><a href="#">Retours &amp; échanges</a></li>
+                            <li><a href="page_contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
-                    <ul>
-                        <li><a href="page_histoire.html">Notre histoire</a></li>
-                        <li><a href="#">Magasins physiques</a></li>
-                        <li><a href="#">Carrières</a></li>
-                    </ul>
+                    <nav aria-label="À propos">
+                        <ul>
+                            <li><a href="#">Notre histoire</a></li>
+                            <li><a href="#">Magasins physiques</a></li>
+                            <li><a href="#">Carrières</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
-                    <ul>
-                        <li><a href="page_mentions.html">Mentions légales</a></li>
-                        <li><a href="page_cgv.html">Conditions générales de vente</a></li>
-                        <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
-                        <li><a href="#">Confidentialité & cookies</a></li>
-                    </ul>
+                    <nav aria-label="Informations légales">
+                        <ul>
+                            <li><a href="page_mentionlegal.html" aria-current="page">Mentions légales</a></li>
+                            <li><a href="page_cgv.html">Conditions générales de vente</a></li>
+                            <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
+                            <li><a href="#">Confidentialité &amp; cookies</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 PearTech. Tous droits réservés.</p>
+                <p>&copy; 2025 PearTech. Tous droits réservés.</p>
             </div>
         </div>
     </footer>

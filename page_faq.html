@@ -4,280 +4,299 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PearTech - FAQ</title>
+    <meta name="description" content="Foire aux questions PearTech : livraison, paiement, retours, compte.">
     <link rel="stylesheet" href="asset/css/page_accueil.css">
     <link rel="stylesheet" href="asset/css/page_faq.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <!-- HEADER -->
-     <header class="header">
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
-                <a href="page_accueil.html" class="logo">
-                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech Logo" class="logo-img">
-                    <div class="logo-text">
+                <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
+                    <div class="logo-text" aria-hidden="true">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
-                    <div class="search-results" id="search-results"></div>
+                <div class="search-bar" role="search">
+                    <label for="search-input" class="sr-only">Rechercher un produit</label>
+                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <input type="text" id="search-input"
+                        placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="search-results">
+                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
-                <nav class="header-nav">
-                    <button class="nav-dropdown">
+                <nav class="header-nav" aria-label="Navigation principale">
+                    <button class="nav-dropdown"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                        aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span>Tous les produits</span>
-                        <span class="material-symbols-outlined">expand_more</span>
+                        <span aria-hidden="true">Tous les produits</span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn">
-                        <span class="material-symbols-outlined">history</span>
+                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
+                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle">
-                        <span class="material-symbols-outlined">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
                     </button>
-                    <a href="page_profil.html" class="icon-btn">
-                        <span class="material-symbols-outlined">person</span>
-                        <span>Compte</span>
+                    <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
+                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                        <span aria-hidden="true">Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        <span>Panier</span>
-                        <span class="cart-badge" id="cart-count">0</span>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
+                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                        <span aria-hidden="true">Panier</span>
+                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
-    <main>
+
+    <main id="main-content">
         <div class="container">
-            <!-- Fil d'Ariane -->
-            <div class="breadcrumb">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span>/</span>
-                <span>FAQ</span>
-            </div>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">FAQ</span>
+            </nav>
 
             <h1 class="page-title">Foire aux questions</h1>
 
-            <!-- Barre de recherche FAQ (optionnelle) -->
-            <div class="faq-search">
-                <span class="material-symbols-outlined">search</span>
-                <input type="text" id="faq-search-input" placeholder="Rechercher une question...">
+            <div class="faq-search" role="search">
+                <label for="faq-search-input" class="sr-only">Rechercher une question dans la FAQ</label>
+                <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                <input type="text" id="faq-search-input" placeholder="Rechercher une question..." aria-controls="faq-list">
             </div>
 
-            <!-- Catégories de questions -->
-            <div class="faq-categories">
-                <button class="category-btn active" data-category="all">Toutes</button>
-                <button class="category-btn" data-category="commandes">Commandes</button>
-                <button class="category-btn" data-category="livraison">Livraison</button>
-                <button class="category-btn" data-category="paiement">Paiement</button>
-                <button class="category-btn" data-category="retours">Retours</button>
-                <button class="category-btn" data-category="compte">Mon compte</button>
+            <div class="faq-categories" role="group" aria-label="Filtrer par catégorie">
+                <button class="category-btn active" data-category="all" aria-pressed="true">Toutes</button>
+                <button class="category-btn" data-category="commandes" aria-pressed="false">Commandes</button>
+                <button class="category-btn" data-category="livraison" aria-pressed="false">Livraison</button>
+                <button class="category-btn" data-category="paiement" aria-pressed="false">Paiement</button>
+                <button class="category-btn" data-category="retours" aria-pressed="false">Retours</button>
+                <button class="category-btn" data-category="compte" aria-pressed="false">Mon compte</button>
             </div>
 
-            <!-- Liste des questions -->
+            <!-- Accordéon FAQ accessible : chaque question est un bouton -->
             <div class="faq-list" id="faq-list">
+
                 <!-- Commandes -->
                 <div class="faq-item" data-category="commandes">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-1" id="faq-btn-1">
                         <span class="faq-question-text">Comment passer une commande ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-1" role="region" aria-labelledby="faq-btn-1" hidden>
                         <p>Pour passer une commande, ajoutez les produits souhaités dans votre panier, puis cliquez sur "Panier" en haut à droite. Suivez les étapes pour renseigner votre adresse de livraison, choisir votre mode de livraison et valider le paiement. Vous recevrez un email de confirmation.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="commandes">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-2" id="faq-btn-2">
                         <span class="faq-question-text">Puis-je modifier ma commande après validation ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-2" role="region" aria-labelledby="faq-btn-2" hidden>
                         <p>Malheureusement, une fois la commande validée, il n'est plus possible de la modifier. Vous pouvez cependant annuler votre commande dans un délai de 14 jours après réception et passer une nouvelle commande.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="commandes">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-3" id="faq-btn-3">
                         <span class="faq-question-text">Comment annuler ma commande ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-3" role="region" aria-labelledby="faq-btn-3" hidden>
                         <p>Connectez-vous à votre compte, rendez-vous dans "Mes commandes" et cliquez sur "Annuler" si la commande n'a pas encore été expédiée. Si elle est déjà expédiée, vous devrez procéder à un retour après réception.</p>
                     </div>
                 </div>
 
                 <!-- Livraison -->
                 <div class="faq-item" data-category="livraison">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-4" id="faq-btn-4">
                         <span class="faq-question-text">Quels sont les délais de livraison ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-4" role="region" aria-labelledby="faq-btn-4" hidden>
                         <p>Nous proposons plusieurs modes de livraison : standard (3-5 jours ouvrés), express (24-48h) et retrait en point relais (2-4 jours). Les délais sont donnés à titre indicatif à compter de l'expédition.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="livraison">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-5" id="faq-btn-5">
                         <span class="faq-question-text">Les frais de livraison sont-ils offerts ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-5" role="region" aria-labelledby="faq-btn-5" hidden>
                         <p>La livraison standard est offerte en France métropolitaine pour toute commande supérieure à 99 €. Pour les commandes inférieures, les frais sont de 5,90 €. La livraison express est facturée 12,90 €.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="livraison">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-6" id="faq-btn-6">
                         <span class="faq-question-text">Puis-je suivre ma commande ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Oui, une fois votre commande expédiée, vous recevrez un email avec un numéro de suivi. Vous pouvez également suivre votre commande depuis votre compte dans la rubrique "Mes commandes".</p>
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-6" role="region" aria-labelledby="faq-btn-6" hidden>
+                        <p>Oui, un email de suivi vous est envoyé dès l'expédition avec un lien de tracking. Vous pouvez également suivre votre commande depuis votre espace client dans "Mes commandes".</p>
                     </div>
                 </div>
 
                 <!-- Paiement -->
                 <div class="faq-item" data-category="paiement">
-                    <div class="faq-question">
-                        <span class="faq-question-text">Quels moyens de paiement acceptez-vous ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-7" id="faq-btn-7">
+                        <span class="faq-question-text">Quels modes de paiement acceptez-vous ?</span>
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-7" role="region" aria-labelledby="faq-btn-7" hidden>
                         <p>Nous acceptons les cartes bancaires (Visa, Mastercard, American Express) et PayPal. Le paiement est sécurisé par notre partenaire Stripe.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="paiement">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-8" id="faq-btn-8">
                         <span class="faq-question-text">Est-il possible de payer en plusieurs fois ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-8" role="region" aria-labelledby="faq-btn-8" hidden>
                         <p>Oui, pour les commandes de 100 € à 3000 €, vous pouvez payer en 3x sans frais par carte bancaire. L'option est proposée au moment du paiement.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="paiement">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-9" id="faq-btn-9">
                         <span class="faq-question-text">Mes données bancaires sont-elles protégées ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-9" role="region" aria-labelledby="faq-btn-9" hidden>
                         <p>Absolument. Nous utilisons le protocole 3D Secure et les données sont chiffrées. Nous ne conservons aucune information bancaire sur nos serveurs.</p>
                     </div>
                 </div>
 
                 <!-- Retours -->
                 <div class="faq-item" data-category="retours">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-10" id="faq-btn-10">
                         <span class="faq-question-text">Quelle est votre politique de retour ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-10" role="region" aria-labelledby="faq-btn-10" hidden>
                         <p>Vous disposez d'un délai de 14 jours à compter de la réception pour retourner un produit, sans avoir à justifier de motif. Les frais de retour sont à votre charge sauf en cas de produit défectueux.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="retours">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-11" id="faq-btn-11">
                         <span class="faq-question-text">Comment retourner un article ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-11" role="region" aria-labelledby="faq-btn-11" hidden>
                         <p>Connectez-vous à votre compte, allez dans "Mes commandes", sélectionnez la commande concernée et cliquez sur "Demander un retour". Suivez les instructions pour imprimer l'étiquette de retour et déposer le colis.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="retours">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-12" id="faq-btn-12">
                         <span class="faq-question-text">Quand serai-je remboursé ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-12" role="region" aria-labelledby="faq-btn-12" hidden>
                         <p>Le remboursement intervient dans un délai de 14 jours après réception et vérification du retour. Le montant est crédité sur le moyen de paiement utilisé lors de la commande.</p>
                     </div>
                 </div>
 
                 <!-- Mon compte -->
                 <div class="faq-item" data-category="compte">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-13" id="faq-btn-13">
                         <span class="faq-question-text">Comment créer un compte ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-13" role="region" aria-labelledby="faq-btn-13" hidden>
                         <p>Cliquez sur l'icône "Compte" en haut à droite, puis sur "Créer un compte". Remplissez le formulaire avec votre email et un mot de passe. Vous pouvez également créer un compte lors de votre première commande.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="compte">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-14" id="faq-btn-14">
                         <span class="faq-question-text">J'ai oublié mon mot de passe, que faire ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-14" role="region" aria-labelledby="faq-btn-14" hidden>
                         <p>Sur la page de connexion, cliquez sur "Mot de passe oublié". Saisissez votre email, vous recevrez un lien pour réinitialiser votre mot de passe.</p>
                     </div>
                 </div>
 
                 <div class="faq-item" data-category="compte">
-                    <div class="faq-question">
+                    <button class="faq-question" aria-expanded="false" aria-controls="faq-answer-15" id="faq-btn-15">
                         <span class="faq-question-text">Comment modifier mes informations personnelles ?</span>
-                        <span class="material-symbols-outlined faq-icon">expand_more</span>
-                    </div>
-                    <div class="faq-answer">
+                        <span class="material-symbols-outlined faq-icon" aria-hidden="true">expand_more</span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-15" role="region" aria-labelledby="faq-btn-15" hidden>
                         <p>Connectez-vous à votre compte, allez dans la rubrique "Mes informations" depuis le menu de gauche. Vous pouvez y modifier votre email, mot de passe, adresse, etc.</p>
                     </div>
                 </div>
+
+                <div class="faq-no-results" id="faq-no-results" hidden aria-live="polite">
+                    Aucune question ne correspond à votre recherche.
+                </div>
             </div>
 
-            <!-- Section contact si la réponse n'est pas trouvée -->
-            <div class="faq-contact">
-                <h2>Vous n'avez pas trouvé votre réponse ?</h2>
-                <p>Contactez notre service client par email à <a href="mailto:support@novacompute.fr">support@novacompute.fr</a> ou par téléphone au 01 23 45 67 89 (du lundi au vendredi, 9h-18h).</p>
+            <div class="faq-contact" aria-labelledby="faq-contact-heading">
+                <h2 id="faq-contact-heading">Vous n'avez pas trouvé votre réponse ?</h2>
+                <p>Contactez notre service client par email à <a href="mailto:contact@peartech.fr">contact@peartech.fr</a> ou par téléphone au <a href="tel:+33123456789">01 23 45 67 89</a> (du lundi au vendredi, 9h-18h).</p>
                 <a href="page_contact.html" class="btn-primary">Nous contacter</a>
             </div>
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
-                    <h4>Aide & services</h4>
-                    <ul>
-                        <li><a href="page_faq.html">FAQ & centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours & échanges</a></li>
-                        <li><a href="/page_contact.html">Contact</a></li>
-                    </ul>
+                    <h4>Aide &amp; services</h4>
+                    <nav aria-label="Aide et services">
+                        <ul>
+                            <li><a href="page_faq.html" aria-current="page">FAQ &amp; centre d'aide</a></li>
+                            <li><a href="#">Suivi de commande</a></li>
+                            <li><a href="#">Retours &amp; échanges</a></li>
+                            <li><a href="page_contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
-                    <ul>
-                        <li><a href="#">Notre histoire</a></li>
-                        <li><a href="#">Magasins physiques</a></li>
-                        <li><a href="#">Carrières</a></li>
-                    </ul>
+                    <nav aria-label="À propos">
+                        <ul>
+                            <li><a href="#">Notre histoire</a></li>
+                            <li><a href="#">Magasins physiques</a></li>
+                            <li><a href="#">Carrières</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
-                    <ul>
-                        <li><a href="page_mentions.html">Mentions légales</a></li>
-                        <li><a href="page_cgv.html">Conditions générales de vente</a></li>
-                        <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
-                        <li><a href="#">Confidentialité & cookies</a></li>
-                    </ul>
+                    <nav aria-label="Informations légales">
+                        <ul>
+                            <li><a href="page_mentionlegal.html">Mentions légales</a></li>
+                            <li><a href="page_cgv.html">Conditions générales de vente</a></li>
+                            <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
+                            <li><a href="#">Confidentialité &amp; cookies</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 PearTech. Tous droits réservés.</p>
+                <p>&copy; 2025 PearTech. Tous droits réservés.</p>
             </div>
         </div>
     </footer>

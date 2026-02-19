@@ -10,65 +10,71 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
-                <a href="page_accueil.html" class="logo">
-                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech Logo" class="logo-img">
-                    <div class="logo-text">
+                <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
+                    <div class="logo-text" aria-hidden="true">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
-                    <div class="search-results" id="search-results"></div>
+                <div class="search-bar" role="search">
+                    <label for="search-input" class="sr-only">Rechercher un produit</label>
+                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <input type="text" id="search-input"
+                        placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="search-results">
+                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
-                <nav class="header-nav">
-                    <button class="nav-dropdown">
+                <nav class="header-nav" aria-label="Navigation principale">
+                    <button class="nav-dropdown"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                        aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span>Tous les produits</span>
-                        <span class="material-symbols-outlined">expand_more</span>
+                        <span aria-hidden="true">Tous les produits</span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn">
-                        <span class="material-symbols-outlined">history</span>
+                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
+                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle">
-                        <span class="material-symbols-outlined">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
                     </button>
-                    <a href="page_profil.html" class="icon-btn">
-                        <span class="material-symbols-outlined">person</span>
-                        <span>Compte</span>
+                    <a href="page_profil.html" class="icon-btn" aria-label="Mon compte" aria-current="page">
+                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                        <span aria-hidden="true">Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        <span>Panier</span>
-                        <span class="cart-badge" id="cart-count">0</span>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
+                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                        <span aria-hidden="true">Panier</span>
+                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <div class="container">
-            <!-- Fil d'Ariane -->
-            <div class="breadcrumb">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span>/</span>
-                <a href="page_compte.html">Mon compte</a>
-                <span>/</span>
-                <span>Mon profil</span>
-            </div>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">Mon profil</span>
+            </nav>
 
             <div class="profil-layout">
-                <!-- Sidebar navigation -->
-                <aside class="profil-sidebar">
-                    <h2 class="sidebar-title">Mon Profil Client</h2>
-                    <nav class="sidebar-nav">
-                        <a href="#" class="sidebar-link active" data-section="info">Informations personnelles</a>
+                <aside class="profil-sidebar" aria-label="Navigation du profil">
+                    <h1 class="sidebar-title">Mon Profil Client</h1>
+                    <nav class="sidebar-nav" aria-label="Sections du profil">
+                        <a href="#" class="sidebar-link active" data-section="info" aria-current="true">Informations personnelles</a>
                         <a href="#" class="sidebar-link" data-section="commandes">Mes commandes</a>
                         <a href="#" class="sidebar-link" data-section="adresses">Mes adresses</a>
                         <a href="#" class="sidebar-link" data-section="paiement">Moyens de paiement</a>
@@ -78,51 +84,55 @@
                     </nav>
                 </aside>
 
-                <!-- Contenu principal dynamique -->
-                <div class="profil-content" id="profil-content">
-                    <!-- Le contenu est injecté par JavaScript -->
+                <div class="profil-content" id="profil-content" aria-live="polite" aria-label="Contenu de la section">
+                    <!-- Contenu injecté par profil.js -->
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
-                    <h4>Aide & services</h4>
-                    <ul>
-                        <li><a href="/page_faq.html">FAQ & centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours & échanges</a></li>
-                        <li><a href="/page_contact.html">Contact</a></li>
-                    </ul>
+                    <h4>Aide &amp; services</h4>
+                    <nav aria-label="Aide et services">
+                        <ul>
+                            <li><a href="page_faq.html">FAQ &amp; centre d'aide</a></li>
+                            <li><a href="#">Suivi de commande</a></li>
+                            <li><a href="#">Retours &amp; échanges</a></li>
+                            <li><a href="page_contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
-                    <ul>
-                        <li><a href="#">Notre histoire</a></li>
-                        <li><a href="#">Magasins physiques</a></li>
-                        <li><a href="#">Carrières</a></li>
-                    </ul>
+                    <nav aria-label="À propos">
+                        <ul>
+                            <li><a href="#">Notre histoire</a></li>
+                            <li><a href="#">Magasins physiques</a></li>
+                            <li><a href="#">Carrières</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
-                    <ul>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales</a></li>
-                        <li><a href="#">Confidentialité & cookies</a></li>
-                    </ul>
+                    <nav aria-label="Informations légales">
+                        <ul>
+                            <li><a href="page_mentionlegal.html">Mentions légales</a></li>
+                            <li><a href="page_cgv.html">Conditions générales de vente</a></li>
+                            <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
+                            <li><a href="#">Confidentialité &amp; cookies</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 PearTech. Tous droits réservés.</p>
+                <p>&copy; 2025 PearTech. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

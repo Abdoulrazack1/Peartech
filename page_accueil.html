@@ -4,62 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PearTech - Boutique high-tech</title>
+    <meta name="description" content="PearTech - Découvrez smartphones, tablettes et montres connectées. Livraison offerte dès 99 €, garantie 2 ans.">
     <link rel="stylesheet" href="asset/css/page_accueil.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <header class="header">
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
-                <a href="page_accueil.html" class="logo">
-                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech Logo" class="logo-img">
-                    <div class="logo-text">
+                <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
+                    <div class="logo-text" aria-hidden="true">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
-                    <div class="search-results" id="search-results"></div>
+                <div class="search-bar" role="search">
+                    <label for="search-input" class="sr-only">Rechercher un produit</label>
+                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <input type="text" id="search-input"
+                        placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="search-results">
+                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
-                <nav class="header-nav">
-                    <button class="nav-dropdown">
+                <nav class="header-nav" aria-label="Navigation principale">
+                    <button class="nav-dropdown"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                        aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span>Tous les produits</span>
-                        <span class="material-symbols-outlined">expand_more</span>
+                        <span aria-hidden="true">Tous les produits</span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn">
-                        <span class="material-symbols-outlined">history</span>
+                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
+                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle">
-                        <span class="material-symbols-outlined">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
                     </button>
-                    <a href="page_profil.html" class="icon-btn">
-                        <span class="material-symbols-outlined">person</span>
-                        <span>Compte</span>
+                    <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
+                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                        <span aria-hidden="true">Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        <span>Panier</span>
-                        <span class="cart-badge" id="cart-count">0</span>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
+                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                        <span aria-hidden="true">Panier</span>
+                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
-    <main>
-        <section class="hero-section">
+
+    <main id="main-content">
+        <section class="hero-section" aria-labelledby="hero-heading">
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-left">
-                        <div class="hero-badge">
+                        <div class="hero-badge" aria-label="Nouvelle collection : iPhone 15 et Galaxy S24">
                             Nouvelle collection
                             <span>iPhone 15 &amp; Galaxy S24</span>
                         </div>
-                        <h1 class="hero-title">
-                            Des produits pensés pour la 
+                        <h1 id="hero-heading" class="hero-title">
+                            Des produits pensés pour la
                             <span class="text-primary">performance</span> et la
                             <span class="text-secondary">connectivité</span>.
                         </h1>
@@ -71,57 +84,57 @@
                             <a href="page_catalogue.html?categorie=apple" class="btn-primary">Voir les Apple</a>
                             <a href="page_catalogue.html?categorie=android" class="btn-secondary">Explorer les Android</a>
                         </div>
-                        <div class="hero-features">
-                            <div class="feature">
+                        <ul class="hero-features" aria-label="Nos engagements" style="list-style:none;padding:0;">
+                            <li class="feature">
                                 <span class="feature-label">Livraison</span>
                                 <span class="feature-value">Offerte dès 99 €</span>
-                            </div>
-                            <div class="feature">
+                            </li>
+                            <li class="feature">
                                 <span class="feature-label">Garantie</span>
                                 <span class="feature-value">2 ans incluse</span>
-                            </div>
-                            <div class="feature">
+                            </li>
+                            <li class="feature">
                                 <span class="feature-label">Support</span>
                                 <span class="feature-value">Experts à votre écoute</span>
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                     <div class="hero-right">
-                        <div class="carousel-container">
-                            <input type="radio" name="carousel" id="slide1" class="carousel-radio" checked>
-                            <input type="radio" name="carousel" id="slide2" class="carousel-radio">
-                            <input type="radio" name="carousel" id="slide3" class="carousel-radio">
+                        <div class="carousel-container" aria-label="Carrousel de produits vedettes" aria-roledescription="carrousel">
+                            <input type="radio" name="carousel" id="slide1" class="carousel-radio" checked aria-label="Slide 1 : iPhone 15 Pro">
+                            <input type="radio" name="carousel" id="slide2" class="carousel-radio" aria-label="Slide 2 : Galaxy S24 Ultra">
+                            <input type="radio" name="carousel" id="slide3" class="carousel-radio" aria-label="Slide 3 : Apple Watch Series 9">
                             <div class="carousel-slides">
-                                <div class="carousel-slide">
+                                <div class="carousel-slide" role="group" aria-label="Slide 1 sur 3">
                                     <div class="carousel-image">
-                                        <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=800" alt="iPhone">
+                                        <img src="https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=800" alt="iPhone 15 Pro en coloris titane naturel">
                                     </div>
                                     <div class="carousel-caption">iPhone 15 Pro - Titane</div>
                                 </div>
-                                <div class="carousel-slide">
+                                <div class="carousel-slide" role="group" aria-label="Slide 2 sur 3">
                                     <div class="carousel-image">
-                                        <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800" alt="Samsung">
+                                        <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800" alt="Samsung Galaxy S24 Ultra">
                                     </div>
                                     <div class="carousel-caption">Galaxy S24 Ultra</div>
                                 </div>
-                                <div class="carousel-slide">
+                                <div class="carousel-slide" role="group" aria-label="Slide 3 sur 3">
                                     <div class="carousel-image">
-                                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800" alt="Montre">
+                                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800" alt="Apple Watch Series 9">
                                     </div>
                                     <div class="carousel-caption">Apple Watch Series 9</div>
                                 </div>
                             </div>
-                            <div class="carousel-nav">
+                            <div class="carousel-nav" aria-label="Contrôles du carrousel">
                                 <label for="slide1" class="carousel-prev" aria-label="Slide précédent"></label>
                                 <label for="slide3" class="carousel-next" aria-label="Slide suivant"></label>
                             </div>
-                            <div class="carousel-indicators">
-                                <label for="slide1" class="indicator"></label>
-                                <label for="slide2" class="indicator"></label>
-                                <label for="slide3" class="indicator"></label>
+                            <div class="carousel-indicators" role="tablist" aria-label="Indicateurs de slide">
+                                <label for="slide1" class="indicator" role="tab" aria-label="Aller au slide 1"></label>
+                                <label for="slide2" class="indicator" role="tab" aria-label="Aller au slide 2"></label>
+                                <label for="slide3" class="indicator" role="tab" aria-label="Aller au slide 3"></label>
                             </div>
                         </div>
-                        <div class="slide-menu">
+                        <div class="slide-menu" aria-label="Navigation rapide carrousel">
                             <label for="slide1" class="slide-item">iPhone 15<br>Pro</label>
                             <label for="slide2" class="slide-item">Galaxy S24<br>Ultra</label>
                             <label for="slide3" class="slide-item">Apple Watch<br>Series 9</label>
@@ -130,58 +143,60 @@
                 </div>
             </div>
         </section>
-        <section class="categories-section">
+
+        <section class="categories-section" aria-labelledby="categories-heading">
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <div class="section-label">PARCOURIR PAR CATÉGORIE</div>
-                        <h2 class="section-title">Catégories principales</h2>
+                        <div class="section-label" aria-hidden="true">PARCOURIR PAR CATÉGORIE</div>
+                        <h2 id="categories-heading" class="section-title">Catégories principales</h2>
                         <p class="section-description">Trouvez rapidement le produit adapté à vos besoins.</p>
                     </div>
                     <a href="page_catalogue.html" class="link-arrow">Voir toutes les catégories</a>
                 </div>
                 <div class="categories-grid">
                     <a href="page_catalogue.html?categorie=apple" class="category-card">
-                        <div class="category-label">Apple</div>
+                        <div class="category-label" aria-hidden="true">Apple</div>
                         <h3 class="category-title">Apple</h3>
                         <p class="category-description">iPhone, iPad, Apple Watch et accessoires.</p>
                     </a>
                     <a href="page_catalogue.html?categorie=android" class="category-card">
-                        <div class="category-label">Android</div>
+                        <div class="category-label" aria-hidden="true">Android</div>
                         <h3 class="category-title">Android</h3>
                         <p class="category-description">Samsung, Google Pixel, Xiaomi et plus.</p>
                     </a>
                     <a href="page_catalogue.html?categorie=montres" class="category-card">
-                        <div class="category-label">Montres connectées</div>
+                        <div class="category-label" aria-hidden="true">Montres connectées</div>
                         <h3 class="category-title">Montres</h3>
                         <p class="category-description">Apple Watch, Galaxy Watch, Fitbit, Garmin.</p>
                     </a>
                     <a href="page_catalogue.html?categorie=tablettes" class="category-card">
-                        <div class="category-label">Tablettes</div>
+                        <div class="category-label" aria-hidden="true">Tablettes</div>
                         <h3 class="category-title">Tablettes</h3>
                         <p class="category-description">iPad, Samsung Tab, Amazon Fire.</p>
                     </a>
                 </div>
             </div>
         </section>
-        <section class="products-section">
+
+        <section class="products-section" aria-labelledby="products-heading">
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <div class="section-label">SÉLECTION</div>
-                        <h2 class="section-title">Best-sellers &amp; nouveautés</h2>
+                        <div class="section-label" aria-hidden="true">SÉLECTION</div>
+                        <h2 id="products-heading" class="section-title">Best-sellers &amp; nouveautés</h2>
                         <p class="section-description">Les produits les plus appréciés par nos clients.</p>
                     </div>
-                    <div class="filter-tabs">
-                        <button class="tab active" data-filter="tous">Tous</button>
-                        <button class="tab" data-filter="apple">Apple</button>
-                        <button class="tab" data-filter="android">Android</button>
-                        <button class="tab" data-filter="montres">Montres</button>
-                        <button class="tab" data-filter="tablettes">Tablettes</button>
+                    <div class="filter-tabs" role="group" aria-label="Filtrer par catégorie">
+                        <button class="tab active" data-filter="tous" aria-pressed="true">Tous</button>
+                        <button class="tab" data-filter="apple" aria-pressed="false">Apple</button>
+                        <button class="tab" data-filter="android" aria-pressed="false">Android</button>
+                        <button class="tab" data-filter="montres" aria-pressed="false">Montres</button>
+                        <button class="tab" data-filter="tablettes" aria-pressed="false">Tablettes</button>
                     </div>
                 </div>
-                <div class="products-grid" id="products-grid"></div>
-                <div class="collection-banner">
+                <div class="products-grid" id="products-grid" role="list" aria-label="Produits"></div>
+                <div class="collection-banner" aria-label="Collection Nouveautés Apple">
                     <div class="collection-content">
                         <h3>Collection "Nouveautés Apple"</h3>
                         <p>Découvrez les derniers iPhone, iPad et Apple Watch.</p>
@@ -190,72 +205,84 @@
                 </div>
             </div>
         </section>
-        <section class="services-section">
+
+        <section class="services-section" aria-labelledby="services-heading">
             <div class="container">
-                <div class="section-label">POURQUOI NOVACOMPUTE</div>
-                <h2 class="section-title">Des services pensés pour durer</h2>
+                <div class="section-label" aria-hidden="true">POURQUOI PEARTECH</div>
+                <h2 id="services-heading" class="section-title">Des services pensés pour durer</h2>
                 <p class="section-description">Un écosystème complet pour choisir, recevoir et faire évoluer vos appareils.</p>
                 <div class="services-grid">
-                    <div class="service-card">
+                    <article class="service-card">
                         <h3>Livraison rapide &amp; suivie</h3>
                         <p>Expédition sous 24/48h et suivi détaillé de votre commande.</p>
-                    </div>
-                    <div class="service-card">
+                    </article>
+                    <article class="service-card">
                         <h3>Garantie 2 ans minimum</h3>
                         <p>Tous nos produits sont testés et garantis 2 ans.</p>
-                    </div>
-                    <div class="service-card">
+                    </article>
+                    <article class="service-card">
                         <h3>Support technique expert</h3>
                         <p>Des spécialistes vous accompagnent pour l'installation et les questions techniques.</p>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
-        <section class="newsletter-section">
+
+        <section class="newsletter-section" aria-labelledby="newsletter-heading">
             <div class="container">
-                <h2>Recevez nos sélections &amp; conseils</h2>
-                <p>Promos exclusives, guides d'achat et nouvelles collections directement dans votre boite mail.</p>
+                <h2 id="newsletter-heading">Recevez nos sélections &amp; conseils</h2>
+                <p>Promos exclusives, guides d'achat et nouvelles collections directement dans votre boîte mail.</p>
                 <div class="newsletter-form">
-                    <input type="email" placeholder="Entrez votre adresse e-mail">
-                    <button class="btn-primary">S'inscrire</button>
+                    <label for="newsletter-email" class="sr-only">Votre adresse e-mail</label>
+                    <input type="email" id="newsletter-email" placeholder="Entrez votre adresse e-mail" aria-label="Votre adresse e-mail pour la newsletter">
+                    <button class="btn-primary" type="button">S'inscrire</button>
                 </div>
             </div>
         </section>
     </main>
-    <footer class="footer">
+
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
                     <h4>Aide &amp; services</h4>
-                    <ul>
-                        <li><a href="/page_faq.html">FAQ &amp; centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours &amp; échanges</a></li>
-                        <li><a href="/page_contact.html">Contact</a></li>
-                    </ul>
+                    <nav aria-label="Aide et services">
+                        <ul>
+                            <li><a href="page_faq.html">FAQ &amp; centre d'aide</a></li>
+                            <li><a href="#">Suivi de commande</a></li>
+                            <li><a href="#">Retours &amp; échanges</a></li>
+                            <li><a href="page_contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
-                    <ul>
-                        <li><a href="#">Notre histoire</a></li>
-                        <li><a href="#">Magasins physiques</a></li>
-                        <li><a href="#">Carrières</a></li>
-                    </ul>
+                    <nav aria-label="À propos">
+                        <ul>
+                            <li><a href="#">Notre histoire</a></li>
+                            <li><a href="#">Magasins physiques</a></li>
+                            <li><a href="#">Carrières</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
-                    <ul>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales</a></li>
-                        <li><a href="#">Confidentialité &amp; cookies</a></li>
-                    </ul>
+                    <nav aria-label="Informations légales">
+                        <ul>
+                            <li><a href="page_mentionlegal.html">Mentions légales</a></li>
+                            <li><a href="page_cgv.html">Conditions générales de vente</a></li>
+                            <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
+                            <li><a href="#">Confidentialité &amp; cookies</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 PearTech. Tous droits réservés.</p>
+                <p>&copy; 2025 PearTech. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
+
     <script src="asset/js/data.js"></script>
     <script src="asset/js/product_grid.js"></script>
     <script src="asset/js/darkmode.js"></script>

@@ -10,65 +10,73 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <!-- HEADER -->
-    <header class="header">
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
-                <a href="page_accueil.html" class="logo">
-                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech Logo" class="logo-img">
-                    <div class="logo-text">
+                <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
+                    <div class="logo-text" aria-hidden="true">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar">
-                    <span class="material-symbols-outlined">search</span>
-                    <input type="text" id="search-input" placeholder="Rechercher un téléphone, une tablette, une montre connectée...">
-                    <div class="search-results" id="search-results"></div>
+                <div class="search-bar" role="search">
+                    <label for="search-input" class="sr-only">Rechercher un produit</label>
+                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <input type="text" id="search-input"
+                        placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="search-results">
+                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
-                <nav class="header-nav">
-                    <button class="nav-dropdown">
+                <nav class="header-nav" aria-label="Navigation principale">
+                    <button class="nav-dropdown"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        aria-controls="dropdown-menu"
+                        aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span>Tous les produits</span>
-                        <span class="material-symbols-outlined">expand_more</span>
+                        <span aria-hidden="true">Tous les produits</span>
+                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
                     </button>
-                    <a href="page_historique.html" class="icon-btn">
-                        <span class="material-symbols-outlined">history</span>
+                    <a href="page_historique.html" class="icon-btn" aria-label="Historique de navigation">
+                        <span class="material-symbols-outlined" aria-hidden="true">history</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle">
-                        <span class="material-symbols-outlined">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
+                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
                     </button>
-                    <a href="page_profil.html" class="icon-btn">
-                        <span class="material-symbols-outlined">person</span>
-                        <span>Compte</span>
+                    <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
+                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
+                        <span aria-hidden="true">Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn" id="cart-icon">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        <span>Panier</span>
-                        <span class="cart-badge" id="cart-count">0</span>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
+                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
+                        <span aria-hidden="true">Panier</span>
+                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <div class="container">
-            <!-- Fil d'Ariane -->
-            <div class="breadcrumb">
+            <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span>/</span>
+                <span aria-hidden="true">/</span>
                 <a href="page_panier.html">Mon panier</a>
-                <span>/</span>
+                <span aria-hidden="true">/</span>
                 <a href="page_paiement.html">Finaliser ma commande</a>
-                <span>/</span>
-                <span>Confirmation</span>
-            </div>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">Confirmation</span>
+            </nav>
 
-            <!-- Message de remerciement -->
-            <div class="confirmation-header">
+            <div class="confirmation-header" role="status" aria-live="polite">
                 <div class="checkmark-circle">
-                    <span class="material-symbols-outlined">check_circle</span>
+                    <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
                 </div>
                 <h1 class="confirmation-title">Merci pour votre commande !</h1>
                 <p class="confirmation-subtitle">Commande n° <span id="order-number">123456789</span></p>
@@ -76,34 +84,33 @@
             </div>
 
             <div class="confirmation-layout">
-                <!-- Colonne gauche : infos livraison et résumé -->
                 <div class="confirmation-left">
-                    <section class="info-section">
-                        <h2>Informations de livraison</h2>
-                        <div class="info-grid">
+                    <section class="info-section" aria-labelledby="delivery-info-heading">
+                        <h2 id="delivery-info-heading">Informations de livraison</h2>
+                        <dl class="info-grid">
                             <div class="info-row">
-                                <span class="info-label">Destinataire</span>
-                                <span class="info-value" id="delivery-name">Jean Dupont</span>
+                                <dt class="info-label">Destinataire</dt>
+                                <dd class="info-value" id="delivery-name">Jean Dupont</dd>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Adresse</span>
-                                <span class="info-value" id="delivery-address">15 rue de la Paix, 75001 Paris, France</span>
+                                <dt class="info-label">Adresse</dt>
+                                <dd class="info-value" id="delivery-address">15 rue de la Paix, 75001 Paris, France</dd>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Mode de livraison</span>
-                                <span class="info-value" id="delivery-mode">Livraison standard (3-5 jours)</span>
+                                <dt class="info-label">Mode de livraison</dt>
+                                <dd class="info-value" id="delivery-mode">Livraison standard (3-5 jours)</dd>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Paiement</span>
-                                <span class="info-value" id="payment-method">Carte bancaire **** 4242</span>
+                                <dt class="info-label">Paiement</dt>
+                                <dd class="info-value" id="payment-method">Carte bancaire **** 4242</dd>
                             </div>
-                        </div>
+                        </dl>
                     </section>
 
-                    <section class="order-summary">
-                        <h2>Résumé de la commande</h2>
-                        <div class="order-items" id="order-items">
-                            <!-- Généré dynamiquement -->
+                    <section class="order-summary" aria-labelledby="order-summary-heading">
+                        <h2 id="order-summary-heading">Résumé de la commande</h2>
+                        <div class="order-items" id="order-items" aria-live="polite">
+                            <!-- Généré dynamiquement par confirmation.js -->
                         </div>
                         <div class="order-totals">
                             <div class="total-row">
@@ -112,13 +119,12 @@
                             </div>
                             <div class="total-row grand-total">
                                 <span>Total payé</span>
-                                <span id="total-paid">1280,00 €</span>
+                                <span id="total-paid">0,00 €</span>
                             </div>
                         </div>
                     </section>
                 </div>
 
-                <!-- Colonne droite : actions -->
                 <div class="confirmation-right">
                     <div class="actions-card">
                         <a href="page_catalogue.html" class="btn-primary">Continuer mes achats</a>
@@ -129,38 +135,44 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
-                    <h4>Aide & services</h4>
-                    <ul>
-                        <li><a href="/page_faq.html">FAQ & centre d'aide</a></li>
-                        <li><a href="#">Suivi de commande</a></li>
-                        <li><a href="#">Retours & échanges</a></li>
-                        <li><a href="/page_contact.html">Contact</a></li>
-                    </ul>
+                    <h4>Aide &amp; services</h4>
+                    <nav aria-label="Aide et services">
+                        <ul>
+                            <li><a href="page_faq.html">FAQ &amp; centre d'aide</a></li>
+                            <li><a href="#">Suivi de commande</a></li>
+                            <li><a href="#">Retours &amp; échanges</a></li>
+                            <li><a href="page_contact.html">Contact</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>À propos</h4>
-                    <ul>
-                        <li><a href="#">Notre histoire</a></li>
-                        <li><a href="#">Magasins physiques</a></li>
-                        <li><a href="#">Carrières</a></li>
-                    </ul>
+                    <nav aria-label="À propos">
+                        <ul>
+                            <li><a href="#">Notre histoire</a></li>
+                            <li><a href="#">Magasins physiques</a></li>
+                            <li><a href="#">Carrières</a></li>
+                        </ul>
+                    </nav>
                 </div>
                 <div class="footer-column">
                     <h4>Légal</h4>
-                    <ul>
-                        <li><a href="#">Mentions légales</a></li>
-                        <li><a href="#">Conditions générales</a></li>
-                        <li><a href="#">Confidentialité & cookies</a></li>
-                    </ul>
+                    <nav aria-label="Informations légales">
+                        <ul>
+                            <li><a href="page_mentionlegal.html">Mentions légales</a></li>
+                            <li><a href="page_cgv.html">Conditions générales de vente</a></li>
+                            <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
+                            <li><a href="#">Confidentialité &amp; cookies</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 PearTech. Tous droits réservés.</p>
+                <p>&copy; 2025 PearTech. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
