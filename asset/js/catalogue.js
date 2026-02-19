@@ -289,15 +289,45 @@
     // FILTRER ET TRIER
     // ════════════════════════════════════════════════════════════════
 
+    // Map explicite sous-catégorie → prédicat de matching
+    // Évite les faux positifs de la comparaison par tag partiel
+    // (ex: "apple watch".includes("watch") matchait Samsung Galaxy Watch)
+    const SUBCAT_MATCHERS = {
+        // ── Apple ──
+        'iPhone':              p => p.tags.includes('iphone'),
+        'iPad':                p => p.tags.includes('ipad'),
+        'Apple Watch':         p => p.categoryId === 'cat_wearables' && p.tags.includes('apple'),
+        'Accessoires':         p => p.tags.some(t => ['accessoire','accessoires'].includes(t)),
+        // ── Android ──
+        'Samsung':             p => p.tags.includes('samsung') && !p.tags.includes('tablette') && !p.tags.some(t => ['watch','montre'].includes(t)),
+        'Google Pixel':        p => p.tags.includes('google') || p.tags.includes('pixel'),
+        'Xiaomi':              p => p.tags.includes('xiaomi'),
+        'OnePlus':             p => p.tags.includes('oneplus'),
+        // ── Wearables ──
+        'Apple Watch':         p => p.categoryId === 'cat_wearables' && p.tags.includes('apple'),
+        'Samsung Galaxy Watch':p => p.tags.includes('samsung') && p.tags.some(t => ['watch','montre'].includes(t)),
+        'Fitbit':              p => p.tags.includes('fitbit'),
+        'Garmin':              p => p.tags.includes('garmin'),
+        // ── Tablettes ──
+        'iPad':                p => p.tags.includes('ipad'),
+        'Samsung Galaxy Tab':  p => p.tags.includes('samsung') && p.tags.includes('tablette'),
+        'Amazon Fire':         p => p.tags.includes('amazon') || p.tags.includes('fire'),
+        'Xiaomi':              p => p.tags.includes('xiaomi'),
+        // ── Fallback ──
+        'Autres':              p => true,
+    };
+
     function matchesSubcategory(product, subs) {
         if (!subs.length) return true;
         return subs.some(sub => {
-            const sl = sub.toLowerCase();
-            if (product.tags.some(t => t.toLowerCase().includes(sl) || sl.includes(t.toLowerCase()))) return true;
-            if (product.name.toLowerCase().includes(sl)) return true;
+            // Utiliser le matcher explicite si disponible
+            const matcher = SUBCAT_MATCHERS[sub];
+            if (matcher) return matcher(product);
+            // Fallback : matcher par nom de catégorie globale (page "tous")
             const cat = NovaComputeDB.categories.find(c => c.name === sub);
             if (cat) return product.categoryId === cat.id;
-            return false;
+            // Fallback final : nom du produit
+            return product.name.toLowerCase().includes(sub.toLowerCase());
         });
     }
 
@@ -360,7 +390,13 @@
             return;
         }
 
-        const PLACEHOLDER = '/asset/image/no-image.png';
+        // Fallbacks Unsplash par catégorie (si image locale absente)
+        const FALLBACKS = {
+            'cat_apple':    'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400&q=80',
+            'cat_android':  'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80',
+            'cat_wearables':'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80',
+            'cat_tablets':  'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400&q=80',
+        };
 
         productsGrid.innerHTML = products.map(product => {
             const price    = product.basePrice;
@@ -405,9 +441,10 @@
             <article class="product-card" aria-label="${product.name}">
                 <a href="page_produit.html?id=${product.id}" class="product-image"
                    aria-label="Voir la fiche de ${product.name}">
-                    <img src="${product.images[0] || PLACEHOLDER}"
+                    <img src="${product.images[0] || FALLBACKS[product.categoryId] || ''}"
                          alt="${product.name}" loading="lazy"
-                         onerror="this.onerror=null;this.src='${PLACEHOLDER}';">
+                         data-fallback="${FALLBACKS[product.categoryId] || ''}"
+                         onerror="this.onerror=null;this.src=this.dataset.fallback||'';">
                     ${badge}${stockHtml}
                 </a>
                 <div class="product-info">

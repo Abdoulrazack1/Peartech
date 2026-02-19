@@ -904,6 +904,7 @@ a {
 
 .filter-tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-xs);
 }
 
@@ -916,6 +917,8 @@ a {
     font-size: 0.85rem;
     cursor: pointer;
     transition: var(--transition-normal);
+    font-family: inherit;
+    white-space: nowrap;
 }
 
 .tab:hover {
@@ -935,23 +938,26 @@ a {
     grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
+    align-items: start; /* chaque card prend sa hauteur naturelle */
 }
 
 .product-card {
     background: var(--secondary);
     border: 1px solid var(--border);
     border-radius: 12px;
-    overflow: hidden;
-    transition: var(--transition-normal);
+    /* NE PAS mettre overflow:hidden ici : ça coupe product-info sous l'image */
+    overflow: visible;
+    /* opacity + transform inclus pour l'animation scroll reveal */
+    transition: opacity 0.5s ease, transform 0.5s ease, border-color var(--transition-normal), box-shadow var(--transition-normal);
     text-decoration: none;
     color: inherit;
     display: flex;
     flex-direction: column;
+    height: 100%; /* s'étire pour remplir la cellule de la grille */
 }
 
 .product-card:hover {
     border-color: var(--primary);
-    transform: translateY(-6px);
     box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
 }
 
@@ -961,6 +967,8 @@ a {
     height: 220px;
     overflow: hidden;
     background: var(--background);
+    border-radius: 12px 12px 0 0; /* coins arrondis uniquement en haut */
+    flex-shrink: 0; /* ne pas rétrécir l'image dans le flex column */
 }
 
 .product-image img {
@@ -972,6 +980,7 @@ a {
 
 .product-card:hover .product-image img {
     transform: scale(1.05);
+    will-change: transform;
 }
 
 .product-badge {
@@ -1007,6 +1016,7 @@ a {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* évite le dépassement dans certains navigateurs */
 }
 
 .product-name {
@@ -1019,14 +1029,34 @@ a {
 .product-specs {
     font-size: 0.8rem;
     color: var(--text-muted);
+    margin-bottom: 0.4rem;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     margin-bottom: var(--spacing-sm);
+}
+
+.product-rating .stars {
+    color: #f59e0b;
+    font-size: 0.95rem;
+    letter-spacing: -1px;
+}
+
+.product-rating .rating-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
 }
 
 .product-footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end; /* aligne en bas : uniforme avec ou sans ancien prix */
     margin-bottom: var(--spacing-sm);
+    gap: 0.5rem;
+    min-height: 52px; /* hauteur fixe = prix + ancien prix empilés → aucun décalage */
 }
 
 .product-price {
@@ -1038,9 +1068,9 @@ a {
 /* ── Bloc prix : prix actuel + ancien prix barré ── */
 .product-price-block {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    flex-direction: column; /* prix principal au-dessus, barré en-dessous */
+    align-items: flex-start;
+    gap: 0.15rem;
 }
 
 .product-old-price {

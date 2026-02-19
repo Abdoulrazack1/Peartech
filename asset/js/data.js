@@ -17,7 +17,7 @@
             slug: 'android',
             description: 'Smartphones Android, tablettes et montres sous Android',
             icon: 'android',
-            image: 'https://images.unsplash.com/photo-1598327105668-5b893f3b5c3a?w=400',
+            image: '/asset/image/apple/iphone-15-pro-max.jpg',
             subcategories: ['Samsung', 'Google Pixel', 'Xiaomi', 'OnePlus', 'Autres']
         },
         {
@@ -26,7 +26,7 @@
             slug: 'montres',
             description: 'Montres connectées pour le sport, la santé et le quotidien',
             icon: 'watch',
-            image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400',
+            image: '/asset/image/apple/iphone-15-pro-max-2.jpg',
             subcategories: ['Apple Watch', 'Samsung Galaxy Watch', 'Fitbit', 'Garmin', 'Autres']
         },
         {
@@ -35,7 +35,7 @@
             slug: 'tablettes',
             description: 'Tablettes pour le travail, les études et le divertissement',
             icon: 'tablet',
-            image: 'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400',
+            image: '/asset/image/apple/iphone-15-pro.jpg',
             subcategories: ['iPad', 'Samsung Galaxy Tab', 'Amazon Fire', 'Xiaomi', 'Autres']
         }
     ];
@@ -140,8 +140,8 @@
             },
             description: 'L\'iPhone 15, l\'essentiel avec l\'îlot dynamique et un appareil photo de 48 Mpx.',
             images: [
-                '/asset/image/apple/iphone-15-2.jpg',
-                '/asset/image/apple/iphone-15.jpeg'
+                '/asset/image/apple/iphone-15.jpeg',
+                '/asset/image/apple/iphone-15-2.jpg'
             ],
             tags: ['iphone', 'apple', '15', 'ios'],
             stock: 35,
@@ -252,7 +252,8 @@
             id: 6,
             name: 'Apple Watch Series 9',
             slug: 'apple-watch-series-9',
-            categoryId: 'cat_apple',
+            categoryId: 'cat_wearables',
+            categoryIds: ['cat_wearables', 'cat_apple'],
             basePrice: 449.00,
             oldPrice: 499.00,
             specs: {
@@ -268,7 +269,7 @@
                 '/asset/image/apple/apple watch series 9.jpg',
                 '/asset/image/apple/apple watch series 9_2.jpg'
             ],
-            tags: ['apple', 'watch', 'montre'],
+            tags: ['apple', 'watch', 'montre', 'montres'],
             stock: 30,
             isNew: true,
             isBestSeller: true,
@@ -295,7 +296,8 @@
             id: 7,
             name: 'Apple Watch SE (2e génération)',
             slug: 'apple-watch-se-2',
-            categoryId: 'cat_apple',
+            categoryId: 'cat_wearables',
+            categoryIds: ['cat_wearables', 'cat_apple'],
             basePrice: 299.00,
             oldPrice: 329.00,
             specs: {
@@ -337,7 +339,8 @@
             id: 8,
             name: 'Apple Watch Ultra 2',
             slug: 'apple-watch-ultra-2',
-            categoryId: 'cat_apple',
+            categoryId: 'cat_wearables',
+            categoryIds: ['cat_wearables', 'cat_apple'],
             basePrice: 899.00,
             oldPrice: 949.00,
             specs: {
@@ -373,7 +376,7 @@
             id: 9,
             name: 'iPad Pro 12.9" (6e génération)',
             slug: 'ipad-pro-12-9',
-            categoryId: 'cat_apple',
+            categoryId: 'cat_tablets',
             basePrice: 1299.00,
             oldPrice: 1399.00,
             specs: {
@@ -412,7 +415,7 @@
             id: 10,
             name: 'iPad Air 11" (5e génération)',
             slug: 'ipad-air-11',
-            categoryId: 'cat_apple',
+            categoryId: 'cat_tablets',
             basePrice: 699.00,
             oldPrice: 749.00,
             specs: {
@@ -450,7 +453,7 @@
             id: 11,
             name: 'iPad (10e génération)',
             slug: 'ipad-10',
-            categoryId: 'cat_apple',
+            categoryId: 'cat_tablets',
             basePrice: 449.00,
             oldPrice: 499.00,
             specs: {
@@ -584,7 +587,7 @@
             },
             description: 'Le Galaxy Z Fold5, le smartphone pliable qui se transforme en tablette.',
             images: [
-                '/asset/image/android/samsung_galaxy_zfold5.jpg',
+                '/asset/image/android/samsung_galaxyzfold5.jpg',
                 '/asset/image/android/samsung_galaxyzfold5.jpg'
             ],
             tags: ['samsung', 'android', 'fold', 'pliable'],
@@ -661,8 +664,8 @@
             },
             description: 'Le Samsung Galaxy A55, un excellent milieu de gamme pour tous les jours.',
             images: [
-                '/asset/image/android/samsung_galaxy_a55_2.webp',
-                '/asset/image/android/samsung_galaxy_a55.jpg'
+                '/asset/image/android/samsung_galaxy_a55.jpg',
+                '/asset/image/android/samsung_galaxy_a55_2.webp'
             ],
             tags: ['samsung', 'android', 'galaxy a'],
             stock: 40,
@@ -897,8 +900,8 @@
             },
             description: 'La Galaxy Watch 6 Classic avec sa lunette tournante, idéale pour le sport et la santé.',
             images: [
-                '/asset/image/android/samsung_galaxywatch6_classic.webp',
-                '/asset/image/android/samsunggalaxywatch6_classic.jpg'
+                '/asset/image/android/samsunggalaxywatch6_classic.jpg',
+                '/asset/image/android/samsung_galaxywatch6_classic.jpg'
             ],
             tags: ['samsung', 'watch', 'android'],
             stock: 25,
@@ -972,7 +975,7 @@
             description: 'Le Fitbit Charge 6, le tracker d\'activité ultime pour la santé et la forme.',
             images: [
                 '/asset/image/android/fitbit6charge.webp',
-                '/asset/image/android/fitbitcharge.webp'
+                '/asset/image/android/fitbit6charge2.jpg'
             ],
             tags: ['fitbit', 'tracker'],
             stock: 60,
@@ -1225,7 +1228,11 @@
         getProductsByCategory: function(categorySlug) {
             const cat = categories.find(c => c.slug === categorySlug);
             if (!cat) return [];
-            return products.filter(p => p.categoryId === cat.id);
+            // categoryIds permet à un produit d'apparaître dans plusieurs catégories
+            return products.filter(p =>
+                p.categoryId === cat.id ||
+                (Array.isArray(p.categoryIds) && p.categoryIds.includes(cat.id))
+            );
         },
         getBestSellers: function(limit = 4) {
             return products.filter(p => p.isBestSeller).slice(0, limit);

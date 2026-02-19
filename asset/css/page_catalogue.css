@@ -268,9 +268,19 @@
 /* ── Bloc prix (prix actuel + prix barré) ── */
 .product-price-block {
     display: flex;
-    align-items: baseline;
+    flex-direction: column; /* prix principal au-dessus, barré en-dessous */
+    align-items: flex-start;
+    gap: 0.15rem;
+}
+
+/* ── Footer carte : prix + boutons toujours alignés en bas ── */
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--spacing-sm);
     gap: 0.5rem;
-    flex-wrap: wrap;
+    min-height: 52px;
 }
 
 .product-old-price {

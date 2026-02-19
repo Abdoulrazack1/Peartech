@@ -26,16 +26,54 @@
             });
         }, observerOptions);
         
-        // Observer les cartes
-        const cards = document.querySelectorAll('.category-card, .product-card, .service-card');
-        cards.forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(card);
+        // Fonction pour attacher l'observer à une card
+        function observeCard(card) {
+            if (card.dataset.scrollObserved) return; // éviter les doublons
+            card.dataset.scrollObserved = '1';
+
+            // Vérifier si la card est déjà dans le viewport
+            const rect = card.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (isVisible) {
+                // Déjà visible : afficher directement sans animation
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            } else {
+                // Hors viewport : animation scroll reveal
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            }
+        }
+
+        // Observer les cartes déjà présentes
+        document.querySelectorAll('.category-card, .service-card').forEach(observeCard);
+
+        // MutationObserver pour observer les product-cards générées dynamiquement
+        const mutationObs = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType !== 1) return;
+                    if (node.classList && node.classList.contains('product-card')) {
+                        observeCard(node);
+                    }
+                    // Chercher dans les enfants aussi (cas où le conteneur entier est rerendu)
+                    node.querySelectorAll && node.querySelectorAll('.product-card').forEach(observeCard);
+                });
+            });
         });
-        
-        console.log('Scroll reveal activé sur', cards.length, 'éléments');
+
+        const productsGrid = document.getElementById('products-grid');
+        if (productsGrid) {
+            mutationObs.observe(productsGrid, { childList: true, subtree: true });
+        }
+
+        // Aussi observer les product-cards déjà présentes au moment du DOMContentLoaded
+        document.querySelectorAll('.product-card').forEach(observeCard);
+
+        console.log('Scroll reveal activé (MutationObserver inclus)');
         
         // ============================================
         // HEADER SCROLL EFFECT

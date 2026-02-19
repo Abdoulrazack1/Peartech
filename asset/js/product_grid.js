@@ -8,6 +8,14 @@
 
     const PLACEHOLDER = '/asset/image/no-image.png';
 
+    // Images de fallback par catégorie (Unsplash) si les images locales ne chargent pas
+    const FALLBACKS = {
+        'cat_apple':    'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=400&q=80',
+        'cat_android':  'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80',
+        'cat_wearables':'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80',
+        'cat_tablets':  'https://images.unsplash.com/photo-1587033411391-5d9e51cce126?w=400&q=80',
+    };
+
     function renderProducts(productsToRender) {
         const grid = document.getElementById('products-grid');
         if (!grid) return;
@@ -58,14 +66,21 @@
             // Favori courant
             const isFav = (typeof window.Favoris !== 'undefined') && window.Favoris.isFavori(product.id);
 
+            // Slug de catégorie pour le filtre (ex: "cat_apple" -> "apple")
+            const categorySlug = (window.NovaComputeDB && window.NovaComputeDB.getCategorySlugFromId)
+                ? window.NovaComputeDB.getCategorySlugFromId(product.categoryId)
+                : (product.categoryId || '').replace('cat_', '');
+
             return `
             <article class="product-card" aria-label="${product.name}"
-                     data-product-id="${product.id}">
+                     data-product-id="${product.id}"
+                     data-category="${categorySlug}">
                 <a href="page_produit.html?id=${product.id}" class="product-image"
                    aria-label="Voir la fiche de ${product.name}">
-                    <img src="${product.images[0] || PLACEHOLDER}"
+                    <img src="${product.images[0] || FALLBACKS[product.categoryId] || PLACEHOLDER}"
                          alt="${product.name}" loading="lazy"
-                         onerror="this.onerror=null;this.src='${PLACEHOLDER}';">
+                         data-fallback="${FALLBACKS[product.categoryId] || PLACEHOLDER}"
+                         onerror="this.onerror=null;this.src=this.dataset.fallback||'${PLACEHOLDER}';">
                     ${badge}${stockHtml}
                 </a>
                 <div class="product-info">

@@ -13,8 +13,9 @@
             productCards.forEach(card => {
                 const category = card.dataset.category; // apple, android, montres, tablettes
                 if (filter === 'tous' || category === filter) {
-                    card.style.display = 'block';
-                    card.style.animation = 'fadeIn 0.3s ease';
+                    // flex car les cards ont flex-direction:column dans le CSS
+                    card.style.display = 'flex';
+                    card.style.opacity = '1';
                 } else {
                     card.style.display = 'none';
                 }
@@ -31,7 +32,18 @@
             });
         });
 
-        // Initialisation
+        // Initialisation immédiate (cards statiques)
         filterProducts('tous');
+
+        // MutationObserver : ré-appliquer le filtre actif quand la grille est rechargée dynamiquement
+        const productsGrid = document.getElementById('products-grid');
+        if (productsGrid) {
+            const gridObserver = new MutationObserver(function() {
+                const activeTab = document.querySelector('.tab.active');
+                const currentFilter = activeTab ? activeTab.dataset.filter : 'tous';
+                filterProducts(currentFilter);
+            });
+            gridObserver.observe(productsGrid, { childList: true });
+        }
     });
 })();
