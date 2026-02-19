@@ -1035,22 +1035,116 @@ a {
     color: var(--primary);
 }
 
+/* ── Bloc prix : prix actuel + ancien prix barré ── */
+.product-price-block {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.product-old-price {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+/* ── Groupe d'actions (panier + favori) ── */
+.product-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+/* Bouton panier — icône uniquement ── */
 .btn-add-cart {
-    padding: 0.6rem 1.2rem;
+    width: 36px;
+    height: 36px;
+    padding: 0;
     background: var(--primary);
     color: white;
     border: none;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: var(--transition-normal);
-    font-family: inherit;
+    flex-shrink: 0;
 }
 
 .btn-add-cart:hover {
     background: var(--primary-hover);
-    transform: scale(1.05);
+    transform: scale(1.08);
+}
+
+.btn-add-cart:disabled {
+    background: #10b981;
+    transform: none;
+    cursor: default;
+}
+
+.btn-add-cart .material-symbols-outlined {
+    font-size: 1.1rem;
+}
+
+/* ── Bouton favori — cœur SVG ── */
+.btn-fav {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-normal);
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+.btn-fav:hover {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.06);
+    transform: scale(1.08);
+}
+
+.btn-fav svg {
+    transition: fill 0.2s ease, stroke 0.2s ease;
+    pointer-events: none;
+}
+
+/* ── Badges manquants ── */
+.badge-promo {
+    background: #ef4444;
+    color: white;
+}
+
+/* ── Stock ── */
+.stock-alert,
+.stock-low {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 0.6rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.stock-alert {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+}
+
+.stock-low {
+    background: rgba(245, 158, 11, 0.9);
+    color: white;
 }
 
 .btn-view-product {
@@ -1549,7 +1643,7 @@ a {
     .filter-tabs { width: 100%; overflow-x: auto; padding-bottom: 0.5rem; }
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .product-image { height: 200px; }
-    .product-footer { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .product-footer { flex-wrap: wrap; gap: 0.5rem; }
     .btn-add-cart { width: 100%; }
     .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
 }

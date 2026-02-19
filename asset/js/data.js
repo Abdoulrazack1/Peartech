@@ -1251,16 +1251,22 @@
     };
 
     // Exposition globale
-    window.NovaComputeDB = {
+    window.PearTechDB = {
         categories: categories,
-        products: products,
+        products:   products,
         promotions: [],
         ...helpers
     };
 
+    // Alias rétrocompatibilité (catalogue.js, recherche.js, etc. utilisent NovaComputeDB)
+    window.NovaComputeDB = window.PearTechDB;
+
+    // Alias direct pour favoris.js et product_grid.js
+    window.products = products;
+
     if (typeof module !== 'undefined' && module.exports) {
-        module.exports = window.NovaComputeDB;
+        module.exports = window.PearTechDB;
     }
 
-    console.log('✅ Base de données NovaCompute chargée :', products.length, 'produits,', categories.length, 'catégories');
+    console.log('✅ Base de données PearTech chargée :', products.length, 'produits,', categories.length, 'catégories');
 })();
