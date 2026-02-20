@@ -148,7 +148,10 @@
 }
 
 .item-price {
-    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
 }
 
 .unit-price {
@@ -290,6 +293,7 @@
     color: var(--text-secondary);
     text-decoration: none;
     transition: color var(--transition-fast);
+    margin-bottom: 2rem;
 }
 
 .continue-shopping:hover {
@@ -301,8 +305,8 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.8rem;
-    margin-top: var(--spacing-lg);
-    padding-top: var(--spacing-md);
+    margin-top: 2rem;
+    padding-top: 1.5rem;
     border-top: 1px solid var(--border);
     list-style: none;
     padding-left: 0;
@@ -321,6 +325,7 @@
 .trust-item .material-symbols-outlined {
     font-size: 1.5rem;
     color: var(--primary);
+    margin-bottom: 0.3rem;
 }
 
 /* ── Recommandations ── */
@@ -349,6 +354,9 @@
     padding: 1rem;
     text-align: center;
     transition: var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 .recommendation-card:hover {
@@ -358,23 +366,48 @@
 
 .recommendation-card img {
     width: 100%;
-    height: 150px;
+    height: 140px;
     object-fit: cover;
     border-radius: 6px;
-    margin-bottom: 0.5rem;
+    flex-shrink: 0;
 }
 
 .recommendation-card h3 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
-    margin-bottom: 0.3rem;
     color: var(--text-primary);
+    line-height: 1.3;
+    /* Limiter à 2 lignes pour uniformiser les cards */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .recommendation-card p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--primary);
-    font-weight: 600;
+    font-weight: 700;
+}
+
+.recommendation-card .btn-view-product {
+    margin-top: auto;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition-normal);
+    display: block;
+    cursor: pointer;
+}
+
+.recommendation-card .btn-view-product:hover {
+    border-color: var(--primary);
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary);
 }
 
 .text-center {
@@ -413,7 +446,7 @@
 
     .cart-summary {
         position: static;
-        order: -1; /* récap en haut sur tablette */
+        order: -1;
     }
 
     .recommendations-grid {
@@ -426,27 +459,56 @@
         font-size: 1.6rem;
     }
 
+    /* Sur mobile : layout en 2 colonnes image | détails
+       puis quantité + prix sur toute la largeur en dessous */
     .cart-item {
         grid-template-columns: 80px 1fr;
+        grid-template-rows: auto auto auto;
         gap: var(--spacing-sm);
     }
 
-    /* Prix et actions sous les détails sur mobile */
+    /* Image : ligne 1, colonne 1 */
+    .item-image {
+        grid-column: 1;
+        grid-row: 1;
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Détails : ligne 1, colonne 2 */
+    .item-details {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    /* Quantité + prix : ligne 2, toute la largeur */
     .item-actions {
         grid-column: 1 / -1;
+        grid-row: 2;
         flex-direction: row;
-        justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
+        justify-content: space-between;
         gap: 0.5rem;
     }
 
+    /* Prix : inline dans item-actions sur mobile */
     .item-price {
-        text-align: left;
+        grid-column: unset;
+        grid-row: unset;
+        text-align: right;
+    }
+
+    .unit-price {
+        margin-bottom: 0;
+        font-size: 0.8rem;
     }
 
     .recommendations-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .recommendation-card img {
+        height: 120px;
     }
 
     .cart-summary {
@@ -465,7 +527,6 @@
 
     .cart-item {
         grid-template-columns: 70px 1fr;
-        gap: 0.75rem;
         padding: var(--spacing-sm) 0;
     }
 
@@ -483,7 +544,16 @@
     }
 
     .recommendations-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+
+    .recommendation-card {
+        padding: 0.75rem;
+    }
+
+    .recommendation-card img {
+        height: 100px;
     }
 
     .trust-info {
