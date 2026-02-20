@@ -153,7 +153,7 @@
             };
 
             // Stocker pour la page de confirmation
-            sessionStorage.setItem('nova-last-order', JSON.stringify(orderData));
+            sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData));
 
             // Vider le panier
             localStorage.removeItem(CART_KEY);

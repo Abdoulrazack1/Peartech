@@ -59,9 +59,13 @@
                 : '';
 
             // Étoiles
-            const fullStars = Math.floor(product.rating || 0);
-            const halfStar  = ((product.rating || 0) % 1) >= 0.5;
-            const stars     = '★'.repeat(fullStars) + (halfStar ? '½' : '');
+            const rating    = product.rating || 0;
+            const fullStars = Math.floor(rating);
+            const hasHalf   = (rating % 1) >= 0.5;
+            const emptyStars= 5 - fullStars - (hasHalf ? 1 : 0);
+            const stars     = '★'.repeat(fullStars)
+                            + (hasHalf ? '½' : '')
+                            + '<span style="opacity:0.25">' + '★'.repeat(emptyStars) + '</span>';
 
             // Favori courant
             const isFav = (typeof window.Favoris !== 'undefined') && window.Favoris.isFavori(product.id);
@@ -89,7 +93,7 @@
                     <div class="product-rating"
                          aria-label="Note ${product.rating || 0} sur 5, ${product.reviews || 0} avis">
                         <span class="stars" aria-hidden="true">${stars}</span>
-                        <span class="rating-count">${product.reviews || 0} avis</span>
+                        <span class="rating-count">${rating.toFixed(1)} · ${product.reviews || 0} avis</span>
                     </div>
                     <div class="product-footer">
                         <div class="product-price-block">

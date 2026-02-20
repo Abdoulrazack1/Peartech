@@ -67,8 +67,8 @@
             stock: 18,
             isNew: true,
             isBestSeller: true,
-            rating: 4.9,
-            reviews: 245,
+            rating: 4.8,
+            reviews: 1243,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -107,8 +107,8 @@
             stock: 22,
             isNew: true,
             isBestSeller: false,
-            rating: 4.8,
-            reviews: 178,
+            rating: 4.2,
+            reviews: 389,
             options: {
                 storage: [
                     { label: '128 Go', price: 0 },
@@ -147,8 +147,8 @@
             stock: 35,
             isNew: true,
             isBestSeller: false,
-            rating: 4.7,
-            reviews: 210,
+            rating: 3.8,
+            reviews: 156,
             options: {
                 storage: [
                     { label: '128 Go', price: 0 },
@@ -189,8 +189,8 @@
             stock: 12,
             isNew: false,
             isBestSeller: false,
-            rating: 4.7,
-            reviews: 324,
+            rating: 4.5,
+            reviews: 612,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -230,8 +230,8 @@
             stock: 28,
             isNew: false,
             isBestSeller: false,
-            rating: 4.6,
-            reviews: 412,
+            rating: 3.2,
+            reviews: 87,
             options: {
                 storage: [
                     { label: '128 Go', price: 0 },
@@ -273,8 +273,8 @@
             stock: 30,
             isNew: true,
             isBestSeller: true,
-            rating: 4.9,
-            reviews: 187,
+            rating: 4.7,
+            reviews: 834,
             options: {
                 size: [
                     { label: '41 mm', price: 0 },
@@ -317,8 +317,8 @@
             stock: 45,
             isNew: false,
             isBestSeller: false,
-            rating: 4.7,
-            reviews: 256,
+            rating: 4.0,
+            reviews: 241,
             options: {
                 size: [
                     { label: '40 mm', price: 0 },
@@ -360,8 +360,8 @@
             stock: 8,
             isNew: true,
             isBestSeller: false,
-            rating: 4.9,
-            reviews: 67,
+            rating: 3.5,
+            reviews: 43,
             options: {
                 bracelet: [
                     { label: 'Alpine Loop', price: 0 },
@@ -397,8 +397,8 @@
             stock: 10,
             isNew: false,
             isBestSeller: true,
-            rating: 4.9,
-            reviews: 145,
+            rating: 4.6,
+            reviews: 521,
             options: {
                 storage: [
                     { label: '512 Go', price: 0 },
@@ -436,8 +436,8 @@
             stock: 20,
             isNew: false,
             isBestSeller: true,
-            rating: 4.8,
-            reviews: 203,
+            rating: 4.3,
+            reviews: 318,
             options: {
                 storage: [
                     { label: '64 Go', price: 0 },
@@ -474,8 +474,8 @@
             stock: 35,
             isNew: true,
             isBestSeller: false,
-            rating: 4.7,
-            reviews: 98,
+            rating: 3.7,
+            reviews: 112,
             options: {
                 storage: [
                     { label: '64 Go', price: 0 },
@@ -516,8 +516,8 @@
             stock: 12,
             isNew: true,
             isBestSeller: true,
-            rating: 4.9,
-            reviews: 178,
+            rating: 4.5,
+            reviews: 445,
             options: {
                 storage: [
                     { label: '512 Go', price: 0 },
@@ -555,8 +555,8 @@
             stock: 15,
             isNew: true,
             isBestSeller: false,
-            rating: 4.8,
-            reviews: 92,
+            rating: 3.9,
+            reviews: 178,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -594,8 +594,8 @@
             stock: 5,
             isNew: false,
             isBestSeller: false,
-            rating: 4.8,
-            reviews: 67,
+            rating: 4.1,
+            reviews: 203,
             options: {
                 storage: [
                     { label: '512 Go', price: 0 },
@@ -632,8 +632,8 @@
             stock: 18,
             isNew: false,
             isBestSeller: true,
-            rating: 4.7,
-            reviews: 134,
+            rating: 2.8,
+            reviews: 34,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -671,8 +671,8 @@
             stock: 40,
             isNew: true,
             isBestSeller: false,
-            rating: 4.6,
-            reviews: 56,
+            rating: 4.4,
+            reviews: 267,
             options: {
                 storage: [
                     { label: '128 Go', price: 0 },
@@ -712,8 +712,8 @@
             stock: 20,
             isNew: true,
             isBestSeller: true,
-            rating: 4.9,
-            reviews: 92,
+            rating: 3.6,
+            reviews: 89,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -751,8 +751,8 @@
             stock: 25,
             isNew: true,
             isBestSeller: false,
-            rating: 4.8,
-            reviews: 78,
+            rating: 4.2,
+            reviews: 156,
             options: {
                 storage: [
                     { label: '128 Go', price: 0 },
@@ -790,8 +790,8 @@
             stock: 15,
             isNew: false,
             isBestSeller: false,
-            rating: 4.7,
-            reviews: 210,
+            rating: 3.4,
+            reviews: 62,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -830,8 +830,8 @@
             stock: 8,
             isNew: true,
             isBestSeller: false,
-            rating: 4.8,
-            reviews: 45,
+            rating: 4.6,
+            reviews: 389,
             options: {
                 storage: [
                     { label: '512 Go', price: 0 },
@@ -868,8 +868,8 @@
             stock: 22,
             isNew: false,
             isBestSeller: true,
-            rating: 4.7,
-            reviews: 112,
+            rating: 3.9,
+            reviews: 134,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -907,8 +907,8 @@
             stock: 25,
             isNew: false,
             isBestSeller: true,
-            rating: 4.7,
-            reviews: 98,
+            rating: 4.3,
+            reviews: 212,
             options: {
                 size: [
                     { label: '43 mm', price: 0 },
@@ -944,8 +944,8 @@
             stock: 30,
             isNew: false,
             isBestSeller: false,
-            rating: 4.6,
-            reviews: 134,
+            rating: 2.5,
+            reviews: 21,
             options: {
                 size: [
                     { label: '40 mm', price: 0 },
@@ -981,8 +981,8 @@
             stock: 60,
             isNew: true,
             isBestSeller: true,
-            rating: 4.6,
-            reviews: 210,
+            rating: 3.8,
+            reviews: 98,
             options: {
                 color: [
                     { label: 'Noir', price: 0 },
@@ -1014,7 +1014,7 @@
             isNew: false,
             isBestSeller: false,
             rating: 4.5,
-            reviews: 145,
+            reviews: 334,
             options: {
                 color: [
                     { label: 'Noir', price: 0 },
@@ -1050,8 +1050,8 @@
             stock: 8,
             isNew: true,
             isBestSeller: true,
-            rating: 4.8,
-            reviews: 67,
+            rating: 3.1,
+            reviews: 47,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -1090,7 +1090,7 @@
             isNew: true,
             isBestSeller: false,
             rating: 4.8,
-            reviews: 42,
+            reviews: 567,
             options: {
                 storage: [
                     { label: '256 Go', price: 0 },
@@ -1128,7 +1128,7 @@
             isNew: false,
             isBestSeller: false,
             rating: 4.7,
-            reviews: 89,
+            reviews: 423,
             options: {
                 storage: [
                     { label: '128 Go', price: 0 },
@@ -1167,8 +1167,8 @@
             stock: 45,
             isNew: true,
             isBestSeller: true,
-            rating: 4.5,
-            reviews: 312,
+            rating: 3.5,
+            reviews: 78,
             options: {
                 storage: [
                     { label: '64 Go', price: 0 },
@@ -1206,7 +1206,7 @@
             isNew: false,
             isBestSeller: false,
             rating: 4.4,
-            reviews: 567,
+            reviews: 891,
             options: {
                 storage: [
                     { label: '32 Go', price: 0 },

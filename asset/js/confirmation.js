@@ -9,15 +9,15 @@
         // Lire les vraies données depuis sessionStorage (renseignées par page_paiement.js)
         // Fallback sur des données de démo si rien n'est trouvé
         let orderData;
-        const stored = sessionStorage.getItem('nova-last-order');
+        const stored = sessionStorage.getItem('peartech-last-order');
 
         if (stored) {
             try {
                 orderData = JSON.parse(stored);
                 // Nettoyer après lecture pour éviter de réafficher sur un rechargement
-                sessionStorage.removeItem('nova-last-order');
+                sessionStorage.removeItem('peartech-last-order');
             } catch (e) {
-                console.warn('Impossible de parser nova-last-order', e);
+                console.warn('Impossible de parser peartech-last-order', e);
             }
         }
 

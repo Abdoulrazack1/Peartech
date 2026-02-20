@@ -20,9 +20,12 @@
     });
 
     const validPromoCodes = {
-        'PROMO10': 0.10,
-        'PROMO20': 0.20,
-        'BIENVENUE': 0.05
+        'PEARTECH10':  { discount: 0.10, label: '-10%' },
+        'PEARTECH20':  { discount: 0.20, label: '-20%' },
+        'BIENVENUE':   { discount: 0.05, label: '-5% bienvenue' },
+        'SUMMER25':    { discount: 0.25, label: '-25% offre été' },
+        'FIDELITE15':  { discount: 0.15, label: '-15% fidélité' },
+        'BACK2SCHOOL': { discount: 0.12, label: '-12% rentrée' },
     };
 
     let currentPromo = null;
@@ -183,8 +186,9 @@
             return;
         }
         if (validPromoCodes[code]) {
-            currentPromo = { code, reduction: validPromoCodes[code] };
-            promoMessage.textContent = 'Code appliqué avec succès !';
+            const promo = validPromoCodes[code];
+            currentPromo = { code, reduction: promo.discount };
+            promoMessage.textContent = `Code "${code}" appliqué : ${promo.label} !`;
             promoMessage.className = 'promo-message success';
         } else {
             currentPromo = null;

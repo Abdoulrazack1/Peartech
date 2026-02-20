@@ -89,6 +89,9 @@
 
         // Générer les produits similaires
         generateSimilarProducts(product);
+
+        // Initialiser les notes personnelles
+        initNotes();
     });
 
     function generateProductHTML(product) {
@@ -221,6 +224,7 @@
                     <button class="tab-btn" data-tab="specs">Fiche technique</button>
                     <button class="tab-btn" data-tab="reviews">Avis clients (${product.reviews})</button>
                     <button class="tab-btn" data-tab="faq">Questions / Réponses</button>
+                    <button class="tab-btn" data-tab="notes">Mes notes</button>
                 </div>
                 <div class="tab-content active" id="tab-desc">
                     <p>${product.description}</p>
@@ -271,6 +275,31 @@
                 </div>
                 <div class="tab-content" id="tab-faq">
                     <p>Aucune question pour le moment. Soyez le premier à poser une question.</p>
+                </div>
+                <div class="tab-content" id="tab-notes">
+                    <div class="personal-notes">
+                        <div class="notes-header">
+                            <div class="notes-header-text">
+                                <h3 class="notes-title">Mes notes personnelles</h3>
+                                <p class="notes-subtitle">Ces notes sont privées et sauvegardées sur votre appareil.</p>
+                            </div>
+                            <span class="notes-saved-indicator" id="notes-saved-indicator"></span>
+                        </div>
+                        <textarea
+                            id="notes-textarea"
+                            class="notes-textarea"
+                            placeholder="Écrivez vos notes ici : comparaison avec d'autres produits, questions à poser, points importants…"
+                            rows="8"
+                            data-product-id="${product.id}"
+                        ></textarea>
+                        <div class="notes-footer">
+                            <span class="notes-char-count" id="notes-char-count">0 caractère</span>
+                            <div class="notes-actions">
+                                <button class="notes-btn-clear" id="notes-btn-clear" type="button">Effacer</button>
+                                <button class="notes-btn-save" id="notes-btn-save" type="button">Sauvegarder</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -412,4 +441,76 @@
             `;
         }).join('');
     }
+    // ── Notes personnelles ────────────────────────────────────────
+    function initNotes() {
+        // Lire l'ID directement depuis l'URL — source de vérité unique
+        const urlId = new URLSearchParams(window.location.search).get('id');
+        if (!urlId) return;
+
+        const STORAGE_KEY = 'peartech-notes-' + urlId;
+
+        const textarea  = document.getElementById('notes-textarea');
+        const saveBtn   = document.getElementById('notes-btn-save');
+        const clearBtn  = document.getElementById('notes-btn-clear');
+        const charCount = document.getElementById('notes-char-count');
+        const indicator = document.getElementById('notes-saved-indicator');
+
+        if (!textarea || !saveBtn || !clearBtn) return;
+
+        // Charger la note sauvegardée pour CE produit
+        const saved = localStorage.getItem(STORAGE_KEY) || '';
+        textarea.value = saved;
+        updateCharCount(saved.length);
+        if (saved) showIndicator('Sauvegardée', false);
+
+        // Compteur en temps réel
+        textarea.addEventListener('input', function () {
+            updateCharCount(this.value.length);
+            if (indicator) indicator.className = 'notes-saved-indicator';
+        });
+
+        // Sauvegarde manuelle
+        saveBtn.addEventListener('click', function () {
+            localStorage.setItem(STORAGE_KEY, textarea.value);
+            showIndicator('✓ Sauvegardée', false);
+        });
+
+        // Raccourci Ctrl+S / Cmd+S
+        textarea.addEventListener('keydown', function (e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                localStorage.setItem(STORAGE_KEY, textarea.value);
+                showIndicator('✓ Sauvegardée', false);
+            }
+        });
+
+        // Effacer
+        clearBtn.addEventListener('click', function () {
+            if (textarea.value === '') return;
+            if (!confirm('Effacer toutes vos notes pour ce produit ?')) return;
+            textarea.value = '';
+            localStorage.removeItem(STORAGE_KEY);
+            updateCharCount(0);
+            showIndicator('Effacées', true);
+            textarea.focus();
+        });
+
+        function updateCharCount(len) {
+            if (!charCount) return;
+            charCount.textContent = len === 0 ? '0 caractère'
+                : len === 1 ? '1 caractère'
+                : len + ' caractères';
+        }
+
+        function showIndicator(text, isWarning) {
+            if (!indicator) return;
+            indicator.textContent = text;
+            indicator.className = 'notes-saved-indicator ' + (isWarning ? 'warning' : 'saved');
+            clearTimeout(indicator._timer);
+            indicator._timer = setTimeout(function () {
+                indicator.className = 'notes-saved-indicator';
+            }, 3000);
+        }
+    }
+
 })();
