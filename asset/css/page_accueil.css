@@ -355,6 +355,7 @@ a {
     transition: var(--transition-normal);
     text-decoration: none;
     font-family: inherit;
+    position: relative; /* nécessaire pour le badge en position absolute */
 }
 
 .icon-btn:hover {
@@ -1709,8 +1710,15 @@ a {
     .search-bar { display: none !important; }
     .header-content { gap: 1rem; }
     .header-nav { gap: 0.5rem; margin-left: auto; }
-    .header-nav .icon-btn { padding: 0.6rem; width: 44px; height: 44px; }
+    .header-nav .icon-btn { padding: 0.6rem; width: 44px; height: 44px; justify-content: center; }
     .header-nav .icon-btn span:not(.material-symbols-outlined) { display: none; }
+    /* Badge en position absolute quand le texte est masqué */
+    .header-nav .icon-btn .cart-badge,
+    .header-nav .icon-btn .fav-badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+    }
     .logo { margin-right: auto; }
     .hero-section { padding: 1.5rem 0; }
     .hero-title { font-size: 2rem; }
@@ -1725,8 +1733,10 @@ a {
     .filter-tabs { width: 100%; overflow-x: auto; padding-bottom: 0.5rem; }
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .product-image { height: 200px; }
-    .product-footer { flex-wrap: wrap; gap: 0.5rem; }
-    .btn-add-cart { width: 100%; }
+    /* Fix : product-footer ne doit pas wrap - les boutons doivent rester dans la card */
+    .product-footer { flex-wrap: nowrap; gap: 0.4rem; min-height: auto; }
+    .product-price { font-size: 1rem; }
+    .product-actions { flex-shrink: 0; }
     .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
 }
 

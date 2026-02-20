@@ -647,6 +647,21 @@
         grid-template-columns: 1fr;
     }
 
+    /* Fix product-footer : empêche les boutons de sortir de la card */
+    .product-footer {
+        flex-wrap: nowrap;
+        min-height: auto;
+        gap: 0.3rem;
+    }
+
+    .product-price {
+        font-size: 1rem;
+    }
+
+    .product-actions {
+        flex-shrink: 0;
+    }
+
     /* Vue liste → vue colonne sur très petit écran */
     .products-grid.list-view .product-card {
         flex-direction: column;

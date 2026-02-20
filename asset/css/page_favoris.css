@@ -408,6 +408,21 @@
         height: 220px;
     }
 
+    /* Fix : boutons ne sortent plus de la card */
+    .favoris-grid .product-footer {
+        flex-wrap: nowrap;
+        min-height: auto;
+        gap: 0.3rem;
+    }
+
+    .favoris-grid .product-price {
+        font-size: 1rem;
+    }
+
+    .favoris-grid .product-actions {
+        flex-shrink: 0;
+    }
+
     .empty-title {
         font-size: 1.3rem;
     }
