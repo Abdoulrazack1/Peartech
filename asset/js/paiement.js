@@ -9,7 +9,7 @@
     document.addEventListener('DOMContentLoaded', function () {
 
         // ── Récupération du panier ────────────────────────────────
-        const CART_KEY = 'nova-cart';
+        const CART_KEY = 'peartech-cart';
         let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
 
         // ── Éléments DOM ─────────────────────────────────────────
@@ -157,7 +157,7 @@
 
             // Vider le panier
             localStorage.removeItem(CART_KEY);
-            localStorage.setItem('nova-cart-count', '0');
+            localStorage.setItem('peartech-cart-count', '0');
 
             // Redirection
             window.location.href = 'page_confirmation.html';

@@ -58,8 +58,8 @@
             
             // Récupérer les catégories depuis la base de données si disponible
             let categories = [];
-            if (window.NovaComputeDB && window.NovaComputeDB.categories) {
-                categories = window.NovaComputeDB.categories.map(cat => ({
+            if (window.PearTechDB && window.PearTechDB.categories) {
+                categories = window.PearTechDB.categories.map(cat => ({
                     icon: cat.icon,
                     title: cat.name,
                     description: cat.description,

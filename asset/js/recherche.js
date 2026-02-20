@@ -1,6 +1,6 @@
 // ============================================
 // recherche.js - Système de recherche en temps réel
-// Utilise la base de données NovaComputeDB
+// Utilise la base de données PearTechDB
 // ============================================
 
 (function() {
@@ -42,13 +42,13 @@
         // FONCTION DE RECHERCHE
         // ============================================
         function performSearch(query) {
-            if (!window.NovaComputeDB) {
-                console.warn('NovaComputeDB non chargé, recherche impossible');
+            if (!window.PearTechDB) {
+                console.warn('PearTechDB non chargé, recherche impossible');
                 searchResults.innerHTML = '<div class="search-no-results">Chargement en cours...</div>';
                 searchResults.classList.add('active');
                 return;
             }
-            const results = NovaComputeDB.search(query);
+            const results = PearTechDB.search(query);
             displaySearchResults(results);
         }
 
@@ -117,7 +117,7 @@
             }
         });
 
-        const productCount = window.NovaComputeDB ? NovaComputeDB.products.length : 0;
+        const productCount = window.PearTechDB ? PearTechDB.products.length : 0;
         console.log('Recherche initialisée avec', productCount, 'produits');
     });
 })();

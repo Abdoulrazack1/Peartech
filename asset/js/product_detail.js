@@ -7,8 +7,8 @@
 
     // Fonction utilitaire pour obtenir le slug d'une catégorie à partir de son ID
     function getCategorySlugFromId(categoryId) {
-        if (!window.NovaComputeDB) return '';
-        const cat = NovaComputeDB.categories.find(c => c.id === categoryId);
+        if (!window.PearTechDB) return '';
+        const cat = PearTechDB.categories.find(c => c.id === categoryId);
         return cat ? cat.slug : '';
     }
 
@@ -23,13 +23,13 @@
         }
 
         // Vérifier que la base de données est chargée
-        if (!window.NovaComputeDB) {
-            console.error('NovaComputeDB non chargé');
+        if (!window.PearTechDB) {
+            console.error('PearTechDB non chargé');
             document.querySelector('main').innerHTML = '<div class="container"><p>Erreur de chargement des données</p></div>';
             return;
         }
 
-        const product = NovaComputeDB.getProductById(parseInt(productId));
+        const product = PearTechDB.getProductById(parseInt(productId));
         if (!product) {
             document.querySelector('main').innerHTML = '<div class="container"><p>Produit introuvable</p></div>';
             return;
@@ -360,8 +360,8 @@
         // Récupérer les produits de la même catégorie, exclure le courant
         const categorySlug = getCategorySlugFromId(currentProduct.categoryId);
         let similar = [];
-        if (categorySlug && NovaComputeDB.getProductsByCategory) {
-            similar = NovaComputeDB.getProductsByCategory(categorySlug).filter(p => p.id !== currentProduct.id).slice(0, 6);
+        if (categorySlug && PearTechDB.getProductsByCategory) {
+            similar = PearTechDB.getProductsByCategory(categorySlug).filter(p => p.id !== currentProduct.id).slice(0, 6);
         }
 
         if (similar.length === 0) {

@@ -4,7 +4,7 @@
 (function() {
     'use strict';
 
-    const CART_STORAGE_KEY = 'nova-cart';
+    const CART_STORAGE_KEY = 'peartech-cart';
 
     // Charger le panier depuis localStorage
     let cart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
@@ -12,7 +12,7 @@
     // Mettre à jour le badge
     function updateCartBadge() {
         const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
-        localStorage.setItem('nova-cart-count', totalItems);
+        localStorage.setItem('peartech-cart-count', totalItems);
         const badge = document.getElementById('cart-count');
         if (badge) {
             badge.textContent = totalItems;
@@ -52,7 +52,7 @@
     }
 
     // Exposer l'API pour d'autres scripts
-    window.NovaCart = {
+    window.PearTechCart = {
         add: addToCart,
         getCart: () => cart,
         clear: () => { cart = []; saveCart(); }

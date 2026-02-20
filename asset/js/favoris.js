@@ -124,7 +124,7 @@
 
         function render() {
             const ids      = getAll();
-            const db       = window.NovaComputeDB;
+            const db       = window.PearTechDB;
             const products = ids
                 .map(id => db ? db.getProductById(id) : null)
                 .filter(Boolean);
@@ -181,13 +181,13 @@
         }
 
         // Attendre data.js si nécessaire
-        if (window.NovaComputeDB) {
+        if (window.PearTechDB) {
             render();
         } else {
             let attempts = 0;
             const t = setInterval(() => {
                 attempts++;
-                if (window.NovaComputeDB) { clearInterval(t); render(); }
+                if (window.PearTechDB) { clearInterval(t); render(); }
                 else if (attempts > 50)   { clearInterval(t); }
             }, 100);
         }
@@ -295,12 +295,12 @@
     // ── Ajout au panier (light version) ─────────────────────────────
 
     function addToCart(productId, btn) {
-        const db      = window.NovaComputeDB;
+        const db      = window.PearTechDB;
         const product = db ? db.getProductById(productId) : null;
         if (!product) return;
 
-        if (window.NovaCart) {
-            window.NovaCart.add({
+        if (window.PearTechCart) {
+            window.PearTechCart.add({
                 id:       product.id,
                 name:     product.name,
                 basePrice:product.basePrice,

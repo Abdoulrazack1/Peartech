@@ -6,7 +6,7 @@
 (function() {
     'use strict';
 
-    const CART_STORAGE_KEY = 'nova-cart';
+    const CART_STORAGE_KEY = 'peartech-cart';
     // Normalise l'image : certaines pages produit stockent `images[]` au lieu de `image`
     let cartItems = (JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || []).map(item => {
         if (!item.image) {
@@ -44,7 +44,7 @@
     function saveCart() {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
         const total = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-        localStorage.setItem('nova-cart-count', total);
+        localStorage.setItem('peartech-cart-count', total);
         const badge = document.getElementById('cart-count');
         if (badge) {
             badge.textContent = total;
@@ -203,8 +203,8 @@
     });
 
     function loadRecommendations() {
-        if (!window.NovaComputeDB) return;
-        const allProducts = NovaComputeDB.products;
+        if (!window.PearTechDB) return;
+        const allProducts = PearTechDB.products;
         const shuffled = [...allProducts].sort(() => 0.5 - Math.random());
         const recommendations = shuffled.slice(0, 4);
 
@@ -227,7 +227,7 @@
     renderCart();
     calculateTotals();
     saveCart();
-    if (window.NovaComputeDB) {
+    if (window.PearTechDB) {
         loadRecommendations();
     } else {
         setTimeout(loadRecommendations, 500);

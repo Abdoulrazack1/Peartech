@@ -67,8 +67,8 @@
             const isFav = (typeof window.Favoris !== 'undefined') && window.Favoris.isFavori(product.id);
 
             // Slug de catégorie pour le filtre (ex: "cat_apple" -> "apple")
-            const categorySlug = (window.NovaComputeDB && window.NovaComputeDB.getCategorySlugFromId)
-                ? window.NovaComputeDB.getCategorySlugFromId(product.categoryId)
+            const categorySlug = (window.PearTechDB && window.PearTechDB.getCategorySlugFromId)
+                ? window.PearTechDB.getCategorySlugFromId(product.categoryId)
                 : (product.categoryId || '').replace('cat_', '');
 
             return `
@@ -142,11 +142,11 @@
 
     // ── Ajout au panier ─────────────────────────────────────────────
     function addToCart(productId, btn) {
-        const products = window.NovaComputeDB ? window.NovaComputeDB.products : (window.products || []);
+        const products = window.PearTechDB ? window.PearTechDB.products : (window.products || []);
         const product  = products.find(p => p.id === productId);
         if (!product) return;
 
-        const CART_KEY = 'nova-cart';
+        const CART_KEY = 'peartech-cart';
         const cart     = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         const existing = cart.find(i => i.id === productId);
 
@@ -166,7 +166,7 @@
 
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
         const total = cart.reduce((acc, i) => acc + i.quantity, 0);
-        localStorage.setItem('nova-cart-count', total);
+        localStorage.setItem('peartech-cart-count', total);
 
         const badge = document.getElementById('cart-count');
         if (badge) {
@@ -185,9 +185,9 @@
     // ── Init ────────────────────────────────────────────────────────
     function init(attempts) {
         attempts = attempts || 0;
-        if (window.NovaComputeDB) {
+        if (window.PearTechDB) {
             // Sur l'accueil : afficher les bestsellers + nouveautés (max 8)
-            const db       = window.NovaComputeDB;
+            const db       = window.PearTechDB;
             const featured = [
                 ...db.products.filter(p => p.isBestSeller),
                 ...db.products.filter(p => p.isNew && !p.isBestSeller)

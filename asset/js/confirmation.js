@@ -71,7 +71,7 @@
         document.getElementById('total-paid').textContent = orderData.total.toFixed(2).replace('.',',') + ' €';
 
         // Vider le panier après confirmation (optionnel)
-        localStorage.setItem('nova-cart-count', '0');
+        localStorage.setItem('peartech-cart-count', '0');
         const badge = document.getElementById('cart-count');
         if (badge) {
             badge.textContent = '0';

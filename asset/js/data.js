@@ -1265,8 +1265,8 @@
         ...helpers
     };
 
-    // Alias rétrocompatibilité (catalogue.js, recherche.js, etc. utilisent NovaComputeDB)
-    window.NovaComputeDB = window.PearTechDB;
+    // Alias rétrocompatibilité (catalogue.js, recherche.js, etc. utilisent PearTechDB)
+    window.PearTechDB = window.PearTechDB;
 
     // Alias direct pour favoris.js et product_grid.js
     window.products = products;

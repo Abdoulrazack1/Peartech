@@ -85,8 +85,8 @@
         priceMaxDisplay     = document.getElementById('price-max-display');
         breadcrumb          = document.getElementById('breadcrumb');
 
-        if (!window.NovaComputeDB) {
-            console.error('[catalogue.js] window.NovaComputeDB non chargé');
+        if (!window.PearTechDB) {
+            console.error('[catalogue.js] window.PearTechDB non chargé');
             if (productsGrid) productsGrid.innerHTML = '<p class="no-results">Impossible de charger les produits.</p>';
             return;
         }
@@ -96,10 +96,10 @@
         const categorySlug = urlParams.get('categorie');
 
         if (categorySlug) {
-            const cat = NovaComputeDB.getCategoryBySlug(categorySlug);
+            const cat = PearTechDB.getCategoryBySlug(categorySlug);
             if (cat) {
                 currentCategory = cat;
-                allProducts     = NovaComputeDB.getProductsByCategory(cat.slug);
+                allProducts     = PearTechDB.getProductsByCategory(cat.slug);
             } else {
                 window.location.href = 'page_accueil.html';
                 return;
@@ -111,7 +111,7 @@
                 slug:          'tous',
                 subcategories: []
             };
-            allProducts = NovaComputeDB.products;
+            allProducts = PearTechDB.products;
         }
 
         if (categoryTitle)       categoryTitle.textContent       = currentCategory.name;
@@ -183,7 +183,7 @@
             });
         } else {
             // Page "tous" → grouper par nom de catégorie
-            NovaComputeDB.categories.forEach(cat => {
+            PearTechDB.categories.forEach(cat => {
                 const count = allProducts.filter(p => p.categoryId === cat.id).length;
                 if (count > 0) subcatMap.set(cat.name, count);
             });
@@ -324,7 +324,7 @@
             const matcher = SUBCAT_MATCHERS[sub];
             if (matcher) return matcher(product);
             // Fallback : matcher par nom de catégorie globale (page "tous")
-            const cat = NovaComputeDB.categories.find(c => c.name === sub);
+            const cat = PearTechDB.categories.find(c => c.name === sub);
             if (cat) return product.categoryId === cat.id;
             // Fallback final : nom du produit
             return product.name.toLowerCase().includes(sub.toLowerCase());
@@ -503,7 +503,7 @@
         const product = allProducts.find(p => p.id === productId);
         if (!product) return;
 
-        const CART_KEY = 'nova-cart';
+        const CART_KEY = 'peartech-cart';
         const cart     = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         const existing = cart.find(i => i.id === productId);
 
@@ -522,7 +522,7 @@
 
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
         const total = cart.reduce((acc, i) => acc + i.quantity, 0);
-        localStorage.setItem('nova-cart-count', total);
+        localStorage.setItem('peartech-cart-count', total);
 
         const badge = document.getElementById('cart-count');
         if (badge) {
