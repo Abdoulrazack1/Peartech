@@ -324,9 +324,11 @@
     function initThumbnails(product) {
         const thumbnails = document.querySelectorAll('.thumbnail');
         const mainImage = document.querySelector('#main-image img');
+        const mainImageContainer = document.getElementById('main-image');
 
         if (!mainImage) return;
 
+        // ── Changer d'image via miniature ────────────────────────
         thumbnails.forEach(thumb => {
             thumb.addEventListener('click', () => {
                 const index = parseInt(thumb.dataset.index);
@@ -338,6 +340,128 @@
                 }
             });
         });
+
+        // ── Lightbox ──────────────────────────────────────────────
+        initLightbox(product);
+
+        // Curseur zoom sur l'image principale
+        if (mainImageContainer) {
+            mainImageContainer.style.cursor = 'zoom-in';
+            mainImageContainer.addEventListener('click', () => {
+                openLightbox(mainImage.src, mainImage.alt, product);
+            });
+        }
+    }
+
+    function initLightbox(product) {
+        // Créer l'overlay lightbox s'il n'existe pas encore
+        if (document.getElementById('lightbox-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.id = 'lightbox-overlay';
+        overlay.className = 'lightbox-overlay';
+        overlay.innerHTML = `
+            <div class="lightbox-container">
+                <button class="lightbox-close" id="lightbox-close" aria-label="Fermer">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+                <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Image précédente">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <img class="lightbox-img" id="lightbox-img" src="" alt="">
+                <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Image suivante">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <div class="lightbox-counter" id="lightbox-counter"></div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        let currentIndex = 0;
+        const images = product.images;
+
+        // Fermer
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeLightbox();
+        });
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+
+        // Navigation
+        document.getElementById('lightbox-prev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateLightbox(currentIndex);
+        });
+        document.getElementById('lightbox-next').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % images.length;
+            updateLightbox(currentIndex);
+        });
+
+        // Clavier
+        document.addEventListener('keydown', (e) => {
+            if (!overlay.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                updateLightbox(currentIndex);
+            }
+            if (e.key === 'ArrowRight') {
+                currentIndex = (currentIndex + 1) % images.length;
+                updateLightbox(currentIndex);
+            }
+        });
+
+        // Swipe tactile
+        let touchStartX = 0;
+        overlay.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        overlay.addEventListener('touchend', (e) => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    currentIndex = (currentIndex + 1) % images.length;
+                } else {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                }
+                updateLightbox(currentIndex);
+            }
+        }, { passive: true });
+
+        function updateLightbox(index) {
+            const img = document.getElementById('lightbox-img');
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = images[index];
+                img.alt = `${product.name} - image ${index + 1}`;
+                img.style.opacity = '1';
+            }, 150);
+            document.getElementById('lightbox-counter').textContent = `${index + 1} / ${images.length}`;
+            // Sync miniatures
+            document.querySelectorAll('.thumbnail').forEach((t, i) => {
+                t.classList.toggle('active', i === index);
+            });
+            currentIndex = index;
+        }
+
+        // Exposer openLightbox globalement dans ce scope
+        window._openLightbox = function(src, alt) {
+            currentIndex = images.indexOf(src);
+            if (currentIndex === -1) currentIndex = 0;
+            updateLightbox(currentIndex);
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window._closeLightbox = closeLightbox;
+
+        function closeLightbox() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    function openLightbox(src, alt, product) {
+        if (window._openLightbox) window._openLightbox(src, alt);
     }
 
     function initOptions(product) {
