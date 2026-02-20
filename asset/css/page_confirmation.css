@@ -54,6 +54,7 @@
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
     align-items: start;
+    overflow: visible;
 }
 
 /* ── Colonne gauche ── */
@@ -169,7 +170,8 @@
 .confirmation-right {
     align-self: start;
     position: sticky;
-    top: 80px; /* colle sous le header sticky */
+    top: 80px;
+    z-index: 1;
 }
 
 .actions-card {

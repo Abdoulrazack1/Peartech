@@ -9,6 +9,7 @@
     gap: var(--spacing-lg);
     margin: var(--spacing-lg) 0;
     align-items: start;
+    overflow: visible;
 }
 
 /* ── Sidebar ── */
@@ -20,6 +21,8 @@
     height: fit-content;
     position: sticky;
     top: 80px;
+    align-self: start;
+    z-index: 1;
 }
 
 .sidebar-title {

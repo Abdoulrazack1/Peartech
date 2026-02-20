@@ -79,6 +79,7 @@
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
     align-items: start;
+    overflow: visible;
 }
 
 /* ── Formulaire principal ── */
@@ -343,6 +344,8 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     position: sticky;
     top: 80px;
+    align-self: start;
+    z-index: 1;
 }
 
 .order-summary h2 {

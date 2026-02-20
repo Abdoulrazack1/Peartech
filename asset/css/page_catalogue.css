@@ -7,6 +7,8 @@
     grid-template-columns: 280px 1fr;
     gap: var(--spacing-lg);
     margin: var(--spacing-lg) 0;
+    align-items: start;
+    overflow: visible;
 }
 
 /* ── Sidebar filtres ── */
@@ -18,7 +20,9 @@
     height: fit-content;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     position: sticky;
-    top: 80px; /* colle sous le header sticky */
+    top: 80px;
+    align-self: start;
+    z-index: 1;
 }
 
 .filters-header {

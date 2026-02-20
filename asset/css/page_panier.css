@@ -16,6 +16,7 @@
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-xl);
     align-items: start;
+    overflow: visible;
 }
 
 /* ── Liste des articles ── */
@@ -191,6 +192,8 @@
     height: fit-content;
     position: sticky;
     top: 80px;
+    align-self: start;
+    z-index: 1;
 }
 
 .cart-summary h2 {
