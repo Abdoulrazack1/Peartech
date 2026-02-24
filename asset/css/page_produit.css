@@ -115,8 +115,8 @@ html {
     display: block;
 }
 
-/* ── Infos produit ── */
-.product-info {
+/* ── Infos produit (scopé au détail, pas aux cards) ── */
+.product-detail .product-info {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -252,8 +252,8 @@ html {
     color: var(--primary);
 }
 
-/* ── Actions produit ── */
-.product-actions {
+/* ── Actions produit (scopé au détail, pas aux cards) ── */
+.product-detail .product-actions {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
@@ -262,7 +262,7 @@ html {
     width: 100%;
 }
 
-.btn-large {
+.product-detail .btn-large {
     flex: 1;
     padding: 1rem;
     font-size: 1rem;
@@ -532,9 +532,10 @@ html {
     color: var(--text-primary);
 }
 
-/* Grille des produits similaires : base à 3 colonnes */
+/* Grille des produits similaires */
 .similar-products .products-grid {
-    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: var(--spacing-md);
 }
 
@@ -585,18 +586,18 @@ html {
     }
 
     /* Boutons en colonne dès qu'on passe en 1 colonne */
-    .product-actions {
+    .product-detail .product-actions {
         flex-direction: column;
         width: 100%;
     }
 
-    .btn-large {
+    .product-detail .btn-large {
         width: 100%;
         min-width: 0;
         box-sizing: border-box;
     }
 
-    .wishlist-btn {
+    .product-detail .wishlist-btn {
         width: 100%;
         height: 48px;
         border-radius: 8px;
@@ -724,12 +725,12 @@ html {
         font-size: 0.85rem;
     }
 
-    .btn-large {
+    .product-detail .btn-large {
         padding: 0.85rem 1rem;
         font-size: 0.9rem;
     }
 
-    .wishlist-btn {
+    .product-detail .wishlist-btn {
         height: 44px;
     }
 
@@ -1162,12 +1163,12 @@ html {
         font-size: 0.78rem;
     }
 
-    .btn-large {
+    .product-detail .btn-large {
         padding: 0.75rem;
         font-size: 0.85rem;
     }
 
-    .wishlist-btn {
+    .product-detail .wishlist-btn {
         height: 40px;
     }
 
@@ -1281,12 +1282,12 @@ html {
         padding: 0.6rem;
     }
 
-    .btn-large {
+    .product-detail .btn-large {
         padding: 0.65rem;
         font-size: 0.8rem;
     }
 
-    .wishlist-btn {
+    .product-detail .wishlist-btn {
         height: 38px;
     }
 
