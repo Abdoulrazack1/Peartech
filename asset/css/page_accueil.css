@@ -56,6 +56,10 @@ body.dark-mode {
     box-sizing: border-box;
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Inter', -apple-system, system-ui, sans-serif;
     background: var(--background);
@@ -63,6 +67,9 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     transition: background-color var(--transition-normal), color var(--transition-normal);
+    /* Filet de sécurité global : empêche tout scroll horizontal */
+    overflow-x: hidden;
+    max-width: 100%;
 }
 
 /* Liens : pas de soulignement par défaut */

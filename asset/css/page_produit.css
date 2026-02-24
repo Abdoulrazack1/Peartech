@@ -1,6 +1,43 @@
 /* ============================================
    Page produit - PearTech
+   Version responsive renforcée
    ============================================ */
+
+/* ══════════════════════════════════════════
+   ANTI-OVERFLOW GLOBAL
+   Bloque tout scroll horizontal qui
+   désactive les media queries
+   ══════════════════════════════════════════ */
+html {
+    overflow-x: hidden;
+}
+
+/* Tous les éléments de la page produit
+   ne peuvent pas dépasser 100% de leur parent */
+.product-detail,
+.product-gallery,
+.product-info,
+.product-price-box,
+.product-options,
+.product-actions,
+.product-services,
+.product-tabs,
+.tabs-header,
+.tab-content,
+.similar-products,
+.breadcrumb,
+.personal-notes,
+.notes-textarea,
+.specs-table,
+.reviews-summary,
+.review-bars,
+.review-card,
+.option-buttons,
+.thumbnail-list {
+    box-sizing: border-box;
+    max-width: 100%;
+    min-width: 0;
+}
 
 /* ── Layout produit ── */
 .product-detail {
@@ -9,7 +46,7 @@
     gap: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
     align-items: start;
-    overflow: visible;
+    min-width: 0;
 }
 
 /* ── Galerie ── */
@@ -17,11 +54,16 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    min-width: 0;          /* Permet au contenu de rétrécir */
+    width: 100%;
+    max-width: 100%;
 }
 
 .main-image {
     width: 100%;
-    height: 400px;
+    max-width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
     border: 1px solid var(--border);
     border-radius: 12px;
     overflow: hidden;
@@ -44,6 +86,7 @@
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .thumbnail {
@@ -78,6 +121,8 @@
     flex-direction: column;
     gap: 1rem;
     min-width: 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 .product-category {
@@ -93,11 +138,14 @@
     font-weight: 700;
     line-height: 1.2;
     color: var(--text-primary);
+    overflow-wrap: break-word;   /* Coupe les mots trop longs */
+    word-break: break-word;
 }
 
 .product-subtitle {
     font-size: 1.1rem;
     color: var(--text-secondary);
+    overflow-wrap: break-word;
 }
 
 .product-rating {
@@ -126,6 +174,8 @@
     flex-direction: column;
     gap: 0.5rem;
     border: 1px solid var(--border);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .current-price {
@@ -160,6 +210,7 @@
 /* ── Options ── */
 .product-options {
     margin: 0.5rem 0;
+    width: 100%;
 }
 
 .option-group {
@@ -190,6 +241,8 @@
     font-family: inherit;
     color: var(--text-primary);
     font-size: 0.9rem;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .option-btn:hover,
@@ -205,13 +258,15 @@
     gap: 1rem;
     flex-wrap: wrap;
     margin: 0.5rem 0;
+    max-width: 100%;
+    width: 100%;
 }
 
 .btn-large {
     flex: 1;
     padding: 1rem;
     font-size: 1rem;
-    min-width: 180px;
+    min-width: 0;
 }
 
 .wishlist-btn {
@@ -239,7 +294,6 @@
     color: var(--text-muted);
 }
 
-/* Hover : rouge */
 .wishlist-btn:hover {
     border-color: #ef4444;
     background: rgba(239, 68, 68, 0.06);
@@ -251,7 +305,6 @@
     color: #ef4444;
 }
 
-/* État actif : produit déjà en favori */
 .wishlist-btn.active,
 .wishlist-btn[aria-pressed="true"] {
     border-color: #ef4444;
@@ -265,7 +318,6 @@
     color: #ef4444;
 }
 
-/* Hover sur état actif : légèrement plus foncé */
 .wishlist-btn.active:hover,
 .wishlist-btn[aria-pressed="true"]:hover {
     background: rgba(239, 68, 68, 0.14);
@@ -279,12 +331,16 @@
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
+    width: 100%;
 }
 
 .service-item {
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-secondary);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    min-width: 0;
 }
 
 .service-item .material-symbols-outlined {
@@ -297,6 +353,8 @@
 /* ── Onglets ── */
 .product-tabs {
     margin: 2rem 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 .tabs-header {
@@ -306,6 +364,8 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    width: 100%;
+    max-width: 100%;
 }
 
 .tabs-header::-webkit-scrollbar {
@@ -348,6 +408,8 @@
 .specs-table {
     width: 100%;
     border-collapse: collapse;
+    overflow-x: auto;      /* Permet le défilement horizontal si nécessaire */
+    display: block;        /* Nécessaire pour que overflow-x fonctionne sur table */
 }
 
 .specs-table tr {
@@ -363,11 +425,15 @@
     color: var(--text-secondary);
     font-size: 0.9rem;
     vertical-align: top;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .specs-table td:first-child {
     font-weight: 600;
-    width: 200px;
+    width: 30%;
+    max-width: 200px;
+    min-width: 80px;
     color: var(--text-primary);
 }
 
@@ -389,7 +455,7 @@
 
 .review-bars {
     flex: 1;
-    min-width: 200px;
+    min-width: 0;
 }
 
 .review-bar-item {
@@ -466,6 +532,12 @@
     color: var(--text-primary);
 }
 
+/* Grille des produits similaires : base à 3 colonnes */
+.similar-products .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
 .text-center {
     text-align: center;
     margin-top: 2rem;
@@ -496,41 +568,87 @@
    RESPONSIVE
    ============================================ */
 
-@media (max-width: 768px) {
+/* ── Tablette large ── */
+@media (max-width: 1024px) {
     .product-detail {
         grid-template-columns: 1fr;
         gap: var(--spacing-lg);
     }
 
+    .product-gallery {
+        position: static;
+    }
+
+    /* Image : aspect-ratio gère tout, pas besoin de height fixe */
     .main-image {
-        height: 320px;
+        aspect-ratio: 16 / 9;
     }
 
-    .product-title {
-        font-size: 1.6rem;
-    }
-
-    .current-price {
-        font-size: 1.6rem;
-    }
-
-    .product-services {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.75rem;
-    }
-
+    /* Boutons en colonne dès qu'on passe en 1 colonne */
     .product-actions {
         flex-direction: column;
+        width: 100%;
     }
 
     .btn-large {
         width: 100%;
-        min-width: auto;
+        min-width: 0;
+        box-sizing: border-box;
     }
 
     .wishlist-btn {
-        width: 48px;
+        width: 100%;
         height: 48px;
+        border-radius: 8px;
+    }
+
+    .similar-products .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* ── Tablette portrait / grand mobile ── */
+@media (max-width: 768px) {
+    .product-detail {
+        gap: var(--spacing-md);
+    }
+
+    /* Image carrée sur mobile */
+    .main-image {
+        aspect-ratio: 4 / 3;
+    }
+
+    .product-title {
+        font-size: 1.5rem;
+    }
+
+    .current-price {
+        font-size: 1.5rem;
+    }
+
+    .product-price-box {
+        padding: 1rem;
+    }
+
+    /* Services compact 3 colonnes */
+    .product-services {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+    }
+
+    .service-item {
+        font-size: 0.75rem;
+    }
+
+    .service-item .material-symbols-outlined {
+        font-size: 1.4rem;
+    }
+
+    .tab-btn {
+        padding: 0.75rem 1.1rem;
+        font-size: 0.88rem;
     }
 
     .reviews-summary {
@@ -538,67 +656,188 @@
     }
 
     .specs-table td:first-child {
-        width: 140px;
+        width: 130px;
+    }
+
+    .similar-products .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .breadcrumb {
+        font-size: 0.78rem;
+        padding: 0.5rem 0;
     }
 }
 
+/* ── Mobile ── */
 @media (max-width: 480px) {
-    .product-title {
-        font-size: 1.4rem;
+    .product-detail {
+        gap: var(--spacing-sm);
     }
 
-    .current-price {
-        font-size: 1.4rem;
-    }
-
+    /* Image ratio plus carré sur petit écran */
     .main-image {
-        height: 260px;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
     }
 
     .thumbnail {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
     }
 
+    .thumbnail-list {
+        gap: 0.4rem;
+    }
+
+    .product-title {
+        font-size: 1.25rem;
+    }
+
+    .product-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .current-price {
+        font-size: 1.25rem;
+    }
+
+    .old-price {
+        font-size: 0.9rem;
+    }
+
+    .payment-info {
+        font-size: 0.82rem;
+    }
+
+    .stock-status {
+        font-size: 0.85rem;
+    }
+
+    .product-price-box {
+        padding: 0.85rem;
+        gap: 0.35rem;
+    }
+
+    .option-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .btn-large {
+        padding: 0.85rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .wishlist-btn {
+        height: 44px;
+    }
+
+    /* Services : verticaux sur mobile */
     .product-services {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+        gap: 0;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
     }
 
     .service-item {
         display: flex;
+        flex-direction: row;
         align-items: center;
         gap: 0.75rem;
         text-align: left;
+        font-size: 0.82rem;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .service-item:last-child {
+        border-bottom: none;
     }
 
     .service-item .material-symbols-outlined {
         margin-bottom: 0;
         flex-shrink: 0;
+        font-size: 1.3rem;
     }
 
     .tab-btn {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
+        padding: 0.65rem 0.9rem;
+        font-size: 0.82rem;
     }
 
     .specs-table td {
-        padding: 0.6rem 0.4rem;
-        font-size: 0.85rem;
+        padding: 0.55rem 0.4rem;
+        font-size: 0.82rem;
     }
 
     .specs-table td:first-child {
-        width: 120px;
-    }
-
-    .review-card {
-        padding: 1rem;
+        width: 110px;
+        min-width: unset;
     }
 
     .average-rating {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+    }
+
+    .review-card {
+        padding: 0.85rem;
+    }
+
+    .review-text {
+        font-size: 0.85rem;
+    }
+
+    .notes-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .notes-actions {
+        width: 100%;
+    }
+
+    .notes-btn-save,
+    .notes-btn-clear {
+        flex: 1;
+        text-align: center;
+    }
+
+    .similar-products h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .similar-products .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem;
+    }
+
+    .similar-products .product-image {
+        height: 130px;
+    }
+
+    .similar-products .product-info {
+        padding: 0.65rem;
+    }
+
+    .similar-products .product-name {
+        font-size: 0.82rem;
+    }
+
+    .similar-products .product-price {
+        font-size: 0.88rem;
+    }
+
+    .similar-products .btn-add-cart,
+    .similar-products .btn-fav {
+        width: 30px;
+        height: 30px;
     }
 }
+
 /* ── Notes personnelles ── */
 .personal-notes {
     max-width: 700px;
@@ -846,7 +1085,6 @@
     border-radius: 20px;
 }
 
-/* Curseur zoom sur l'image principale */
 #main-image {
     cursor: zoom-in;
 }
@@ -863,4 +1101,216 @@
 
     .lightbox-prev { left: 0.5rem; }
     .lightbox-next { right: 0.5rem; }
+}
+
+/* ── Très petit mobile (≤ 360px) ── */
+@media (max-width: 360px) {
+    .main-image {
+        aspect-ratio: 1 / 1;
+        border-radius: 6px;
+    }
+
+    .thumbnail {
+        width: 46px;
+        height: 46px;
+    }
+
+    .thumbnail-list {
+        gap: 0.25rem;
+    }
+
+    .product-category {
+        font-size: 0.72rem;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+    }
+
+    .product-subtitle {
+        font-size: 0.82rem;
+    }
+
+    .current-price {
+        font-size: 1.1rem;
+    }
+
+    .old-price {
+        font-size: 0.82rem;
+    }
+
+    .payment-info {
+        font-size: 0.75rem;
+    }
+
+    .stock-status {
+        font-size: 0.78rem;
+    }
+
+    .product-price-box {
+        padding: 0.7rem;
+        gap: 0.25rem;
+        border-radius: 8px;
+    }
+
+    .option-label {
+        font-size: 0.82rem;
+    }
+
+    .option-btn {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.78rem;
+    }
+
+    .btn-large {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .wishlist-btn {
+        height: 40px;
+    }
+
+    .product-services {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+
+    .service-item {
+        font-size: 0.75rem;
+        gap: 0.5rem;
+    }
+
+    .service-item .material-symbols-outlined {
+        font-size: 1.2rem;
+    }
+
+    .tab-btn {
+        padding: 0.55rem 0.7rem;
+        font-size: 0.75rem;
+    }
+
+    .specs-table td {
+        font-size: 0.75rem;
+        padding: 0.45rem 0.3rem;
+    }
+
+    .specs-table td:first-child {
+        width: 95px;
+        min-width: unset;
+    }
+
+    .average-rating {
+        font-size: 1.8rem;
+    }
+
+    .review-card {
+        padding: 0.7rem;
+    }
+
+    .review-author {
+        font-size: 0.82rem;
+    }
+
+    .review-text {
+        font-size: 0.78rem;
+    }
+
+    .similar-products h2 {
+        font-size: 1rem;
+    }
+
+    .similar-products .products-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .similar-products .product-image {
+        height: 150px;
+    }
+
+    .notes-textarea {
+        min-height: 100px;
+        font-size: 0.82rem;
+        padding: 0.65rem;
+    }
+
+    .notes-title {
+        font-size: 0.88rem;
+    }
+
+    .notes-subtitle {
+        font-size: 0.72rem;
+    }
+
+    .notes-btn-save,
+    .notes-btn-clear {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .lightbox-container {
+        padding: 3rem 0.25rem;
+    }
+
+    .lightbox-nav {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+/* ── Minuscule (≤ 320px) ── */
+@media (max-width: 320px) {
+    .main-image {
+        aspect-ratio: 1 / 1;
+    }
+
+    .thumbnail {
+        width: 40px;
+        height: 40px;
+    }
+
+    .product-title {
+        font-size: 1rem;
+    }
+
+    .current-price {
+        font-size: 1rem;
+    }
+
+    .product-price-box {
+        padding: 0.6rem;
+    }
+
+    .btn-large {
+        padding: 0.65rem;
+        font-size: 0.8rem;
+    }
+
+    .wishlist-btn {
+        height: 38px;
+    }
+
+    .tab-btn {
+        padding: 0.5rem 0.55rem;
+        font-size: 0.7rem;
+    }
+
+    .specs-table td {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.25rem;
+    }
+
+    .specs-table td:first-child {
+        width: 80px;
+        min-width: unset;
+    }
+
+    .similar-products .products-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .option-btn {
+        font-size: 0.72rem;
+        padding: 0.3rem 0.5rem;
+    }
 }

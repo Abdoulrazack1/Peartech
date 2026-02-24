@@ -1637,4 +1637,4 @@
         }
     });
 
-})(); // Fin de l'IIFE — exécution immédiate
+})();
