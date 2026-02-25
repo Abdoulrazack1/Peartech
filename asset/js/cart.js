@@ -242,11 +242,22 @@
     // ── Bouton "Passer à l'étape suivante" ────────────────────────
 
     checkoutBtn.addEventListener('click', function() {
-        if (cartItems.length === 0) { // Empêche d'aller au paiement avec un panier vide
+        if (cartItems.length === 0) {
             alert('Votre panier est vide.');
             return;
         }
-        window.location.href = 'page_paiement.html'; // Redirige vers la page de paiement
+        // Sauvegarde le code promo actif avant de quitter la page
+        // sessionStorage : données perdues à la fermeture de l'onglet (comportement voulu)
+        if (currentPromo) {
+            try {
+                sessionStorage.setItem('peartech-promo', JSON.stringify(currentPromo));
+            } catch(e) {
+                console.warn('sessionStorage indisponible, la promo ne sera pas transmise :', e);
+            }
+        } else {
+            try { sessionStorage.removeItem('peartech-promo'); } catch(e) {}
+        }
+        window.location.href = 'page_paiement.html';
     });
 
     // ── Chargement des recommandations ────────────────────────────

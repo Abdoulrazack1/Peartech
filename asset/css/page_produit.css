@@ -1,19 +1,19 @@
 /* ============================================
    Page produit - PearTech
-   Version responsive renforcée
+   Version responsive renforcée + commentée
    ============================================ */
 
 /* ══════════════════════════════════════════
    ANTI-OVERFLOW GLOBAL
-   Bloque tout scroll horizontal qui
-   désactive les media queries
+   Bloque tout scroll horizontal qui désactive
+   les media queries sur mobile
    ══════════════════════════════════════════ */
 html {
-    overflow-x: hidden;
+    overflow-x: hidden; /* Empêche tout scroll horizontal sur la page, condition nécessaire pour que les media queries s'activent */
 }
 
-/* Tous les éléments de la page produit
-   ne peuvent pas dépasser 100% de leur parent */
+/* Réinitialisation anti-débordement sur tous les
+   conteneurs de la page produit */
 .product-detail,
 .product-gallery,
 .product-info,
@@ -34,1284 +34,1379 @@ html {
 .review-card,
 .option-buttons,
 .thumbnail-list {
-    box-sizing: border-box;
-    max-width: 100%;
-    min-width: 0;
+    box-sizing: border-box; /* Inclut padding et border dans le calcul de largeur, évite les débordements */
+    max-width: 100%;        /* Aucun élément ne peut dépasser la largeur de son parent */
+    min-width: 0;           /* Autorise les éléments flex/grid à rétrécir en-dessous de leur contenu */
 }
 
-/* ── Layout produit ── */
+/* ══════════════════════════════════════════
+   1. LAYOUT PRINCIPAL
+   Grille 2 colonnes : galerie | infos
+   ══════════════════════════════════════════ */
 .product-detail {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
-    align-items: start;
-    min-width: 0;
+    display: grid;                  /* Mise en page en grille CSS */
+    grid-template-columns: 1fr 1fr; /* 2 colonnes de largeur égale */
+    gap: var(--spacing-xl);         /* Espace entre les 2 colonnes */
+    margin-bottom: var(--spacing-xl); /* Espace sous le bloc produit avant les similaires */
+    align-items: start;             /* Les 2 colonnes s'alignent par le haut, pas par le centre */
+    min-width: 0;                   /* Autorise la grille à rétrécir sur petits écrans */
 }
 
-/* ── Galerie ── */
+/* ══════════════════════════════════════════
+   2. GALERIE (colonne gauche)
+   ══════════════════════════════════════════ */
 .product-gallery {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    min-width: 0;          /* Permet au contenu de rétrécir */
-    width: 100%;
-    max-width: 100%;
+    display: flex;          /* Disposition en colonne : image principale puis miniatures */
+    flex-direction: column; /* Empile verticalement image + miniatures */
+    gap: 1rem;              /* Espace entre l'image principale et la liste de miniatures */
+    min-width: 0;           /* Permet à la galerie de rétrécir si l'écran est petit */
+    width: 100%;            /* Occupe toute la largeur de sa colonne */
+    max-width: 100%;        /* Ne déborde pas au-delà de sa colonne */
 }
 
+/* Image principale */
 .main-image {
-    width: 100%;
-    max-width: 100%;
-    aspect-ratio: 4 / 3;
-    height: auto;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--secondary);
+    width: 100%;            /* Occupe toute la largeur disponible */
+    max-width: 100%;        /* Ne dépasse jamais son conteneur */
+    aspect-ratio: 4 / 3;   /* Ratio fixe : l'image se redimensionne proportionnellement sans hauteur fixe */
+    height: auto;           /* Hauteur calculée automatiquement par l'aspect-ratio */
+    border: 1px solid var(--border);    /* Bordure subtile autour de l'image */
+    border-radius: 12px;    /* Coins arrondis */
+    overflow: hidden;       /* Cache tout ce qui dépasse des coins arrondis */
+    background: var(--secondary); /* Couleur de fond pendant le chargement de l'image */
 }
 
 .main-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform var(--transition-slow);
+    width: 100%;                        /* L'image remplit tout le conteneur en largeur */
+    height: 100%;                       /* L'image remplit tout le conteneur en hauteur */
+    object-fit: cover;                  /* Recadre l'image pour couvrir sans déformer */
+    display: block;                     /* Supprime l'espace vide sous l'image (comportement inline par défaut) */
+    transition: transform var(--transition-slow); /* Animation de zoom au survol */
 }
 
 .main-image:hover img {
-    transform: scale(1.03);
+    transform: scale(1.03); /* Légère mise à l'échelle au survol pour un effet interactif */
 }
 
+/* Liste de miniatures */
 .thumbnail-list {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    width: 100%;
+    display: flex;   /* Aligne les miniatures horizontalement */
+    gap: 0.5rem;     /* Espace entre chaque miniature */
+    flex-wrap: wrap; /* Passe à la ligne si les miniatures ne tiennent pas sur une rangée */
+    width: 100%;     /* Occupe toute la largeur disponible */
 }
 
+/* Miniature individuelle */
 .thumbnail {
-    width: 80px;
-    height: 80px;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color var(--transition-fast);
-    flex-shrink: 0;
+    width: 80px;                                    /* Largeur fixe d'une miniature */
+    height: 80px;                                   /* Hauteur fixe d'une miniature */
+    border: 2px solid transparent;                  /* Bordure invisible par défaut, visible quand active */
+    border-radius: 8px;                             /* Coins arrondis */
+    overflow: hidden;                               /* Cache les débordements de l'image dans les coins arrondis */
+    cursor: pointer;                                /* Curseur main pour indiquer la cliquabilité */
+    transition: border-color var(--transition-fast); /* Animation fluide du changement de bordure */
+    flex-shrink: 0;                                 /* La miniature ne rétrécit pas avec le flex */
 }
 
 .thumbnail.active {
-    border-color: var(--primary);
+    border-color: var(--primary); /* Bordure colorée pour indiquer la miniature sélectionnée */
 }
 
 .thumbnail:hover {
-    border-color: var(--primary);
+    border-color: var(--primary); /* Même bordure au survol pour feedback visuel */
 }
 
 .thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 100%;       /* L'image remplit la miniature en largeur */
+    height: 100%;      /* L'image remplit la miniature en hauteur */
+    object-fit: cover; /* Recadre sans déformer */
+    display: block;    /* Supprime l'espace vide sous l'image */
 }
 
-/* ── Infos produit (scopé au détail, pas aux cards) ── */
+/* ══════════════════════════════════════════
+   3. INFOS PRODUIT (colonne droite)
+   Scopé à .product-detail pour ne pas
+   affecter les cards des produits similaires
+   ══════════════════════════════════════════ */
 .product-detail .product-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    min-width: 0;
-    width: 100%;
-    max-width: 100%;
+    display: flex;          /* Empile les informations verticalement */
+    flex-direction: column; /* Colonne : catégorie, titre, prix, options, boutons... */
+    gap: 1rem;              /* Espace uniforme entre chaque bloc d'info */
+    min-width: 0;           /* Permet au bloc de rétrécir */
+    width: 100%;            /* Occupe toute la colonne */
+    max-width: 100%;        /* Ne déborde pas */
 }
 
+/* Étiquette de catégorie (ex: "IPHONE") */
 .product-category {
-    font-size: 0.8rem;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
+    font-size: 0.8rem;          /* Petite taille pour une étiquette */
+    color: var(--primary);      /* Couleur de marque */
+    text-transform: uppercase;  /* Tout en majuscules */
+    letter-spacing: 1px;        /* Espacement des lettres pour l'effet étiquette */
+    font-weight: 600;            /* Semi-gras */
 }
 
+/* Nom du produit */
 .product-title {
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--text-primary);
-    overflow-wrap: break-word;   /* Coupe les mots trop longs */
-    word-break: break-word;
+    font-size: 2rem;            /* Grande taille pour le titre principal */
+    font-weight: 700;           /* Gras */
+    line-height: 1.2;           /* Interligne serré pour les titres longs */
+    color: var(--text-primary); /* Couleur texte principale */
+    overflow-wrap: break-word;  /* Coupe les mots trop longs plutôt que de déborder */
+    word-break: break-word;     /* Forçage du retour à la ligne sur les mots longs */
 }
 
+/* Sous-titre (ex: "A17 Pro - 8 Go - 256 Go") */
 .product-subtitle {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    overflow-wrap: break-word;
+    font-size: 1.1rem;              /* Légèrement plus petit que le titre */
+    color: var(--text-secondary);   /* Couleur secondaire, moins contrastée */
+    overflow-wrap: break-word;      /* Coupe si trop long */
 }
 
+/* Ligne note / étoiles */
 .product-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    display: flex;       /* Aligne étoiles et texte horizontalement */
+    align-items: center; /* Centrage vertical */
+    gap: 0.5rem;         /* Espace entre les étoiles et le texte */
+    flex-wrap: wrap;     /* Passe à la ligne si l'espace manque */
 }
 
+/* Étoiles */
 .stars {
-    color: #f59e0b;
-    font-size: 1.1rem;
+    color: #f59e0b;   /* Couleur dorée pour les étoiles */
+    font-size: 1.1rem; /* Taille légèrement agrandie */
 }
 
+/* Texte "(1243 avis)" */
 .rating-count {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+    color: var(--text-muted); /* Couleur atténuée */
+    font-size: 0.9rem;         /* Taille réduite */
 }
 
-/* ── Bloc prix ── */
+/* ══════════════════════════════════════════
+   4. BLOC PRIX
+   ══════════════════════════════════════════ */
 .product-price-box {
-    background: var(--secondary);
-    padding: 1.5rem;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    border: 1px solid var(--border);
-    width: 100%;
-    box-sizing: border-box;
+    background: var(--secondary);           /* Fond légèrement différent du fond principal */
+    padding: 1.5rem;                        /* Espace intérieur confortable */
+    border-radius: 12px;                    /* Coins arrondis */
+    display: flex;                          /* Empile prix, mensualités, stock verticalement */
+    flex-direction: column;                 /* Disposition en colonne */
+    gap: 0.5rem;                            /* Espace entre chaque ligne d'info prix */
+    border: 1px solid var(--border);        /* Bordure subtile */
+    width: 100%;                            /* Prend toute la largeur */
+    box-sizing: border-box;                 /* Padding inclus dans la largeur */
 }
 
+/* Prix actuel (ex: "1 479,00 €") */
 .current-price {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
+    font-size: 2rem;        /* Très grand pour attirer l'œil */
+    font-weight: 700;       /* Gras */
+    color: var(--primary);  /* Couleur de marque pour mettre en valeur */
 }
 
+/* Prix barré (ex: "1 599,00 €") */
 .old-price {
-    font-size: 1.1rem;
-    color: var(--text-muted);
-    text-decoration: line-through;
+    font-size: 1.1rem;          /* Plus petit que le prix actuel */
+    color: var(--text-muted);   /* Atténué pour montrer que c'est l'ancien prix */
+    text-decoration: line-through; /* Barré */
 }
 
+/* Info mensualités (ex: "ou 12 × 123,25 € sans frais") */
 .payment-info {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
+    font-size: 0.9rem;              /* Petit */
+    color: var(--text-secondary);   /* Couleur secondaire */
 }
 
+/* Badge de disponibilité (ex: "En stock - livraison offerte") */
 .stock-status {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #10b981;
-    font-weight: 600;
+    display: flex;      /* Icône + texte côte à côte */
+    align-items: center; /* Centrage vertical */
+    gap: 0.5rem;        /* Espace entre l'icône et le texte */
+    color: #10b981;     /* Vert pour "en stock" */
+    font-weight: 600;   /* Semi-gras */
 }
 
+/* Variante rupture de stock */
 .stock-status.out {
-    color: #ef4444;
+    color: #ef4444; /* Rouge pour "rupture de stock" */
 }
 
-/* ── Options ── */
+/* ══════════════════════════════════════════
+   5. OPTIONS (couleur, stockage, etc.)
+   ══════════════════════════════════════════ */
 .product-options {
-    margin: 0.5rem 0;
-    width: 100%;
+    margin: 0.5rem 0; /* Espace vertical autour du bloc options */
+    width: 100%;       /* Pleine largeur */
 }
 
+/* Groupe d'une option (ex: groupe "Couleur") */
 .option-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1rem; /* Espace entre les groupes d'options */
 }
 
+/* Label du groupe (ex: "Couleur :") */
 .option-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
-    font-size: 0.9rem;
+    display: block;             /* Affichage en bloc pour forcer le retour à la ligne */
+    font-weight: 600;           /* Semi-gras */
+    margin-bottom: 0.5rem;      /* Espace sous le label avant les boutons */
+    color: var(--text-primary); /* Couleur texte principale */
+    font-size: 0.9rem;          /* Légèrement petit */
 }
 
+/* Conteneur des boutons d'option */
 .option-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: flex;   /* Aligne les boutons horizontalement */
+    flex-wrap: wrap; /* Passe à la ligne si trop de boutons */
+    gap: 0.5rem;     /* Espace entre chaque bouton */
 }
 
+/* Bouton d'option individuel (ex: "Titane naturel") */
 .option-btn {
-    padding: 0.5rem 1rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    font-family: inherit;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    max-width: 100%;
-    box-sizing: border-box;
+    padding: 0.5rem 1rem;           /* Espace intérieur */
+    background: var(--secondary);   /* Fond */
+    border: 1px solid var(--border); /* Bordure */
+    border-radius: 6px;             /* Coins légèrement arrondis */
+    cursor: pointer;                /* Curseur main */
+    transition: all var(--transition-fast); /* Animation au survol */
+    font-family: inherit;           /* Hérite de la police du site */
+    color: var(--text-primary);     /* Couleur du texte */
+    font-size: 0.9rem;              /* Taille standard */
+    max-width: 100%;                /* Ne déborde pas de son conteneur */
+    box-sizing: border-box;         /* Padding inclus dans la largeur */
 }
 
+/* Bouton survolé ou sélectionné */
 .option-btn:hover,
 .option-btn.active {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--primary);
+    border-color: var(--primary);               /* Bordure colorée */
+    background: rgba(59, 130, 246, 0.1);        /* Fond légèrement bleuté */
+    color: var(--primary);                      /* Texte de couleur de marque */
 }
 
-/* ── Actions produit (scopé au détail, pas aux cards) ── */
+/* ══════════════════════════════════════════
+   6. BOUTONS D'ACTION
+   Scopés à .product-detail pour ne pas
+   écraser les boutons des cards similaires
+   ══════════════════════════════════════════ */
 .product-detail .product-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin: 0.5rem 0;
-    max-width: 100%;
-    width: 100%;
+    display: flex;      /* Aligne les boutons horizontalement */
+    gap: 1rem;          /* Espace entre les boutons */
+    flex-wrap: wrap;    /* Passe à la ligne si nécessaire */
+    margin: 0.5rem 0;   /* Espace vertical */
+    max-width: 100%;    /* Ne déborde pas */
+    width: 100%;        /* Pleine largeur */
 }
 
+/* Style commun aux grands boutons (Ajouter / Acheter) */
 .product-detail .btn-large {
-    flex: 1;
-    padding: 1rem;
-    font-size: 1rem;
-    min-width: 0;
+    flex: 1;        /* Prend l'espace disponible équitablement */
+    padding: 1rem;  /* Espace intérieur généreux */
+    font-size: 1rem; /* Taille lisible */
+    min-width: 0;   /* Autorise le bouton à rétrécir */
 }
 
+/* ══════════════════════════════════════════
+   7. BOUTON WISHLIST (cœur)
+   ══════════════════════════════════════════ */
 .wishlist-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    width: 48px;
-    height: 48px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    font-family: inherit;
-    color: var(--text-secondary);
-    flex-shrink: 0;
+    display: flex;              /* Centre l'icône */
+    align-items: center;        /* Centrage vertical */
+    justify-content: center;    /* Centrage horizontal */
+    padding: 0;                 /* Pas de padding, taille gérée par width/height */
+    width: 48px;                /* Largeur fixe pour le bouton carré */
+    height: 48px;               /* Hauteur fixe */
+    background: transparent;    /* Fond transparent */
+    border: 1px solid var(--border); /* Bordure subtile */
+    border-radius: 8px;         /* Coins arrondis */
+    cursor: pointer;            /* Curseur main */
+    transition: var(--transition-normal); /* Animation au survol */
+    font-family: inherit;       /* Hérite de la police */
+    color: var(--text-secondary); /* Couleur de l'icône */
+    flex-shrink: 0;             /* Ne rétrécit pas avec le flex */
 }
 
-/* Icône cœur dans le bouton favori */
+/* Icône cœur dans le bouton */
 .wishlist-btn .material-symbols-outlined {
-    font-size: 1.3rem;
-    transition: color var(--transition-fast), font-variation-settings var(--transition-fast);
-    font-variation-settings: 'FILL' 0;
-    color: var(--text-muted);
+    font-size: 1.3rem;                                              /* Taille de l'icône */
+    transition: color var(--transition-fast), font-variation-settings var(--transition-fast); /* Animation couleur et remplissage */
+    font-variation-settings: 'FILL' 0;                             /* Cœur vide par défaut */
+    color: var(--text-muted);                                      /* Couleur atténuée par défaut */
 }
 
+/* Survol du bouton wishlist */
 .wishlist-btn:hover {
-    border-color: #ef4444;
-    background: rgba(239, 68, 68, 0.06);
-    color: #ef4444;
-    transform: translateY(-1px);
+    border-color: #ef4444;                  /* Bordure rouge */
+    background: rgba(239, 68, 68, 0.06);    /* Fond légèrement rouge */
+    color: #ef4444;                         /* Icône rouge */
+    transform: translateY(-1px);            /* Légère élévation */
 }
 
+/* Icône au survol */
 .wishlist-btn:hover .material-symbols-outlined {
-    color: #ef4444;
+    color: #ef4444; /* Icône rouge au survol */
 }
 
+/* État actif (produit en favoris) */
 .wishlist-btn.active,
 .wishlist-btn[aria-pressed="true"] {
-    border-color: #ef4444;
-    background: rgba(239, 68, 68, 0.08);
-    color: #ef4444;
+    border-color: #ef4444;              /* Bordure rouge */
+    background: rgba(239, 68, 68, 0.08); /* Fond légèrement rouge */
+    color: #ef4444;                     /* Couleur rouge */
 }
 
+/* Icône cœur remplie quand favori */
 .wishlist-btn.active .material-symbols-outlined,
 .wishlist-btn[aria-pressed="true"] .material-symbols-outlined {
-    font-variation-settings: 'FILL' 1;
-    color: #ef4444;
+    font-variation-settings: 'FILL' 1; /* Cœur plein (rempli) */
+    color: #ef4444;                    /* Rouge */
 }
 
+/* Survol quand déjà en favoris */
 .wishlist-btn.active:hover,
 .wishlist-btn[aria-pressed="true"]:hover {
-    background: rgba(239, 68, 68, 0.14);
+    background: rgba(239, 68, 68, 0.14); /* Fond rouge plus intense */
 }
 
-/* ── Services produit ── */
+/* ══════════════════════════════════════════
+   8. SERVICES PRODUIT
+   (garantie, installation, retour 30j)
+   ══════════════════════════════════════════ */
 .product-services {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    width: 100%;
+    display: grid;                          /* 3 colonnes pour les 3 services */
+    grid-template-columns: repeat(3, 1fr);  /* 3 colonnes égales */
+    gap: 1rem;                              /* Espace entre les services */
+    margin-top: 1.5rem;                     /* Séparation avec les boutons au-dessus */
+    padding-top: 1.5rem;                    /* Espace interne au-dessus de la ligne de séparation */
+    border-top: 1px solid var(--border);    /* Ligne de séparation visuelle */
+    width: 100%;                            /* Pleine largeur */
 }
 
+/* Item de service individuel */
 .service-item {
-    text-align: center;
-    font-size: 0.82rem;
-    color: var(--text-secondary);
-    word-break: break-word;
-    overflow-wrap: break-word;
-    min-width: 0;
+    text-align: center;     /* Texte centré sous l'icône */
+    font-size: 0.82rem;     /* Petit texte */
+    color: var(--text-secondary); /* Couleur secondaire */
+    word-break: break-word; /* Coupe si le texte est trop long */
+    overflow-wrap: break-word; /* Idem, pour les navigateurs plus anciens */
+    min-width: 0;           /* Permet le rétrécissement */
 }
 
+/* Icône du service */
 .service-item .material-symbols-outlined {
-    font-size: 2rem;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
-    display: block;
+    font-size: 2rem;        /* Grande icône */
+    color: var(--primary);  /* Couleur de marque */
+    margin-bottom: 0.5rem;  /* Espace sous l'icône avant le texte */
+    display: block;         /* Force le retour à la ligne après l'icône */
 }
 
-/* ── Onglets ── */
+/* ══════════════════════════════════════════
+   9. ONGLETS (description, specs, avis, FAQ, notes)
+   ══════════════════════════════════════════ */
 .product-tabs {
-    margin: 2rem 0;
-    width: 100%;
-    max-width: 100%;
+    margin: 2rem 0;  /* Espace au-dessus et en-dessous de la section onglets */
+    width: 100%;     /* Pleine largeur */
+    max-width: 100%; /* Ne déborde pas */
 }
 
+/* Barre des onglets */
 .tabs-header {
-    display: flex;
-    gap: 0;
-    border-bottom: 1px solid var(--border);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    width: 100%;
-    max-width: 100%;
+    display: flex;                      /* Aligne les boutons d'onglet horizontalement */
+    gap: 0;                             /* Pas d'espace entre les onglets */
+    border-bottom: 1px solid var(--border); /* Ligne de séparation sous les onglets */
+    overflow-x: auto;                   /* Scroll horizontal si trop d'onglets sur mobile */
+    -webkit-overflow-scrolling: touch;  /* Scroll fluide sur iOS */
+    scrollbar-width: none;              /* Cache la scrollbar (Firefox) */
+    width: 100%;                        /* Pleine largeur */
+    max-width: 100%;                    /* Ne déborde pas */
 }
 
+/* Cache la scrollbar (Chrome/Safari) */
 .tabs-header::-webkit-scrollbar {
-    display: none;
+    display: none; /* Scrollbar invisible mais fonctionnelle */
 }
 
+/* Bouton d'onglet */
 .tab-btn {
-    padding: 0.8rem 1.5rem;
-    background: transparent;
-    border: none;
-    border-bottom: 3px solid transparent;
-    font-weight: 600;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    font-family: inherit;
-    white-space: nowrap;
-    flex-shrink: 0;
+    padding: 0.8rem 1.5rem;             /* Espace intérieur */
+    background: transparent;            /* Fond transparent */
+    border: none;                       /* Pas de bordure */
+    border-bottom: 3px solid transparent; /* Bordure basse invisible par défaut */
+    font-weight: 600;                   /* Semi-gras */
+    color: var(--text-secondary);       /* Couleur atténuée */
+    cursor: pointer;                    /* Curseur main */
+    transition: all var(--transition-fast); /* Animation */
+    font-family: inherit;               /* Hérite de la police */
+    white-space: nowrap;                /* Ne coupe pas le texte de l'onglet */
+    flex-shrink: 0;                     /* Ne rétrécit pas */
 }
 
+/* Onglet actif */
 .tab-btn.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
+    color: var(--primary);              /* Texte coloré */
+    border-bottom-color: var(--primary); /* Ligne de soulignement colorée */
 }
 
+/* Survol onglet inactif */
 .tab-btn:hover:not(.active) {
-    color: var(--text-primary);
+    color: var(--text-primary); /* Texte légèrement plus visible */
 }
 
+/* Contenu d'un onglet (masqué par défaut) */
 .tab-content {
-    padding: 2rem 0;
-    display: none;
+    padding: 2rem 0; /* Espace intérieur autour du contenu */
+    display: none;   /* Masqué par défaut */
 }
 
+/* Contenu de l'onglet actif */
 .tab-content.active {
-    display: block;
+    display: block; /* Affiché uniquement pour l'onglet sélectionné */
 }
 
-/* ── Tableau des specs ── */
+/* ══════════════════════════════════════════
+   10. TABLEAU DES SPÉCIFICATIONS TECHNIQUES
+   ══════════════════════════════════════════ */
 .specs-table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow-x: auto;      /* Permet le défilement horizontal si nécessaire */
-    display: block;        /* Nécessaire pour que overflow-x fonctionne sur table */
+    width: 100%;                /* Pleine largeur */
+    border-collapse: collapse;  /* Supprime l'espace entre les bordures des cellules */
+    overflow-x: auto;           /* Scroll horizontal si le tableau est trop large */
+    display: block;             /* Nécessaire pour que overflow-x fonctionne sur un élément table */
 }
 
+/* Ligne du tableau */
 .specs-table tr {
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); /* Séparateur entre chaque ligne */
 }
 
+/* Dernière ligne sans séparateur */
 .specs-table tr:last-child {
-    border-bottom: none;
+    border-bottom: none; /* Pas de bordure après la dernière ligne */
 }
 
+/* Cellule */
 .specs-table td {
-    padding: 0.8rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    vertical-align: top;
-    overflow-wrap: break-word;
-    word-break: break-word;
+    padding: 0.8rem;            /* Espace intérieur */
+    color: var(--text-secondary); /* Couleur secondaire */
+    font-size: 0.9rem;          /* Taille standard */
+    vertical-align: top;        /* Aligne en haut pour les cellules multi-lignes */
+    overflow-wrap: break-word;  /* Coupe les valeurs longues */
+    word-break: break-word;     /* Idem */
 }
 
+/* Première colonne : nom de la spec */
 .specs-table td:first-child {
-    font-weight: 600;
-    width: 30%;
-    max-width: 200px;
-    min-width: 80px;
-    color: var(--text-primary);
+    font-weight: 600;           /* Gras pour mettre en valeur le nom de la spec */
+    width: 30%;                 /* Largeur relative pour s'adapter à l'écran */
+    max-width: 200px;           /* Plafond absolu */
+    min-width: 80px;            /* Plancher pour rester lisible */
+    color: var(--text-primary); /* Texte principal plus contrasté */
 }
 
-/* ── Avis clients ── */
+/* ══════════════════════════════════════════
+   11. AVIS CLIENTS
+   ══════════════════════════════════════════ */
+
+/* Conteneur résumé : note + barres */
 .reviews-summary {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    display: flex;       /* Note et barres côte à côte */
+    gap: 2rem;           /* Espace entre la note et les barres */
+    align-items: center; /* Centrage vertical */
+    margin-bottom: 2rem; /* Espace sous le résumé */
+    flex-wrap: wrap;     /* Passe à la ligne sur petits écrans */
 }
 
+/* Gros chiffre de note (ex: "4.8") */
 .average-rating {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--primary);
-    flex-shrink: 0;
+    font-size: 3rem;        /* Très grand pour mettre en valeur */
+    font-weight: 700;       /* Gras */
+    color: var(--primary);  /* Couleur de marque */
+    flex-shrink: 0;         /* Ne rétrécit pas avec le flex */
 }
 
+/* Conteneur des barres de distribution */
 .review-bars {
-    flex: 1;
-    min-width: 0;
+    flex: 1;     /* Prend l'espace restant */
+    min-width: 0; /* Autorise le rétrécissement pour éviter l'overflow */
 }
 
+/* Ligne d'une barre (ex: "5★ ▓▓▓▓▓ 70%") */
 .review-bar-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.3rem;
+    display: flex;       /* Étoiles, barre et pourcentage sur une ligne */
+    align-items: center; /* Centrage vertical */
+    gap: 0.5rem;         /* Espace entre les éléments */
+    margin-bottom: 0.3rem; /* Espace entre les rangées */
 }
 
+/* Étiquette étoile (ex: "5★") */
 .bar-label {
-    width: 30px;
-    color: var(--text-secondary);
-    font-size: 0.85rem;
-    flex-shrink: 0;
+    width: 30px;                /* Largeur fixe pour aligner les barres */
+    color: var(--text-secondary); /* Couleur secondaire */
+    font-size: 0.85rem;         /* Petit */
+    flex-shrink: 0;             /* Ne rétrécit pas */
 }
 
+/* Fond de la barre de progression */
 .bar {
-    flex: 1;
-    height: 8px;
-    background: var(--border);
-    border-radius: 4px;
-    overflow: hidden;
+    flex: 1;                  /* Prend l'espace disponible */
+    height: 8px;              /* Mince */
+    background: var(--border); /* Fond neutre */
+    border-radius: 4px;       /* Arrondi */
+    overflow: hidden;         /* Clip le remplissage */
 }
 
+/* Remplissage coloré de la barre */
 .bar-fill {
-    height: 100%;
-    background: var(--primary);
-    border-radius: 4px;
-    transition: width 0.5s ease;
+    height: 100%;           /* Remplit toute la hauteur */
+    background: var(--primary); /* Couleur de marque */
+    border-radius: 4px;     /* Arrondi */
+    transition: width 0.5s ease; /* Animation d'entrée */
 }
 
+/* Carte d'un avis */
 .review-card {
-    padding: 1.5rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin-bottom: 1rem;
+    padding: 1.5rem;                /* Espace intérieur */
+    background: var(--secondary);   /* Fond légèrement différent */
+    border: 1px solid var(--border); /* Bordure */
+    border-radius: 8px;             /* Coins arrondis */
+    margin-bottom: 1rem;            /* Espace entre les avis */
 }
 
+/* En-tête d'un avis (auteur + date) */
 .review-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: flex;                  /* Auteur et date côte à côte */
+    justify-content: space-between; /* Auteur à gauche, date à droite */
+    align-items: center;            /* Centrage vertical */
+    margin-bottom: 0.5rem;          /* Espace sous l'en-tête */
+    flex-wrap: wrap;                /* Passe à la ligne si manque de place */
+    gap: 0.5rem;                    /* Espace si retour à la ligne */
 }
 
+/* Nom de l'auteur */
 .review-author {
-    font-weight: 600;
-    color: var(--text-primary);
+    font-weight: 600;           /* Gras */
+    color: var(--text-primary); /* Couleur principale */
 }
 
+/* Date de l'avis */
 .review-date {
-    color: var(--text-muted);
-    font-size: 0.8rem;
+    color: var(--text-muted); /* Atténué */
+    font-size: 0.8rem;         /* Petit */
 }
 
+/* Texte de l'avis */
 .review-text {
-    line-height: 1.6;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
+    line-height: 1.6;           /* Interligne généreux pour la lisibilité */
+    color: var(--text-secondary); /* Couleur secondaire */
+    font-size: 0.95rem;         /* Légèrement réduit */
 }
 
-/* ── Produits similaires ── */
+/* ══════════════════════════════════════════
+   12. PRODUITS SIMILAIRES
+   ══════════════════════════════════════════ */
 .similar-products {
-    margin-top: 3rem;
+    margin-top: 3rem; /* Séparation avec la section onglets au-dessus */
 }
 
+/* Titre de section */
 .similar-products h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
+    font-size: 1.5rem;          /* Grand */
+    font-weight: 700;           /* Gras */
+    margin-bottom: 1.5rem;      /* Espace sous le titre avant la grille */
+    color: var(--text-primary); /* Couleur principale */
 }
 
-/* Grille des produits similaires */
+/* Grille des produits similaires
+   display:grid explicite pour éviter
+   l'héritage erroné de page_accueil.css */
 .similar-products .products-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: var(--spacing-md);
+    display: grid;                              /* Grille explicite */
+    grid-template-columns: repeat(3, 1fr) !important; /* 3 colonnes, !important pour surcharger page_accueil.css */
+    gap: var(--spacing-md);                     /* Espace entre les cards */
 }
 
+/* Lien "Voir tous les produits" */
 .text-center {
-    text-align: center;
-    margin-top: 2rem;
+    text-align: center; /* Centré */
+    margin-top: 2rem;   /* Espace au-dessus */
 }
 
-/* ── Breadcrumb ── */
+/* ══════════════════════════════════════════
+   13. FIL D'ARIANE (breadcrumb)
+   ══════════════════════════════════════════ */
 .breadcrumb {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.2rem;
-    padding: 1rem 0;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    display: flex;        /* Éléments sur une ligne */
+    align-items: center;  /* Centrage vertical */
+    flex-wrap: wrap;      /* Passe à la ligne si trop long */
+    gap: 0.2rem;          /* Espace entre les éléments */
+    padding: 1rem 0;      /* Espace vertical */
+    font-size: 0.85rem;   /* Petit */
+    color: var(--text-muted); /* Atténué */
 }
 
 .breadcrumb a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
+    color: var(--text-secondary);           /* Légèrement moins atténué que les séparateurs */
+    text-decoration: none;                  /* Pas de soulignement */
+    transition: color var(--transition-fast); /* Animation au survol */
 }
 
 .breadcrumb a:hover {
-    color: var(--primary);
+    color: var(--primary); /* Couleur de marque au survol */
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* ══════════════════════════════════════════
+   14. NOTES PERSONNELLES
+   ══════════════════════════════════════════ */
+.personal-notes {
+    max-width: 700px; /* Largeur maximale pour rester lisible */
+}
 
-/* ── Tablette large ── */
+/* En-tête de la section notes */
+.notes-header {
+    display: flex;                  /* Titre et indicateur côte à côte */
+    align-items: flex-start;        /* Alignement en haut */
+    justify-content: space-between; /* Titre à gauche, badge à droite */
+    gap: 1rem;                      /* Espace entre les éléments */
+    margin-bottom: 1rem;            /* Espace sous l'en-tête */
+}
+
+/* Titre "Mes notes personnelles" */
+.notes-title {
+    font-size: 1rem;            /* Standard */
+    font-weight: 600;           /* Semi-gras */
+    color: var(--text-primary); /* Couleur principale */
+    margin-bottom: 0.2rem;      /* Espace sous le titre avant le sous-titre */
+}
+
+/* Sous-titre discret */
+.notes-subtitle {
+    font-size: 0.82rem;       /* Petit */
+    color: var(--text-muted); /* Très atténué */
+}
+
+/* Badge "✓ Sauvegardée" */
+.notes-saved-indicator {
+    font-size: 0.8rem;          /* Petit */
+    font-weight: 600;           /* Semi-gras */
+    padding: 0.3rem 0.7rem;     /* Espace intérieur de la pilule */
+    border-radius: 20px;        /* Forme arrondie de pilule */
+    flex-shrink: 0;             /* Ne rétrécit pas */
+    opacity: 0;                 /* Invisible par défaut */
+    transition: opacity 0.3s ease; /* Apparition en fondu */
+}
+
+/* Badge quand sauvegarde réussie */
+.notes-saved-indicator.saved {
+    background: rgba(16, 185, 129, 0.12); /* Fond vert clair */
+    color: #10b981;                        /* Texte vert */
+    opacity: 1;                            /* Visible */
+}
+
+/* Badge en cas d'avertissement */
+.notes-saved-indicator.warning {
+    background: rgba(239, 68, 68, 0.1); /* Fond rouge clair */
+    color: #ef4444;                      /* Texte rouge */
+    opacity: 1;                          /* Visible */
+}
+
+/* Zone de texte */
+.notes-textarea {
+    width: 100%;                /* Pleine largeur */
+    min-height: 180px;          /* Hauteur minimale pour écrire confortablement */
+    padding: 1rem;              /* Espace intérieur */
+    background: var(--background); /* Fond principal */
+    border: 1px solid var(--border); /* Bordure */
+    border-radius: 10px;        /* Coins arrondis */
+    color: var(--text-primary); /* Couleur du texte */
+    font-family: inherit;       /* Hérite de la police du site */
+    font-size: 0.9rem;          /* Taille confortable */
+    line-height: 1.65;          /* Interligne généreux */
+    resize: vertical;           /* Redimensionnable uniquement en hauteur */
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast); /* Animation focus */
+    box-sizing: border-box;     /* Padding inclus dans la largeur */
+    display: block;             /* Évite l'espace sous la textarea */
+}
+
+/* Placeholder de la textarea */
+.notes-textarea::placeholder {
+    color: var(--text-muted); /* Atténué */
+    font-style: italic;       /* Italique pour distinguer du vrai texte */
+}
+
+/* Textarea au focus */
+.notes-textarea:focus {
+    outline: none;                              /* Supprime l'outline natif du navigateur */
+    border-color: var(--primary);               /* Bordure colorée au focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Halo bleu subtil */
+}
+
+/* Pied du bloc notes (compteur + boutons) */
+.notes-footer {
+    display: flex;                  /* Compteur à gauche, boutons à droite */
+    align-items: center;            /* Centrage vertical */
+    justify-content: space-between; /* Séparation gauche / droite */
+    margin-top: 0.75rem;            /* Espace au-dessus */
+    gap: 1rem;                      /* Espace entre les éléments */
+}
+
+/* Compteur de caractères */
+.notes-char-count {
+    font-size: 0.78rem;       /* Très petit */
+    color: var(--text-muted); /* Atténué */
+}
+
+/* Groupe de boutons (Sauvegarder / Effacer) */
+.notes-actions {
+    display: flex; /* Côte à côte */
+    gap: 0.5rem;   /* Espace entre les boutons */
+}
+
+/* Style commun aux deux boutons de notes */
+.notes-btn-save,
+.notes-btn-clear {
+    padding: 0.5rem 1.1rem;         /* Espace intérieur */
+    border-radius: 7px;             /* Coins arrondis */
+    font-size: 0.85rem;             /* Petit */
+    font-weight: 600;               /* Semi-gras */
+    font-family: inherit;           /* Hérite de la police */
+    cursor: pointer;                /* Curseur main */
+    transition: var(--transition-fast); /* Animation */
+    border: 1px solid transparent;  /* Bordure transparente par défaut */
+}
+
+/* Bouton Sauvegarder */
+.notes-btn-save {
+    background: var(--primary);     /* Fond coloré */
+    color: #fff;                    /* Texte blanc */
+    border-color: var(--primary);   /* Bordure assortie */
+}
+
+.notes-btn-save:hover {
+    background: var(--primary-hover);   /* Fond plus sombre au survol */
+    border-color: var(--primary-hover); /* Bordure assortie */
+}
+
+/* Bouton Effacer */
+.notes-btn-clear {
+    background: transparent;        /* Fond vide */
+    color: var(--text-secondary);   /* Texte secondaire */
+    border-color: var(--border);    /* Bordure standard */
+}
+
+.notes-btn-clear:hover {
+    border-color: #ef4444;                  /* Bordure rouge au survol */
+    color: #ef4444;                         /* Texte rouge */
+    background: rgba(239, 68, 68, 0.06);    /* Fond légèrement rouge */
+}
+
+/* ══════════════════════════════════════════
+   15. LIGHTBOX (visionneuse plein écran)
+   ══════════════════════════════════════════ */
+
+/* Overlay de fond */
+.lightbox-overlay {
+    position: fixed;            /* Plaque sur tout l'écran, indépendant du scroll */
+    inset: 0;                   /* Recouvre les 4 bords (top/right/bottom/left: 0) */
+    background: rgba(0, 0, 0, 0.92); /* Fond noir très opaque */
+    z-index: 9999;              /* Devant tout le reste de la page */
+    display: flex;              /* Centre le contenu */
+    align-items: center;        /* Centrage vertical */
+    justify-content: center;    /* Centrage horizontal */
+    opacity: 0;                 /* Invisible par défaut */
+    visibility: hidden;         /* Ni visible ni interactif par défaut */
+    transition: opacity 0.25s ease, visibility 0.25s ease; /* Apparition en fondu */
+    cursor: zoom-out;           /* Curseur indique qu'on peut fermer en cliquant */
+}
+
+/* Lightbox ouverte */
+.lightbox-overlay.active {
+    opacity: 1;         /* Visible */
+    visibility: visible; /* Interactif */
+}
+
+/* Conteneur interne */
+.lightbox-container {
+    position: relative;     /* Contexte pour les boutons positionnés en absolu */
+    display: flex;          /* Centre l'image */
+    align-items: center;    /* Centrage vertical */
+    justify-content: center; /* Centrage horizontal */
+    width: 100%;            /* Pleine largeur */
+    height: 100%;           /* Pleine hauteur */
+    padding: 4rem 5rem;     /* Espace pour les boutons de navigation */
+    box-sizing: border-box; /* Padding inclus dans les dimensions */
+}
+
+/* Image affichée dans la lightbox */
+.lightbox-img {
+    max-width: 100%;        /* Ne dépasse pas le conteneur */
+    max-height: 100%;       /* Ne dépasse pas le conteneur */
+    object-fit: contain;    /* Affiche l'image entière sans la recadrer */
+    border-radius: 8px;     /* Coins arrondis */
+    transition: opacity 0.15s ease; /* Fondu lors du changement d'image */
+    cursor: default;        /* Curseur normal sur l'image */
+    user-select: none;      /* Empêche la sélection de l'image */
+}
+
+/* Bouton de fermeture (✕) */
+.lightbox-close {
+    position: absolute;                     /* Positionné dans le coin */
+    top: 1.2rem;                            /* En haut */
+    right: 1.2rem;                          /* À droite */
+    width: 42px;                            /* Taille du bouton */
+    height: 42px;                           /* Taille du bouton */
+    background: rgba(255, 255, 255, 0.1);   /* Fond semi-transparent */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure semi-transparente */
+    border-radius: 50%;                     /* Rond */
+    color: white;                           /* Icône blanche */
+    cursor: pointer;                        /* Curseur main */
+    display: flex;                          /* Centre l'icône */
+    align-items: center;                    /* Centrage vertical */
+    justify-content: center;               /* Centrage horizontal */
+    transition: background 0.2s ease;       /* Animation */
+    z-index: 1;                            /* Au-dessus de l'image */
+}
+
+.lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2); /* Fond plus visible au survol */
+}
+
+/* Boutons de navigation (précédent / suivant) */
+.lightbox-nav {
+    position: absolute;                     /* Positionnés latéralement */
+    top: 50%;                               /* Milieu vertical */
+    transform: translateY(-50%);            /* Centrage vertical précis */
+    width: 48px;                            /* Taille du bouton */
+    height: 48px;                           /* Taille du bouton */
+    background: rgba(255, 255, 255, 0.1);   /* Fond semi-transparent */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure */
+    border-radius: 50%;                     /* Rond */
+    color: white;                           /* Icône blanche */
+    cursor: pointer;                        /* Curseur main */
+    display: flex;                          /* Centre l'icône */
+    align-items: center;                    /* Centrage vertical */
+    justify-content: center;                /* Centrage horizontal */
+    transition: background 0.2s ease;       /* Animation */
+    z-index: 1;                             /* Au-dessus de l'image */
+}
+
+.lightbox-nav:hover {
+    background: rgba(255, 255, 255, 0.25); /* Fond plus visible au survol */
+}
+
+.lightbox-prev { left: 1.2rem; }   /* Bouton précédent à gauche */
+.lightbox-next { right: 1.2rem; }  /* Bouton suivant à droite */
+
+/* Compteur "1 / 3" */
+.lightbox-counter {
+    position: absolute;                 /* En bas centré */
+    bottom: 1.2rem;                     /* Espace du bas */
+    left: 50%;                          /* Centrage horizontal */
+    transform: translateX(-50%);        /* Centrage horizontal précis */
+    color: rgba(255, 255, 255, 0.7);    /* Blanc semi-transparent */
+    font-size: 0.85rem;                 /* Petit */
+    font-weight: 500;                   /* Medium */
+    background: rgba(0, 0, 0, 0.4);    /* Fond sombre */
+    padding: 0.3rem 0.8rem;             /* Espace intérieur */
+    border-radius: 20px;                /* Pilule */
+}
+
+/* Curseur zoom sur l'image principale */
+#main-image {
+    cursor: zoom-in; /* Indique qu'on peut ouvrir la lightbox */
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════ */
+
+/* ── Tablette large (≤ 1024px) ──────────── */
 @media (max-width: 1024px) {
+
     .product-detail {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        grid-template-columns: 1fr; /* Passe en 1 seule colonne : galerie au-dessus, infos en-dessous */
+        gap: var(--spacing-lg);     /* Gap réduit */
     }
 
     .product-gallery {
-        position: static;
+        position: static; /* Annule le sticky si activé en desktop */
     }
 
-    /* Image : aspect-ratio gère tout, pas besoin de height fixe */
     .main-image {
-        aspect-ratio: 16 / 9;
+        aspect-ratio: 16 / 9; /* Format cinémascope mieux adapté aux tablettes */
     }
 
-    /* Boutons en colonne dès qu'on passe en 1 colonne */
     .product-detail .product-actions {
-        flex-direction: column;
-        width: 100%;
+        flex-direction: column; /* Boutons empilés verticalement dès la mise en colonne unique */
+        width: 100%;            /* Pleine largeur */
     }
 
     .product-detail .btn-large {
-        width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
+        width: 100%;        /* Chaque bouton prend toute la largeur */
+        min-width: 0;       /* Autorise le rétrécissement */
+        box-sizing: border-box; /* Padding inclus */
     }
 
     .product-detail .wishlist-btn {
-        width: 100%;
-        height: 48px;
-        border-radius: 8px;
+        width: 100%;        /* Bouton favori pleine largeur aussi */
+        height: 48px;       /* Hauteur tactile confortable */
+        border-radius: 8px; /* Coins arrondis */
     }
 
     .similar-products .products-grid {
-        grid-template-columns: repeat(3, 1fr) !important;
+        grid-template-columns: repeat(3, 1fr) !important; /* 3 colonnes maintenues sur tablette */
     }
 }
 
-/* ── Tablette portrait / grand mobile ── */
+/* ── Grand mobile / tablette portrait (≤ 768px) ── */
 @media (max-width: 768px) {
+
     .product-detail {
-        gap: var(--spacing-md);
+        gap: var(--spacing-md); /* Gap encore réduit */
     }
 
-    /* Image carrée sur mobile */
     .main-image {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 4 / 3; /* Revient au format 4/3, plus compact */
     }
 
     .product-title {
-        font-size: 1.5rem;
+        font-size: 1.5rem; /* Titre réduit */
     }
 
     .current-price {
-        font-size: 1.5rem;
+        font-size: 1.5rem; /* Prix réduit */
     }
 
     .product-price-box {
-        padding: 1rem;
+        padding: 1rem; /* Padding réduit */
     }
 
-    /* Services compact 3 colonnes */
     .product-services {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-        margin-top: 1rem;
-        padding-top: 1rem;
+        grid-template-columns: repeat(3, 1fr); /* 3 colonnes maintenues mais compactes */
+        gap: 0.5rem;                           /* Gap réduit */
+        margin-top: 1rem;                      /* Espacement réduit */
+        padding-top: 1rem;                     /* Espacement réduit */
     }
 
     .service-item {
-        font-size: 0.75rem;
+        font-size: 0.75rem; /* Texte plus petit */
     }
 
     .service-item .material-symbols-outlined {
-        font-size: 1.4rem;
+        font-size: 1.4rem; /* Icônes réduites */
     }
 
     .tab-btn {
-        padding: 0.75rem 1.1rem;
-        font-size: 0.88rem;
+        padding: 0.75rem 1.1rem; /* Onglets moins larges */
+        font-size: 0.88rem;      /* Texte légèrement réduit */
     }
 
     .reviews-summary {
-        gap: 1rem;
+        gap: 1rem; /* Gap réduit entre note et barres */
     }
 
     .specs-table td:first-child {
-        width: 130px;
+        width: 130px; /* Colonne labels plus étroite */
     }
 
     .similar-products .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 colonnes sur mobile */
     }
 
     .breadcrumb {
-        font-size: 0.78rem;
-        padding: 0.5rem 0;
+        font-size: 0.78rem; /* Fil d'Ariane plus petit */
+        padding: 0.5rem 0;  /* Padding réduit */
     }
+
+    .lightbox-container {
+        padding: 3.5rem 1rem; /* Marges réduites pour la lightbox */
+    }
+
+    .lightbox-nav {
+        width: 40px;  /* Boutons de nav plus petits */
+        height: 40px; /* Boutons de nav plus petits */
+    }
+
+    .lightbox-prev { left: 0.5rem; }  /* Plus proche du bord */
+    .lightbox-next { right: 0.5rem; } /* Plus proche du bord */
 }
 
-/* ── Mobile ── */
+/* ── Mobile (≤ 480px) ─────────────────────── */
 @media (max-width: 480px) {
+
     .product-detail {
-        gap: var(--spacing-sm);
+        gap: var(--spacing-sm); /* Gap minimum */
     }
 
-    /* Image ratio plus carré sur petit écran */
     .main-image {
-        aspect-ratio: 1 / 1;
-        border-radius: 8px;
+        aspect-ratio: 1 / 1; /* Carré sur petits écrans */
+        border-radius: 8px;  /* Coins moins arrondis */
     }
 
     .thumbnail {
-        width: 56px;
-        height: 56px;
+        width: 56px;  /* Miniatures réduites */
+        height: 56px; /* Miniatures réduites */
     }
 
     .thumbnail-list {
-        gap: 0.4rem;
+        gap: 0.4rem; /* Espace réduit entre miniatures */
     }
 
     .product-title {
-        font-size: 1.25rem;
+        font-size: 1.25rem; /* Titre plus petit */
     }
 
     .product-subtitle {
-        font-size: 0.9rem;
+        font-size: 0.9rem; /* Sous-titre réduit */
     }
 
     .current-price {
-        font-size: 1.25rem;
+        font-size: 1.25rem; /* Prix réduit */
     }
 
     .old-price {
-        font-size: 0.9rem;
+        font-size: 0.9rem; /* Prix barré réduit */
     }
 
     .payment-info {
-        font-size: 0.82rem;
+        font-size: 0.82rem; /* Mensualités réduites */
     }
 
     .stock-status {
-        font-size: 0.85rem;
+        font-size: 0.85rem; /* Badge stock réduit */
     }
 
     .product-price-box {
-        padding: 0.85rem;
-        gap: 0.35rem;
+        padding: 0.85rem; /* Padding réduit */
+        gap: 0.35rem;     /* Gap interne réduit */
     }
 
     .option-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem; /* Boutons d'option moins hauts */
+        font-size: 0.85rem;     /* Texte réduit */
     }
 
     .product-detail .btn-large {
-        padding: 0.85rem 1rem;
-        font-size: 0.9rem;
+        padding: 0.85rem 1rem; /* Boutons d'action moins hauts */
+        font-size: 0.9rem;     /* Texte légèrement réduit */
     }
 
     .product-detail .wishlist-btn {
-        height: 44px;
+        height: 44px; /* Hauteur réduite mais reste tactile */
     }
 
-    /* Services : verticaux sur mobile */
     .product-services {
-        grid-template-columns: 1fr;
-        gap: 0;
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
+        grid-template-columns: 1fr; /* Services en liste verticale */
+        gap: 0;                     /* Pas de gap, séparation par border-bottom */
+        margin-top: 0.75rem;        /* Espacement réduit */
+        padding-top: 0.75rem;       /* Espacement réduit */
     }
 
     .service-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 0.75rem;
-        text-align: left;
-        font-size: 0.82rem;
-        padding: 0.5rem 0;
-        border-bottom: 1px solid var(--border);
+        display: flex;                          /* Icône et texte sur une ligne */
+        flex-direction: row;                    /* Horizontal */
+        align-items: center;                    /* Centrage vertical */
+        gap: 0.75rem;                           /* Espace icône / texte */
+        text-align: left;                       /* Texte aligné à gauche */
+        font-size: 0.82rem;                     /* Texte petit */
+        padding: 0.5rem 0;                      /* Espace vertical */
+        border-bottom: 1px solid var(--border); /* Séparateur */
     }
 
     .service-item:last-child {
-        border-bottom: none;
+        border-bottom: none; /* Pas de séparateur sous le dernier service */
     }
 
     .service-item .material-symbols-outlined {
-        margin-bottom: 0;
-        flex-shrink: 0;
-        font-size: 1.3rem;
+        margin-bottom: 0;   /* Supprime la marge en bas (mode horizontal) */
+        flex-shrink: 0;     /* L'icône ne rétrécit pas */
+        font-size: 1.3rem;  /* Icônes réduites */
     }
 
     .tab-btn {
-        padding: 0.65rem 0.9rem;
-        font-size: 0.82rem;
+        padding: 0.65rem 0.9rem; /* Onglets compacts */
+        font-size: 0.82rem;      /* Texte réduit */
     }
 
     .specs-table td {
-        padding: 0.55rem 0.4rem;
-        font-size: 0.82rem;
+        padding: 0.55rem 0.4rem; /* Cellules moins hautes */
+        font-size: 0.82rem;      /* Texte réduit */
     }
 
     .specs-table td:first-child {
-        width: 110px;
-        min-width: unset;
+        width: 110px;      /* Colonne labels encore plus étroite */
+        min-width: unset;  /* Annule le min-width global */
     }
 
     .average-rating {
-        font-size: 2.2rem;
+        font-size: 2.2rem; /* Note moins grande */
     }
 
     .review-card {
-        padding: 0.85rem;
+        padding: 0.85rem; /* Carte d'avis moins haute */
     }
 
     .review-text {
-        font-size: 0.85rem;
+        font-size: 0.85rem; /* Texte réduit */
     }
 
     .notes-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
+        flex-direction: column; /* Compteur et boutons en colonne */
+        align-items: flex-start; /* Alignés à gauche */
+        gap: 0.5rem;            /* Espace réduit */
     }
 
     .notes-actions {
-        width: 100%;
+        width: 100%; /* Les boutons prennent toute la largeur */
     }
 
     .notes-btn-save,
     .notes-btn-clear {
-        flex: 1;
-        text-align: center;
+        flex: 1;          /* Chaque bouton prend la moitié */
+        text-align: center; /* Texte centré */
     }
 
     .similar-products h2 {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
+        font-size: 1.2rem; /* Titre réduit */
+        margin-bottom: 1rem; /* Espace réduit */
     }
 
     .similar-products .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.75rem;
+        grid-template-columns: repeat(2, 1fr) !important; /* 2 colonnes */
+        gap: 0.75rem; /* Gap réduit */
     }
 
     .similar-products .product-image {
-        height: 130px;
+        height: 130px; /* Images des cards plus basses */
     }
 
     .similar-products .product-info {
-        padding: 0.65rem;
+        padding: 0.65rem; /* Padding interne des cards réduit */
     }
 
     .similar-products .product-name {
-        font-size: 0.82rem;
+        font-size: 0.82rem; /* Nom du produit dans les cards réduit */
     }
 
     .similar-products .product-price {
-        font-size: 0.88rem;
+        font-size: 0.88rem; /* Prix dans les cards réduit */
     }
 
     .similar-products .btn-add-cart,
     .similar-products .btn-fav {
-        width: 30px;
-        height: 30px;
+        width: 30px;  /* Petits boutons dans les cards */
+        height: 30px; /* Petits boutons dans les cards */
     }
 }
 
-/* ── Notes personnelles ── */
-.personal-notes {
-    max-width: 700px;
-}
-
-.notes-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.notes-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.2rem;
-}
-
-.notes-subtitle {
-    font-size: 0.82rem;
-    color: var(--text-muted);
-}
-
-.notes-saved-indicator {
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.3rem 0.7rem;
-    border-radius: 20px;
-    flex-shrink: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.notes-saved-indicator.saved {
-    background: rgba(16, 185, 129, 0.12);
-    color: #10b981;
-    opacity: 1;
-}
-
-.notes-saved-indicator.warning {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    opacity: 1;
-}
-
-.notes-textarea {
-    width: 100%;
-    min-height: 180px;
-    padding: 1rem;
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 0.9rem;
-    line-height: 1.65;
-    resize: vertical;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    box-sizing: border-box;
-    display: block;
-}
-
-.notes-textarea::placeholder {
-    color: var(--text-muted);
-    font-style: italic;
-}
-
-.notes-textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.notes-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 0.75rem;
-    gap: 1rem;
-}
-
-.notes-char-count {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-}
-
-.notes-actions {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.notes-btn-save,
-.notes-btn-clear {
-    padding: 0.5rem 1.1rem;
-    border-radius: 7px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    font-family: inherit;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    border: 1px solid transparent;
-}
-
-.notes-btn-save {
-    background: var(--primary);
-    color: #fff;
-    border-color: var(--primary);
-}
-
-.notes-btn-save:hover {
-    background: var(--primary-hover);
-    border-color: var(--primary-hover);
-}
-
-.notes-btn-clear {
-    background: transparent;
-    color: var(--text-secondary);
-    border-color: var(--border);
-}
-
-.notes-btn-clear:hover {
-    border-color: #ef4444;
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.06);
-}
-
-@media (max-width: 480px) {
-    .notes-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-    }
-
-    .notes-actions {
-        width: 100%;
-    }
-
-    .notes-btn-save,
-    .notes-btn-clear {
-        flex: 1;
-        text-align: center;
-    }
-}
-
-/* ── Lightbox ── */
-.lightbox-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.92);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-    cursor: zoom-out;
-}
-
-.lightbox-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.lightbox-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 4rem 5rem;
-    box-sizing: border-box;
-}
-
-.lightbox-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: 8px;
-    transition: opacity 0.15s ease;
-    cursor: default;
-    user-select: none;
-}
-
-.lightbox-close {
-    position: absolute;
-    top: 1.2rem;
-    right: 1.2rem;
-    width: 42px;
-    height: 42px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease;
-    z-index: 1;
-}
-
-.lightbox-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-.lightbox-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease;
-    z-index: 1;
-}
-
-.lightbox-nav:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
-
-.lightbox-prev { left: 1.2rem; }
-.lightbox-next { right: 1.2rem; }
-
-.lightbox-counter {
-    position: absolute;
-    bottom: 1.2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.85rem;
-    font-weight: 500;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-}
-
-#main-image {
-    cursor: zoom-in;
-}
-
-@media (max-width: 768px) {
-    .lightbox-container {
-        padding: 3.5rem 1rem;
-    }
-
-    .lightbox-nav {
-        width: 40px;
-        height: 40px;
-    }
-
-    .lightbox-prev { left: 0.5rem; }
-    .lightbox-next { right: 0.5rem; }
-}
-
-/* ── Très petit mobile (≤ 360px) ── */
+/* ── Très petit mobile (≤ 360px) ───────────── */
 @media (max-width: 360px) {
+
     .main-image {
-        aspect-ratio: 1 / 1;
-        border-radius: 6px;
+        aspect-ratio: 1 / 1; /* Carré */
+        border-radius: 6px;  /* Coins moins arrondis */
     }
 
     .thumbnail {
-        width: 46px;
-        height: 46px;
+        width: 46px;  /* Miniatures encore réduites */
+        height: 46px; /* Miniatures encore réduites */
     }
 
     .thumbnail-list {
-        gap: 0.25rem;
+        gap: 0.25rem; /* Espacement minimum */
     }
 
     .product-category {
-        font-size: 0.72rem;
+        font-size: 0.72rem; /* Étiquette très petite */
     }
 
     .product-title {
-        font-size: 1.1rem;
+        font-size: 1.1rem; /* Titre très compact */
     }
 
     .product-subtitle {
-        font-size: 0.82rem;
+        font-size: 0.82rem; /* Sous-titre très compact */
     }
 
     .current-price {
-        font-size: 1.1rem;
+        font-size: 1.1rem; /* Prix compact */
     }
 
     .old-price {
-        font-size: 0.82rem;
+        font-size: 0.82rem; /* Prix barré compact */
     }
 
     .payment-info {
-        font-size: 0.75rem;
+        font-size: 0.75rem; /* Mensualités très petites */
     }
 
     .stock-status {
-        font-size: 0.78rem;
+        font-size: 0.78rem; /* Badge stock très petit */
     }
 
     .product-price-box {
-        padding: 0.7rem;
-        gap: 0.25rem;
-        border-radius: 8px;
+        padding: 0.7rem;    /* Padding minimum */
+        gap: 0.25rem;       /* Gap minimum */
+        border-radius: 8px; /* Coins moins arrondis */
     }
 
     .option-label {
-        font-size: 0.82rem;
+        font-size: 0.82rem; /* Labels options réduits */
     }
 
     .option-btn {
-        padding: 0.35rem 0.65rem;
-        font-size: 0.78rem;
+        padding: 0.35rem 0.65rem; /* Boutons options très compacts */
+        font-size: 0.78rem;       /* Texte réduit */
     }
 
     .product-detail .btn-large {
-        padding: 0.75rem;
-        font-size: 0.85rem;
+        padding: 0.75rem;  /* Boutons compacts */
+        font-size: 0.85rem; /* Texte réduit */
     }
 
     .product-detail .wishlist-btn {
-        height: 40px;
+        height: 40px; /* Hauteur réduite */
     }
 
     .product-services {
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
+        margin-top: 0.5rem;  /* Espace minimal */
+        padding-top: 0.5rem; /* Espace minimal */
     }
 
     .service-item {
-        font-size: 0.75rem;
-        gap: 0.5rem;
+        font-size: 0.75rem; /* Texte service très petit */
+        gap: 0.5rem;        /* Espace icône/texte réduit */
     }
 
     .service-item .material-symbols-outlined {
-        font-size: 1.2rem;
+        font-size: 1.2rem; /* Icônes réduites */
     }
 
     .tab-btn {
-        padding: 0.55rem 0.7rem;
-        font-size: 0.75rem;
+        padding: 0.55rem 0.7rem; /* Onglets très compacts */
+        font-size: 0.75rem;      /* Texte réduit */
     }
 
     .specs-table td {
-        font-size: 0.75rem;
-        padding: 0.45rem 0.3rem;
+        font-size: 0.75rem;  /* Texte réduit */
+        padding: 0.45rem 0.3rem; /* Cellules très compactes */
     }
 
     .specs-table td:first-child {
-        width: 95px;
-        min-width: unset;
+        width: 95px;      /* Colonne labels étroite */
+        min-width: unset; /* Annule le min-width global */
     }
 
     .average-rating {
-        font-size: 1.8rem;
+        font-size: 1.8rem; /* Note réduite */
     }
 
     .review-card {
-        padding: 0.7rem;
+        padding: 0.7rem; /* Card d'avis compacte */
     }
 
     .review-author {
-        font-size: 0.82rem;
+        font-size: 0.82rem; /* Auteur réduit */
     }
 
     .review-text {
-        font-size: 0.78rem;
+        font-size: 0.78rem; /* Texte très petit */
     }
 
     .similar-products h2 {
-        font-size: 1rem;
+        font-size: 1rem; /* Titre réduit */
     }
 
     .similar-products .products-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 1fr !important; /* 1 seule colonne à 360px */
     }
 
     .similar-products .product-image {
-        height: 150px;
+        height: 150px; /* Image un peu plus haute sur 1 colonne */
     }
 
     .notes-textarea {
-        min-height: 100px;
-        font-size: 0.82rem;
-        padding: 0.65rem;
+        min-height: 100px;  /* Textarea plus basse */
+        font-size: 0.82rem; /* Texte réduit */
+        padding: 0.65rem;   /* Padding réduit */
     }
 
     .notes-title {
-        font-size: 0.88rem;
+        font-size: 0.88rem; /* Titre notes réduit */
     }
 
     .notes-subtitle {
-        font-size: 0.72rem;
+        font-size: 0.72rem; /* Sous-titre très petit */
     }
 
     .notes-btn-save,
     .notes-btn-clear {
-        padding: 0.4rem 0.6rem;
-        font-size: 0.75rem;
+        padding: 0.4rem 0.6rem; /* Boutons compacts */
+        font-size: 0.75rem;     /* Texte réduit */
     }
 
     .lightbox-container {
-        padding: 3rem 0.25rem;
+        padding: 3rem 0.25rem; /* Marges minimales */
     }
 
     .lightbox-nav {
-        width: 32px;
-        height: 32px;
+        width: 32px;  /* Boutons très petits */
+        height: 32px; /* Boutons très petits */
     }
 }
 
-/* ── Minuscule (≤ 320px) ── */
+/* ── Minuscule (≤ 320px) ─────────────────── */
 @media (max-width: 320px) {
+
     .main-image {
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 1 / 1; /* Carré */
     }
 
     .thumbnail {
-        width: 40px;
-        height: 40px;
+        width: 40px;  /* Miniatures minimum */
+        height: 40px; /* Miniatures minimum */
     }
 
     .product-title {
-        font-size: 1rem;
+        font-size: 1rem; /* Titre au minimum lisible */
     }
 
     .current-price {
-        font-size: 1rem;
+        font-size: 1rem; /* Prix au minimum */
     }
 
     .product-price-box {
-        padding: 0.6rem;
+        padding: 0.6rem; /* Padding minimum absolu */
     }
 
     .product-detail .btn-large {
-        padding: 0.65rem;
-        font-size: 0.8rem;
+        padding: 0.65rem; /* Boutons minimum */
+        font-size: 0.8rem; /* Texte minimum */
     }
 
     .product-detail .wishlist-btn {
-        height: 38px;
+        height: 38px; /* Hauteur minimum tactile */
     }
 
     .tab-btn {
-        padding: 0.5rem 0.55rem;
-        font-size: 0.7rem;
+        padding: 0.5rem 0.55rem; /* Onglets minimum */
+        font-size: 0.7rem;       /* Texte minimum */
     }
 
     .specs-table td {
-        font-size: 0.7rem;
-        padding: 0.4rem 0.25rem;
+        font-size: 0.7rem;       /* Texte minimum */
+        padding: 0.4rem 0.25rem; /* Cellules minimum */
     }
 
     .specs-table td:first-child {
-        width: 80px;
-        min-width: unset;
+        width: 80px;      /* Colonne labels minimum */
+        min-width: unset; /* Annule le min-width global */
     }
 
     .similar-products .products-grid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: 1fr !important; /* 1 colonne */
     }
 
     .option-btn {
-        font-size: 0.72rem;
-        padding: 0.3rem 0.5rem;
+        font-size: 0.72rem;     /* Texte minimum */
+        padding: 0.3rem 0.5rem; /* Padding minimum */
     }
 }

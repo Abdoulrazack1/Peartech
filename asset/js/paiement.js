@@ -6,252 +6,385 @@
 // ============================================
 
 (function () {
-    'use strict'; // Mode strict activé
+    'use strict';
+
+    // ── Accès localStorage sécurisé ───────────────────────────────
+    // Protège contre : mode privé, quota dépassé, cookies bloqués
+
+    function storageGet(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            console.warn('localStorage.getItem échoué :', e);
+            return null;
+        }
+    }
+
+    function storageSet(key, value) {
+        try {
+            localStorage.setItem(key, value);
+            return true;
+        } catch (e) {
+            console.warn('localStorage.setItem échoué (quota ou mode privé ?) :', e);
+            return false;
+        }
+    }
+
+    function storageRemove(key) {
+        try {
+            localStorage.removeItem(key);
+        } catch (e) {
+            console.warn('localStorage.removeItem échoué :', e);
+        }
+    }
+
+    // ── Génération d'un numéro de commande non-collisionnable ─────
+    // CORRECTION : Math.random() seul peut générer des doublons.
+    // On combine timestamp + compteur atomique + aléatoire pour garantir l'unicité.
+    // Format : CMD-XXXXXXXX (base 36, lisible et compact)
+
+    function generateOrderNumber() {
+        // Lit le compteur persistant (s'incrémente à chaque commande)
+        const counter = parseInt(storageGet('peartech-order-counter') || '0', 10) + 1;
+        storageSet('peartech-order-counter', String(counter));
+
+        const timestamp = Date.now().toString(36).toUpperCase();    // Ex: "LK3D2F" (ms depuis epoch)
+        const seq       = counter.toString(36).padStart(3, '0').toUpperCase(); // Ex: "001"
+        const rand      = Math.random().toString(36).substr(2, 3).toUpperCase(); // Ex: "A7B"
+
+        return `CMD-${timestamp}-${seq}${rand}`; // Ex: "CMD-LK3D2F-001A7B"
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        // ── Chargement du panier depuis localStorage ──────────────
+        // ── Chargement du panier ──────────────────────────────────
 
-        const CART_KEY = 'peartech-cart'; // Clé de stockage du panier
-        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || []; // Tableau des articles ou vide
+        const CART_KEY = 'peartech-cart';
+        let cart = [];
+        try {
+            cart = JSON.parse(storageGet(CART_KEY)) || [];
+        } catch (e) {
+            console.warn('Panier corrompu, réinitialisation :', e);
+            cart = [];
+        }
+
+        // ── Récupération de la promo active depuis cart.js ────────
+        // cart.js sauvegarde currentPromo dans sessionStorage avant la redirection
+
+        let currentPromo = null;
+        try {
+            const storedPromo = sessionStorage.getItem('peartech-promo');
+            if (storedPromo) currentPromo = JSON.parse(storedPromo);
+        } catch(e) {
+            console.warn('Impossible de lire la promo depuis sessionStorage :', e);
+        }
 
         // ── Récupération des éléments du DOM ──────────────────────
 
-        const summaryItemsEl  = document.getElementById('summary-items');   // Zone des articles dans le récap
-        const summaryTotalEl  = document.getElementById('subtotal');         // Sous-total
-        const summaryShipEl   = document.getElementById('delivery-cost');    // Frais de livraison
-        const summaryGrandEl  = document.getElementById('total');            // Total TTC
-        const form            = document.querySelector('.checkout-form');    // Formulaire principal
-        const confirmBtn      = document.getElementById('confirm-order');    // Bouton "Confirmer la commande"
-        const deliveryOptions = document.querySelectorAll('input[name="delivery"]'); // Radios de livraison
-        const paymentOptions  = document.querySelectorAll('input[name="payment"]');  // Radios de paiement
-        const paymentDetails  = document.getElementById('cb-fields');        // Champs carte bancaire
+        const summaryItemsEl  = document.getElementById('summary-items');
+        const summaryTotalEl  = document.getElementById('subtotal');
+        const summaryShipEl   = document.getElementById('delivery-cost');
+        const summaryGrandEl  = document.getElementById('total');
+        const form            = document.querySelector('.checkout-form');
+        const confirmBtn      = document.getElementById('confirm-order');
+        const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+        const paymentOptions  = document.querySelectorAll('input[name="payment"]');
+        const paymentDetails  = document.getElementById('cb-fields');
 
         // ── Affichage du résumé de commande ───────────────────────
 
         function renderSummary() {
-            if (!summaryItemsEl) return; // Élément absent : pas de récap à afficher
+            if (!summaryItemsEl) return;
 
-            if (cart.length === 0) { // Panier vide
+            if (cart.length === 0) {
                 summaryItemsEl.innerHTML = '<p class="summary-empty">Panier vide.</p>';
                 return;
             }
 
-            // Calcule le sous-total : somme (prix × quantité) de tous les articles
-            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            const shipping = getShippingCost(); // Récupère le coût de livraison selon l'option choisie
-            const total    = subtotal + shipping; // Total = sous-total + livraison
+            const subtotal      = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const promoDiscount = currentPromo ? subtotal * currentPromo.discount : 0;
+            const shipping      = getShippingCost();
+            const total         = subtotal - promoDiscount + shipping;
 
-            // Génère le HTML de chaque article : "Qté × Nom" + prix total de la ligne
-            summaryItemsEl.innerHTML = cart.map(item => `
+            // ── Lignes articles ────────────────────────────────────
+            summaryItemsEl.innerHTML = cart.map(item => {
+                const linePrice   = item.price * item.quantity;
+                const hasDiscount = item.oldPrice && item.oldPrice > item.price;
+                const oldLine     = hasDiscount ? item.oldPrice * item.quantity : null;
+                const pct         = hasDiscount ? Math.round((1 - item.price / item.oldPrice) * 100) : 0;
+                return `
                 <div class="summary-item">
-                    <span class="item-name">${item.quantity}× ${item.name}</span>
-                    <span class="item-price">${formatPrice(item.price * item.quantity)}</span>
-                </div>
-            `).join(''); // Concatène toutes les lignes sans virgule entre elles
+                    <span class="item-name">
+                        ${item.quantity}× ${item.name}
+                        ${pct > 0 ? `<span class="summary-badge">-${pct}%</span>` : ''}
+                    </span>
+                    <span class="item-price">
+                        ${oldLine ? `<span class="item-old-price">${formatPrice(oldLine)}</span> ` : ''}
+                        ${formatPrice(linePrice)}
+                    </span>
+                </div>`;
+            }).join('');
 
-            // Met à jour les totaux dans le DOM
-            if (summaryTotalEl) summaryTotalEl.textContent = formatPrice(subtotal);   // Sous-total
-            if (summaryShipEl)  summaryShipEl.textContent  = shipping === 0 ? 'Gratuit' : formatPrice(shipping); // Livraison
-            if (summaryGrandEl) summaryGrandEl.textContent = formatPrice(total);      // Total TTC
+            // ── Sous-total et livraison ────────────────────────────
+            if (summaryTotalEl) summaryTotalEl.textContent = formatPrice(subtotal);
+            if (summaryShipEl)  summaryShipEl.textContent  = shipping === 0 ? 'Gratuit' : formatPrice(shipping);
+
+            // ── Ligne réduction dans .summary-totals ───────────────
+            // Le HTML n'a pas de ligne réduction par défaut :
+            // on l'injecte dynamiquement juste avant la ligne Total,
+            // et on la supprime si aucune promo n'est active.
+            const summaryTotals    = document.querySelector('.summary-totals');
+            const existingPromoRow = document.getElementById('promo-summary-row');
+
+            if (promoDiscount > 0 && summaryTotals) {
+                const label = currentPromo.code
+                    ? `🏷️ Code "${currentPromo.code}" (-${Math.round(currentPromo.discount * 100)}%)`
+                    : '🏷️ Réduction';
+
+                if (existingPromoRow) {
+                    // Met à jour la ligne existante sans recréer le DOM
+                    existingPromoRow.querySelector('.promo-label').textContent  = label;
+                    existingPromoRow.querySelector('.promo-amount').textContent = `-${formatPrice(promoDiscount)}`;
+                } else {
+                    // Crée la ligne et l'insère avant la ligne Total
+                    const promoRow = document.createElement('div');
+                    promoRow.id        = 'promo-summary-row';
+                    promoRow.className = 'summary-line';
+                    promoRow.style.color = '#10b981';
+                    promoRow.innerHTML = `
+                        <span class="promo-label">${label}</span>
+                        <span class="promo-amount" style="font-weight:700">-${formatPrice(promoDiscount)}</span>
+                    `;
+                    const totalLine = summaryTotals.querySelector('.summary-line.total');
+                    if (totalLine) {
+                        summaryTotals.insertBefore(promoRow, totalLine);
+                    } else {
+                        summaryTotals.appendChild(promoRow);
+                    }
+                }
+            } else if (existingPromoRow) {
+                existingPromoRow.remove(); // Supprime si la promo a été retirée
+            }
+
+            // ── Total final déduit de la promo ─────────────────────
+            if (summaryGrandEl) summaryGrandEl.textContent = formatPrice(total);
         }
 
         // ── Calcul du coût de livraison ───────────────────────────
 
         function getShippingCost() {
-            const selected = document.querySelector('input[name="delivery"]:checked'); // Option cochée
-            if (!selected) return 5.90; // Pas d'option cochée : valeur par défaut
+            const selected = document.querySelector('input[name="delivery"]:checked');
+            if (!selected) return 5.90;
 
-            // Récupère le prix depuis le span .option-price dans le label de l'option
-            const optionEl   = selected.closest('.delivery-option');
-            const priceSpan  = optionEl ? optionEl.querySelector('.option-price') : null;
+            const optionEl  = selected.closest('.delivery-option');
+            const priceSpan = optionEl ? optionEl.querySelector('.option-price') : null;
             if (priceSpan) {
-                const txt = priceSpan.textContent.replace(/[^\d,]/g, '').replace(',', '.'); // Nettoie "5,90 €" → "5.90"
-                const val = parseFloat(txt); // Convertit en nombre
-                return isNaN(val) ? 0 : val; // Retourne 0 si la conversion échoue
+                const txt = priceSpan.textContent.replace(/[^\d,]/g, '').replace(',', '.');
+                const val = parseFloat(txt);
+                return isNaN(val) ? 0 : val;
             }
-            // Fallback selon la valeur du radio si le span n'est pas trouvé
             if (selected.value === 'standard') return 5.90;
             if (selected.value === 'express')  return 12.90;
-            return 0; // Point relais = gratuit
+            return 0;
         }
 
         // ── Affichage des champs carte bancaire ───────────────────
 
         function togglePaymentDetails() {
-            if (!paymentDetails) return; // Élément absent : on ignore
-            const selected = document.querySelector('input[name="payment"]:checked'); // Option cochée
-            const isCarte  = selected && selected.value === 'cb'; // Vérifie si "carte bancaire" est sélectionnée
-            // Affiche les champs carte seulement si l'option CB est sélectionnée
+            if (!paymentDetails) return;
+            const selected = document.querySelector('input[name="payment"]:checked');
+            const isCarte  = selected && selected.value === 'cb';
             paymentDetails.style.display = isCarte ? 'block' : 'none';
         }
 
         // ── Validation du formulaire ───────────────────────────────
 
         function validateForm() {
-            // Sélectionne tous les champs obligatoires du formulaire
             const required = form
                 ? form.querySelectorAll('input[required], select[required], input[aria-required="true"]')
                 : document.querySelectorAll('input[required], select[required]');
-            let valid = true; // Présuppose que le formulaire est valide
+            let valid = true;
 
             required.forEach(field => {
-                // Vérifie si le champ est vide (comportement différent selon le type)
-                const isEmpty = field.type === 'checkbox'
-                    ? !field.checked        // Checkbox : vérifie si coché
-                    : !field.value.trim();  // Autre : vérifie si vide après trim
-
+                const isEmpty = field.type === 'checkbox' ? !field.checked : !field.value.trim();
                 if (isEmpty) {
-                    field.style.borderColor = '#ef4444'; // Bordure rouge = champ manquant
-                    valid = false; // Le formulaire n'est pas valide
+                    field.style.borderColor = '#ef4444';
+                    valid = false;
                 } else {
-                    field.style.borderColor = ''; // Réinitialise la bordure si rempli
+                    field.style.borderColor = '';
                 }
             });
 
-            return valid; // Retourne true si tous les champs sont remplis
+            return valid;
         }
 
         // ── Soumission et création de la commande ─────────────────
 
         function submitOrder() {
-            if (!validateForm()) { // Valide d'abord le formulaire
+            if (!validateForm()) {
                 showMessage('Veuillez remplir tous les champs obligatoires.', 'error');
                 return;
             }
 
-            if (cart.length === 0) { // Panier vide : impossible de commander
+            if (cart.length === 0) {
                 showMessage('Votre panier est vide.', 'error');
                 return;
             }
 
-            // ── Récupération des informations de livraison et paiement ──
-
             const selectedDelivery = document.querySelector('input[name="delivery"]:checked');
             const selectedPayment  = document.querySelector('input[name="payment"]:checked');
 
-            // Construit le nom complet du destinataire
             const name = (document.getElementById('prenom')?.value || '') + ' '
                        + (document.getElementById('nom')?.value    || '');
 
-            // Construit l'adresse complète en filtrant les champs vides
             const address = [
                 document.getElementById('adresse')?.value,
                 document.getElementById('ville')?.value,
                 document.getElementById('code-postal')?.value,
                 document.getElementById('country')?.value || 'France'
-            ].filter(Boolean).join(', '); // Joint les parties non vides avec ", "
+            ].filter(Boolean).join(', ');
 
-            // ── Détermine le label du moyen de paiement ────────────
-
-            let paymentLabel = 'Carte bancaire'; // Valeur par défaut
-            if (selectedPayment?.value === 'paypal') paymentLabel = 'PayPal'; // Override si PayPal
-            const cardLast4 = document.getElementById('card-number')?.value.slice(-4); // 4 derniers chiffres
+            let paymentLabel = 'Carte bancaire';
+            if (selectedPayment?.value === 'paypal') paymentLabel = 'PayPal';
+            const cardLast4 = document.getElementById('card-number')?.value.slice(-4);
             if (selectedPayment?.value === 'cb' && cardLast4) {
-                paymentLabel = `Carte bancaire **** ${cardLast4}`; // Format "CB **** 4242"
+                paymentLabel = `Carte bancaire **** ${cardLast4}`;
             }
 
-            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            const shipping = getShippingCost();
-
-            // ── Construction de l'objet commande ──────────────────
+            const subtotal      = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const promoDiscount = currentPromo ? subtotal * currentPromo.discount : 0;
+            const shipping      = getShippingCost();
 
             const orderData = {
-                orderNumber: 'CMD-' + Math.floor(Math.random() * 1000000), // Numéro aléatoire
-                email: document.getElementById('email')?.value || '',       // Email du client
+                orderNumber: generateOrderNumber(), // CORRECTION : numéro unique garanti
+                email: document.getElementById('email')?.value || '',
                 delivery: {
-                    name:    name.trim() || 'Client',    // Nom du destinataire
-                    address: address     || '–',         // Adresse ou tiret si vide
-                    // Récupère le titre de l'option de livraison choisie
+                    name:    name.trim() || 'Client',
+                    address: address     || '–',
                     mode: (function() {
                         if (!selectedDelivery) return 'Livraison standard (3-5 jours)';
                         const optEl = selectedDelivery.closest('.delivery-option');
                         const t     = optEl ? optEl.querySelector('.option-title') : null;
                         return t ? t.textContent.trim() : 'Livraison standard';
                     })(),
-                    payment: paymentLabel // Résumé du moyen de paiement
+                    payment: paymentLabel
                 },
-                items:    cart.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })), // Articles
-                shipping: shipping,          // Frais de livraison
-                total:    subtotal + shipping // Total TTC
+                items:    cart.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
+                shipping: shipping,
+                promoCode:     currentPromo ? currentPromo.code : null,
+                promoDiscount: promoDiscount,
+                total:    subtotal - promoDiscount + shipping
             };
 
-            // ── Stockage pour la page de confirmation ─────────────
-            // sessionStorage : données accessibles uniquement pendant la session
-            sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData));
+            // ── Stockage sessionStorage pour la page confirmation ──
+            // sessionStorage peut aussi échouer en mode privé strict
+
+            try {
+                sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData));
+            } catch (e) {
+                console.warn('sessionStorage indisponible, la confirmation utilisera les données de démo :', e);
+                // La page confirmation a un fallback intégré : pas bloquant
+            }
 
             // ── Nettoyage du panier ────────────────────────────────
 
-            localStorage.removeItem(CART_KEY);              // Supprime le panier
-            localStorage.setItem('peartech-cart-count', '0'); // Remet le compteur à zéro
+            storageRemove(CART_KEY);
+            storageSet('peartech-cart-count', '0');
 
-            window.location.href = 'page_confirmation.html'; // Redirige vers la page de confirmation
+            window.location.href = 'page_confirmation.html';
         }
 
         // ── Notification inline en cas d'erreur ───────────────────
 
         function showMessage(text, type) {
-            let msg = document.getElementById('paiement-message'); // Cherche un message existant
-            if (!msg) { // Crée le message s'il n'existe pas encore
+            let msg = document.getElementById('paiement-message');
+            if (!msg) {
                 msg = document.createElement('div');
                 msg.id = 'paiement-message';
                 msg.style.cssText = 'margin:1rem 0;padding:.9rem 1.2rem;border-radius:8px;font-size:.9rem;font-weight:500;';
-                form && form.prepend(msg); // Insère au début du formulaire
+                form && form.prepend(msg);
             }
-            msg.textContent = text; // Texte du message
-            // Style selon le type (error = rouge, autre = vert)
+            msg.textContent      = text;
             msg.style.background = type === 'error' ? 'rgba(239,68,68,.1)' : 'rgba(16,185,129,.1)';
             msg.style.border     = `1px solid ${type === 'error' ? '#ef4444' : '#10b981'}`;
             msg.style.color      = type === 'error' ? '#ef4444' : '#10b981';
-            msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); // Scroll jusqu'au message
+            msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         // ── Formateur de prix ──────────────────────────────────────
 
         function formatPrice(price) {
-            return price.toFixed(2).replace('.', ',') + ' €'; // Ex: 1234.5 → "1234,50 €"
+            return price.toFixed(2).replace('.', ',') + ' €';
         }
 
-        // ── Événements sur les options de livraison ───────────────
+        // ── Événements livraison, paiement, confirmation ──────────
 
         deliveryOptions.forEach(opt => {
             opt.addEventListener('change', function () {
-                // Réinitialise le style de toutes les options
                 document.querySelectorAll('.delivery-option').forEach(el => {
                     el.style.borderColor = '';
                     el.style.background  = '';
                 });
-                // Met en évidence l'option sélectionnée
                 const parent = this.closest('.delivery-option');
                 if (parent) {
-                    parent.style.borderColor = 'var(--primary)';             // Bordure bleue
-                    parent.style.background  = 'rgba(59,130,246,.05)';       // Fond légèrement bleu
+                    parent.style.borderColor = 'var(--primary)';
+                    parent.style.background  = 'rgba(59,130,246,.05)';
                 }
-                renderSummary(); // Recalcule les totaux car le prix de livraison a changé
+                renderSummary();
             });
         });
 
-        // ── Événements sur les options de paiement ────────────────
-
         paymentOptions.forEach(opt => {
-            opt.addEventListener('change', togglePaymentDetails); // Affiche/cache les champs CB
+            opt.addEventListener('change', togglePaymentDetails);
         });
-
-        // ── Clic sur le bouton de confirmation ────────────────────
 
         if (confirmBtn) {
             confirmBtn.addEventListener('click', function (e) {
-                e.preventDefault(); // Empêche le rechargement de page
-                submitOrder();      // Lance la création de commande
+                e.preventDefault();
+                submitOrder();
             });
         }
 
         // ── Initialisation ─────────────────────────────────────────
 
-        renderSummary();        // Affiche le résumé dès le chargement
-        togglePaymentDetails(); // Initialise l'affichage des champs de paiement
+        renderSummary();
+        togglePaymentDetails();
+
+        // Injecte les styles pour l'affichage des réductions dans le récap
+        if (!document.getElementById('paiement-discount-style')) {
+            const style = document.createElement('style');
+            style.id = 'paiement-discount-style';
+            style.textContent = `
+                .item-old-price {
+                    text-decoration: line-through;
+                    color: var(--text-muted, #9ca3af);
+                    font-size: 0.85em;
+                    margin-right: 0.25rem;
+                }
+                .summary-badge {
+                    display: inline-block;
+                    background: rgba(239, 68, 68, 0.12);
+                    color: #ef4444;
+                    font-size: 0.72rem;
+                    font-weight: 700;
+                    padding: 0.1rem 0.4rem;
+                    border-radius: 4px;
+                    margin-left: 0.3rem;
+                    vertical-align: middle;
+                }
+                .summary-savings .item-name {
+                    font-weight: 600;
+                }
+                .summary-savings {
+                    border-top: 1px dashed var(--border, #e5e7eb);
+                    padding-top: 0.5rem;
+                    margin-top: 0.25rem;
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
         console.log('Paiement initialisé –', cart.length, 'article(s) dans le panier');
     });
 
-})(); // Fin de l'IIFE
+})();
