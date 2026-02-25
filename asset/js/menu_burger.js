@@ -5,37 +5,31 @@
 // ============================================
 
 (function() {
-    'use strict'; // Mode strict activé
+    'use strict';
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        // ── Création des éléments du menu mobile ─────────────────
+        createBurgerButton();
+        createMobileMenu();
 
-        createBurgerButton(); // Crée et insère le bouton hamburger dans le header
-        createMobileMenu();   // Crée le panneau de navigation latéral et l'overlay
+        const burgerBtn    = document.getElementById('burger-menu');
+        const mobileMenu   = document.getElementById('mobile-menu');
+        const mobileOverlay = document.querySelector('.mobile-overlay');
 
-        // Récupère les éléments créés (ils existent maintenant dans le DOM)
-        const burgerBtn    = document.getElementById('burger-menu');   // Bouton hamburger
-        const mobileMenu   = document.getElementById('mobile-menu');   // Panneau latéral
-        const mobileOverlay = document.querySelector('.mobile-overlay'); // Fond semi-transparent
-
-        if (!burgerBtn || !mobileMenu) { // Vérifie que les éléments ont bien été créés
+        if (!burgerBtn || !mobileMenu) {
             console.warn('Éléments menu mobile introuvables');
             return;
         }
 
-        // ── Événements d'ouverture et fermeture ───────────────────
-
         burgerBtn.addEventListener('click', function(e) {
-            e.stopPropagation(); // Empêche l'événement de remonter (évite fermeture immédiate)
-            toggleMobileMenu(); // Bascule l'état du menu
+            e.stopPropagation();
+            toggleMobileMenu();
         });
 
-        if (mobileOverlay) { // Si l'overlay existe
-            mobileOverlay.addEventListener('click', closeMobileMenu); // Clic sur le fond = ferme le menu
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMobileMenu);
         }
 
-        // Fermeture avec la touche Escape (accessibilité clavier)
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
                 closeMobileMenu();
@@ -47,23 +41,20 @@
         // ============================================
 
         function createBurgerButton() {
-            if (document.getElementById('burger-menu')) return; // Déjà créé : on ne recrée pas
+            if (document.getElementById('burger-menu')) return;
 
-            const burger = document.createElement('button'); // Crée un élément bouton
-            burger.id = 'burger-menu';                       // ID pour le récupérer ensuite
-            burger.className = 'burger-btn';                 // Classe CSS pour le style
-            burger.setAttribute('aria-label', 'Menu');       // Label accessible (lecteurs d'écran)
-
-            // Icône Material Symbols : "menu" = trois barres horizontales (hamburger)
+            const burger = document.createElement('button');
+            burger.id = 'burger-menu';
+            burger.className = 'burger-btn';
+            burger.setAttribute('aria-label', 'Menu');
             burger.innerHTML = `
                 <span class="material-symbols-outlined burger-icon">menu</span>
             `;
 
-            const nav = document.querySelector('nav'); // Récupère la navigation dans le header
+            const nav = document.querySelector('nav');
             if (nav) {
-                nav.insertBefore(burger, nav.firstChild); // Insère le bouton avant le premier élément du nav
+                nav.insertBefore(burger, nav.firstChild);
             }
-
             console.log('Bouton burger créé');
         }
 
@@ -72,21 +63,17 @@
         // ============================================
 
         function createMobileMenu() {
-            if (document.getElementById('mobile-menu')) return; // Déjà créé
+            if (document.getElementById('mobile-menu')) return;
 
-            // ── Overlay (fond semi-transparent) ───────────────────
             const overlay = document.createElement('div');
-            overlay.className = 'mobile-overlay'; // Classe CSS pour le fond sombre
-            document.body.appendChild(overlay);   // Ajoute à la fin du body
+            overlay.className = 'mobile-overlay';
+            document.body.appendChild(overlay);
 
-            // ── Panneau de navigation latéral ─────────────────────
             const menu = document.createElement('div');
-            menu.id = 'mobile-menu';         // ID pour le récupérer ensuite
-            menu.className = 'mobile-menu';  // Classe CSS pour le style du panneau
+            menu.id = 'mobile-menu';
+            menu.className = 'mobile-menu';
 
-            // Construction du HTML interne du menu
             menu.innerHTML = `
-                <!-- En-tête du menu avec logo et bouton fermer -->
                 <div class="mobile-menu-header">
                     <div class="mobile-logo">
                         <div class="logo-icon"><img src="asset/image/LogoProjetEcf.png" alt=""></div>
@@ -95,20 +82,15 @@
                             <div class="logo-subtitle">Boutique high-tech</div>
                         </div>
                     </div>
-                    <!-- Bouton de fermeture (croix) -->
                     <button class="mobile-close" id="mobile-close">
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
-
                 <div class="mobile-menu-content">
-                    <!-- Barre de recherche adaptée au mobile -->
                     <div class="mobile-search">
                         <span class="material-symbols-outlined">search</span>
-                        <input type="text" placeholder="Rechercher...">
+                        <input type="text" id="mobile-search-input" placeholder="Rechercher...">
                     </div>
-
-                    <!-- Navigation principale (pages du site) -->
                     <nav class="mobile-nav">
                         <h3 class="mobile-nav-title">Navigation</h3>
                         <a href="page_accueil.html" class="mobile-nav-item">
@@ -124,8 +106,6 @@
                             Mes favoris
                         </a>
                     </nav>
-
-                    <!-- Navigation par catégories de produits -->
                     <nav class="mobile-nav">
                         <h3 class="mobile-nav-title">Catégories</h3>
                         <a href="page_catalogue.html?categorie=apple" class="mobile-nav-item">
@@ -145,8 +125,6 @@
                             Tablettes
                         </a>
                     </nav>
-
-                    <!-- Raccourcis vers les pages compte, favoris, panier -->
                     <div class="mobile-actions">
                         <a href="page_profil.html" class="mobile-action-btn">
                             <span class="material-symbols-outlined">person</span>
@@ -164,22 +142,39 @@
                 </div>
             `;
 
-            document.body.appendChild(menu); // Ajoute le panneau à la fin du body
+            document.body.appendChild(menu);
 
-            // ── Bouton fermer (croix) dans l'en-tête du menu ─────
             const closeBtn = document.getElementById('mobile-close');
             if (closeBtn) {
-                closeBtn.addEventListener('click', closeMobileMenu); // Clic sur la croix = ferme
+                closeBtn.addEventListener('click', closeMobileMenu);
             }
 
-            // ── Fermeture automatique au clic sur un lien ─────────
-            // Évite que le menu reste ouvert après navigation
             const navItems = menu.querySelectorAll('.mobile-nav-item');
             navItems.forEach(item => {
                 item.addEventListener('click', function() {
-                    closeMobileMenu(); // Ferme le menu quand l'utilisateur clique sur un lien
+                    closeMobileMenu();
                 });
             });
+
+            // === CORRECTION : Lier la recherche mobile à la recherche principale ===
+            const mobileSearchInput = document.getElementById('mobile-search-input');
+            const mainSearchInput = document.getElementById('search-input');
+            if (mobileSearchInput && mainSearchInput) {
+                mobileSearchInput.addEventListener('input', function(e) {
+                    // Mettre à jour le champ principal
+                    mainSearchInput.value = this.value;
+                    // Déclencher l'événement input pour lancer la recherche
+                    mainSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                });
+                mobileSearchInput.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        // Simuler la même action que la recherche principale (souvent gérée par un événement)
+                        mainSearchInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+                        closeMobileMenu(); // Fermer le menu après la recherche
+                    }
+                });
+            }
 
             console.log('Menu mobile créé');
         }
@@ -190,39 +185,37 @@
 
         function toggleMobileMenu() {
             if (mobileMenu.classList.contains('active')) {
-                closeMobileMenu(); // Déjà ouvert : on ferme
+                closeMobileMenu();
             } else {
-                openMobileMenu();  // Fermé : on ouvre
+                openMobileMenu();
             }
         }
 
         function openMobileMenu() {
-            mobileMenu.classList.add('active');    // Affiche le panneau (CSS gère la translation)
-            mobileOverlay.classList.add('active'); // Affiche le fond semi-transparent
-            burgerBtn.classList.add('active');     // Style actif sur le bouton burger
+            mobileMenu.classList.add('active');
+            mobileOverlay.classList.add('active');
+            burgerBtn.classList.add('active');
 
             const icon = burgerBtn.querySelector('.burger-icon');
-            if (icon) icon.textContent = 'close'; // Change l'icône hamburger → croix
+            if (icon) icon.textContent = 'close';
 
-            document.body.style.overflow = 'hidden'; // Bloque le scroll de la page derrière le menu
-
+            document.body.style.overflow = 'hidden';
             console.log('Menu mobile ouvert');
         }
 
         function closeMobileMenu() {
-            mobileMenu.classList.remove('active');    // Cache le panneau
-            mobileOverlay.classList.remove('active'); // Cache l'overlay
-            burgerBtn.classList.remove('active');     // Retire le style actif du bouton
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+            burgerBtn.classList.remove('active');
 
             const icon = burgerBtn.querySelector('.burger-icon');
-            if (icon) icon.textContent = 'menu'; // Remet l'icône hamburger
+            if (icon) icon.textContent = 'menu';
 
-            document.body.style.overflow = ''; // Rétablit le scroll normal de la page
-
+            document.body.style.overflow = '';
             console.log('Menu mobile fermé');
         }
 
         console.log('Mobile menu module initialisé');
     });
 
-})(); // Fin de l'IIFE
+})();

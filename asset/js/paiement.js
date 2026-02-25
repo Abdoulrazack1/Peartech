@@ -8,9 +8,7 @@
 (function () {
     'use strict';
 
-    // ── Accès localStorage sécurisé ───────────────────────────────
-    // Protège contre : mode privé, quota dépassé, cookies bloqués
-
+    // ── Accès localStorage sécurisé (utile pour le compteur de commandes) ──
     function storageGet(key) {
         try {
             return localStorage.getItem(key);
@@ -25,7 +23,7 @@
             localStorage.setItem(key, value);
             return true;
         } catch (e) {
-            console.warn('localStorage.setItem échoué (quota ou mode privé ?) :', e);
+            console.warn('localStorage.setItem échoué :', e);
             return false;
         }
     }
@@ -38,39 +36,34 @@
         }
     }
 
-    // ── Génération d'un numéro de commande non-collisionnable ─────
-    // CORRECTION : Math.random() seul peut générer des doublons.
-    // On combine timestamp + compteur atomique + aléatoire pour garantir l'unicité.
-    // Format : CMD-XXXXXXXX (base 36, lisible et compact)
-
+    // ── Génération d'un numéro de commande non-collisionnable ──
     function generateOrderNumber() {
-        // Lit le compteur persistant (s'incrémente à chaque commande)
         const counter = parseInt(storageGet('peartech-order-counter') || '0', 10) + 1;
         storageSet('peartech-order-counter', String(counter));
 
-        const timestamp = Date.now().toString(36).toUpperCase();    // Ex: "LK3D2F" (ms depuis epoch)
-        const seq       = counter.toString(36).padStart(3, '0').toUpperCase(); // Ex: "001"
-        const rand      = Math.random().toString(36).substr(2, 3).toUpperCase(); // Ex: "A7B"
+        const timestamp = Date.now().toString(36).toUpperCase();
+        const seq       = counter.toString(36).padStart(3, '0').toUpperCase();
+        const rand      = Math.random().toString(36).substr(2, 3).toUpperCase();
 
-        return `CMD-${timestamp}-${seq}${rand}`; // Ex: "CMD-LK3D2F-001A7B"
+        return `CMD-${timestamp}-${seq}${rand}`;
     }
 
     document.addEventListener('DOMContentLoaded', function () {
 
-        // ── Chargement du panier ──────────────────────────────────
-
-        const CART_KEY = 'peartech-cart';
+        // ── Chargement du panier via l'API centralisée ──
         let cart = [];
-        try {
-            cart = JSON.parse(storageGet(CART_KEY)) || [];
-        } catch (e) {
-            console.warn('Panier corrompu, réinitialisation :', e);
-            cart = [];
+        if (window.PearTechCart) {
+            cart = window.PearTechCart.getCart() || [];
+        } else {
+            console.warn('PearTechCart non disponible, lecture directe localStorage');
+            try {
+                cart = JSON.parse(storageGet('peartech-cart')) || [];
+            } catch (e) {
+                cart = [];
+            }
         }
 
-        // ── Récupération de la promo active depuis cart.js ────────
-        // cart.js sauvegarde currentPromo dans sessionStorage avant la redirection
-
+        // ── Récupération de la promo active depuis sessionStorage ──
         let currentPromo = null;
         try {
             const storedPromo = sessionStorage.getItem('peartech-promo');
@@ -79,8 +72,7 @@
             console.warn('Impossible de lire la promo depuis sessionStorage :', e);
         }
 
-        // ── Récupération des éléments du DOM ──────────────────────
-
+        // ── Récupération des éléments du DOM ──
         const summaryItemsEl  = document.getElementById('summary-items');
         const summaryTotalEl  = document.getElementById('subtotal');
         const summaryShipEl   = document.getElementById('delivery-cost');
@@ -91,8 +83,7 @@
         const paymentOptions  = document.querySelectorAll('input[name="payment"]');
         const paymentDetails  = document.getElementById('cb-fields');
 
-        // ── Affichage du résumé de commande ───────────────────────
-
+        // ── Affichage du résumé de commande ──
         function renderSummary() {
             if (!summaryItemsEl) return;
 
@@ -106,7 +97,7 @@
             const shipping      = getShippingCost();
             const total         = subtotal - promoDiscount + shipping;
 
-            // ── Lignes articles ────────────────────────────────────
+            // ── Lignes articles ──
             summaryItemsEl.innerHTML = cart.map(item => {
                 const linePrice   = item.price * item.quantity;
                 const hasDiscount = item.oldPrice && item.oldPrice > item.price;
@@ -125,14 +116,9 @@
                 </div>`;
             }).join('');
 
-            // ── Sous-total et livraison ────────────────────────────
             if (summaryTotalEl) summaryTotalEl.textContent = formatPrice(subtotal);
             if (summaryShipEl)  summaryShipEl.textContent  = shipping === 0 ? 'Gratuit' : formatPrice(shipping);
 
-            // ── Ligne réduction dans .summary-totals ───────────────
-            // Le HTML n'a pas de ligne réduction par défaut :
-            // on l'injecte dynamiquement juste avant la ligne Total,
-            // et on la supprime si aucune promo n'est active.
             const summaryTotals    = document.querySelector('.summary-totals');
             const existingPromoRow = document.getElementById('promo-summary-row');
 
@@ -142,11 +128,9 @@
                     : '🏷️ Réduction';
 
                 if (existingPromoRow) {
-                    // Met à jour la ligne existante sans recréer le DOM
                     existingPromoRow.querySelector('.promo-label').textContent  = label;
                     existingPromoRow.querySelector('.promo-amount').textContent = `-${formatPrice(promoDiscount)}`;
                 } else {
-                    // Crée la ligne et l'insère avant la ligne Total
                     const promoRow = document.createElement('div');
                     promoRow.id        = 'promo-summary-row';
                     promoRow.className = 'summary-line';
@@ -163,14 +147,11 @@
                     }
                 }
             } else if (existingPromoRow) {
-                existingPromoRow.remove(); // Supprime si la promo a été retirée
+                existingPromoRow.remove();
             }
 
-            // ── Total final déduit de la promo ─────────────────────
             if (summaryGrandEl) summaryGrandEl.textContent = formatPrice(total);
         }
-
-        // ── Calcul du coût de livraison ───────────────────────────
 
         function getShippingCost() {
             const selected = document.querySelector('input[name="delivery"]:checked');
@@ -188,16 +169,12 @@
             return 0;
         }
 
-        // ── Affichage des champs carte bancaire ───────────────────
-
         function togglePaymentDetails() {
             if (!paymentDetails) return;
             const selected = document.querySelector('input[name="payment"]:checked');
             const isCarte  = selected && selected.value === 'cb';
             paymentDetails.style.display = isCarte ? 'block' : 'none';
         }
-
-        // ── Validation du formulaire ───────────────────────────────
 
         function validateForm() {
             const required = form
@@ -217,8 +194,6 @@
 
             return valid;
         }
-
-        // ── Soumission et création de la commande ─────────────────
 
         function submitOrder() {
             if (!validateForm()) {
@@ -241,7 +216,7 @@
                 document.getElementById('adresse')?.value,
                 document.getElementById('ville')?.value,
                 document.getElementById('code-postal')?.value,
-                document.getElementById('country')?.value || 'France'
+                document.getElementById('pays')?.value || 'France'
             ].filter(Boolean).join(', ');
 
             let paymentLabel = 'Carte bancaire';
@@ -256,7 +231,7 @@
             const shipping      = getShippingCost();
 
             const orderData = {
-                orderNumber: generateOrderNumber(), // CORRECTION : numéro unique garanti
+                orderNumber: generateOrderNumber(),
                 email: document.getElementById('email')?.value || '',
                 delivery: {
                     name:    name.trim() || 'Client',
@@ -276,25 +251,22 @@
                 total:    subtotal - promoDiscount + shipping
             };
 
-            // ── Stockage sessionStorage pour la page confirmation ──
-            // sessionStorage peut aussi échouer en mode privé strict
-
             try {
                 sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData));
             } catch (e) {
                 console.warn('sessionStorage indisponible, la confirmation utilisera les données de démo :', e);
-                // La page confirmation a un fallback intégré : pas bloquant
             }
 
-            // ── Nettoyage du panier ────────────────────────────────
-
-            storageRemove(CART_KEY);
-            storageSet('peartech-cart-count', '0');
+            // ── Nettoyage du panier via l'API centralisée ──
+            if (window.PearTechCart) {
+                window.PearTechCart.clear(); // méthode clear() doit exister
+            } else {
+                storageRemove('peartech-cart');
+                storageSet('peartech-cart-count', '0');
+            }
 
             window.location.href = 'page_confirmation.html';
         }
-
-        // ── Notification inline en cas d'erreur ───────────────────
 
         function showMessage(text, type) {
             let msg = document.getElementById('paiement-message');
@@ -311,13 +283,9 @@
             msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // ── Formateur de prix ──────────────────────────────────────
-
         function formatPrice(price) {
             return price.toFixed(2).replace('.', ',') + ' €';
         }
-
-        // ── Événements livraison, paiement, confirmation ──────────
 
         deliveryOptions.forEach(opt => {
             opt.addEventListener('change', function () {
@@ -345,12 +313,9 @@
             });
         }
 
-        // ── Initialisation ─────────────────────────────────────────
-
         renderSummary();
         togglePaymentDetails();
 
-        // Injecte les styles pour l'affichage des réductions dans le récap
         if (!document.getElementById('paiement-discount-style')) {
             const style = document.createElement('style');
             style.id = 'paiement-discount-style';

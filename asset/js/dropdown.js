@@ -16,27 +16,21 @@
             return;
         }
 
-        // ── Création du menu : attend PearTechDB si besoin ────────
-        // CORRECTION : le menu était créé immédiatement, avant que data.js
-        // ait eu le temps de se charger. On attend maintenant jusqu'à 2s,
-        // puis on bascule sur les catégories statiques (fallback).
-
-        waitForDBAndCreate();
-
-        function waitForDBAndCreate(attempts) {
-            attempts = attempts || 0;
-            if (window.PearTechDB || attempts >= 20) {
-                // PearTechDB disponible ou délai dépassé → on crée avec ce qu'on a
+        // Créer le menu dès que PearTechDB est disponible
+        if (window.PearTechDB) {
+            createDropdownMenu();
+            attachDropdownEvents();
+        } else {
+            // Attendre l'événement personnalisé émis par data.js
+            document.addEventListener('PearTechDBReady', function() {
                 createDropdownMenu();
                 attachDropdownEvents();
-            } else {
-                setTimeout(() => waitForDBAndCreate(attempts + 1), 100);
-            }
+            });
         }
 
-        // ── Attachement des événements globaux ────────────────────
-        // Séparé de createDropdownMenu() pour pouvoir être appelé
-        // après que le menu est dans le DOM
+        // ============================================
+        // ATTACHEMENT DES ÉVÉNEMENTS GLOBAUX
+        // ============================================
 
         function attachDropdownEvents() {
             const dropdownMenu = document.querySelector('.dropdown-menu');
@@ -73,7 +67,6 @@
             let categories = [];
 
             if (window.PearTechDB && window.PearTechDB.categories) {
-                // Source principale : données réelles de data.js
                 categories = window.PearTechDB.categories.map(cat => ({
                     icon:          cat.icon,
                     title:         cat.name,
@@ -82,9 +75,7 @@
                     slug:          cat.slug
                 }));
             } else {
-                // CORRECTION : fallback clair et explicite quand data.js est absent.
-                // Ce n'est plus silencieux : on log un avertissement.
-                console.warn('PearTechDB non disponible après attente : menu dropdown en mode statique.');
+                console.warn('PearTechDB non disponible : menu dropdown en mode statique.');
                 categories = [
                     { icon: 'apple',  title: 'Apple',              description: 'iPhone, iPad, Apple Watch et accessoires',    subcategories: ['iPhone', 'iPad', 'Apple Watch', 'Accessoires'],                     slug: 'apple' },
                     { icon: 'android',title: 'Android',            description: 'Samsung, Google Pixel, Xiaomi et plus',       subcategories: ['Samsung', 'Google Pixel', 'Xiaomi', 'OnePlus', 'Autres'],           slug: 'android' },
@@ -134,8 +125,7 @@
             attachDropdownItemEvents();
         }
 
-        // ── Icônes SVG ────────────────────────────────────────────
-
+        // ── Icônes SVG ── (inchangé)
         function getSvgIcon(iconName) {
             const icons = {
                 'apple':  `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.05 20.28C16.07 21.23 14.99 21.08 13.97 20.63C12.88 20.17 11.88 20.15 10.73 20.63C9.29001 21.25 8.53001 21.07 7.67001 20.28C2.79001 15.25 3.51001 7.59 9.05001 7.31C10.4 7.38 11.34 8.05 12.13 8.11C13.31 7.87 14.44 7.18 15.7 7.27C17.21 7.39 18.35 8.05 19.11 9.23C15.95 11.11 16.53 15.28 19.28 16.49C18.76 17.87 18.04 19.24 17.04 20.29L17.05 20.28ZM12.03 7.25C11.88 5.02 13.69 3.18 15.77 3C16.02 5.44 13.45 7.36 12.03 7.25Z" fill="currentColor"/></svg>`,
@@ -146,8 +136,7 @@
             return icons[iconName] || `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/></svg>`;
         }
 
-        // ── Toggle ouverture/fermeture ─────────────────────────────
-
+        // ── Toggle ouverture/fermeture ── (inchangé)
         function toggleDropdown() {
             const menu = document.querySelector('.dropdown-menu');
             if (!menu) return;
@@ -173,8 +162,6 @@
             dropdownButton.classList.remove('active');
             if (icon) icon.style.transform = 'rotate(0deg)';
         }
-
-        // ── Événements sur les items du menu ──────────────────────
 
         function attachDropdownItemEvents() {
             document.querySelectorAll('.dropdown-item').forEach(function(item) {
