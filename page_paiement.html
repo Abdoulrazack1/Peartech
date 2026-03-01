@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PearTech - Finaliser ma commande</title>
+    <meta name="description" content="Finalisez votre commande PearTech : adresse de livraison, mode de livraison et paiement sécurisé.">
     <link rel="stylesheet" href="asset/css/page_accueil.css">
     <link rel="stylesheet" href="asset/css/page_paiement.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,119 +13,124 @@
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-    <header class="header" role="banner">
+    <!-- ===== HEADER ===== -->
+    <header class="header">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
-                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
-                    <div class="logo-text" aria-hidden="true">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img">
+                    <div class="logo-text">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar" role="search">
+                <div class="search-bar">
                     <label for="search-input" class="sr-only">Rechercher un produit</label>
-                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input"
                         placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
-                        autocomplete="off"
-                        aria-autocomplete="list"
-                        aria-controls="search-results">
-                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
+                        autocomplete="off">
+                    <div class="search-results" id="search-results" aria-label="Résultats de recherche"></div>
                 </div>
                 <nav class="header-nav" aria-label="Navigation principale">
-                    <button class="nav-dropdown"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                        aria-label="Menu des catégories de produits">
+                    <button class="nav-dropdown" aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span aria-hidden="true">Tous les produits</span>
-                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
-                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                        <span aria-hidden="true">Favoris</span>
-                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span>Favoris</span>
+                        <span class="fav-badge" id="fav-count">0</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair">
+                        <span class="material-symbols-outlined">light_mode</span>
                     </button>
                     <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
-                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <span aria-hidden="true">Compte</span>
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
                     </a>
                     <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
-                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                        <span aria-hidden="true">Panier</span>
-                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content">
         <div class="container">
+
+            <!-- ===== BREADCRUMB ===== -->
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span aria-hidden="true">/</span>
+                <span>/</span>
                 <a href="page_panier.html">Mon panier</a>
-                <span aria-hidden="true">/</span>
-                <span aria-current="page">Finaliser ma commande</span>
+                <span>/</span>
+                <span>Finaliser ma commande</span>
             </nav>
+
             <h1 class="page-title">Finaliser ma commande</h1>
 
+            <!-- ===== CHECKOUT STEPS ===== -->
             <ol class="checkout-steps" aria-label="Étapes de commande">
-                <li class="step completed" aria-label="Étape 1 : Panier, terminée">
-                    <span class="step-number" aria-hidden="true">1</span>
+                <li class="step completed">
+                    <span class="step-number">1</span>
                     <span class="step-label">Panier</span>
                 </li>
-                <li class="step active" aria-label="Étape 2 : Livraison et paiement, en cours" aria-current="step">
-                    <span class="step-number" aria-hidden="true">2</span>
+                <li class="step active">
+                    <span class="step-number">2</span>
                     <span class="step-label">Livraison &amp; paiement</span>
                 </li>
-                <li class="step" aria-label="Étape 3 : Confirmation, à venir">
-                    <span class="step-number" aria-hidden="true">3</span>
+                <li class="step">
+                    <span class="step-number">3</span>
                     <span class="step-label">Confirmation</span>
                 </li>
             </ol>
 
+            <!-- ===== CHECKOUT LAYOUT (2 COLONNES) ===== -->
             <div class="checkout-layout">
+
+                <!-- ===== LEFT COLUMN : FORMULAIRE ===== -->
                 <div class="checkout-form">
+
+                    <!-- Adresse de livraison -->
                     <section class="checkout-section" aria-labelledby="address-heading">
                         <h2 id="address-heading">Adresse de livraison</h2>
                         <div id="address-form">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="prenom">Prénom <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                    <label for="prenom">Prénom <span>*</span></label>
                                     <input type="text" id="prenom" name="prenom" value="Jean" required autocomplete="given-name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="nom">Nom <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                    <label for="nom">Nom <span>*</span></label>
                                     <input type="text" id="nom" name="nom" value="Dupont" required autocomplete="family-name">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="adresse">Adresse principale <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                <label for="adresse">Adresse principale <span>*</span></label>
                                 <input type="text" id="adresse" name="adresse" value="15 rue de la Paix" required autocomplete="street-address">
                             </div>
                             <div class="form-group">
-                                <label for="complement">Complément d'adresse <span class="sr-only">(optionnel)</span></label>
+                                <label for="complement">Complément d'adresse</label>
                                 <input type="text" id="complement" name="complement" placeholder="Bâtiment, étage, etc." autocomplete="address-line2">
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="code-postal">Code postal <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                    <label for="code-postal">Code postal <span>*</span></label>
                                     <input type="text" id="code-postal" name="code-postal" value="75001" required autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{5}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="ville">Ville <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                    <label for="ville">Ville <span>*</span></label>
                                     <input type="text" id="ville" name="ville" value="Paris" required autocomplete="address-level2">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="pays">Pays <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                <label for="pays">Pays <span>*</span></label>
                                 <select id="pays" name="pays" required autocomplete="country">
                                     <option value="FR" selected>France</option>
                                     <option value="BE">Belgique</option>
@@ -134,17 +140,18 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="telephone">Téléphone <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                    <label for="telephone">Téléphone <span>*</span></label>
                                     <input type="tel" id="telephone" name="telephone" value="0612345678" required autocomplete="tel">
                                 </div>
                                 <div class="form-group">
-                                    <label for="email">E-mail <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
+                                    <label for="email">E-mail <span>*</span></label>
                                     <input type="email" id="email" name="email" value="jean.dupont@email.com" required autocomplete="email">
                                 </div>
                             </div>
                         </div>
                     </section>
 
+                    <!-- Mode de livraison -->
                     <section class="checkout-section" aria-labelledby="delivery-heading">
                         <h2 id="delivery-heading">Mode de livraison</h2>
                         <div class="delivery-options" id="delivery-options" role="radiogroup" aria-labelledby="delivery-heading">
@@ -175,14 +182,15 @@
                         </div>
                     </section>
 
+                    <!-- Moyen de paiement -->
                     <section class="checkout-section" aria-labelledby="payment-heading">
                         <h2 id="payment-heading">Moyen de paiement</h2>
                         <div class="payment-options" id="payment-options" role="radiogroup" aria-labelledby="payment-heading">
                             <label class="payment-option">
-                                <input type="radio" name="payment" value="cb" checked aria-controls="cb-fields">
+                                <input type="radio" name="payment" value="cb" checked>
                                 <div class="option-content">
                                     <span class="option-title">Carte bancaire</span>
-                                    <span class="option-icons" aria-label="Visa, Mastercard, American Express">Visa Mastercard American Express</span>
+                                    <span class="option-icons">Visa Mastercard American Express</span>
                                 </div>
                             </label>
                             <label class="payment-option">
@@ -220,50 +228,53 @@
                                 </div>
                             </div>
                             <p class="security-note">
-                                <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+                                <span class="material-symbols-outlined">lock</span>
                                 Paiement sécurisé 3D Secure
                             </p>
                         </div>
                     </section>
 
+                    <!-- Validation -->
                     <section class="checkout-section" aria-labelledby="validation-heading">
                         <h2 id="validation-heading" class="sr-only">Validation</h2>
                         <div class="validation-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="accept-cgv" required aria-required="true">
+                                <input type="checkbox" id="accept-cgv" required>
                                 <span>J'accepte les <a href="page_cgv.html">conditions générales de vente</a></span>
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" id="accept-newsletter">
-                                <span>Recevoir des offres et actualités <span class="sr-only">(optionnel)</span></span>
+                                <span>Recevoir des offres et actualités</span>
                             </label>
                         </div>
                     </section>
 
+                    <!-- Boutons d'action -->
                     <div class="form-actions">
                         <button type="button" class="btn-primary" id="confirm-order">
-                            <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+                            <span class="material-symbols-outlined">lock</span>
                             Confirmer la commande
                         </button>
                         <a href="page_panier.html" class="btn-secondary">Retour au panier</a>
                     </div>
                 </div>
 
+                <!-- ===== RIGHT COLUMN : RÉCAPITULATIF ===== -->
                 <aside class="order-summary" aria-label="Récapitulatif de votre commande">
                     <h2>Votre commande</h2>
-                    <div class="summary-items" id="summary-items" aria-live="polite"></div>
+                    <div class="summary-items" id="summary-items"></div>
                     <div class="summary-totals">
                         <div class="summary-line">
                             <span>Sous-total</span>
-                            <span id="subtotal" aria-live="polite">0,00 €</span>
+                            <span id="subtotal">0,00 €</span>
                         </div>
                         <div class="summary-line">
                             <span>Livraison</span>
-                            <span id="delivery-cost" aria-live="polite">5,90 €</span>
+                            <span id="delivery-cost">5,90 €</span>
                         </div>
                         <div class="summary-line total">
                             <span>Total</span>
-                            <span id="total" aria-live="polite">0,00 €</span>
+                            <span id="total">0,00 €</span>
                         </div>
                     </div>
                 </aside>
@@ -271,7 +282,8 @@
         </div>
     </main>
 
-    <footer class="footer" role="contentinfo">
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
@@ -312,6 +324,8 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

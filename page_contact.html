@@ -13,127 +13,129 @@
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-    <header class="header" role="banner">
+    <!-- ===== HEADER ===== -->
+    <header class="header">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
-                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
-                    <div class="logo-text" aria-hidden="true">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img">
+                    <div class="logo-text">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar" role="search">
+                <div class="search-bar">
                     <label for="search-input" class="sr-only">Rechercher un produit</label>
-                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input"
                         placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
-                        autocomplete="off"
-                        aria-autocomplete="list"
-                        aria-controls="search-results">
-                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
+                        autocomplete="off">
+                    <div class="search-results" id="search-results" aria-label="Résultats de recherche"></div>
                 </div>
                 <nav class="header-nav" aria-label="Navigation principale">
-                    <button class="nav-dropdown"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                        aria-label="Menu des catégories de produits">
+                    <button class="nav-dropdown" aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span aria-hidden="true">Tous les produits</span>
-                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
-                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                        <span aria-hidden="true">Favoris</span>
-                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span>Favoris</span>
+                        <span class="fav-badge" id="fav-count">0</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair">
+                        <span class="material-symbols-outlined">light_mode</span>
                     </button>
                     <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
-                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <span aria-hidden="true">Compte</span>
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
                     </a>
                     <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
-                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                        <span aria-hidden="true">Panier</span>
-                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content">
         <div class="container">
+
+            <!-- ===== BREADCRUMB ===== -->
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span aria-hidden="true">/</span>
-                <span aria-current="page">Contact</span>
+                <span>/</span>
+                <span>Contact</span>
             </nav>
 
             <h1 class="page-title">Contactez-nous</h1>
 
+            <!-- ===== CONTACT LAYOUT (2 COLONNES) ===== -->
             <div class="contact-layout">
-                <section class="contact-form" aria-labelledby="form-heading">
-                    <h2 id="form-heading">Envoyez-nous un message</h2>
-                    <form id="contact-form" novalidate aria-label="Formulaire de contact">
+
+                <!-- ===== FORMULAIRE DE CONTACT ===== -->
+                <section class="contact-form">
+                    <h2>Envoyez-nous un message</h2>
+                    <form id="contact-form" novalidate>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="name">Nom complet <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
-                                <input type="text" id="name" name="name" required autocomplete="name" aria-required="true">
+                                <label for="name">Nom complet <span>*</span></label>
+                                <input type="text" id="name" name="name" required autocomplete="name">
                             </div>
                             <div class="form-group">
-                                <label for="email">Email <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
-                                <input type="email" id="email" name="email" required autocomplete="email" aria-required="true">
+                                <label for="email">Email <span>*</span></label>
+                                <input type="email" id="email" name="email" required autocomplete="email">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="subject">Sujet <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
-                            <input type="text" id="subject" name="subject" required aria-required="true">
+                            <label for="subject">Sujet <span>*</span></label>
+                            <input type="text" id="subject" name="subject" required>
                         </div>
                         <div class="form-group">
-                            <label for="message">Message <span aria-hidden="true">*</span><span class="sr-only">(obligatoire)</span></label>
-                            <textarea id="message" name="message" rows="6" required aria-required="true"></textarea>
+                            <label for="message">Message <span>*</span></label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
                         </div>
                         <div class="form-group checkbox-group">
                             <label class="checkbox-label">
-                                <input type="checkbox" id="consent" name="consent" required aria-required="true">
+                                <input type="checkbox" id="consent" name="consent" required>
                                 <span>J'accepte que mes données soient traitées pour répondre à ma demande.</span>
                             </label>
                         </div>
                         <button type="submit" class="btn-primary">Envoyer le message</button>
                     </form>
-                    <div id="form-message" class="form-message" role="status" aria-live="polite"></div>
+                    <div id="form-message" class="form-message"></div>
                 </section>
 
-                <aside class="contact-info" aria-label="Coordonnées de contact">
+                <!-- ===== COORDONNÉES ===== -->
+                <aside class="contact-info">
                     <h2>Nos coordonnées</h2>
                     <div class="info-card">
                         <div class="info-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+                            <span class="material-symbols-outlined">location_on</span>
                             <div>
                                 <h3>Adresse</h3>
                                 <p>15 rue de la Paix<br>75001 Paris, France</p>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">phone</span>
+                            <span class="material-symbols-outlined">phone</span>
                             <div>
                                 <h3>Téléphone</h3>
                                 <p><a href="tel:+33123456789">01 23 45 67 89</a></p>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+                            <span class="material-symbols-outlined">mail</span>
                             <div>
                                 <h3>Email</h3>
-                                <p><a href="/cdn-cgi/l/email-protection#660509081207051226160307141203050e480014"><span class="__cf_email__" data-cfemail="96f5f9f8e2f7f5e2d6e6f3f7e4e2f3f5feb8f0e4">[email&#160;protected]</span></a></p>
+                                <p><a href="mailto:contact@peartech.fr">contact@peartech.fr</a></p>
                             </div>
                         </div>
                         <div class="info-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+                            <span class="material-symbols-outlined">schedule</span>
                             <div>
                                 <h3>Horaires</h3>
                                 <p>Lun-Ven : 9h - 18h<br>Sam-Dim : fermé</p>
@@ -141,6 +143,7 @@
                         </div>
                     </div>
 
+                    <!-- ===== MAP ===== -->
                     <div class="map-container">
                         <h3>Nous trouver</h3>
                         <div class="map-placeholder">
@@ -161,7 +164,8 @@
         </div>
     </main>
 
-    <footer class="footer" role="contentinfo">
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
@@ -171,7 +175,7 @@
                             <li><a href="page_faq.html">FAQ &amp; centre d'aide</a></li>
                             <li><a href="#">Suivi de commande</a></li>
                             <li><a href="#">Retours &amp; échanges</a></li>
-                            <li><a href="page_contact.html" aria-current="page">Contact</a></li>
+                            <li><a href="page_contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -203,7 +207,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <!-- ===== SCRIPTS ===== -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

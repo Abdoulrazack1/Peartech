@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PearTech - Mon panier</title>
+    <meta name="description" content="Consultez et modifiez votre panier PearTech avant de finaliser votre commande.">
     <link rel="stylesheet" href="asset/css/page_accueil.css">
     <link rel="stylesheet" href="asset/css/page_panier.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,75 +13,80 @@
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-    <header class="header" role="banner">
+    <!-- ===== HEADER ===== -->
+    <header class="header">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
-                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
-                    <div class="logo-text" aria-hidden="true">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img">
+                    <div class="logo-text">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar" role="search">
+                <div class="search-bar">
                     <label for="search-input" class="sr-only">Rechercher un produit</label>
-                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input"
                         placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
-                        autocomplete="off"
-                        aria-autocomplete="list"
-                        aria-controls="search-results">
-                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
+                        autocomplete="off">
+                    <div class="search-results" id="search-results" aria-label="Résultats de recherche"></div>
                 </div>
                 <nav class="header-nav" aria-label="Navigation principale">
-                    <button class="nav-dropdown"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                        aria-label="Menu des catégories de produits">
+                    <button class="nav-dropdown" aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span aria-hidden="true">Tous les produits</span>
-                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
-                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                        <span aria-hidden="true">Favoris</span>
-                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span>Favoris</span>
+                        <span class="fav-badge" id="fav-count">0</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair">
+                        <span class="material-symbols-outlined">light_mode</span>
                     </button>
                     <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
-                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <span aria-hidden="true">Compte</span>
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
                     </a>
-                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier" aria-current="page">
-                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                        <span aria-hidden="true">Panier</span>
-                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
+                    <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content">
         <div class="container">
+
+            <!-- ===== BREADCRUMB ===== -->
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span aria-hidden="true">/</span>
-                <span aria-current="page">Mon panier</span>
+                <span>/</span>
+                <span>Mon panier</span>
             </nav>
+
             <h1 class="page-title">Mon panier</h1>
+
+            <!-- ===== CART LAYOUT (2 COLONNES) ===== -->
             <div class="cart-layout">
-                <div class="cart-items" id="cart-items" aria-live="polite" aria-label="Articles dans le panier">
+
+                <!-- ===== LEFT COLUMN : ARTICLES ===== -->
+                <div class="cart-items" id="cart-items" aria-label="Articles dans le panier">
                     <!-- Rempli dynamiquement par cart.js -->
                 </div>
+
+                <!-- ===== RIGHT COLUMN : RÉCAPITULATIF ===== -->
                 <aside class="cart-summary" aria-label="Récapitulatif de commande">
                     <h2>Récapitulatif</h2>
                     <div class="summary-row">
                         <span>Sous-total</span>
-                        <span id="subtotal" aria-live="polite">0,00 €</span>
+                        <span id="subtotal">0,00 €</span>
                     </div>
                     <div class="summary-row">
                         <span>Livraison</span>
@@ -92,7 +98,7 @@
                     </div>
                     <div class="summary-row total">
                         <span>Total TTC</span>
-                        <span id="total" aria-live="polite">0,00 €</span>
+                        <span id="total">0,00 €</span>
                     </div>
                     <div class="promo-code">
                         <label for="promo-input">Code promotionnel</label>
@@ -100,7 +106,7 @@
                             <input type="text" id="promo-input" placeholder="Entrez votre code" aria-describedby="promo-message">
                             <button class="btn-secondary" id="apply-promo" type="button">Appliquer</button>
                         </div>
-                        <div id="promo-message" class="promo-message" aria-live="polite" role="status"></div>
+                        <div id="promo-message" class="promo-message"></div>
                     </div>
                     <button class="btn-primary checkout-btn" id="checkout-btn" type="button">
                         Passer à l'étape suivante
@@ -108,20 +114,22 @@
                     <a href="page_catalogue.html" class="continue-shopping">Continuer mes achats</a>
                     <ul class="trust-info" aria-label="Nos garanties" style="list-style:none;padding:0;">
                         <li class="trust-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">lock</span>
+                            <span class="material-symbols-outlined">lock</span>
                             <span>Paiement sécurisé</span>
                         </li>
                         <li class="trust-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">assignment_return</span>
+                            <span class="material-symbols-outlined">assignment_return</span>
                             <span>Retour sous 30 jours</span>
                         </li>
                         <li class="trust-item">
-                            <span class="material-symbols-outlined" aria-hidden="true">local_shipping</span>
+                            <span class="material-symbols-outlined">local_shipping</span>
                             <span>Livraison suivie</span>
                         </li>
                     </ul>
                 </aside>
             </div>
+
+            <!-- ===== RECOMMANDATIONS ===== -->
             <section class="recommendations" aria-labelledby="reco-heading">
                 <h2 id="reco-heading">Recommandations associées</h2>
                 <div class="recommendations-grid" id="recommendations-grid" role="list" aria-label="Produits recommandés"></div>
@@ -132,7 +140,8 @@
         </div>
     </main>
 
-    <footer class="footer" role="contentinfo">
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
@@ -173,6 +182,8 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

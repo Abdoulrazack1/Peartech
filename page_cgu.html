@@ -12,129 +12,129 @@
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
-    <header class="header" role="banner">
+    <!-- ===== HEADER ===== -->
+    <header class="header">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
-                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
-                    <div class="logo-text" aria-hidden="true">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img">
+                    <div class="logo-text">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
-                <div class="search-bar" role="search">
+                <div class="search-bar">
                     <label for="search-input" class="sr-only">Rechercher un produit</label>
-                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input"
                         placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
-                        autocomplete="off"
-                        aria-autocomplete="list"
-                        aria-controls="search-results">
-                    <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
+                        autocomplete="off">
+                    <div class="search-results" id="search-results" aria-label="Résultats de recherche"></div>
                 </div>
                 <nav class="header-nav" aria-label="Navigation principale">
-                    <button class="nav-dropdown"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                        aria-label="Menu des catégories de produits">
+                    <button class="nav-dropdown" aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span aria-hidden="true">Tous les produits</span>
-                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
-                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                        <span aria-hidden="true">Favoris</span>
-                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span>Favoris</span>
+                        <span class="fav-badge" id="fav-count">0</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair">
+                        <span class="material-symbols-outlined">light_mode</span>
                     </button>
                     <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
-                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <span aria-hidden="true">Compte</span>
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
                     </a>
                     <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
-                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                        <span aria-hidden="true">Panier</span>
-                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content">
         <div class="container">
+
+            <!-- ===== BREADCRUMB ===== -->
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span aria-hidden="true">/</span>
-                <span aria-current="page">Conditions générales d'utilisation</span>
+                <span>/</span>
+                <span>Conditions générales d'utilisation</span>
             </nav>
 
+            <!-- ===== LEGAL CONTENT ===== -->
             <article class="legal-content">
                 <h1>Conditions Générales d'Utilisation</h1>
                 <p class="legal-update">Dernière mise à jour : 1er janvier 2025</p>
 
-                <section aria-labelledby="cgu-art1">
-                    <h2 id="cgu-art1">1. Objet</h2>
+                <section>
+                    <h2>1. Objet</h2>
                     <p>Les présentes CGU ont pour objet de définir les modalités et conditions d'utilisation du site PearTech (ci-après "le Site") par les utilisateurs.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art2">
-                    <h2 id="cgu-art2">2. Acceptation</h2>
+                <section>
+                    <h2>2. Acceptation</h2>
                     <p>L'accès et l'utilisation du Site impliquent l'acceptation sans réserve des présentes CGU par l'utilisateur. En cas de non-acceptation, l'utilisateur doit renoncer à l'accès au Site.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art3">
-                    <h2 id="cgu-art3">3. Accès au site</h2>
+                <section>
+                    <h2>3. Accès au site</h2>
                     <p>Le Site est accessible gratuitement à tout utilisateur disposant d'une connexion internet. Tous les frais nécessaires pour l'accès au Site (matériel, connexion) sont à la charge de l'utilisateur. PearTech se réserve le droit de suspendre ou d'interrompre l'accès au Site pour des raisons de maintenance ou pour toute autre raison, sans préavis.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art4">
-                    <h2 id="cgu-art4">4. Compte utilisateur</h2>
+                <section>
+                    <h2>4. Compte utilisateur</h2>
                     <p>Certaines fonctionnalités du Site nécessitent la création d'un compte. L'utilisateur s'engage à fournir des informations exactes et à les mettre à jour. Le mot de passe est personnel et confidentiel. PearTech ne pourra être tenu responsable d'une utilisation frauduleuse du compte.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art5">
-                    <h2 id="cgu-art5">5. Propriété intellectuelle</h2>
+                <section>
+                    <h2>5. Propriété intellectuelle</h2>
                     <p>Tous les contenus du Site (textes, images, logos, etc.) sont protégés par le droit d'auteur et restent la propriété exclusive de PearTech ou de ses partenaires. Toute reproduction ou représentation sans autorisation est interdite.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art6">
-                    <h2 id="cgu-art6">6. Responsabilité</h2>
+                <section>
+                    <h2>6. Responsabilité</h2>
                     <p>PearTech s'efforce de fournir des informations exactes et à jour, mais ne garantit pas l'exhaustivité ou l'absence d'erreur. La responsabilité de PearTech ne saurait être engagée en cas de dommage direct ou indirect lié à l'utilisation du Site.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art7">
-                    <h2 id="cgu-art7">7. Données personnelles</h2>
+                <section>
+                    <h2>7. Données personnelles</h2>
                     <p>Les données collectées lors de la navigation sur le Site sont traitées conformément à la politique de confidentialité disponible sur le Site. L'utilisateur dispose d'un droit d'accès, de rectification et de suppression.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art8">
-                    <h2 id="cgu-art8">8. Cookies</h2>
+                <section>
+                    <h2>8. Cookies</h2>
                     <p>Le Site utilise des cookies pour améliorer la navigation. En continuant à naviguer, l'utilisateur accepte leur utilisation. Il peut les désactiver dans son navigateur.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art9">
-                    <h2 id="cgu-art9">9. Liens hypertextes</h2>
+                <section>
+                    <h2>9. Liens hypertextes</h2>
                     <p>Le Site peut contenir des liens vers d'autres sites. PearTech n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur contenu.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art10">
-                    <h2 id="cgu-art10">10. Modification des CGU</h2>
+                <section>
+                    <h2>10. Modification des CGU</h2>
                     <p>PearTech se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront informés par une mention sur le Site.</p>
                 </section>
 
-                <section aria-labelledby="cgu-art11">
-                    <h2 id="cgu-art11">11. Droit applicable</h2>
+                <section>
+                    <h2>11. Droit applicable</h2>
                     <p>Les CGU sont soumises au droit français. En cas de litige, les tribunaux français seront seuls compétents.</p>
                 </section>
             </article>
         </div>
     </main>
 
-    <footer class="footer" role="contentinfo">
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-column">
@@ -164,7 +164,7 @@
                         <ul>
                             <li><a href="page_mentionlegal.html">Mentions légales</a></li>
                             <li><a href="page_cgv.html">Conditions générales de vente</a></li>
-                            <li><a href="page_cgu.html" aria-current="page">Conditions générales d'utilisation</a></li>
+                            <li><a href="page_cgu.html">Conditions générales d'utilisation</a></li>
                             <li><a href="#">Confidentialité &amp; cookies</a></li>
                         </ul>
                     </nav>
@@ -175,6 +175,8 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

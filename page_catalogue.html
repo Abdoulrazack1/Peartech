@@ -13,109 +13,111 @@
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
+    <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
-                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img" aria-hidden="true">
-                    <div class="logo-text" aria-hidden="true">
+                    <img src="asset/image/LogoProjetEcf.png" alt="" class="logo-img">
+                    <div class="logo-text">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
                 <div class="search-bar" role="search">
                     <label for="search-input" class="sr-only">Rechercher un produit</label>
-                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input"
                         placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
-                        autocomplete="off"
-                        aria-autocomplete="list"
-                        aria-controls="search-results">
+                        autocomplete="off">
                     <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
                 <nav class="header-nav" aria-label="Navigation principale">
-                    <button class="nav-dropdown"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
-                        aria-label="Menu des catégories de produits">
+                    <button class="nav-dropdown" aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span aria-hidden="true">Tous les produits</span>
-                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
-                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                        <span aria-hidden="true">Favoris</span>
-                        <span class="fav-badge" id="fav-count" aria-live="polite">0</span>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span>Favoris</span>
+                        <span class="fav-badge" id="fav-count">0</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair">
+                        <span class="material-symbols-outlined">light_mode</span>
                     </button>
                     <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
-                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <span aria-hidden="true">Compte</span>
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
                     </a>
                     <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
-                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                        <span aria-hidden="true">Panier</span>
-                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content">
         <div class="container">
+
+            <!-- ===== BREADCRUMB ===== -->
             <nav class="breadcrumb" aria-label="Fil d'Ariane">
                 <a href="page_accueil.html">Accueil</a>
-                <span aria-hidden="true">/</span>
+                <span>/</span>
                 <a href="page_catalogue.html">Toutes les catégories</a>
-                <span aria-hidden="true">/</span>
-                <span id="current-category-name" aria-current="page">Apple</span>
+                <span>/</span>
+                <span id="current-category-name">Apple</span>
             </nav>
 
+            <!-- ===== CATALOGUE LAYOUT ===== -->
             <div class="catalogue-layout">
+
+                <!-- ===== FILTERS SIDEBAR ===== -->
                 <aside class="filters-sidebar" id="filters-sidebar" aria-label="Filtres de recherche">
                     <div class="filters-header">
                         <h2 style="font-size:1.1rem;font-weight:600;color:var(--text-primary);">Filtrer les résultats</h2>
                         <button class="reset-filters" id="reset-filters" aria-label="Réinitialiser tous les filtres">Réinitialiser</button>
                     </div>
                     <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Sous-catégories</h3>
+                        <h3 class="filter-section-title">Sous-catégories</h3>
                         <div id="subcategories-filter" class="checkbox-list" role="group" aria-label="Filtrer par sous-catégorie"></div>
                     </div>
                     <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Prix</h3>
+                        <h3 class="filter-section-title">Prix</h3>
                         <div class="price-range">
                             <label for="price-min" class="sr-only">Prix minimum</label>
-                            <input type="range" id="price-min" class="price-slider" min="0" max="5000" step="10" value="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="5000">
+                            <input type="range" id="price-min" class="price-slider" min="0" max="5000" step="10" value="0">
                             <label for="price-max" class="sr-only">Prix maximum</label>
-                            <input type="range" id="price-max" class="price-slider" min="0" max="5000" step="10" value="5000" aria-valuenow="5000" aria-valuemin="0" aria-valuemax="5000">
-                            <div class="price-values" aria-live="polite" aria-label="Plage de prix sélectionnée">
+                            <input type="range" id="price-max" class="price-slider" min="0" max="5000" step="10" value="5000">
+                            <div class="price-values">
                                 <span id="price-min-display">0 €</span> - <span id="price-max-display">5000 €</span>
                             </div>
                         </div>
                     </div>
                     <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Marques</h3>
+                        <h3 class="filter-section-title">Marques</h3>
                         <div id="brands-filter" class="checkbox-list" role="group" aria-label="Filtrer par marque"></div>
                     </div>
                     <div class="filter-section">
-                        <h3 class="filter-section-title" style="font-size:.9rem;font-weight:600;margin-bottom:.5rem;color:var(--text-primary);text-transform:uppercase;letter-spacing:.5px;">Caractéristiques</h3>
+                        <h3 class="filter-section-title">Caractéristiques</h3>
                         <div id="features-filter" class="checkbox-list" role="group" aria-label="Filtrer par caractéristique"></div>
                     </div>
                 </aside>
 
+                <!-- ===== RESULTS COLUMN ===== -->
                 <div class="catalogue-results">
                     <div class="results-header">
                         <div>
                             <h1 class="category-title" id="category-title">Apple</h1>
                             <p class="category-description" id="category-description">iPhone, iPad, Apple Watch et accessoires Apple</p>
-                            <p class="results-count" id="results-count" aria-live="polite">Chargement…</p>
+                            <p class="results-count" id="results-count">Chargement…</p>
                         </div>
                         <div class="results-toolbar">
-                            <div class="active-filters" id="active-filters" aria-label="Filtres actifs" aria-live="polite"></div>
+                            <div class="active-filters" id="active-filters" aria-label="Filtres actifs"></div>
                             <div class="sort-selector">
                                 <label for="sort">Trier par :</label>
                                 <select id="sort" aria-label="Trier les résultats">
@@ -126,11 +128,11 @@
                                 </select>
                             </div>
                             <div class="view-toggle" role="group" aria-label="Mode d'affichage">
-                                <button class="view-btn active" data-view="grid" aria-pressed="true" aria-label="Affichage en grille">
-                                    <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+                                <button class="view-btn active" data-view="grid" aria-label="Affichage en grille">
+                                    <span class="material-symbols-outlined">grid_view</span>
                                 </button>
-                                <button class="view-btn" data-view="list" aria-pressed="false" aria-label="Affichage en liste">
-                                    <span class="material-symbols-outlined" aria-hidden="true">view_list</span>
+                                <button class="view-btn" data-view="list" aria-label="Affichage en liste">
+                                    <span class="material-symbols-outlined">view_list</span>
                                 </button>
                             </div>
                         </div>
@@ -142,6 +144,7 @@
         </div>
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
@@ -183,6 +186,8 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SCRIPTS ===== -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/darkmode.js"></script>
     <script src="asset/js/recherche.js"></script>

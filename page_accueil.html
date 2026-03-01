@@ -13,58 +13,57 @@
 <body>
     <a href="#main-content" class="skip-link">Aller au contenu principal</a>
 
+    <!-- ===== HEADER ===== -->
     <header class="header" role="banner">
         <div class="container">
             <div class="header-content">
                 <a href="page_accueil.html" class="logo" aria-label="PearTech - Retour à l'accueil">
-                    <img src="asset/image/LogoProjetEcf.png" alt="logo PearTech" class="logo-img" aria-hidden="true">
-                    <div class="logo-text" aria-hidden="true">
+                    <img src="asset/image/LogoProjetEcf.png" alt="logo PearTech" class="logo-img">
+                    <div class="logo-text">
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>
                     </div>
                 </a>
                 <div class="search-bar" role="search">
                     <label for="search-input" class="sr-only">Rechercher un produit</label>
-                    <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                    <span class="material-symbols-outlined">search</span>
                     <input type="text" id="search-input"
                         placeholder="Rechercher un téléphone, une tablette, une montre connectée..."
-                        autocomplete="off"
-                        aria-autocomplete="list"
-                        aria-controls="search-results">
+                        autocomplete="off">
                     <div class="search-results" id="search-results" role="listbox" aria-label="Résultats de recherche"></div>
                 </div>
                 <nav class="header-nav" aria-label="Navigation principale">
                     <button class="nav-dropdown"
-                        aria-expanded="false"
-                        aria-haspopup="true"
-                        aria-controls="dropdown-menu"
                         aria-label="Menu des catégories de produits">
                         CATÉGORIES
-                        <span aria-hidden="true">Tous les produits</span>
-                        <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+                        <span>Tous les produits</span>
+                        <span class="material-symbols-outlined">expand_more</span>
                     </button>
                     <a href="page_favoris.html" class="icon-btn" aria-label="Mes favoris">
-                        <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                        <span class="fav-badge" id="fav-count" aria-live="polite" style="display:none">0</span>
+                        <span class="material-symbols-outlined">favorite</span>
+                        <span class="fav-badge" id="fav-count" style="display:none">0</span>
                     </a>
-                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair" aria-pressed="false">
-                        <span class="material-symbols-outlined" aria-hidden="true">light_mode</span>
+                    <button class="icon-btn" id="theme-toggle" aria-label="Basculer le thème sombre/clair">
+                        <span class="material-symbols-outlined">light_mode</span>
                     </button>
                     <a href="page_profil.html" class="icon-btn" aria-label="Mon compte">
-                        <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <span aria-hidden="true">Compte</span>
+                        <span class="material-symbols-outlined">person</span>
+                        <span>Compte</span>
                     </a>
                     <a href="page_panier.html" class="icon-btn" id="cart-icon" aria-label="Mon panier">
-                        <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                        <span aria-hidden="true">Panier</span>
-                        <span class="cart-badge" id="cart-count" aria-live="polite" aria-label="0 article dans le panier">0</span>
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span>Panier</span>
+                        <span class="cart-badge" id="cart-count">0</span>
                     </a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main id="main-content">
+
+        <!-- ===== HERO SECTION ===== -->
         <section class="hero-section" aria-labelledby="hero-heading">
             <div class="container">
                 <div class="hero-content">
@@ -84,7 +83,7 @@
                         </p>
                         <div class="hero-actions">
                             <a href="page_catalogue.html?categorie=apple" class="btn-primary">Voir les Produits Apple</a>
-                            <a href="page_catalogue.html?categorie=android" class="btn-secondary">Explorer les Produits   Android</a>
+                            <a href="page_catalogue.html?categorie=android" class="btn-secondary">Explorer les Produits Android</a>
                         </div>
                         <ul class="hero-features" aria-label="Nos engagements" style="list-style:none;padding:0;">
                             <li class="feature">
@@ -102,7 +101,7 @@
                         </ul>
                     </div>
                     <div class="hero-right">
-                        <div class="carousel-container" aria-label="Carrousel de produits vedettes" aria-roledescription="carrousel">
+                        <div class="carousel-container" aria-label="Carrousel de produits vedettes">
                             <input type="radio" name="carousel" id="slide1" class="carousel-radio" checked aria-label="Slide 1 : iPhone 15 Pro">
                             <input type="radio" name="carousel" id="slide2" class="carousel-radio" aria-label="Slide 2 : Galaxy S24 Ultra">
                             <input type="radio" name="carousel" id="slide3" class="carousel-radio" aria-label="Slide 3 : Apple Watch Series 9">
@@ -146,11 +145,12 @@
             </div>
         </section>
 
+        <!-- ===== CATEGORIES SECTION ===== -->
         <section class="categories-section" aria-labelledby="categories-heading">
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <div class="section-label" aria-hidden="true">PARCOURIR PAR CATÉGORIE</div>
+                        <div class="section-label">PARCOURIR PAR CATÉGORIE</div>
                         <h2 id="categories-heading" class="section-title">Catégories principales</h2>
                         <p class="section-description">Trouvez rapidement le produit adapté à vos besoins.</p>
                     </div>
@@ -158,22 +158,22 @@
                 </div>
                 <div class="categories-grid">
                     <a href="page_catalogue.html?categorie=apple" class="category-card">
-                        <div class="category-label" aria-hidden="true">Apple</div>
+                        <div class="category-label">Apple</div>
                         <h3 class="category-title">Apple</h3>
                         <p class="category-description">iPhone, iPad, Apple Watch et accessoires.</p>
                     </a>
                     <a href="page_catalogue.html?categorie=android" class="category-card">
-                        <div class="category-label" aria-hidden="true">Android</div>
+                        <div class="category-label">Android</div>
                         <h3 class="category-title">Android</h3>
                         <p class="category-description">Samsung, Google Pixel, Xiaomi et plus.</p>
                     </a>
                     <a href="page_catalogue.html?categorie=montres" class="category-card">
-                        <div class="category-label" aria-hidden="true">Montres connectées</div>
+                        <div class="category-label">Montres connectées</div>
                         <h3 class="category-title">Montres</h3>
                         <p class="category-description">Apple Watch, Galaxy Watch, Fitbit, Garmin.</p>
                     </a>
                     <a href="page_catalogue.html?categorie=tablettes" class="category-card">
-                        <div class="category-label" aria-hidden="true">Tablettes</div>
+                        <div class="category-label">Tablettes</div>
                         <h3 class="category-title">Tablettes</h3>
                         <p class="category-description">iPad, Samsung Tab, Amazon Fire.</p>
                     </a>
@@ -181,20 +181,21 @@
             </div>
         </section>
 
+        <!-- ===== PRODUCTS SECTION (Best-sellers) ===== -->
         <section class="products-section" aria-labelledby="products-heading">
             <div class="container">
                 <div class="section-header">
                     <div>
-                        <div class="section-label" aria-hidden="true">SÉLECTION</div>
+                        <div class="section-label">SÉLECTION</div>
                         <h2 id="products-heading" class="section-title">Best-sellers &amp; nouveautés</h2>
                         <p class="section-description">Les produits les plus appréciés par nos clients.</p>
                     </div>
                     <div class="filter-tabs" role="group" aria-label="Filtrer par catégorie">
-                        <button class="tab active" data-filter="tous" aria-pressed="true">Tous</button>
-                        <button class="tab" data-filter="apple" aria-pressed="false">Apple</button>
-                        <button class="tab" data-filter="android" aria-pressed="false">Android</button>
-                        <button class="tab" data-filter="montres" aria-pressed="false">Montres</button>
-                        <button class="tab" data-filter="tablettes" aria-pressed="false">Tablettes</button>
+                        <button class="tab active" data-filter="tous">Tous</button>
+                        <button class="tab" data-filter="apple">Apple</button>
+                        <button class="tab" data-filter="android">Android</button>
+                        <button class="tab" data-filter="montres">Montres</button>
+                        <button class="tab" data-filter="tablettes">Tablettes</button>
                     </div>
                 </div>
                 <div class="products-grid" id="products-grid" role="list" aria-label="Produits"></div>
@@ -208,9 +209,10 @@
             </div>
         </section>
 
+        <!-- ===== SERVICES SECTION ===== -->
         <section class="services-section" aria-labelledby="services-heading">
             <div class="container">
-                <div class="section-label" aria-hidden="true">POURQUOI PEARTECH</div>
+                <div class="section-label">POURQUOI PEARTECH</div>
                 <h2 id="services-heading" class="section-title">Des services pensés pour durer</h2>
                 <p class="section-description">Un écosystème complet pour choisir, recevoir et faire évoluer vos appareils.</p>
                 <div class="services-grid">
@@ -230,6 +232,7 @@
             </div>
         </section>
 
+        <!-- ===== NEWSLETTER SECTION ===== -->
         <section class="newsletter-section" aria-labelledby="newsletter-heading">
             <div class="container">
                 <h2 id="newsletter-heading">Recevez nos sélections &amp; conseils</h2>
@@ -243,6 +246,7 @@
         </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
     <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-grid">
@@ -285,6 +289,7 @@
         </div>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
     <script src="asset/js/data.js"></script>
     <script src="asset/js/product_grid.js"></script>
     <script src="asset/js/darkmode.js"></script>
