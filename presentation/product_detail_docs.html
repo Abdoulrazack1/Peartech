@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — product_detail.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#c084fc;--a2:#ff6b6b;--a3:#7eb5ff;--a4:#f5c542;--a5:#56d19e;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;flex-wrap:wrap;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  .sec p b,.sec p strong{color:var(--t);font-weight:700;}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#d8b4fe;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .cb{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d8b4fe;}
+  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .cbl{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+  .fork{display:grid;gap:1rem;width:100%;max-width:720px;}
+  .fork.f2{grid-template-columns:1fr 1fr;}
+  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
+  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
+  .fc .vn{width:100%;max-width:100%;}
+  .fc .va{width:100%;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
+  .box.info{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d8b4fe;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+  .box.bad {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+  .box.def {background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);color:#7eb5ff;}
+  .box.ana {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b,.box strong{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#d8b4fe}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#fde68a}
+  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+  .grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
+  .grow:last-child{border-bottom:none;}
+  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tc{font-family:'JetBrains Mono',monospace;color:#d8b4fe;font-size:.76rem;}
+  .tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+  .tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+  .tli{position:relative;margin-bottom:1.8rem;}
+  .tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+  .tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+  .tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+  .tlt{font-size:.95rem;font-weight:700;}
+  .tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
+  .tlb ic{background:var(--bg3);border:1px solid var(--border);}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── EXTRA SCHEMAS ─── */
+  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+  .ls-key{font-weight:700;margin-bottom:.25rem;}
+  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-box{border-radius:11px;padding:1rem;}
+  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .cmp-item:last-child{border-bottom:none;}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">product_detail.js</div>
+  <a href="#intro">Intro</a>
+  <a href="#url">URL → Produit</a>
+  <a href="#html">Génération HTML</a>
+  <a href="#tabs">Onglets</a>
+  <a href="#lightbox">Lightbox</a>
+  <a href="#options">Options & Prix</a>
+  <a href="#similar">Similaires</a>
+  <a href="#notes">Notes</a>
+  <a href="#recap">Récap</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>URL ?id=42</b><br><span style="color:var(--t3);font-size:.71rem;">via URLSearchParams
+<div class="schema">
+  <div class="schema-title">Lecture de l'URL — comment le produit est identifié</div>
+  <div style="display:flex;flex-direction:column;gap:.4rem;max-width:580px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.77rem;background:var(--bg3);border-radius:8px;padding:.6rem .9rem;color:var(--t2);">
+      page_produit.html<span style="color:#fde68a;">?id=42</span>&amp;ref=catalogue
+    </div>
+    <div style="display:flex;align-items:center;gap:.5rem;font-size:.73rem;color:var(--t2);">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);">↓</span>
+      <span><ic>new URLSearchParams(window.location.search).get('id')</ic> → <ic>"42"</ic></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.6rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">id trouvé</div>
+        <div style="font-size:.72rem;color:var(--t2);">parseInt("42") = 42<br>PearTechDB.getProductById(42) → objet produit<br>generateProductHTML(product)</div>
+      </div>
+      <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:.6rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.3rem;">id absent ou introuvable</div>
+        <div style="font-size:.72rem;color:var(--t2);">null ou NaN<br>console.error("Produit non trouvé")<br>window.location = '/'</div>
+      </div>
+    </div>
+  </div>
+</div>
+</span></div>
+<div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">getProductById, getSimilar…</span></div>
+<div class="carte-item"><b>window.PearTechCart</b><br><span style="color:var(--t3);font-size:.71rem;">pour ajouter au panier</span></div>
+<div class="carte-item"><b>localStorage peartech-notes-{id}</b><br><span style="color:var(--t3);font-size:.71rem;">notes personnelles</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#f472b622;color:#f472b6;border:1px solid #f472b644;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>generateProductHTML(p)</b><br><span style="color:var(--t3);font-size:.71rem;">tout le HTML de la fiche</span></div>
+<div class="carte-item"><b>initTabs()</b><br><span style="color:var(--t3);font-size:.71rem;">onglets description / specs / avis</span></div>
+<div class="carte-item"><b>initThumbnails()</b><br><span style="color:var(--t3);font-size:.71rem;">galerie images</span></div>
+<div class="carte-item"><b>initOptions()</b><br><span style="color:var(--t3);font-size:.71rem;">couleur, stockage → prix</span></div>
+<div class="carte-item"><b>generateSimilarProducts()</b><br><span style="color:var(--t3);font-size:.71rem;">cartes produits similaires</span></div>
+<div class="carte-item"><b>initNotes()</b><br><span style="color:var(--t3);font-size:.71rem;">notes localStorage</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>CustomEvent productSelected</b><br><span style="color:var(--t3);font-size:.71rem;">écouté par main.js</span></div>
+<div class="carte-item"><b>localStorage peartech-notes-{id}</b><br><span style="color:var(--t3);font-size:.71rem;">sauvegarde des notes</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>product_detail.js</span></h1>
+  <p>Ce fichier gère entièrement la page fiche produit. Il lit l'identifiant dans l'URL, charge le bon produit depuis la base de données, génère tout le HTML de la page, puis initialise les onglets, la galerie d'images avec lightbox, le système de prix dynamique selon les options, les produits similaires, et les notes personnelles.</p>
+  <div class="fbadge"><div class="dot"></div>product_detail.js · 10 fonctions · ~639 lignes · une seule page</div>
+</div>
+
+<!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro">
+  <div class="slabel">00 — Avant de commencer</div>
+  <h2>De l'URL vide à la fiche produit complète</h2>
+  <p>product_detail.js transforme une page HTML quasi-vide en fiche produit complète. Il lit l'URL pour savoir quel produit afficher, génère tout le contenu dynamiquement, puis branche les comportements interactifs un par un.</p>
+
+  <div class="box ana"><span class="bi">🎬</span><div><b>Analogie :</b> C'est comme un décorateur de plateau de tournage. La page HTML est un plateau vide avec juste quelques points d'ancrage (<ic>#product-detail</ic>, <ic>#breadcrumb</ic>…). product_detail.js arrive avec tous les accessoires (données du produit) et aménage entièrement le décor, puis installe tous les mécanismes interactifs.</div></div>
+
+  <h3>Vocabulaire essentiel — lisez ça en premier</h3>
+  <div class="glos">
+    <div class="glos-head">📖 Termes utilisés dans ce fichier</div>
+    <div class="grow"><div class="gterm">URLSearchParams</div><div class="gdef"><ic>new URLSearchParams(window.location.search)</ic> analyse la partie "?id=42" de l'URL. <ic>.get('id')</ic> retourne la valeur "42" sous forme de texte, ou <ic>null</ic> si le paramètre n'existe pas.</div></div>
+    <div class="grow"><div class="gterm">window.location.search</div><div class="gdef">La chaîne de requête de l'URL courante : pour <ic>page_produit.html?id=42</ic>, <ic>window.location.search</ic> vaut <ic>"?id=42"</ic>. C'est depuis là que le fichier sait quel produit afficher.</div></div>
+    <div class="grow"><div class="gterm">Template literal</div><div class="gdef">Chaîne délimitée par des backticks ( ` ) qui permet d'insérer des variables avec <ic>${variable}</ic> et de s'étendre sur plusieurs lignes. <ic>`Bonjour ${prenom} !`</ic> est bien plus lisible que <ic>'Bonjour ' + prenom + ' !'</ic>.</div></div>
+    <div class="grow"><div class="gterm">Object.entries()</div><div class="gdef"><ic>Object.entries({ram:"8Go", storage:"256Go"})</ic> retourne <ic>[["ram","8Go"], ["storage","256Go"]]</ic> — un tableau de paires [clé, valeur]. Utilisé pour générer les boutons d'options dynamiquement.</div></div>
+    <div class="grow"><div class="gterm">for...of</div><div class="gdef">Boucle qui parcourt les éléments d'un tableau un par un. <ic>for (const [key, values] of Object.entries(options))</ic> déstructure chaque paire en deux variables <ic>key</ic> et <ic>values</ic>.</div></div>
+    <div class="grow"><div class="gterm">Lightbox</div><div class="gdef">Superposition (overlay) qui affiche une image en grand format au-dessus de la page. L'arrière-plan est assombri. L'utilisateur peut naviguer entre les images, fermer via Échap, ou swiper sur mobile.</div></div>
+    <div class="grow"><div class="gterm">touchstart / touchend</div><div class="gdef">Événements déclenchés sur les appareils tactiles. <ic>touchstart</ic> enregistre la position du doigt au début du geste. <ic>touchend</ic> calcule la distance parcourue. Si > 50px vers la gauche → image suivante. Vers la droite → précédente.</div></div>
+    <div class="grow"><div class="gterm">?.  (optional chaining)</div><div class="gdef"><ic>document.querySelector('.titre')?.textContent</ic> : si <ic>querySelector</ic> retourne <ic>null</ic>, le <ic>?.</ic> court-circuite et renvoie <ic>undefined</ic> au lieu de lancer une erreur. Évite le classique "Cannot read properties of null".</div></div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 01 URL ══ -->
+<div class="sec" id="url">
+  <div class="slabel">01 — Point d'entrée</div>
+  <h2>De l'URL au produit affiché</h2>
+  <p>Tout commence par l'URL. La page ne sait pas quel produit afficher tant qu'elle n'a pas lu le paramètre <ic>?id=</ic>. Trois vérifications successives garantissent qu'on ne travaille qu'avec des données valides.</p>
+
+  <div class="diag">
+    <div class="dtitle">Flux complet — de l'URL au rendu</div>
+    <div class="vc">
+      <div class="vn w cgr">URL : page_produit.html?id=42</div>
+      <div class="va">↓<div class="val">new URLSearchParams(window.location.search).get('id')</div></div>
+      <div class="vn w cy">productId = "42" (texte) — ou null si paramètre absent</div>
+    </div>
+    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
+      <div class="fc">
+        <div class="fl flr">!productId (null)</div>
+        <div class="va">↓</div>
+        <div class="vn cr">window.location.href = 'page_accueil.html'<br>Redirection immédiate</div>
+      </div>
+      <div class="fc">
+        <div class="fl flg">productId existe</div>
+        <div class="va">↓</div>
+        <div class="vn cy">window.PearTechDB chargé ?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;width:100%;margin-top:.3rem;">
+          <div class="fc">
+            <div class="fl flr" style="font-size:.6rem;">NON</div>
+            <div class="va">↓</div>
+            <div class="vn cr" style="font-size:.7rem;">Message d'erreur dans main</div>
+          </div>
+          <div class="fc">
+            <div class="fl flg" style="font-size:.6rem;">OUI</div>
+            <div class="va">↓</div>
+            <div class="vn cg" style="font-size:.7rem;">getProductById(42)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vc" style="margin-top:.4rem;">
+      <div class="vn w cy">Produit trouvé ?</div>
+    </div>
+    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
+      <div class="fc">
+        <div class="fl flr">!product</div>
+        <div class="va">↓</div>
+        <div class="vn cr">"Produit introuvable" dans main</div>
+      </div>
+      <div class="fc">
+        <div class="fl flg">product trouvé</div>
+        <div class="va">↓</div>
+        <div class="vn cg">Génération HTML + Init des 5 modules</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// URLSearchParams analyse la chaîne "?id=42"</span>
+<span class="kw">const</span> <span class="vr">urlParams</span>  = <span class="kw">new</span> URLSearchParams(window.location.search);
+<span class="kw">const</span> <span class="vr">productId</span> = urlParams.<span class="fn">get</span>(<span class="s">'id'</span>);
+<span class="cm">// urlParams.get('id') = "42" (toujours un texte, jamais un nombre)
+// C'est pourquoi plus loin on fait parseInt(productId) pour la recherche en DB</span>
+
+<span class="kw">if</span> (!productId) {
+    window.location.href = <span class="s">'page_accueil.html'</span>;
+    <span class="kw">return</span>;  <span class="cm">// return OBLIGATOIRE : window.location.href ne stoppe pas l'exécution !</span>
+}
+
+<span class="kw">const</span> <span class="vr">product</span> = PearTechDB.<span class="fn">getProductById</span>(<span class="fn">parseInt</span>(productId));
+<span class="cm">// parseInt("42") → 42 (nombre)
+// La DB cherche par id numérique, pas par texte</span>
+</pre></div>
+
+  <div class="box warn"><span class="bi">⚠️</span><div><b>window.location.href ne stoppe pas le code !</b> Écrire <ic>window.location.href = 'page_accueil.html'</ic> demande au navigateur de naviguer, mais le code JavaScript CONTINUE de s'exécuter pendant quelques millisecondes. Sans le <ic>return</ic> juste après, les lignes suivantes s'exécuteraient aussi — et planteraient puisque <ic>productId</ic> est null.</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Anatomie de l'URL — ce que chaque partie signifie</div>
+    <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:700;text-align:center;letter-spacing:.03em;margin-bottom:1rem;line-height:2.5;">
+      <span style="color:var(--t2);">page_produit.html</span><span style="color:#ff9090;">?</span><span style="color:#f7d97a;">id</span><span style="color:#ff9090;">=</span><span style="color:#d8b4fe;">42</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;font-size:.78rem;">
+      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:8px;padding:.8rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);font-weight:700;margin-bottom:.3rem;">page_produit.html</div>
+        <div style="color:var(--t3);">Le fichier HTML — toujours le même pour tous les produits</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.8rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#f7d97a;font-weight:700;margin-bottom:.3rem;">?id=</div>
+        <div style="color:var(--t3);"><ic>window.location.search</ic> = "?id=42". Le <b>?</b> démarre la chaîne de requête, <b>id</b> est la clé</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.8rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#d8b4fe;font-weight:700;margin-bottom:.3rem;">42</div>
+        <div style="color:var(--t3);">La valeur — récupérée via <ic>urlParams.get('id')</ic>. Texte "42", pas nombre 42 !</div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem;background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.2);border-radius:8px;padding:.7rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#d8b4fe;text-align:center;">
+      PearTechDB.getProductById(<b>parseInt("42")</b>) → cherche par id numérique 42 → retourne l'objet produit
+    </div>
+  </div>
+
+  <h3>Le fil d'Ariane — breadcrumb dynamique</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Exemple : Accueil / Apple / MacBook Air M2</span>
+<span class="kw">const</span> <span class="vr">categorySlug</span> = <span class="fn">getCategorySlugFromId</span>(product.categoryId);
+<span class="cm">// getCategorySlugFromId cherche dans PearTechDB.categories la catégorie
+// dont l'id correspond à product.categoryId
+// Retourne le slug : "apple", "android", "tablettes"…</span>
+
+<span class="kw">const</span> <span class="vr">breadcrumb</span> = document.<span class="fn">getElementById</span>(<span class="s">'breadcrumb'</span>);
+<span class="kw">if</span> (breadcrumb) {
+    breadcrumb.innerHTML = <span class="s">`
+        &lt;a href="page_accueil.html"&gt;Accueil&lt;/a&gt;
+        &lt;span&gt;/&lt;/span&gt;
+        &lt;a href="page_catalogue.html?categorie=${categorySlug}"&gt;
+            ${categorySlug.<span class="fn">charAt</span>(<span class="nm">0</span>).<span class="fn">toUpperCase</span>() + categorySlug.<span class="fn">slice</span>(<span class="nm">1</span>)}
+        &lt;/a&gt;
+        &lt;span&gt;/&lt;/span&gt;
+        &lt;span&gt;${product.name}&lt;/span&gt;
+    `</span>;
+    <span class="cm">// charAt(0).toUpperCase() + slice(1) = mettre la 1ère lettre en majuscule
+    // "apple" → "A" + "pple" → "Apple"</span>
+}
+</pre></div>
+</div>
+<hr>
+
+<!-- ══ 02 HTML ══ -->
+<div class="sec" id="html">
+  <div class="slabel">02 — Génération du contenu</div>
+  <h2>generateProductHTML() — construire toute la fiche</h2>
+  <p>Cette fonction reçoit l'objet <ic>product</ic> et retourne une longue chaîne HTML. Elle gère plusieurs cas : stock disponible ou épuisé, présence ou absence d'un ancien prix, options de personnalisation, statut favori.</p>
+
+  <div class="diag">
+    <div class="dtitle">Structure du HTML généré par generateProductHTML</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:2;color:var(--t2);">
+        <div style="color:#c084fc;font-weight:700;margin-bottom:.3rem;">Colonne gauche</div>
+        <div style="color:#7eb5ff;">.product-gallery</div>
+        <div style="padding-left:1rem;">├─ #main-image (grande image)</div>
+        <div style="padding-left:1rem;">└─ #thumbnail-list</div>
+        <div style="padding-left:2rem;">└─ .thumbnail[data-index] ×N</div>
+      </div>
+      <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:2;color:var(--t2);">
+        <div style="color:#c084fc;font-weight:700;margin-bottom:.3rem;">Colonne droite</div>
+        <div style="color:#f7d97a;">.product-info</div>
+        <div style="padding-left:1rem;">.product-category</div>
+        <div style="padding-left:1rem;">h1.product-title</div>
+        <div style="padding-left:1rem;">.product-rating (étoiles)</div>
+        <div style="padding-left:1rem;">.product-price-box</div>
+        <div style="padding-left:1rem;">.product-options (si options)</div>
+        <div style="padding-left:1rem;">.product-actions (boutons)</div>
+        <div style="padding-left:1rem;">.product-services (3 icônes)</div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem;background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.7rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#d8b4fe;line-height:1.8;">
+      <b>Toute la largeur (grid-column: 1/-1) :</b><br>
+      .product-tabs → onglets : Description | Fiche technique | Avis clients | FAQ | Mes notes
+    </div>
+  </div>
+
+  <h3>Génération conditionnelle des options</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">optionsHtml</span> = <span class="s">''</span>;
+
+<span class="kw">if</span> (product.options && Object.<span class="fn">keys</span>(product.options).length > <span class="nm">0</span>) {
+    <span class="cm">// product.options = { ram: [{label:"8Go",price:0}, {label:"16Go",price:150}], storage: [...] }
+    // Object.keys() retourne ["ram", "storage"] — vérifie que ce n'est pas vide</span>
+
+    optionsHtml = <span class="s">'&lt;div class="product-options"&gt;'</span>;
+
+    <span class="kw">for</span> (<span class="kw">const</span> [key, values] <span class="kw">of</span> Object.<span class="fn">entries</span>(product.options)) {
+        <span class="cm">// key = "ram", values = [{label:"8Go",price:0}, {label:"16Go",price:150}]
+        // Destructuration : chaque entrée de [["ram", [...]], ["storage", [...]]] est
+        // décomposée en deux variables [key, values]</span>
+
+        <span class="kw">const</span> <span class="vr">optionLabel</span> = key === <span class="s">'ram'</span> ? <span class="s">'Mémoire RAM'</span> :
+                           key === <span class="s">'storage'</span> ? <span class="s">'Stockage'</span> :
+                           key === <span class="s">'color'</span> ? <span class="s">'Couleur'</span> :
+                           key.<span class="fn">charAt</span>(<span class="nm">0</span>).<span class="fn">toUpperCase</span>() + key.<span class="fn">slice</span>(<span class="nm">1</span>);
+        <span class="cm">// Traduction des clés techniques en labels lisibles
+        // Dernier cas : si clé inconnue, juste mettre la 1ère lettre en majuscule</span>
+
+        optionsHtml += <span class="s">`
+            &lt;div class="option-group" data-option-group="${key}"&gt;
+                &lt;span class="option-label"&gt;${optionLabel}:&lt;/span&gt;
+                &lt;div class="option-buttons"&gt;
+                    ${values.<span class="fn">map</span>((opt, index) =>
+                        <span class="s">`&lt;button class="option-btn ${index === 0 ? 'active' : ''}"
+                                  data-price="${opt.price}"
+                                  data-value="${opt.label}"&gt;${opt.label}&lt;/button&gt;`</span>
+                    ).<span class="fn">join</span>(<span class="s">''</span>)}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `</span>;
+        <span class="cm">// index === 0 ? 'active' : '' → le premier bouton de chaque groupe est actif par défaut</span>
+    }
+    optionsHtml += <span class="s">'&lt;/div&gt;'</span>;
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Object.entries() — comment les options sont décomposées</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:center;">
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;line-height:1.8;color:var(--t2);">
+        <div style="color:#d8b4fe;margin-bottom:.3rem;">product.options</div>
+        {<br>
+        &nbsp;&nbsp;ram: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{label:"8Go", price:0},<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{label:"16Go", price:150}<br>
+        &nbsp;&nbsp;],<br>
+        &nbsp;&nbsp;storage: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{label:"256Go", price:0},<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{label:"512Go", price:200}<br>
+        &nbsp;&nbsp;]<br>
+        }
+      </div>
+      <div style="font-size:1.5rem;color:var(--t3);text-align:center;">→</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;line-height:1.8;color:var(--t2);">
+        <div style="color:#f7d97a;margin-bottom:.3rem;">Object.entries() → itérations</div>
+        <div style="color:#7ee8b8;">Tour 1 : key="ram"</div>
+        <div style="padding-left:1rem;">values=[{label:"8Go"…}, …]</div>
+        <div style="padding-left:1rem;">→ génère le groupe RAM</div>
+        <div style="color:#7eb5ff;margin-top:.3rem;">Tour 2 : key="storage"</div>
+        <div style="padding-left:1rem;">values=[{label:"256Go"…}, …]</div>
+        <div style="padding-left:1rem;">→ génère le groupe Stockage</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 03 TABS ══ -->
+<div class="sec" id="tabs">
+  <div class="slabel">03 — Onglets</div>
+  <h2>initTabs() — afficher un panneau à la fois</h2>
+  <p>Les onglets (Description, Fiche technique, Avis, FAQ, Notes) suivent le même pattern que filtre.js : retirer <ic>active</ic> de tout, puis l'ajouter sur la cible.</p>
+<div class="diag">
+  <div class="dtitle">Les 5 onglets — data-tab → #tab-{id}</div>
+  <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.7rem;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.4);border-radius:6px;padding:.3rem .65rem;color:#c4b5fd;">desc</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .65rem;color:var(--t3);">specs</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .65rem;color:var(--t3);">reviews</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .65rem;color:var(--t3);">faq</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .65rem;color:var(--t3);">notes</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:540px;">
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="color:#c4b5fd;font-family:'JetBrains Mono',monospace;">①</span><span>Clic sur "Fiche technique" → tabId = 'specs'</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="color:#fda4af;font-family:'JetBrains Mono',monospace;">②</span><span>tabBtns.forEach → classList.remove('active') sur tous</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="color:#fda4af;font-family:'JetBrains Mono',monospace;">③</span><span>tabContents.forEach → classList.remove('active') sur tous</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="color:#7ee8b8;font-family:'JetBrains Mono',monospace;">④</span><span>btn.classList.add('active') → bouton "Fiche technique" marqué</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="color:#7ee8b8;font-family:'JetBrains Mono',monospace;">⑤</span><span>getElementById('tab-specs').classList.add('active') → panneau visible</span>
+    </div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">initTabs</span>() {
+    <span class="kw">const</span> <span class="vr">tabBtns</span>     = document.<span class="fn">querySelectorAll</span>(<span class="s">'.tab-btn'</span>);
+    <span class="kw">const</span> <span class="vr">tabContents</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.tab-content'</span>);
+
+    tabBtns.<span class="fn">forEach</span>(btn => {
+        btn.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, () => {
+            <span class="kw">const</span> <span class="vr">tabId</span> = btn.dataset.tab;
+            <span class="cm">// data-tab="specs" → tabId = "specs"</span>
+
+            tabBtns.<span class="fn">forEach</span>(b => b.classList.<span class="fn">remove</span>(<span class="s">'active'</span>));     <span class="cm">// 1. Tout effacer</span>
+            tabContents.<span class="fn">forEach</span>(c => c.classList.<span class="fn">remove</span>(<span class="s">'active'</span>)); <span class="cm">// 2. Cacher tous les panneaux</span>
+            btn.classList.<span class="fn">add</span>(<span class="s">'active'</span>);                              <span class="cm">// 3. Marquer le bouton cliqué</span>
+
+            <span class="kw">const</span> <span class="vr">activeTab</span> = document.<span class="fn">getElementById</span>(<span class="s">`tab-${tabId}`</span>);
+            <span class="kw">if</span> (activeTab) activeTab.classList.<span class="fn">add</span>(<span class="s">'active'</span>);          <span class="cm">// 4. Afficher le panneau</span>
+            <span class="cm">// template literal : `tab-${"specs"}` → "tab-specs" → cherche #tab-specs</span>
+        });
+    });
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">État des onglets avant et après un clic sur "Fiche technique"</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-align:center;margin-bottom:.6rem;">Avant (Description actif)</div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <div style="background:rgba(192,132,252,.15);border:1px solid rgba(192,132,252,.45);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#d8b4fe;">.tab-btn[data-tab="desc"] .active</div>
+          <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">.tab-btn[data-tab="specs"]</div>
+          <div style="background:rgba(192,132,252,.15);border:1px solid rgba(192,132,252,.45);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#d8b4fe;margin-top:.4rem;">#tab-desc .active → visible</div>
+          <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">#tab-specs → caché</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;text-align:center;margin-bottom:.6rem;">Après (Fiche technique actif)</div>
+        <div style="display:flex;flex-direction:column;gap:.3rem;">
+          <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">.tab-btn[data-tab="desc"]</div>
+          <div style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">.tab-btn[data-tab="specs"] .active</div>
+          <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);margin-top:.4rem;">#tab-desc → caché</div>
+          <div style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);border-radius:6px;padding:.4rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">#tab-specs .active → visible</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 04 LIGHTBOX ══ -->
+<div class="sec" id="lightbox">
+  <div class="slabel">04 — Galerie et Lightbox</div>
+  <h2>initThumbnails + initLightbox() — galerie interactive</h2>
+  <p>Deux niveaux d'interaction pour les images : clic sur une miniature pour changer l'image principale, clic sur l'image principale pour ouvrir la lightbox en plein écran.</p>
+
+  <div class="diag">
+    <div class="dtitle">Architecture de la galerie — deux zones distinctes</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:1.1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7eb5ff;margin-bottom:.7rem;">Niveau 1 — Miniatures</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Clic sur <ic>.thumbnail</ic> → change <ic>#main-image img.src</ic> + gère <ic>.active</ic> sur les miniatures. Simple et rapide, pas d'overlay.</div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:7px;padding:.6rem;line-height:1.7;color:var(--t2);">mainImage.src = product.images[index]<br>thumbnails.forEach(t =&gt; t.classList.remove('active'))<br>thumb.classList.add('active')</div>
+      </div>
+      <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:12px;padding:1.1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#d8b4fe;margin-bottom:.7rem;">Niveau 2 — Lightbox</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Clic sur <ic>#main-image</ic> → ouvre l'overlay. Navigation gauche/droite, Échap pour fermer, swipe mobile, compteur "2 / 4", sync avec les miniatures.</div>
+        <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:7px;padding:.6rem;line-height:1.7;color:var(--t2);">overlay.classList.add('active')<br>document.body.style.overflow = 'hidden'<br><span style="color:#555e74;font-style:italic;">// bloque le scroll de la page</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Création de l'overlay — une seule fois</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">initLightbox</span>(product) {
+    <span class="cm">// Garde : si l'overlay existe déjà, on ne le recrée pas</span>
+    <span class="kw">if</span> (document.<span class="fn">getElementById</span>(<span class="s">'lightbox-overlay'</span>)) <span class="kw">return</span>;
+
+    <span class="kw">const</span> <span class="vr">overlay</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+    overlay.id        = <span class="s">'lightbox-overlay'</span>;
+    overlay.className = <span class="s">'lightbox-overlay'</span>;
+    overlay.innerHTML = <span class="s">`
+        &lt;div class="lightbox-container"&gt;
+            &lt;button class="lightbox-close"&gt;✕&lt;/button&gt;
+            &lt;button class="lightbox-prev"&gt;←&lt;/button&gt;
+            &lt;img class="lightbox-img" id="lightbox-img"&gt;
+            &lt;button class="lightbox-next"&gt;→&lt;/button&gt;
+            &lt;div class="lightbox-counter"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+    `</span>;
+    document.body.<span class="fn">appendChild</span>(overlay);
+    <span class="cm">// L'overlay est ajouté au body et reste dans le DOM toujours.
+    // Il est visible seulement quand il a la classe "active".</span>
+}
+</pre></div>
+
+  <h3>Navigation circulaire — l'opérateur modulo %</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Navigation "suivant" — circulaire grâce au modulo</span>
+currentIndex = (currentIndex + <span class="nm">1</span>) % images.length;
+
+<span class="cm">// Exemple avec 4 images (index 0 à 3) :
+// currentIndex=0 → (0+1) % 4 = 1  ✓
+// currentIndex=2 → (2+1) % 4 = 3  ✓
+// currentIndex=3 → (3+1) % 4 = 0  ← revient au début
+
+// Navigation "précédent" — légèrement plus complexe</span>
+currentIndex = (currentIndex - <span class="nm">1</span> + images.length) % images.length;
+
+<span class="cm">// Pourquoi + images.length ?
+// currentIndex=0 → (0-1) % 4 = -1 en JS → problème !
+// Avec correction : (0-1+4) % 4 = 3 % 4 = 3 ← va à la dernière image ✓
+// currentIndex=2 → (2-1+4) % 4 = 5 % 4 = 1 ✓</span>
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Modulo — navigation circulaire sur 4 images</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1rem;">
+      <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7eb5ff;">index 0<br>image 1</div>
+      <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7eb5ff;">index 1<br>image 2</div>
+      <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7eb5ff;">index 2<br>image 3</div>
+      <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7eb5ff;">index 3<br>image 4</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;font-size:.78rem;color:var(--t2);">
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:8px;padding:.7rem;">
+        <b style="color:#7ee8b8;">→ Suivant depuis index 3</b><br>
+        (3 + 1) % 4 = <b>0</b> ← retour au début
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.7rem;">
+        <b style="color:#f7d97a;">← Précédent depuis index 0</b><br>
+        (0 − 1 + 4) % 4 = 3 % 4 = <b>3</b> ← va à la fin
+      </div>
+    </div>
+  </div>
+
+  <h3>Swipe tactile — détection du glissement</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">touchStartX</span> = <span class="nm">0</span>;
+
+overlay.<span class="fn">addEventListener</span>(<span class="s">'touchstart'</span>, (e) => {
+    <span class="vr">touchStartX</span> = e.touches[<span class="nm">0</span>].clientX;
+    <span class="cm">// e.touches[0] = premier doigt en contact. clientX = position horizontale en pixels</span>
+}, { passive: <span class="kw">true</span> });
+<span class="cm">// { passive: true } = on promet de ne pas appeler e.preventDefault()
+// → le navigateur peut gérer le scroll en parallèle, plus fluide</span>
+
+overlay.<span class="fn">addEventListener</span>(<span class="s">'touchend'</span>, (e) => {
+    <span class="kw">const</span> <span class="vr">diff</span> = touchStartX - e.changedTouches[<span class="nm">0</span>].clientX;
+    <span class="cm">// diff > 0 : doigt a glissé VERS LA GAUCHE → image suivante
+    // diff < 0 : doigt a glissé VERS LA DROITE → image précédente</span>
+
+    <span class="kw">if</span> (Math.<span class="fn">abs</span>(diff) > <span class="nm">50</span>) {  <span class="cm">// seuil : au moins 50 pixels de déplacement</span>
+        <span class="kw">if</span> (diff > <span class="nm">0</span>) {
+            currentIndex = (currentIndex + <span class="nm">1</span>) % images.length;
+        } <span class="kw">else</span> {
+            currentIndex = (currentIndex - <span class="nm">1</span> + images.length) % images.length;
+        }
+        <span class="fn">updateLightbox</span>(currentIndex);
+    }
+}, { passive: <span class="kw">true</span> });
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Les 4 façons de naviguer dans la lightbox</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:.8rem;">
+      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:.3rem;">◀ ▶</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.3rem;">Boutons nav</div>
+        <div style="font-size:.75rem;color:var(--t3);"><ic>e.stopPropagation()</ic> — évite de fermer la lightbox en même temps</div>
+      </div>
+      <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:.3rem;">← →</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d8b4fe;margin-bottom:.3rem;">Flèches clavier</div>
+        <div style="font-size:.75rem;color:var(--t3);">Vérifie <ic>overlay.classList.contains('active')</ic> avant de réagir</div>
+      </div>
+      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:.3rem;">👆</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">Swipe tactile</div>
+        <div style="font-size:.75rem;color:var(--t3);">Seuil 50px — ignore les micro-dérapages accidentels</div>
+      </div>
+      <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.3rem;margin-bottom:.3rem;">⎋</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.3rem;">Échap / overlay</div>
+        <div style="font-size:.75rem;color:var(--t3);">Retire <ic>.active</ic> + restaure <ic>overflow</ic> du body</div>
+      </div>
+    </div>
+    <div style="background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.2);border-radius:8px;padding:.7rem 1rem;font-size:.78rem;color:var(--t2);">
+      Toutes ces méthodes appellent <ic>updateLightbox(index)</ic> — une seule fonction centralise la mise à jour : image, compteur "2 / 4", opacité de transition, et sync des miniatures.
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 05 OPTIONS ══ -->
+<div class="sec" id="options">
+  <div class="slabel">05 — Prix dynamique</div>
+  <h2>initOptions() — le prix se recalcule à chaque sélection</h2>
+  <p>Quand l'utilisateur choisit une option (16 Go RAM, 512 Go SSD…), le prix affiché se met à jour immédiatement. La logique est simple : prix de base + somme des surcoûts des options actives.</p>
+<div class="diag">
+  <div class="dtitle">Calcul du prix avec options — exemple MacBook</div>
+  <div style="display:flex;flex-direction:column;gap:.4rem;max-width:520px;">
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Prix de base</div>
+      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7dd3fc;">product.basePrice = 1 299 €</div>
+    </div>
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Option RAM sélect.</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#c4b5fd;">16 Go → dataset.priceAddon = +200</div>
+    </div>
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Option SSD sélect.</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#c4b5fd;">512 Go → dataset.priceAddon = +100</div>
+    </div>
+    <div style="border-top:1px solid var(--border);margin:.1rem 0;"></div>
+    <div style="display:grid;grid-template-columns:140px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;">Prix affiché</div>
+      <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7ee8b8;font-weight:700;">1299 + 200 + 100 = 1 599 €</div>
+    </div>
+  </div>
+  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">querySelectorAll('.option-btn.active') → reduce((sum, btn) => sum + Number(btn.dataset.priceAddon || 0), basePrice) → innerHTML mis à jour</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">initOptions</span>(product) {
+    <span class="kw">const</span> <span class="vr">optionGroups</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.option-group'</span>);
+    <span class="kw">const</span> <span class="vr">priceElement</span> = document.<span class="fn">getElementById</span>(<span class="s">'current-price'</span>);
+    <span class="kw">if</span> (!priceElement) <span class="kw">return</span>;
+
+    <span class="kw">let</span> <span class="vr">basePrice</span> = product.basePrice || product.price;
+    <span class="cm">// basePrice || product.price : si basePrice n'existe pas → utiliser price</span>
+
+    <span class="kw">function</span> <span class="fn">updatePrice</span>() {
+        <span class="kw">let</span> <span class="vr">total</span> = basePrice;
+
+        optionGroups.<span class="fn">forEach</span>(group => {
+            <span class="kw">const</span> <span class="vr">activeBtn</span> = group.<span class="fn">querySelector</span>(<span class="s">'.option-btn.active'</span>);
+            <span class="kw">if</span> (activeBtn && activeBtn.dataset.price) {
+                total += <span class="fn">parseFloat</span>(activeBtn.dataset.price);
+                <span class="cm">// data-price="150" → 150 (surcoût de l'option active)</span>
+            }
+        });
+
+        priceElement.textContent = total.<span class="fn">toFixed</span>(<span class="nm">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>, <span class="s">','</span>) + <span class="s">' €'</span>;
+        <span class="cm">// toFixed(2) = toujours 2 décimales : 999 → "999.00"
+        // .replace('.', ',') = format français : "999.00" → "999,00"</span>
+
+        <span class="kw">const</span> <span class="vr">paymentInfo</span> = document.<span class="fn">querySelector</span>(<span class="s">'.payment-info'</span>);
+        <span class="kw">if</span> (paymentInfo) {
+            paymentInfo.textContent = <span class="s">`ou 12 × ${(total/<span class="nm">12</span>).<span class="fn">toFixed</span>(<span class="nm">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>, <span class="s">','</span>)} € sans frais`</span>;
+        }
+    }
+
+    optionGroups.<span class="fn">forEach</span>(group => {
+        <span class="kw">const</span> <span class="vr">btns</span> = group.<span class="fn">querySelectorAll</span>(<span class="s">'.option-btn'</span>);
+        btns.<span class="fn">forEach</span>(btn => {
+            btn.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, () => {
+                btns.<span class="fn">forEach</span>(b => b.classList.<span class="fn">remove</span>(<span class="s">'active'</span>));
+                btn.classList.<span class="fn">add</span>(<span class="s">'active'</span>);
+                <span class="fn">updatePrice</span>();
+            });
+        });
+    });
+
+    <span class="fn">updatePrice</span>();  <span class="cm">// Calcule le prix initial (options par défaut)</span>
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">updatePrice() — exemple avec 2 groupes d'options</div>
+    <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;justify-content:center;">
+      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.4rem;">Prix de base</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--t2);">999 €</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);">+</div>
+      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.4rem;">RAM active</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;color:#f7d97a;">16 Go = +150 €</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">data-price="150"</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);">+</div>
+      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.4rem;">Stockage actif</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;color:#7eb5ff;">512 Go = +200 €</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">data-price="200"</div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);">=</div>
+      <div style="background:rgba(192,132,252,.1);border:2px solid rgba(192,132,252,.45);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.4rem;">Prix affiché</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#d8b4fe;">1 349,00 €</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">ou 12 × 112,42 €</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 06 SIMILAR ══ -->
+<div class="sec" id="similar">
+  <div class="slabel">06 — Produits similaires</div>
+  <h2>generateSimilarProducts() — même catégorie, sauf le courant</h2>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">generateSimilarProducts</span>(currentProduct) {
+    <span class="kw">const</span> <span class="vr">grid</span> = document.<span class="fn">getElementById</span>(<span class="s">'similar-products-grid'</span>);
+    <span class="kw">if</span> (!grid) <span class="kw">return</span>;
+
+    <span class="kw">const</span> <span class="vr">categorySlug</span> = <span class="fn">getCategorySlugFromId</span>(currentProduct.categoryId);
+
+    <span class="kw">let</span> <span class="vr">similar</span> = [];
+    <span class="kw">if</span> (categorySlug && PearTechDB.getProductsByCategory) {
+        similar = PearTechDB
+            .<span class="fn">getProductsByCategory</span>(categorySlug)  <span class="cm">// tous les produits de cette catégorie</span>
+            .<span class="fn">filter</span>(p => p.id !== currentProduct.id)    <span class="cm">// exclure le produit courant</span>
+            .<span class="fn">slice</span>(<span class="nm">0</span>, <span class="nm">6</span>);                               <span class="cm">// max 6 produits</span>
+    }
+
+    <span class="kw">if</span> (similar.length === <span class="nm">0</span>) {
+        grid.innerHTML = <span class="s">'&lt;p&gt;Aucun produit similaire pour le moment.&lt;/p&gt;'</span>;
+        <span class="kw">return</span>;
+    }
+
+    grid.innerHTML = similar.<span class="fn">map</span>(p => <span class="s">`
+        &lt;article class="product-card" data-product-id="${p.id}"&gt;
+            &lt;a href="page_produit.html?id=${p.id}" class="product-image"&gt;
+                &lt;img src="${p.images[0]}" onerror="this.src='/asset/image/no-image.png'"&gt;
+            &lt;/a&gt;
+            …
+        &lt;/article&gt;
+    `</span>).<span class="fn">join</span>(<span class="s">''</span>);
+    <span class="cm">// .map() transforme chaque produit en HTML
+    // .join('') colle tous les morceaux ensemble sans séparateur</span>
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Chaîne de filtrage des produits similaires</div>
+    <div class="vc">
+      <div class="vn w cgr">PearTechDB — tous les produits (ex: 40 produits)</div>
+      <div class="va">↓<div class="val">getProductsByCategory("apple")</div></div>
+      <div class="vn w cbl">Produits Apple uniquement (ex: 12 produits)</div>
+      <div class="va">↓<div class="val">.filter(p => p.id !== currentProduct.id)</div></div>
+      <div class="vn w cy">Même catégorie, SANS le produit courant (ex: 11 produits)</div>
+      <div class="va">↓<div class="val">.slice(0, 6)</div></div>
+      <div class="vn w cg">Maximum 6 produits similaires affichés</div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 07 NOTES ══ -->
+<div class="sec" id="notes">
+  <div class="slabel">07 — Notes personnelles</div>
+  <h2>initNotes() — sauvegarder des notes par produit</h2>
+  <p>L'onglet "Mes notes" permet à l'utilisateur de saisir du texte lié à ce produit. Les notes sont sauvegardées dans localStorage avec une clé unique par produit. Elles persistent entre les sessions.</p>
+<div class="diag">
+  <div class="dtitle">Pipeline generateSimilarProducts(currentProduct)</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;">
+    <div style="display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">source</div>
+      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7dd3fc;">PearTechDB.getProductsByCategory(slug) → tous les produits de la catégorie</div>
+    </div>
+    <div style="display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">filtre</div>
+      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">.filter(p => p.id !== currentProduct.id) → exclu lui-même</div>
+    </div>
+    <div style="display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">limite</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#c4b5fd;">.slice(0, 6) → max 6 produits similaires</div>
+    </div>
+    <div style="display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">rendu</div>
+      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">similar.length === 0 → section cachée · sinon → buildCard() × N → grid</div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="box def"><span class="bi">🔤</span><div><b>Clé unique par produit :</b> <ic>'peartech-notes-42'</ic> pour l'iPhone id=42, <ic>'peartech-notes-7'</ic> pour le MacBook id=7. En ajoutant l'id à la clé, chaque produit a son propre espace de stockage. Sans ça, toutes les fiches produits partageraient la même note — et s'effaceraient mutuellement.</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Isolation des notes dans localStorage — une clé par produit</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem;">
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d8b4fe;margin-bottom:.4rem;">page_produit.html?id=5</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">clé localStorage :</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#d8b4fe;background:var(--bg3);border-radius:5px;padding:.3rem .5rem;margin-bottom:.4rem;">'peartech-notes-5'</div>
+        <div style="font-size:.75rem;color:var(--t2);">Valeur : "À comparer avec l'iPhone 15 Pro…"</div>
+      </div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">page_produit.html?id=42</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">clé localStorage :</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;background:var(--bg3);border-radius:5px;padding:.3rem .5rem;margin-bottom:.4rem;">'peartech-notes-42'</div>
+        <div style="font-size:.75rem;color:var(--t2);">Valeur : "Prix vu moins cher sur Cdiscount…"</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">page_produit.html?id=99</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">clé localStorage :</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;background:var(--bg3);border-radius:5px;padding:.3rem .5rem;margin-bottom:.4rem;">'peartech-notes-99'</div>
+        <div style="font-size:.75rem;color:var(--t2);">Valeur : "" (aucune note)</div>
+      </div>
+    </div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;">
+      Chaque visite sur une fiche produit charge <b>uniquement sa propre clé</b>. Les notes de l'iPhone ne contaminent jamais celles du MacBook.
+    </div>
+  </div>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">initNotes</span>() {
+    <span class="kw">const</span> <span class="vr">urlId</span> = <span class="kw">new</span> URLSearchParams(window.location.search).<span class="fn">get</span>(<span class="s">'id'</span>);
+    <span class="kw">if</span> (!urlId) <span class="kw">return</span>;
+
+    <span class="kw">const</span> <span class="vr">STORAGE_KEY</span> = <span class="s">'peartech-notes-'</span> + urlId;
+    <span class="cm">// Exemple : 'peartech-notes-42' — unique par produit</span>
+
+    <span class="kw">const</span> <span class="vr">textarea</span>  = document.<span class="fn">getElementById</span>(<span class="s">'notes-textarea'</span>);
+    <span class="kw">const</span> <span class="vr">saveBtn</span>   = document.<span class="fn">getElementById</span>(<span class="s">'notes-btn-save'</span>);
+    <span class="kw">const</span> <span class="vr">clearBtn</span>  = document.<span class="fn">getElementById</span>(<span class="s">'notes-btn-clear'</span>);
+    <span class="kw">const</span> <span class="vr">charCount</span> = document.<span class="fn">getElementById</span>(<span class="s">'notes-char-count'</span>);
+    <span class="kw">const</span> <span class="vr">indicator</span> = document.<span class="fn">getElementById</span>(<span class="s">'notes-saved-indicator'</span>);
+
+    <span class="cm">// Charger la note existante pour ce produit</span>
+    <span class="kw">const</span> <span class="vr">saved</span> = localStorage.<span class="fn">getItem</span>(STORAGE_KEY) || <span class="s">''</span>;
+    textarea.value = saved;
+    <span class="fn">updateCharCount</span>(saved.length);
+
+    <span class="cm">// Raccourci Ctrl+S / Cmd+S (Mac)</span>
+    textarea.<span class="fn">addEventListener</span>(<span class="s">'keydown'</span>, <span class="kw">function</span>(e) {
+        <span class="kw">if</span> ((e.ctrlKey || e.metaKey) && e.key === <span class="s">'s'</span>) {
+            e.<span class="fn">preventDefault</span>();  <span class="cm">// empêche le dialogue "Enregistrer la page" du navigateur</span>
+            localStorage.<span class="fn">setItem</span>(STORAGE_KEY, textarea.value);
+            <span class="fn">showIndicator</span>(<span class="s">'✓ Sauvegardée'</span>, <span class="kw">false</span>);
+        }
+    });
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Système de notes — carte des interactions</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;">
+      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.2rem;margin-bottom:.3rem;">⌨️</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t2);margin-bottom:.3rem;">Frappe dans textarea</div>
+        <div style="font-size:.75rem;color:var(--t3);">Compteur mis à jour en temps réel. Indicateur "Sauvegardée" effacé.</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.2rem;margin-bottom:.3rem;">💾</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d8b4fe;margin-bottom:.3rem;">Bouton Sauvegarder<br>ou Ctrl+S</div>
+        <div style="font-size:.75rem;color:var(--t3);">localStorage.setItem(). Indicateur "✓ Sauvegardée" 3s.</div>
+      </div>
+      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-size:1.2rem;margin-bottom:.3rem;">🗑️</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.3rem;">Bouton Effacer</div>
+        <div style="font-size:.75rem;color:var(--t3);">confirm() d'abord. Puis localStorage.removeItem(). Focus retour sur textarea.</div>
+      </div>
+    </div>
+    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span><ic>showIndicator(text, isWarning)</ic> affiche un message pendant 3 secondes puis s'efface automatiquement via <ic>clearTimeout</ic> + <ic>setTimeout</ic>. Le <ic>clearTimeout(indicator._timer)</ic> annule un timer précédent avant d'en lancer un nouveau — évite l'empilement si on sauvegarde plusieurs fois rapidement.</span></div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 08 RECAP ══ -->
+<div class="sec" id="recap">
+  <div class="slabel">08 — Récapitulatif</div>
+  <h2>Le film complet de A à Z</h2>
+<div class="diag">
+  <div class="dtitle">Séquence d'initialisation — les 12 fonctions dans l'ordre</div>
+  <div style="display:flex;flex-direction:column;gap:.25rem;max-width:580px;">
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">1</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7dd3fc;">init()</div>
+      <div style="font-size:.7rem;color:var(--t3);">DOMContentLoaded · lit ?id= URL · getProductById</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">2</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#c4b5fd;">generateProductHTML()</div>
+      <div style="font-size:.7rem;color:var(--t3);">injecte tout le HTML de la fiche dans #product-container</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">3</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initTabs()</div>
+      <div style="font-size:.7rem;color:var(--t3);">5 onglets + panneaux</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">4</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initThumbnails()</div>
+      <div style="font-size:.7rem;color:var(--t3);">galerie · miniatures → image principale</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">5</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initLightbox()</div>
+      <div style="font-size:.7rem;color:var(--t3);">plein écran · Escape/clic ferme</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">6</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initOptions()</div>
+      <div style="font-size:.7rem;color:var(--t3);">prix dynamique · basePrice + addons</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">7</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initAddToCart()</div>
+      <div style="font-size:.7rem;color:var(--t3);">PearTechCart.add() avec options sélectionnées</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">8</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initQuantityControls()</div>
+      <div style="font-size:.7rem;color:var(--t3);">+ / − · min=1 · max=stock</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">9</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initFavoris()</div>
+      <div style="font-size:.7rem;color:var(--t3);">Favoris.toggle · cœur rouge/vide</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">10</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">initNotes()</div>
+      <div style="font-size:.7rem;color:var(--t3);">localStorage 'peartech-notes-{id}'</div>
+    </div>
+    <div style="display:grid;grid-template-columns:28px 140px 1fr;gap:.4rem;align-items:center;padding-left:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">11</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">generateSimilarProducts()</div>
+      <div style="font-size:.7rem;color:var(--t3);">même catégorie · max 6</div>
+    </div>
+  </div>
+</div>
+
+<div class="diag">
+  <div class="dtitle">Les 12 fonctions de product_detail.js</div>
+  <table class="recap-table">
+    <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td class="fn-cell">init()</td><td>DOMContentLoaded</td><td>Lit ?id= URL · getProductById() · generateProductHTML() · init*() en cascade</td></tr>
+      <tr><td class="fn-cell">generateProductHTML(p)</td><td>appelée par init()</td><td>Injecte tout le HTML de la fiche dans #product-container</td></tr>
+      <tr><td class="fn-cell">initTabs()</td><td>après generateProductHTML</td><td>Clic onglet → active/désactive panneaux + aria-selected</td></tr>
+      <tr><td class="fn-cell">initThumbnails()</td><td>après generateProductHTML</td><td>Clic miniature → met à jour image principale + active state</td></tr>
+      <tr><td class="fn-cell">initLightbox()</td><td>après generateProductHTML</td><td>Clic image principale → plein écran · Escape/clic → ferme</td></tr>
+      <tr><td class="fn-cell">initOptions()</td><td>après generateProductHTML</td><td>Clic option (couleur/stockage) → recalcule le prix affiché</td></tr>
+      <tr><td class="fn-cell">initAddToCart()</td><td>après generateProductHTML</td><td>Lit options sélectionnées + qty → PearTechCart.add()</td></tr>
+      <tr><td class="fn-cell">initQuantityControls()</td><td>après generateProductHTML</td><td>Boutons ±qty avec min=1 max=99</td></tr>
+      <tr><td class="fn-cell">initFavoris()</td><td>après generateProductHTML</td><td>Lit Favoris.isFav(id) → état bouton · clic → toggle + mise à jour icône</td></tr>
+      <tr><td class="fn-cell">initNotes()</td><td>après generateProductHTML</td><td>Textarea → localStorage[peartech-note-{id}] avec autoSave</td></tr>
+      <tr><td class="fn-cell">generateSimilarProducts(p)</td><td>appelée par init()</td><td>getSimilarProducts(id) → 4 cartes dans #similar-products</td></tr>
+      <tr><td class="fn-cell">formatPrice(n)</td><td>utilitaire</td><td>1329 → "1 329,00 €" (locale fr-FR)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+  <div class="tl">
+    <div class="tli"><div class="tld" style="background:var(--a4)"></div>
+      <div class="tlh"><div class="tls">Étape 1 — DOMContentLoaded</div><div class="tlt">Lecture de l'URL</div></div>
+      <div class="tlb"><ic>URLSearchParams</ic> extrait l'id depuis <ic>?id=42</ic>. Si absent → redirection accueil. Si PearTechDB absent → message erreur. Si produit introuvable → "Produit introuvable".</div>
+    </div>
+    <div class="tli"><div class="tld" style="background:var(--a)"></div>
+      <div class="tlh"><div class="tls">Étape 2</div><div class="tlt">Génération de la page</div></div>
+      <div class="tlb"><ic>getCategorySlugFromId()</ic> trouve la catégorie. <ic>breadcrumb.innerHTML</ic> construit le fil d'Ariane. <ic>generateProductHTML(product)</ic> génère tout le HTML de la fiche et l'injecte dans <ic>#product-detail</ic>.</div>
+    </div>
+    <div class="tli"><div class="tld" style="background:var(--a3)"></div>
+      <div class="tlh"><div class="tls">Étape 3</div><div class="tlt">Initialisation des boutons d'action</div></div>
+      <div class="tlb">Le bouton "Acheter maintenant" reçoit son handler : simule un clic sur "Ajouter au panier", puis redirige vers la page panier après 300ms. Le bouton wishlist synchronise son <ic>aria-label</ic> et son <ic>title</ic> via MutationObserver.</div>
+    </div>
+    <div class="tli"><div class="tld" style="background:var(--a5)"></div>
+      <div class="tlh"><div class="tls">Étape 4</div><div class="tlt">Initialisation des 5 modules</div></div>
+      <div class="tlb"><ic>initTabs()</ic> : onglets de la fiche produit.<br><ic>initThumbnails()</ic> : galerie + lightbox avec navigation, clavier, swipe.<br><ic>initOptions()</ic> : prix recalculé à chaque sélection d'option.<br><ic>generateSimilarProducts()</ic> : injecte 6 produits de la même catégorie.<br><ic>initNotes()</ic> : notes persistantes en localStorage.</div>
+    </div>
+    <div class="tli" style="margin-bottom:0"><div class="tld" style="background:var(--a2)"></div>
+      <div class="tlh"><div class="tls">En permanence</div><div class="tlt">Interactions utilisateur</div></div>
+      <div class="tlb">Chaque module gère ses propres événements indépendamment. Les modules communiquent peu entre eux : initOptions met à jour le prix dans le DOM que panier.js lira plus tard. initThumbnails sync l'index courant que la lightbox utilise.</div>
+    </div>
+  </div>
+
+  <div class="tbl" style="margin-top:2rem;">
+    <thead><tr><th>Fonction</th><th>Rôle</th><th>Ce qu'elle produit / modifie</th></tr></thead>
+    <tbody>
+      <tr><td class="tc">getCategorySlugFromId()</td><td style="color:var(--t2)">Utilitaire</td><td style="color:var(--t2)">Retourne "apple", "android"… depuis un categoryId</td></tr>
+      <tr><td class="tc">generateProductHTML()</td><td style="color:var(--t2)">Générateur</td><td style="color:var(--t2)">Retourne une longue chaîne HTML injectée dans #product-detail</td></tr>
+      <tr><td class="tc">initTabs()</td><td style="color:var(--t2)">Comportement</td><td style="color:var(--t2)">Gère l'affichage d'un seul panneau d'onglet à la fois</td></tr>
+      <tr><td class="tc">initThumbnails()</td><td style="color:var(--t2)">Comportement</td><td style="color:var(--t2)">Change l'image principale + ouvre la lightbox</td></tr>
+      <tr><td class="tc">initLightbox()</td><td style="color:var(--t2)">Comportement</td><td style="color:var(--t2)">Overlay plein écran, navigation clavier/swipe/boutons</td></tr>
+      <tr><td class="tc">initOptions()</td><td style="color:var(--t2)">Comportement</td><td style="color:var(--t2)">Recalcule et met à jour le prix à chaque clic d'option</td></tr>
+      <tr><td class="tc">generateSimilarProducts()</td><td style="color:var(--t2)">Générateur</td><td style="color:var(--t2)">Injecte jusqu'à 6 cartes dans #similar-products-grid</td></tr>
+      <tr><td class="tc">initNotes()</td><td style="color:var(--t2)">Comportement</td><td style="color:var(--t2)">Notes persistantes par produit via localStorage</td></tr>
+    </tbody>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

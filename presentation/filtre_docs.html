@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — filtre.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
+    --accent:#f5c542; --accent2:#ff6b6b; --accent3:#56d19e;
+    --accent4:#4f8eff; --accent5:#c084fc;
+    --text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+  .nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--accent);white-space:nowrap;}
+  .nav-links{display:flex;gap:.15rem;flex-wrap:wrap;}
+  .nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+  .nav-links a:hover{background:var(--bg3);color:var(--text);}
+
+  .page{max-width:1040px;margin:0 auto;padding:80px 1.5rem 5rem;}
+
+  .hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.28rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1.2rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
+  .hero h1 span{color:var(--accent);}
+  .hero p{color:var(--text2);font-size:1rem;max-width:640px;line-height:1.8;}
+  .file-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.38rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0;}
+
+  .section{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+  .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .section h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;}
+  .section h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+  .section h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
+  .section p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
+  .section p b{color:var(--text);font-weight:600;}
+  .section p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
+
+  /* DIAGRAMMES */
+  .diagram{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;margin:1.5rem 0;}
+  .diagram-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.8rem;}
+  .vchain{display:flex;flex-direction:column;align-items:center;}
+  .vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+  .vnode.wide{max-width:700px;}
+  .varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
+  .varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
+  .c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+  .c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+  .fork{display:grid;gap:1rem;width:100%;max-width:700px;}
+  .fork.f2{grid-template-columns:1fr 1fr;}
+  .fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
+  .fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
+  .fl-green{background:rgba(86,209,158,.15);color:#7ee8b8;}
+  .fl-red  {background:rgba(255,107,107,.15);color:#ff9090;}
+  .fork-col .vnode{max-width:100%;width:100%;}
+  .fork-col .varrow{width:100%;}
+
+  /* CALLOUTS */
+  .callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
+  .callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
+  .callout.info    {background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+  .callout.warn    {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .callout.success {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+  .callout.danger  {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+  .callout.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+  .callout.analogy {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .callout b{font-weight:700;}
+  .callout code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:rgba(255,255,255,.08);padding:.1rem .3rem;border-radius:3px;}
+
+  /* CODE */
+  .code-block{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .code-block pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+  .cb-lang{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);}
+  .kw{color:#c084fc}.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
+
+  /* TERME */
+  .term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+  .term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+  .term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
+  .term-row:last-child{border-bottom:none;}
+  .term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
+  .term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
+
+  /* SCHEMA */
+  .schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
+  .schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
+  .schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+  .schema-card.yellow::before{background:linear-gradient(to right,var(--accent),transparent);}
+  .schema-card.green::before {background:linear-gradient(to right,var(--accent3),transparent);}
+  .schema-card.blue::before  {background:linear-gradient(to right,var(--accent4),transparent);}
+  .schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
+  .schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
+  .schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
+  .schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+  .schema-card code{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:#7eb5ff;}
+  .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
+  .tag-yellow{background:rgba(245,197,66,.15);color:var(--accent);}
+  .tag-green {background:rgba(86,209,158,.15);color:var(--accent3);}
+  .tag-blue  {background:rgba(79,142,255,.15);color:var(--accent4);}
+  .tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
+
+  /* OBJ */
+  .obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+  .obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
+  .obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
+  .obj-row:last-child{border-bottom:none;}
+  .obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
+  .obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
+  .obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
+  .obj-req {font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.65rem;min-width:14px;}
+
+  /* TABLE */
+  .data-table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
+  .data-table th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .data-table td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:hover td{background:rgba(255,255,255,.015);}
+  .td-code{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+  .td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
+
+  /* TABS DEMO */
+  .tabs-demo{display:flex;gap:.5rem;flex-wrap:wrap;padding:1.2rem;background:var(--bg3);border-radius:12px;margin:1rem 0;border:1px solid var(--border);}
+  .tab-demo{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.4rem .9rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:default;}
+  .tab-demo.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+  .timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+  .tl-item{position:relative;margin-bottom:1.8rem;}
+  .tl-dot{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+  .tl-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+  .tl-step{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);}
+  .tl-title{font-size:.95rem;font-weight:700;}
+  .tl-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+  .tl-body code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:#7eb5ff;}
+
+  /* SIDE NOTE */
+  .side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
+  .side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+  .sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+
+  @media(max-width:600px){
+    .fork.f2{grid-template-columns:1fr;}
+    nav{padding:0 1rem;}
+    .schema-grid{grid-template-columns:1fr;}
+  }
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── SCHEMAS PASS 2 ─── */
+  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+  .kbox{border-radius:11px;padding:.9rem 1rem;}
+  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .kbox-item:last-child{border-bottom:none;}
+  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
+  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+  .seq{display:flex;flex-direction:column;gap:.3rem;}
+  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+  .trans-line{width:28px;height:1px;background:var(--t3);}
+  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">filtre.js</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#structure">Structure</a>
+    <a href="#filter">filterProducts</a>
+    <a href="#tabs">Onglets</a>
+    <a href="#observer">MutationObserver</a>
+    <a href="#integration">Intégration</a>
+    <a href="#resume">Récap</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-tag">Documentation complète · niveau débutant</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>CustomEvent categorySelected
+<div class="schema2">
+  <div class="s2t">Pipeline de filtrage — de l'événement au DOM</div>
+  <div class="seq">
+    <div class="seq-row">
+      <div class="seq-n">1</div>
+      <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">categorySelected</span> reçu (detail.category = 'Apple') OU clic bouton filtre</div>
+    </div>
+    <div class="seq-arrow">↓ activeCategory mis à jour</div>
+    <div class="seq-row">
+      <div class="seq-n">2</div>
+      <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filterCards(category)</span> → querySelectorAll('.product-card')</div>
+    </div>
+    <div class="seq-arrow">↓ pour chaque carte</div>
+    <div class="seq-row">
+      <div class="seq-n">3</div>
+      <div class="seq-body">card.dataset.category === category <span style="color:var(--t3);font-size:.7rem;">(ou category === 'all')</span><br>→ <span style="color:#7ee8b8;">display: ''</span> (visible) ou <span style="color:#fda4af;">display: 'none'</span> (caché)</div>
+    </div>
+    <div class="seq-arrow">↓</div>
+    <div class="seq-row">
+      <div class="seq-n">4</div>
+      <div class="seq-body">dispatch <span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filterChanged</span> → main.js reçoit pour debug</div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-size:.74rem;color:var(--t3);">Contrainte clé : les cartes .product-card avec data-category doivent exister dans le DOM AVANT que filtre.js s'initialise → product_grid.js DOIT être chargé avant filtre.js</div>
+</div>
+</b><br><span style="color:var(--t3);font-size:.71rem;">émis par dropdown.js ou product_grid.js</span></div>
+<div class="carte-item"><b>data-category</b><br><span style="color:var(--t3);font-size:.71rem;">attributs sur les cartes DOM existantes</span></div>
+<div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>filterProducts(cat)</b><br><span style="color:var(--t3);font-size:.71rem;">affiche/cache selon data-category</span></div>
+<div class="carte-item"><b>updateActiveBtn(btn)</b><br><span style="color:var(--t3);font-size:.71rem;">style du bouton actif</span></div>
+<div class="carte-item"><b>applyFilter()</b><br><span style="color:var(--t3);font-size:.71rem;">filtre combiné catégorie + recherche</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>CustomEvent filterChanged</b><br><span style="color:var(--t3);font-size:.71rem;">écouté par main.js</span></div>
+<div class="carte-item"><b>DOM visible/hidden</b><br><span style="color:var(--t3);font-size:.71rem;">cartes affichées ou cachées</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+    <h1>Comprendre<br><span>filtre.js</span></h1>
+    <p>Ce fichier gère les onglets de filtrage de la page d'accueil. Quand on clique sur "Apple", seules les cartes Apple restent visibles. Chaque concept est expliqué avec des mots simples.</p>
+    <div class="file-badge"><div class="dot"></div>filtre.js · 1 fonction principale · ~60 lignes</div>
+  </div>
+
+  <!-- ══════ 00 INTRO ══════ -->
+  <div class="section" id="intro">
+    <div class="section-label">00 — Avant de commencer</div>
+    <h2>Affichage et masquage des cartes par data-category</h2>
+    <p>Quand l'utilisateur clique sur un onglet ("Tous", "Apple", "Android"…), <code>filtre.js</code> montre les cartes correspondantes et cache toutes les autres. C'est tout.</p>
+
+    <div class="callout analogy">
+      <span class="callout-icon">🔦</span>
+      <div><b>Analogie :</b> Imaginez une vitrine de magasin avec des produits. Certains sont étiquetés "Apple", d'autres "Android". Quand vous allumez le projecteur "Apple", seuls les produits Apple sont éclairés — les autres sont dans l'ombre. Cliquer sur un onglet, c'est choisir quel projecteur allumer.</div>
+    </div>
+
+    <div class="term-box">
+      <div class="term-box-title">📚 Vocabulaire spécifique à ce fichier</div>
+      <div class="term-row">
+        <div class="term-name">classList</div>
+        <div class="term-def">La liste des classes CSS d'un élément HTML. On peut l'ajouter, la retirer ou vérifier sa présence. Ex : <code>element.classList.add('active')</code> ajoute la classe "active" qui peut changer le style visuel de l'élément.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">dataset</div>
+        <div class="term-def">Les attributs <code>data-*</code> d'un élément HTML. Si un bouton a <code>data-filter="apple"</code>, on peut lire cette valeur avec <code>bouton.dataset.filter</code> → renvoie "apple".</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">display: none</div>
+        <div class="term-def">Propriété CSS qui rend un élément complètement invisible ET retire son espace dans la page (comme s'il n'existait pas). Différent de <code>visibility: hidden</code> qui cache mais garde l'espace.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">display: flex</div>
+        <div class="term-def">Propriété CSS qui rend un élément visible en mode "flex" (mise en page flexible). Les cartes produit utilisent flex pour aligner leur contenu interne — il faut donc remettre "flex" et non "block" pour les réafficher correctement.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">MutationObserver</div>
+        <div class="term-def">Un outil JavaScript qui surveille les changements dans le DOM (la page). Il peut détecter quand des éléments sont ajoutés, supprimés ou modifiés, et exécuter une action en réponse.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">this</div>
+        <div class="term-def">Dans un écouteur d'événement avec <code>function</code>, <code>this</code> désigne l'élément qui a déclenché l'événement. Si l'onglet "Apple" est cliqué, <code>this</code> = l'onglet "Apple".</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 01 STRUCTURE ══════ -->
+  <div class="section" id="structure">
+    <div class="section-label">01 — Vue d'ensemble</div>
+    <h2>La structure globale du fichier</h2>
+    <p>Comme <code>product_grid.js</code>, tout le code est dans une <b>IIFE</b> avec <code>DOMContentLoaded</code>. La première chose qui s'exécute est une vérification de sécurité.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">🗂 Ordre d'exécution complet</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">📄 filtre.js est chargé par le navigateur</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">L'IIFE s'exécute — crée une bulle isolée</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-purple wide">Enregistre : "quand le HTML sera prêt, lance la fonction principale"</div>
+        <div class="varrow">↓<div class="varrow-label">le HTML de la page est prêt</div></div>
+        <div class="vnode c-blue wide">Cherche tous les éléments <code>.tab</code> (les onglets)</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">Des onglets existent sur cette page ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-red">NON → on s'arrête</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red"><code>return</code> immédiat — pas d'onglets sur cette page, inutile de continuer</div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-green">OUI → on continue</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green">Définit la fonction <code>filterProducts()</code></div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-blue">Attache un écouteur de clic sur chaque onglet</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-yellow"><code>filterProducts('tous')</code> — état initial : tout visible</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-purple">MutationObserver — surveille les nouvelles cartes injectées</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <div><b>Pourquoi vérifier si les onglets existent ?</b> Ce fichier est chargé sur toutes les pages du site. Sur la page panier ou la page produit, il n'y a pas d'onglets. Sans cette vérification, le code plante silencieusement. Avec <code>if (tabs.length === 0) return;</code>, il sort proprement sans erreur.</div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre>(<span class="kw">function</span>() {
+    <span class="str">'use strict'</span>;
+
+    document.<span class="fn">addEventListener</span>(<span class="str">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
+
+        <span class="kw">const</span> <span class="var">tabs</span> = document.<span class="fn">querySelectorAll</span>(<span class="str">'.tab'</span>);
+        <span class="cmt">// querySelectorAll retourne une NodeList (comme un tableau)
+        // de tous les éléments ayant la classe "tab"</span>
+
+        <span class="kw">if</span> (tabs.length <span class="op">===</span> <span class="nm">0</span>) <span class="kw">return</span>;
+        <span class="cmt">// tabs.length = nombre d'onglets trouvés
+        // Si 0 onglet → on sort immédiatement</span>
+
+        <span class="kw">function</span> <span class="fn">filterProducts</span>(filter) { <span class="cmt">/* ... */</span> }
+
+        tabs.<span class="fn">forEach</span>(tab <span class="op">=&gt;</span> {
+            tab.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() { <span class="cmt">/* ... */</span> });
+        });
+
+        <span class="fn">filterProducts</span>(<span class="str">'tous'</span>);   <span class="cmt">// Affiche tout dès le chargement</span>
+
+        <span class="cmt">// MutationObserver...</span>
+    });
+})();
+</pre></div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔍 querySelector vs querySelectorAll — la différence en image</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;margin-bottom:.8rem;">querySelector('.tab')</div>
+          <div style="background:var(--bg3);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);line-height:1.8;margin-bottom:.6rem;">
+            &lt;button class="tab"&gt;Tous&lt;/button&gt; ← <span style="color:#f7d97a;">✓ trouvé, stop</span><br>
+            &lt;button class="tab"&gt;Apple&lt;/button&gt; ← <span style="color:var(--text3);">ignoré</span><br>
+            &lt;button class="tab"&gt;Android&lt;/button&gt; ← <span style="color:var(--text3);">ignoré</span>
+          </div>
+          <div style="font-size:.78rem;color:var(--text2);">Retourne <b>un seul élément</b> — le premier qui correspond. Inutile pour notre besoin (on veut tous les onglets).</div>
+        </div>
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;">querySelectorAll('.tab') ← utilisé ici</div>
+          <div style="background:var(--bg3);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);line-height:1.8;margin-bottom:.6rem;">
+            &lt;button class="tab"&gt;Tous&lt;/button&gt; ← <span style="color:#7ee8b8;">✓ inclus</span><br>
+            &lt;button class="tab"&gt;Apple&lt;/button&gt; ← <span style="color:#7ee8b8;">✓ inclus</span><br>
+            &lt;button class="tab"&gt;Android&lt;/button&gt; ← <span style="color:#7ee8b8;">✓ inclus</span>
+          </div>
+          <div style="font-size:.78rem;color:var(--text2);">Retourne une <b>NodeList</b> de tous les éléments correspondants. On peut ensuite faire <code>.forEach()</code> dessus pour installer un écouteur sur chacun.</div>
+        </div>
+      </div>
+      <div style="margin-top:.8rem;background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.7rem 1rem;font-size:.78rem;color:#d3a8ff;">
+        <b>NodeList vs Array :</b> Une NodeList ressemble à un tableau mais n'est pas tout à fait un tableau. Elle supporte <code>.forEach()</code> mais pas toutes les méthodes comme <code>.map()</code> ou <code>.filter()</code>. Pour les utiliser, il faudrait la convertir : <code>[...tabs].map(...)</code>.
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 02 FILTERPRODUCTS ══════ -->
+  <div class="section" id="filter">
+    <div class="section-label">02 — La fonction de filtrage</div>
+    <h2>filterProducts( filter )</h2>
+    <p>Cette fonction reçoit un mot (ex: <code>"apple"</code>) et parcourt <b>toutes</b> les cartes produit. Pour chacune, elle regarde sa catégorie et décide de la montrer ou la cacher.</p>
+
+    <div class="callout analogy">
+      <span class="callout-icon">🔍</span>
+      <div><b>Analogie :</b> C'est comme un agent de sécurité à l'entrée d'une expo. Il a la liste des invités (le filtre "apple"). Pour chaque personne (chaque carte), il vérifie son badge (l'attribut <code>data-category</code>). Badge correspond → entre. Badge ne correspond pas → reste dehors. Sauf si le filtre est "tous" : là, tout le monde entre.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔍 Flux de filterProducts — pour chaque carte</div>
+      <div class="vchain">
+        <div class="vnode c-yellow wide">Entrée : filter = "apple" (reçu en paramètre)</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-gray wide"><code>querySelectorAll('.product-card')</code> — récupère toutes les cartes du DOM au moment de l'appel</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>.forEach(card => ...)</code> — boucle sur chaque carte une par une</div>
+        <div class="varrow">↓<div class="varrow-label">pour chaque carte :</div></div>
+        <div class="vnode c-purple wide"><code>card.dataset.category</code> — lit l'attribut data-category de la carte (ex: "android")</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">filter === 'tous'  OU  category === filter ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-green">OUI → la carte correspond</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green"><code>card.style.display = 'flex'</code><br>La carte redevient visible</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green"><code>card.style.opacity = '1'</code><br>S'assure qu'elle est bien à 100% d'opacité</div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-red">NON → ne correspond pas</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red"><code>card.style.display = 'none'</code><br>La carte disparaît et n'occupe plus de place</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>La condition avec || (OU logique)</h3>
+    <div class="callout beginner">
+      <span class="callout-icon">🔤</span>
+      <div><b>Opérateur || (OU) :</b> La condition est vraie si <b>au moins un des deux</b> côtés est vrai. <code>A || B</code> est vrai si A est vrai, si B est vrai, ou si les deux sont vrais.<br><br>
+      <b>Court-circuit :</b> JavaScript est paresseux. Si <code>A</code> est déjà vrai, il n'évalue même pas <code>B</code>. Donc si <code>filter === 'tous'</code>, il ne vérifie pas <code>category === filter</code>. C'est plus efficace.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔄 .forEach() — comment la boucle traite les 4 cartes une par une</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);margin-bottom:.8rem;text-align:center;">Scénario : filterProducts("apple") — 4 cartes dans la grille</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;align-items:start;">
+        <div style="background:rgba(86,209,158,.09);border:1px solid rgba(86,209,158,.4);border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:.3rem;">tour 1</div>
+          <div style="font-size:1.1rem;">🍎</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7ee8b8;margin:.3rem 0;">data-category="apple"</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);">filter==="tous"? ✗<br>cat===filter? ✓</div>
+          <div style="margin-top:.4rem;background:rgba(86,209,158,.2);border-radius:5px;padding:.25rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">display:flex ✓</div>
+        </div>
+        <div style="background:rgba(255,107,107,.07);border:1px dashed rgba(255,107,107,.3);border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:.3rem;">tour 2</div>
+          <div style="font-size:1.1rem;">🤖</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#ff9090;margin:.3rem 0;">data-category="android"</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);">filter==="tous"? ✗<br>cat===filter? ✗</div>
+          <div style="margin-top:.4rem;background:rgba(255,107,107,.15);border-radius:5px;padding:.25rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#ff9090;">display:none ✗</div>
+        </div>
+        <div style="background:rgba(86,209,158,.09);border:1px solid rgba(86,209,158,.4);border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:.3rem;">tour 3</div>
+          <div style="font-size:1.1rem;">🍎</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7ee8b8;margin:.3rem 0;">data-category="apple"</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);">filter==="tous"? ✗<br>cat===filter? ✓</div>
+          <div style="margin-top:.4rem;background:rgba(86,209,158,.2);border-radius:5px;padding:.25rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">display:flex ✓</div>
+        </div>
+        <div style="background:rgba(255,107,107,.07);border:1px dashed rgba(255,107,107,.3);border-radius:10px;padding:.8rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);margin-bottom:.3rem;">tour 4</div>
+          <div style="font-size:1.1rem;">⌚</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#ff9090;margin:.3rem 0;">data-category="wearables"</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);">filter==="tous"? ✗<br>cat===filter? ✗</div>
+          <div style="margin-top:.4rem;background:rgba(255,107,107,.15);border-radius:5px;padding:.25rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#ff9090;">display:none ✗</div>
+        </div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text3);text-align:center;margin-top:.7rem;">4 cartes traitées · 2 visibles · 2 cachées · boucle terminée</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔀 Court-circuit du || — ce qui est évalué selon le filtre actif</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.9rem;">Cas 1 — filter = "tous"</div>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;flex-wrap:wrap;">
+            <div style="background:rgba(86,209,158,.15);border:1px solid rgba(86,209,158,.4);border-radius:6px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7ee8b8;">filter === 'tous' ✓ VRAI</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text3);">||</div>
+            <div style="background:rgba(139,147,168,.08);border:1px dashed rgba(139,147,168,.3);border-radius:6px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);">category === filter<br><span style="font-size:.6rem;">⚡ jamais évalué</span></div>
+          </div>
+          <div style="font-size:.78rem;color:var(--text2);">Résultat : <span style="color:#7ee8b8;font-weight:600;">VRAI</span> — toutes les cartes sont affichées, peu importe leur catégorie</div>
+        </div>
+        <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7eb5ff;margin-bottom:.9rem;">Cas 2 — filter = "apple"</div>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;flex-wrap:wrap;">
+            <div style="background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.35);border-radius:6px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#ff9090;">filter === 'tous' ✗ FAUX</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text3);">||</div>
+            <div style="background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.35);border-radius:6px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7eb5ff;">category === 'apple' ?<br><span style="font-size:.6rem;">✅ évalué maintenant</span></div>
+          </div>
+          <div style="font-size:.78rem;color:var(--text2);">Résultat : dépend de la catégorie de la carte — <span style="color:#7ee8b8;">vrai</span> si "apple", <span style="color:#ff9090;">faux</span> sinon</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Pourquoi display: 'flex' et pas 'block' ?</h3>
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div>Les <code>.product-card</code> sont stylées en CSS avec <code>display: flex</code>. Flex permet d'aligner l'image, le texte et le bouton à l'intérieur de la carte. Si on remettait <code>'block'</code> au lieu de <code>'flex'</code>, le contenu interne de la carte serait désorienté — tout s'empilerait verticalement sans mise en forme. Il faut remettre exactement ce que le CSS attend.</div>
+    </div>
+
+    <h3>Tableau des cas possibles</h3>
+    <div class="data-table">
+      <thead><tr><th>Filtre reçu</th><th>data-category de la carte</th><th>Résultat</th><th>Explication</th></tr></thead>
+      <tbody>
+        <tr><td class="td-code">'tous'</td><td class="td-code">'apple'</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">✓ visible</span></td><td>'tous' est vrai → court-circuit, peu importe la catégorie</td></tr>
+        <tr><td class="td-code">'tous'</td><td class="td-code">'android'</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">✓ visible</span></td><td>Même chose — 'tous' accepte tout</td></tr>
+        <tr><td class="td-code">'apple'</td><td class="td-code">'apple'</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">✓ visible</span></td><td>'apple' === 'apple' est vrai</td></tr>
+        <tr><td class="td-code">'apple'</td><td class="td-code">'android'</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">✗ cachée</span></td><td>'tous' faux ET 'android' ≠ 'apple'</td></tr>
+        <tr><td class="td-code">'wearables'</td><td class="td-code">'tablets'</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">✗ cachée</span></td><td>'tous' faux ET 'tablets' ≠ 'wearables'</td></tr>
+      </tbody>
+    </div>
+
+    <h3>Avant / Après — ce qui se passe dans le DOM</h3>
+    <div class="diagram">
+      <div class="diagram-title">🔲 Visualisation de la grille avant et après filterProducts('apple')</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text2);margin-bottom:.8rem;text-align:center;">AVANT — filtre = "tous"</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;">🍎 Apple<br><span style="font-size:.58rem;opacity:.7">display:flex</span></div>
+            <div style="background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7eb5ff;">🤖 Android<br><span style="font-size:.58rem;opacity:.7">display:flex</span></div>
+            <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;">🍎 Apple<br><span style="font-size:.58rem;opacity:.7">display:flex</span></div>
+            <div style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#f7d97a;">⌚ Wearable<br><span style="font-size:.58rem;opacity:.7">display:flex</span></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--text3);text-align:center;margin-top:.5rem;">4 cartes visibles — toutes occupent de l'espace</div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text2);margin-bottom:.8rem;text-align:center;">APRÈS — filtre = "apple"</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+            <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;">🍎 Apple<br><span style="font-size:.58rem;opacity:.7">display:flex</span></div>
+            <div style="background:rgba(139,147,168,.04);border:1px dashed rgba(139,147,168,.2);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);">🤖 Android<br><span style="font-size:.58rem;opacity:.7">display:none</span></div>
+            <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;">🍎 Apple<br><span style="font-size:.58rem;opacity:.7">display:flex</span></div>
+            <div style="background:rgba(139,147,168,.04);border:1px dashed rgba(139,147,168,.2);border-radius:8px;padding:.6rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);">⌚ Wearable<br><span style="font-size:.58rem;opacity:.7">display:none</span></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--text3);text-align:center;margin-top:.5rem;">2 cartes visibles · 2 cachées (existent toujours dans le HTML)</div>
+        </div>
+      </div>
+      <div class="side-note" style="margin-top:1rem;">
+        <span class="side-note-icon">💡</span>
+        <span>Les cartes cachées (<code>display:none</code>) sont toujours présentes dans le HTML — elles ne sont pas supprimées. Elles reprennent leur place instantanément si on reclique "Tous". C'est bien plus rapide que de les supprimer et les recréer.</span>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre><span class="kw">function</span> <span class="fn">filterProducts</span>(filter) {
+
+    <span class="cmt">// Récupère toutes les cartes présentes dans le DOM à cet instant</span>
+    <span class="kw">const</span> <span class="var">productCards</span> = document.<span class="fn">querySelectorAll</span>(<span class="str">'.product-card'</span>);
+
+    productCards.<span class="fn">forEach</span>(card <span class="op">=&gt;</span> {
+
+        <span class="cmt">// Lit l'attribut data-category="apple" de la carte
+        // card.dataset.category → "apple"</span>
+        <span class="kw">const</span> <span class="var">category</span> = card.dataset.category;
+
+        <span class="kw">if</span> (filter <span class="op">===</span> <span class="str">'tous'</span> <span class="op">||</span> category <span class="op">===</span> filter) {
+            card.style.display = <span class="str">'flex'</span>;  <span class="cmt">// Réaffiche (flex = style original)</span>
+            card.style.opacity = <span class="str">'1'</span>;    <span class="cmt">// Opacité totale (100%)</span>
+        } <span class="kw">else</span> {
+            card.style.display = <span class="str">'none'</span>;  <span class="cmt">// Cache — retire du flux visuel</span>
+        }
+    });
+}
+</pre></div>
+
+    <div class="side-note">
+      <span class="side-note-icon">🔗</span>
+      <span>Le lien entre filtre.js et product_grid.js : c'est <code>product_grid.js</code> qui écrit <code>data-category="apple"</code> sur chaque carte quand il la génère. filtre.js se contente de lire ce que product_grid.js a écrit. Les deux fichiers communiquent via le HTML, sans se parler directement.</span>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 03 ONGLETS ══════ -->
+  <div class="section" id="tabs">
+    <div class="section-label">03 — Gestion des onglets</div>
+    <h2>Ce qui se passe au clic sur un onglet</h2>
+    <p>Chaque onglet reçoit un écouteur de clic. Quand on clique, trois actions se déroulent <b>dans l'ordre</b>.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">🖱 Flux au clic sur un onglet (ex: clic sur "Apple")</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">Utilisateur clique sur l'onglet "Apple"</div>
+        <div class="varrow">↓<div class="varrow-label">action 1 — réinitialisation visuelle</div></div>
+        <div class="vnode c-red wide"><code>tabs.forEach(t => t.classList.remove('active'))</code><br>Retire la classe "active" de TOUS les onglets sans exception</div>
+        <div class="varrow">↓<div class="varrow-label">action 2 — marquage du nouvel onglet</div></div>
+        <div class="vnode c-green wide"><code>this.classList.add('active')</code><br>Ajoute "active" uniquement sur l'onglet qui vient d'être cliqué</div>
+        <div class="varrow">↓<div class="varrow-label">action 3 — filtrage</div></div>
+        <div class="vnode c-yellow wide"><code>this.dataset.filter</code> → lit "apple" depuis <code>data-filter="apple"</code></div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>filterProducts("apple")</code> — affiche les cartes Apple, cache les autres</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-purple wide"><code>console.log('Filtre appliqué :', filter)</code> — trace dans les DevTools pour déboguer</div>
+      </div>
+    </div>
+
+    <h3>Démonstration visuelle</h3>
+    <p>Avant le clic sur "Apple" (onglet "Tous" est actif) :</p>
+    <div class="tabs-demo">
+      <div class="tab-demo active">Tous</div>
+      <div class="tab-demo">Apple</div>
+      <div class="tab-demo">Android</div>
+      <div class="tab-demo">Wearables</div>
+    </div>
+    <p>Après le clic sur "Apple" :</p>
+    <div class="tabs-demo">
+      <div class="tab-demo">Tous</div>
+      <div class="tab-demo active">Apple ← maintenant actif</div>
+      <div class="tab-demo">Android</div>
+      <div class="tab-demo">Wearables</div>
+    </div>
+
+    <h3>Pourquoi retire-t-on "active" de TOUS avant d'en ajouter un ?</h3>
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div><b>Le piège :</b> Si on ajoutait seulement <code>active</code> au nouvel onglet sans retirer l'ancien, on se retrouverait avec <b>deux onglets actifs en même temps</b> visuellement. En retirant d'abord de tous, on repart toujours d'une ardoise vierge avant d'en activer un seul.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔄 Ce qui se passe exactement dans le DOM au clic sur "Android"</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.6rem;align-items:center;margin-bottom:.5rem;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center;margin-bottom:.5rem;">État initial</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;">
+            <div style="background:rgba(245,197,66,.15);border:1px solid rgba(245,197,66,.4);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;text-align:center;">Tous .active ✓</div>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Apple</div>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Android ← clic</div>
+          </div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text3);">→</div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center;margin-bottom:.5rem;">Après remove('active') sur tous</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Tous</div>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Apple</div>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Android</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent2);text-align:center;margin-top:.4rem;">ardoise vierge</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text3);">→</div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);text-align:center;margin-bottom:.5rem;">Après add('active') sur Android</div>
+          <div style="display:flex;flex-direction:column;gap:.3rem;">
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Tous</div>
+            <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);text-align:center;">Apple</div>
+            <div style="background:rgba(86,209,158,.15);border:1px solid rgba(86,209,158,.4);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;text-align:center;">Android .active ✓</div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent3);text-align:center;margin-top:.4rem;">un seul actif</div>
+        </div>
+      </div>
+      <div class="side-note">
+        <span class="side-note-icon">⚠️</span>
+        <span>Sans l'étape "ardoise vierge" : si on faisait juste <code>android.add('active')</code>, on aurait à la fois "Tous .active" et "Android .active" → deux onglets surlignés en même temps. L'interface serait incohérente.</span>
+      </div>
+    </div>
+
+    <h3>Pourquoi function et pas une arrow function ?</h3>
+    <div class="callout beginner">
+      <span class="callout-icon">🔤</span>
+      <div><b>Arrow function</b> (<code>() =></code>) et <code>function</code> se comportent différemment avec <code>this</code>.<br><br>
+      Dans une <code>function</code> classique à l'intérieur d'un <code>addEventListener</code>, <code>this</code> = l'élément qui a reçu le clic (l'onglet). C'est ce qu'on veut.<br><br>
+      Dans une arrow function <code>() =></code>, <code>this</code> hérite du contexte parent et ne désigne <b>pas</b> l'onglet cliqué. On ne pourrait donc pas utiliser <code>this.classList.add('active')</code> ni <code>this.dataset.filter</code>.</div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre>tabs.<span class="fn">forEach</span>(tab <span class="op">=&gt;</span> {
+    <span class="cmt">// Pour chaque onglet, on installe un écouteur de clic</span>
+    tab.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+        <span class="cmt">// Ici "this" = l'onglet sur lequel on a cliqué
+        // Grâce à "function" (pas une arrow function)</span>
+
+        <span class="cmt">// Étape 1 : efface le marquage actif sur tous les onglets</span>
+        tabs.<span class="fn">forEach</span>(t <span class="op">=&gt;</span> t.classList.<span class="fn">remove</span>(<span class="str">'active'</span>));
+
+        <span class="cmt">// Étape 2 : marque l'onglet cliqué</span>
+        <span class="kw">this</span>.classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+
+        <span class="cmt">// Étape 3 : lit la valeur du filtre et applique</span>
+        <span class="kw">const</span> <span class="var">filter</span> = <span class="kw">this</span>.dataset.filter;  <span class="cmt">// ex: "apple"</span>
+        <span class="fn">filterProducts</span>(filter);
+
+        console.<span class="fn">log</span>(<span class="str">'Filtre appliqué :'</span>, filter);
+    });
+});
+</pre></div>
+
+    <h3>Structure HTML que le fichier attend</h3>
+    <div class="obj-schema">
+      <div class="obj-title">🏷 Attributs nécessaires sur chaque onglet</div>
+      <div class="obj-row"><div class="obj-req">✦</div><div class="obj-key">class="tab"</div><div class="obj-type">string</div><div class="obj-desc">Permet à <code>querySelectorAll('.tab')</code> de trouver l'onglet</div></div>
+      <div class="obj-row"><div class="obj-req">✦</div><div class="obj-key">data-filter</div><div class="obj-type">string</div><div class="obj-desc">La valeur du filtre : <code>"tous"</code>, <code>"apple"</code>, <code>"android"</code>, <code>"wearables"</code>, <code>"tablets"</code></div></div>
+      <div class="obj-row"><div class="obj-req"></div><div class="obj-key">class="active"</div><div class="obj-type">ajouté/retiré</div><div class="obj-desc">Classe ajoutée dynamiquement par JavaScript pour le style visuel "sélectionné"</div></div>
+    </div>
+    <div class="obj-schema">
+      <div class="obj-title">🃏 Attributs nécessaires sur chaque carte produit</div>
+      <div class="obj-row"><div class="obj-req">✦</div><div class="obj-key">class="product-card"</div><div class="obj-type">string</div><div class="obj-desc">Sélectionnée par <code>querySelectorAll('.product-card')</code></div></div>
+      <div class="obj-row"><div class="obj-req">✦</div><div class="obj-key">data-category</div><div class="obj-type">string</div><div class="obj-desc">Doit correspondre exactement à un <code>data-filter</code> d'onglet. Ex: <code>"apple"</code> sur la carte correspond à <code>data-filter="apple"</code> sur l'onglet</div></div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">⚖️ function vs () =&gt; — pourquoi "this" change tout</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;">✅ function() { } — utilisé ici</div>
+          <div style="background:var(--bg3);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;margin-bottom:.7rem;line-height:1.7;">
+            tab.addEventListener('click', <span style="color:#7ee8b8;">function</span>() {<br>
+            &nbsp;&nbsp;<span style="color:#f7d97a;">this</span> // = l'onglet cliqué ✓<br>
+            &nbsp;&nbsp;<span style="color:#f7d97a;">this</span>.classList.add('active')<br>
+            &nbsp;&nbsp;<span style="color:#f7d97a;">this</span>.dataset.filter → "apple"<br>
+            })
+          </div>
+          <div style="font-size:.78rem;color:var(--text2);">Avec <code>function</code>, <code>this</code> est lié par le navigateur à l'élément qui a déclenché l'événement. C'est le comportement "classique" voulu.</div>
+        </div>
+        <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;">❌ () =&gt; { } — ne fonctionne pas</div>
+          <div style="background:var(--bg3);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;margin-bottom:.7rem;line-height:1.7;">
+            tab.addEventListener('click', <span style="color:#ff9090;">() =&gt;</span> {<br>
+            &nbsp;&nbsp;<span style="color:#ff9090;">this</span> // = window, pas l'onglet ✗<br>
+            &nbsp;&nbsp;<span style="color:#ff9090;">this</span>.classList → <span style="color:#ff9090;">ERREUR</span><br>
+            &nbsp;&nbsp;<span style="color:#ff9090;">this</span>.dataset → <span style="color:#ff9090;">ERREUR</span><br>
+            })
+          </div>
+          <div style="font-size:.78rem;color:var(--text2);">Avec <code>() =&gt;</code>, <code>this</code> est hérité du contexte parent (l'IIFE) et pointe vers <code>window</code> — pas l'onglet. Impossible d'accéder au bon élément.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 04 MUTATIONOBSERVER ══════ -->
+  <div class="section" id="observer">
+    <div class="section-label">04 — MutationObserver</div>
+    <h2>Surveiller les nouvelles cartes</h2>
+    <p>Il y a un problème de <b>timing</b>. filtre.js démarre au même moment que product_grid.js. Mais product_grid.js n'injecte les cartes qu'après avoir chargé la base de données (ce qui prend un peu de temps).</p>
+
+    <div class="schema-grid">
+      <div class="schema-card red">
+        <span class="tag tag-red">Le problème sans observer</span>
+        <h4>Scénario problématique</h4>
+        <p>1. filtre.js démarre → aucune carte dans la page.<br>
+        2. L'utilisateur clique "Apple" → <code>filterProducts('apple')</code> → 0 carte trouvée, rien ne se passe.<br>
+        3. product_grid.js injecte les cartes → elles s'affichent toutes, même les Android, en ignorant le filtre actif.</p>
+      </div>
+      <div class="schema-card green">
+        <span class="tag tag-green">La solution avec l'observer</span>
+        <h4>Comment le MutationObserver résout ça</h4>
+        <p>Il surveille en permanence <code>#products-grid</code>. Dès que product_grid.js y injecte des cartes, l'observer se déclenche et appelle immédiatement <code>filterProducts</code> avec le filtre actif. Résultat : le filtre est respecté même si les cartes arrivent en retard.</p>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">👁 Flux du MutationObserver</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">Cherche l'élément <code>#products-grid</code> dans la page</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">La grille existe ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-red">NON</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red">Observer non créé — fin silencieuse</div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-green">OUI</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-blue">Crée le MutationObserver avec une fonction callback</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-purple">Observer commence à surveiller <code>#products-grid</code></div>
+          <div class="varrow">↓<div class="varrow-label">plus tard, product_grid.js injecte des cartes…</div></div>
+          <div class="vnode c-yellow">Callback se déclenche automatiquement</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green">Lit l'onglet actif → récupère son filtre</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-blue"><code>filterProducts(filtre_actuel)</code> — re-filtre les nouvelles cartes</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Chronologie complète de la coopération</h3>
+
+    <div class="diagram">
+      <div class="diagram-title">📊 Frise temporelle — filtre.js et product_grid.js en parallèle</div>
+      <div style="margin-bottom:.6rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);">
+        <div></div>
+        <div style="display:flex;justify-content:space-between;padding:0 .3rem;">
+          <span>t=0ms</span><span>t=50ms</span><span>t=100ms</span><span>t=Xms</span><span>t=X+1ms</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;margin-bottom:.4rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7eb5ff;display:flex;align-items:center;">filtre.js</div>
+        <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.25);border-radius:6px;padding:.4rem .6rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+          <span style="background:rgba(245,197,66,.2);color:#f7d97a;border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">installe onglets</span>
+          <span style="color:var(--text3);font-size:.65rem;">→</span>
+          <span style="background:rgba(192,132,252,.2);color:#d3a8ff;border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">active observer</span>
+          <span style="color:var(--text3);font-size:.65rem;">→</span>
+          <span style="background:rgba(139,147,168,.15);color:var(--text3);border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">⏳ attend des cartes…</span>
+          <span style="color:var(--text3);font-size:.65rem;">→</span>
+          <span style="background:rgba(86,209,158,.2);color:#7ee8b8;border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">🎯 re-filtre !</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;margin-bottom:.8rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;display:flex;align-items:center;">product_grid.js</div>
+        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.4rem .6rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+          <span style="background:rgba(139,147,168,.15);color:var(--text3);border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">⏳ attend PearTechDB…</span>
+          <span style="color:var(--text3);font-size:.65rem;">→</span>
+          <span style="background:rgba(79,142,255,.2);color:#7eb5ff;border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">DB prête</span>
+          <span style="color:var(--text3);font-size:.65rem;">→</span>
+          <span style="background:rgba(245,197,66,.2);color:#f7d97a;border-radius:4px;padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;">💥 injecte 8 cartes</span>
+        </div>
+      </div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:8px;padding:.7rem 1rem;font-size:.78rem;color:var(--text2);">
+        <b style="color:#7ee8b8;">Le point critique :</b> si l'utilisateur clique "Apple" avant que les cartes arrivent (entre t=0 et t=X), filterProducts('apple') tourne sur 0 cartes → rien ne se passe. Mais le filtre "Apple" est visuellement actif. Quand product_grid.js injecte les cartes au temps X, l'observer se déclenche et applique immédiatement "apple" sur les nouvelles cartes.
+      </div>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent4)"></div>
+        <div class="tl-head"><div class="tl-step">t = 0ms</div><div class="tl-title">Les deux fichiers démarrent en même temps</div></div>
+        <div class="tl-body">filtre.js et product_grid.js répondent tous les deux à <code>DOMContentLoaded</code>. filtre.js installe ses onglets et son observer. product_grid.js commence à chercher PearTechDB.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent5)"></div>
+        <div class="tl-head"><div class="tl-step">t = 0 → Xms</div><div class="tl-title">L'utilisateur peut déjà cliquer sur un onglet</div></div>
+        <div class="tl-body">filtre.js est prêt mais les cartes n'existent pas encore. Si l'utilisateur clique "Apple", <code>filterProducts('apple')</code> tourne mais ne trouve rien (0 carte). Le filtre "Apple" reste quand même actif visuellement.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent3)"></div>
+        <div class="tl-head"><div class="tl-step">t = Xms</div><div class="tl-title">product_grid.js injecte les cartes</div></div>
+        <div class="tl-body"><code>grid.innerHTML = ...</code> remplace le contenu vide par les 8 cartes HTML.</div>
+      </div>
+      <div class="tl-item" style="margin-bottom:0">
+        <div class="tl-dot" style="background:var(--accent)"></div>
+        <div class="tl-head"><div class="tl-step">t = Xms + quelques µs</div><div class="tl-title">L'observer réagit immédiatement</div></div>
+        <div class="tl-body">Le navigateur notifie l'observer que des enfants ont été ajoutés dans <code>#products-grid</code>. L'observer lit l'onglet actif (ex: "Apple"), et appelle <code>filterProducts('apple')</code>. Seules les cartes Apple restent visibles — exactement comme l'utilisateur avait demandé.</div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre><span class="kw">const</span> <span class="var">productsGrid</span> = document.<span class="fn">getElementById</span>(<span class="str">'products-grid'</span>);
+
+<span class="kw">if</span> (productsGrid) {
+
+    <span class="kw">const</span> <span class="var">gridObserver</span> = <span class="kw">new</span> <span class="fn">MutationObserver</span>(<span class="kw">function</span>() {
+        <span class="cmt">// Cette fonction est appelée automatiquement par le navigateur
+        // dès que des enfants sont ajoutés/supprimés dans productsGrid</span>
+
+        <span class="kw">const</span> <span class="var">activeTab</span> = document.<span class="fn">querySelector</span>(<span class="str">'.tab.active'</span>);
+        <span class="cmt">// .tab.active = élément qui a DEUX classes : "tab" et "active"
+        // Si aucun onglet actif (cas très rare), on utilise 'tous' par défaut</span>
+
+        <span class="kw">const</span> <span class="var">currentFilter</span> = activeTab <span class="op">?</span> activeTab.dataset.filter <span class="op">:</span> <span class="str">'tous'</span>;
+        <span class="fn">filterProducts</span>(currentFilter);
+    });
+
+    gridObserver.<span class="fn">observe</span>(productsGrid, { childList: <span class="kw">true</span> });
+    <span class="cmt">// childList: true = surveille uniquement les ajouts/suppressions d'enfants directs
+    // On n'observe PAS les attributs ni les descendants profonds → précis et léger</span>
+}
+</pre></div>
+
+    <div class="diagram">
+      <div class="diagram-title">👁 Ce que { childList: true } surveille — et ce qu'il ignore</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;">✅ Déclenche l'observer</div>
+          <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--text2);">
+            <div style="background:rgba(86,209,158,.1);border-radius:6px;padding:.4rem .7rem;">product_grid.js injecte 8 cartes <code>&lt;article&gt;</code> dans la grille</div>
+            <div style="background:rgba(86,209,158,.1);border-radius:6px;padding:.4rem .7rem;">Un script supprime toutes les cartes (rechargement)</div>
+            <div style="background:rgba(86,209,158,.1);border-radius:6px;padding:.4rem .7rem;">Une carte est ajoutée manuellement via la console</div>
+          </div>
+        </div>
+        <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;">❌ N'active PAS l'observer</div>
+          <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--text2);">
+            <div style="background:rgba(255,107,107,.08);border-radius:6px;padding:.4rem .7rem;">Un <code>data-category</code> change sur une carte existante</div>
+            <div style="background:rgba(255,107,107,.08);border-radius:6px;padding:.4rem .7rem;">La classe <code>.active</code> change sur un onglet</div>
+            <div style="background:rgba(255,107,107,.08);border-radius:6px;padding:.4rem .7rem;">Un texte à l'intérieur d'une carte est modifié</div>
+          </div>
+        </div>
+      </div>
+      <div class="side-note" style="margin-top:1rem;">
+        <span class="side-note-icon">💡</span>
+        <span>On aurait pu utiliser <code>{ subtree: true, attributes: true }</code> pour surveiller tout — mais cela déclencherait l'observer des dizaines de fois à chaque petit changement. <code>childList: true</code> seul est suffisant et minimal.</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 05 INTÉGRATION ══════ -->
+  <div class="section" id="integration">
+    <div class="section-label">05 — Intégration avec les autres fichiers</div>
+    <h2>Le "contrat" entre les fichiers</h2>
+    <p>filtre.js et product_grid.js ne se parlent pas directement. Leur seul pont de communication, c'est le <b>HTML dans la page</b>.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">🔗 Comment les deux fichiers se coordonnent via le DOM</div>
+      <div class="vchain">
+        <div class="vnode c-blue wide">product_grid.js écrit :<br><code>&lt;article class="product-card" data-category="apple"&gt;</code></div>
+        <div class="varrow">↓<div class="varrow-label">injecté dans #products-grid</div></div>
+        <div class="vnode c-gray wide">Le DOM — terrain neutre visible par tous les fichiers</div>
+        <div class="varrow">↓<div class="varrow-label">lu par filtre.js</div></div>
+        <div class="vnode c-yellow wide">filtre.js lit <code>card.dataset.category</code> et compare avec son filtre actif</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-green wide">Carte visible ou cachée selon la correspondance</div>
+      </div>
+    </div>
+
+    <div class="callout danger">
+      <span class="callout-icon">🚨</span>
+      <div><b>Le point de rupture critique :</b> Si product_grid.js change les valeurs de <code>data-category</code> (ex: utiliser <code>"cat_apple"</code> au lieu de <code>"apple"</code>), les onglets de filtre.js ne fonctionneront plus. Les valeurs de <code>data-filter</code> sur les onglets et de <code>data-category</code> sur les cartes <b>doivent être identiques</b>.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">✅ vs ❌ — Contrat respecté vs contrat rompu</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;text-align:center;">✅ Contrat respecté — ça marche</div>
+          <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:1rem;font-size:.8rem;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des onglets :</div>
+            <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#7ee8b8;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-filter="apple"</code>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des cartes :</div>
+            <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#7ee8b8;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-category="apple"</code>
+            <div style="font-size:.78rem;color:var(--text2);">Les deux ont exactement <code>"apple"</code> → la comparaison <code>category === filter</code> est <span style="color:#7ee8b8;font-weight:700;">vraie</span> → carte visible</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;text-align:center;">❌ Contrat rompu — filtre silencieux</div>
+          <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:1rem;font-size:.8rem;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des onglets :</div>
+            <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#ff9090;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-filter="apple"</code>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des cartes (modifié) :</div>
+            <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#ff9090;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-category="cat_apple"</code>
+            <div style="font-size:.78rem;color:var(--text2);"><code>"apple"</code> ≠ <code>"cat_apple"</code> → comparaison <span style="color:#ff9090;font-weight:700;">fausse</span> → toutes les cartes cachées. Pas d'erreur dans la console — juste une page vide.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-table">
+      <thead><tr><th>Onglet (data-filter)</th><th>Carte attendue (data-category)</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr><td class="td-code">data-filter="tous"</td><td>n'importe laquelle</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">Toutes visibles</span></td></tr>
+        <tr><td class="td-code">data-filter="apple"</td><td class="td-code">data-category="apple"</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">✓ Visible</span></td></tr>
+        <tr><td class="td-code">data-filter="apple"</td><td class="td-code">data-category="android"</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">✗ Cachée</span></td></tr>
+      </tbody>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 06 RECAP ══════ -->
+  <div class="section" id="resume">
+    <div class="section-label">06 — Récapitulatif</div>
+    <h2>Le film complet de A à Z</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent4)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 1</div><div class="tl-title">Chargement du fichier</div></div>
+        <div class="tl-body">L'IIFE s'exécute. Tout est mis en attente dans <code>DOMContentLoaded</code>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 2</div><div class="tl-title">HTML prêt — vérification de sécurité</div></div>
+        <div class="tl-body">On cherche les onglets <code>.tab</code>. S'il n'y en a pas (autre page du site), <code>return</code> — on sort sans erreur.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent3)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 3</div><div class="tl-title">Mise en place</div></div>
+        <div class="tl-body">Chaque onglet reçoit un écouteur de clic. <code>filterProducts('tous')</code> est appelé — toutes les cartes déjà présentes sont affichées. L'observer est activé sur <code>#products-grid</code>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent5)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 4</div><div class="tl-title">product_grid.js injecte les cartes</div></div>
+        <div class="tl-body">L'observer détecte les nouveaux enfants dans la grille. Il re-filtre immédiatement avec le filtre actif. Même si l'utilisateur avait déjà cliqué un onglet, le bon filtre est appliqué.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent2)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 5</div><div class="tl-title">L'utilisateur clique un onglet</div></div>
+        <div class="tl-body">Tous les onglets perdent <code>active</code>. Le cliqué le reçoit. Son <code>data-filter</code> est lu. <code>filterProducts(filtre)</code> boucle sur toutes les cartes : celles qui correspondent passent en <code>display: flex</code>, les autres en <code>display: none</code>.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — main.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#60a5fa;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  .sec p b{color:var(--t);}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#93c5fd;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .cblu{background:rgba(96,165,250,.11);border:1px solid rgba(96,165,250,.4);color:#93c5fd;}
+  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+  .fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;}
+  .box.info{background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);color:#93c5fd;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#93c5fd}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+  @media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── EXTRA SCHEMAS ─── */
+  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+  .ls-key{font-weight:700;margin-bottom:.25rem;}
+  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-box{border-radius:11px;padding:1rem;}
+  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .cmp-item:last-child{border-bottom:none;}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">main.js</div>
+  <a href="#intro">Intro</a>
+  <a href="#config">CONFIG</a>
+  <a href="#events">Événements custom</a>
+  <a href="#peartechapi">window.PearTech</a>
+  <a href="#perf">Performance</a>
+  <a href="#recap">Récap</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>CustomEvent categorySelected</b><br><span style="color:var(--t3);font-size:.71rem;">émis par dropdown/grid</span></div>
+<div class="carte-item"><b>CustomEvent productAddedToCart</b><br><span style="color:var(--t3);font-size:.71rem;">émis par panier.js</span></div>
+<div class="carte-item"><b>CustomEvent filterChanged</b><br><span style="color:var(--t3);font-size:.71rem;">émis par filtre.js</span></div>
+<div class="carte-item"><b>CustomEvent productSelected</b><br><span style="color:var(--t3);font-size:.71rem;">émis par product_detail.js</span></div>
+<div class="carte-item"><b>window.load</b><br><span style="color:var(--t3);font-size:.71rem;">mesure performance</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#60a5fa22;color:#60a5fa;border:1px solid #60a5fa44;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>CONFIG</b><br><span style="color:var(--t3);font-size:.71rem;">siteName, version, debug</span></div>
+<div class="carte-item"><b>console.log stylisé</b><br><span style="color:var(--t3);font-size:.71rem;">%c CSS dans la console</span></div>
+<div class="carte-item"><b>performance.now()</b><br><span style="color:var(--t3);font-size:.71rem;">temps total de chargement</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>window.PearTech</b><br><span style="color:var(--t3);font-size:.71rem;">notify(), getTheme(), setTheme()</span></div>
+<div class="carte-item"><b>CustomEvent showNotification</b><br><span style="color:var(--t3);font-size:.71rem;">via PearTech.notify()</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>main.js</span></h1>
+  <p>Le fichier d'entrée global du projet. Il ne gère aucune UI directement — son rôle est d'écouter les événements custom des autres modules, d'exposer des utilitaires globaux via <ic>window.PearTech</ic> (thème, notifications), et de logguer les performances au démarrage.</p>
+  <div class="fbadge"><div class="dot"></div>main.js · ~80 lignes · CONFIG + 3 event listeners + window.PearTech · toutes les pages</div>
+</div>
+
+<!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro">
+  <div class="slabel">00 — Vue d'ensemble</div>
+  <h2>Le chef d'orchestre — sans jouer d'instrument</h2>
+  <div class="box ana"><span class="bi">🎼</span><div><b>Analogie :</b> main.js est comme un chef d'orchestre. Il n'joue aucune note lui-même, mais il écoute tous les musiciens (les autres modules), maintient le tempo (logs), et met à disposition des outils communs (window.PearTech) que tout le monde peut utiliser.</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Les 4 responsabilités de main.js</div>
+    <div class="fork f2" style="max-width:720px;margin:0 auto;">
+      <div style="background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);border-radius:11px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#93c5fd;margin-bottom:.3rem;">1 — CONFIG</div>
+        <div style="font-size:.78rem;color:var(--t2);">Objet centralisé : siteName, version, debug. Un seul endroit à modifier pour changer le comportement global.</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:11px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#d3a8ff;margin-bottom:.3rem;">2 — Écoute d'événements custom</div>
+        <div style="font-size:.78rem;color:var(--t2);">filterChanged · productAddedToCart · productSelected. Centralise les logs de tous les modules.</div>
+      </div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">3 — window.PearTech</div>
+        <div style="font-size:.78rem;color:var(--t2);">API globale : notify(), getTheme(), setTheme(). Accessible depuis tous les scripts.</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">4 — Performance</div>
+        <div style="font-size:.78rem;color:var(--t2);">performance.now() après window.load — mesure le temps de chargement complet de la page.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 01 CONFIG ══ -->
+<div class="sec" id="config">
+  <div class="slabel">01 — Objet de configuration</div>
+  <h2>CONFIG — un seul endroit pour tout paramétrer</h2>
+<div class="diag">
+  <div class="dtitle">CONFIG — toutes les constantes en un seul objet</div>
+  <table class="recap-table">
+    <thead><tr><th>Clé</th><th>Valeur par défaut</th><th>Utilisée pour</th></tr></thead>
+    <tbody>
+      <tr><td class="fn-cell">version</td><td>'1.0.0'</td><td>Identification de version en console</td></tr>
+      <tr><td class="fn-cell">debug</td><td>false</td><td>Active les console.log détaillés si true</td></tr>
+      <tr><td class="fn-cell">cartKey</td><td>'peartech-cart'</td><td>Clé localStorage partagée entre panier.js et cart.js</td></tr>
+      <tr><td class="fn-cell">favKey</td><td>'peartech-favoris'</td><td>Clé localStorage partagée entre favoris.js et profil.js</td></tr>
+      <tr><td class="fn-cell">themeKey</td><td>'peartech-theme'</td><td>Clé localStorage partagée entre darkmode.js et main.js</td></tr>
+      <tr><td class="fn-cell">sessionKey</td><td>'peartech-session'</td><td>Clé localStorage pour la session utilisateur (profil.js)</td></tr>
+    </tbody>
+  </table>
+  <div style="margin-top:.6rem;font-size:.75rem;color:var(--t3);">Intérêt : si la clé 'peartech-cart' doit changer, on la modifie une seule fois dans CONFIG plutôt que dans chaque fichier.</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">CONFIG</span> = {
+    siteName: <span class="s">'PearTech'</span>, <span class="cm">// Nom affiché dans les logs</span>
+    version:  <span class="s">'1.0.0'</span>,   <span class="cm">// Version sémantique (major.minor.patch)</span>
+    debug:    <span class="kw">true</span>         <span class="cm">// ← Mettre false en production pour désactiver tous les logs</span>
+};
+
+<span class="cm">// Chaque console.log est conditionné par CONFIG.debug :
+// if (CONFIG.debug) { console.log(...) }
+// → En production : changer debug: true → false → silence total</span></pre></div>
+
+  <div class="box warn"><span class="bi">💡</span><div><b>Pourquoi un objet CONFIG ?</b> Sans lui, si on veut désactiver tous les logs en production, il faudrait chercher et supprimer chaque <ic>console.log</ic> un par un dans le fichier. Avec CONFIG, un seul changement (<ic>debug: false</ic>) suffit pour tout éteindre d'un coup.</div></div>
+
+  <h3>Le log de démarrage stylisé</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre>console.<span class="fn">log</span>(<span class="s">'%c'</span> + CONFIG.siteName + <span class="s">' v'</span> + CONFIG.version,
+    <span class="s">'color: #3B82F6; font-size: 16px; font-weight: bold'</span>);
+<span class="cm">// Le préfixe %c indique à la console d'appliquer les styles CSS du 2e argument.
+// Résultat : "PearTech v1.0.0" affiché en bleu gras 16px dans la console DevTools.</span></pre></div>
+</div>
+<hr>
+
+<!-- ══ 02 EVENTS ══ -->
+<div class="sec" id="events">
+  <div class="slabel">02 — Événements custom</div>
+  <h2>Le bus d'événements — écouter sans coupler</h2>
+<div class="schema">
+  <div class="schema-title">Bus d'événements — main.js comme hub central</div>
+  <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:.7rem;align-items:start;margin-bottom:1rem;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);margin-bottom:.5rem;text-align:right;">ÉMETTEURS</div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;padding:.25rem .7rem;border-radius:6px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.35);color:#c4b5fd;">product_grid.js<br><span style="font-weight:400;font-size:.58rem;">categorySelected</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;padding:.25rem .7rem;border-radius:6px;background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;">dropdown.js<br><span style="font-weight:400;font-size:.58rem;">categorySelected</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;padding:.25rem .7rem;border-radius:6px;background:rgba(110,231,183,.12);border:1px solid rgba(110,231,183,.35);color:#7ee8b8;">panier.js<br><span style="font-weight:400;font-size:.58rem;">productAddedToCart</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;padding:.25rem .7rem;border-radius:6px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);color:#fcd34d;">filtre.js<br><span style="font-weight:400;font-size:.58rem;">filterChanged</span></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;padding:.25rem .7rem;border-radius:6px;background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.35);color:#f9a8d4;">product_detail.js<br><span style="font-weight:400;font-size:.58rem;">productSelected</span></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:1.8rem;gap:.3rem;">
+      <div style="color:var(--t3);font-size:.7rem;">→→→</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;padding:.5rem .7rem;border-radius:10px;background:rgba(96,165,250,.15);border:2px solid rgba(96,165,250,.4);color:#93c5fd;text-align:center;">main.js<br>HUB</div>
+      <div style="color:var(--t3);font-size:.7rem;">→→→</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);margin-bottom:.5rem;">RÉPONSES</div>
+      <div style="display:flex;flex-direction:column;gap:.35rem;">
+        <div style="font-size:.73rem;color:var(--t2);padding:.3rem .6rem;background:var(--bg3);border-radius:6px;">console.log stylisé (debug)</div>
+        <div style="font-size:.73rem;color:var(--t2);padding:.3rem .6rem;background:var(--bg3);border-radius:6px;">window.PearTech.notify() → showNotification event</div>
+        <div style="font-size:.73rem;color:var(--t3);padding:.3rem .6rem;font-style:italic;">futur: analytics, notifications UI</div>
+      </div>
+    </div>
+  </div>
+  <div class="box info" style="margin:0;"><span class="bi">💡</span><div><b>Couplage zéro.</b> product_grid.js ne sait pas que main.js existe. Il émet juste un signal sur <ic>document</ic>. main.js est le seul à écouter — mais n'importe quel autre module pourrait s'y abonner sans toucher à product_grid.js.</div></div>
+</div>
+
+  <p>Les modules du projet communiquent entre eux via des <b>CustomEvents</b> sur le <ic>document</ic>. main.js les écoute tous pour les logger. C'est le pattern "publish/subscribe" appliqué au DOM.</p>
+<div class="diag">
+  <div class="dtitle">CONFIG — les 6 clés et leurs consommateurs</div>
+  <table style="width:100%;border-collapse:collapse;font-size:.73rem;max-width:620px;">
+    <thead><tr>
+      <th style="padding:.45rem .7rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-align:left;">Clé</th>
+      <th style="padding:.45rem .7rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">Valeur</th>
+      <th style="padding:.45rem .7rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-align:left;">Consommé par</th>
+    </tr></thead>
+    <tbody>
+      <tr><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:#f0abfc;">version</td><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:var(--t2);text-align:center;">'1.0.0'</td><td style="padding:.4rem .7rem;border:1px solid var(--border);color:var(--t3);">console au chargement</td></tr>
+      <tr><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:#f7d97a;">debug</td><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:var(--t2);text-align:center;">false</td><td style="padding:.4rem .7rem;border:1px solid var(--border);color:var(--t3);">if (CONFIG.debug) → active logs + perf</td></tr>
+      <tr><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:#7ee8b8;">cartKey</td><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:var(--t2);text-align:center;">'peartech-cart'</td><td style="padding:.4rem .7rem;border:1px solid var(--border);color:var(--t3);">partagé panier.js + cart.js</td></tr>
+      <tr><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:#fda4af;">favKey</td><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:var(--t2);text-align:center;">'peartech-favoris'</td><td style="padding:.4rem .7rem;border:1px solid var(--border);color:var(--t3);">favoris.js + profil.js</td></tr>
+      <tr><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:#fde68a;">themeKey</td><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:var(--t2);text-align:center;">'peartech-theme'</td><td style="padding:.4rem .7rem;border:1px solid var(--border);color:var(--t3);">darkmode.js + main.js</td></tr>
+      <tr><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:#7dd3fc;">sessionKey</td><td style="padding:.4rem .7rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;color:var(--t2);text-align:center;">'peartech-session'</td><td style="padding:.4rem .7rem;border:1px solid var(--border);color:var(--t3);">profil.js exclusivement</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript — 3 événements écoutés</span><pre><span class="cm">// Émis par filtre.js quand un filtre change</span>
+document.<span class="fn">addEventListener</span>(<span class="s">'filterChanged'</span>, <span class="kw">function</span>(e) {
+    <span class="kw">if</span> (CONFIG.debug) console.<span class="fn">log</span>(<span class="s">'Filtre changé:'</span>, e.detail.filter);
+});
+
+<span class="cm">// Émis par panier.js quand un produit est ajouté au panier</span>
+document.<span class="fn">addEventListener</span>(<span class="s">'productAddedToCart'</span>, <span class="kw">function</span>(e) {
+    <span class="kw">if</span> (CONFIG.debug) console.<span class="fn">log</span>(<span class="s">'Produit ajouté:'</span>, e.detail.name);
+});
+
+<span class="cm">// Émis par product_grid.js ou catalogue.js quand un produit est cliqué</span>
+document.<span class="fn">addEventListener</span>(<span class="s">'productSelected'</span>, <span class="kw">function</span>(e) {
+    <span class="kw">if</span> (CONFIG.debug) console.<span class="fn">log</span>(<span class="s">'Produit sélectionné:'</span>, e.detail.name);
+});</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Pattern Publish / Subscribe — pourquoi c'est élégant</div>
+    <div class="fork f2" style="max-width:720px;margin:0 auto;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">❌ Sans CustomEvent (couplage fort)</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.9;">panier.js importerait main.js<br>→ dépendance circulaire<br>→ modification de l'un casse l'autre<br>→ impossible de les tester séparément</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">✅ Avec CustomEvent (couplage nul)</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.9;">panier.js dispatch un événement<br>→ ne connaît pas main.js<br>→ main.js écoute sans connaître panier.js<br>→ chaque module est indépendant</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 03 PEARTECHAPI ══ -->
+<div class="sec" id="peartechapi">
+  <div class="slabel">03 — API globale</div>
+  <h2>window.PearTech — accessible depuis tous les scripts</h2>
+<div class="schema">
+  <div class="schema-title">window.PearTech — l'API publique de main.js</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;">
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#93c5fd;">PearTech.notify(msg, type)</div>
+      <div style="font-size:.75rem;color:var(--t2);">Dispatche <ic>showNotification</ic> sur <ic>document</ic>. type = 'success' | 'error' | 'info'. Aucun écouteur actuellement → infrastructure pour une future UI toast globale.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#93c5fd;">PearTech.getTheme()</div>
+      <div style="font-size:.75rem;color:var(--t2);">Lit <ic>body.classList.contains('dark-mode')</ic> → retourne 'dark' ou 'light'. Utilisable depuis la console dev pour connaître le thème actuel.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#93c5fd;">PearTech.setTheme(theme)</div>
+      <div style="font-size:.75rem;color:var(--t2);">Toggle <ic>body.classList</ic> + <ic>localStorage.setItem('peartech-theme', theme)</ic>. Ne met pas à jour l'icône ni aria-pressed (contrairement à darkmode.js) → pour usage programmatique uniquement.</div>
+    </div>
+  </div>
+</div>
+
+  <p>En assignant un objet à <ic>window.PearTech</ic>, n'importe quel autre script de la page peut appeler <ic>window.PearTech.notify()</ic> ou <ic>PearTech.setTheme('dark')</ic> sans importer quoi que ce soit.</p>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre>window.PearTech = {
+    version: CONFIG.version,
+
+    <span class="cm">// Publie un événement de notification (pour une future toast UI)</span>
+    notify: <span class="kw">function</span>(message, type) {
+        <span class="kw">const</span> <span class="vr">event</span> = <span class="kw">new</span> CustomEvent(<span class="s">'showNotification'</span>, {
+            detail: { message: message, type: type || <span class="s">'info'</span> }
+        });
+        document.<span class="fn">dispatchEvent</span>(event);
+    },
+
+    <span class="cm">// Retourne 'dark' ou 'light' selon la classe CSS sur body</span>
+    getTheme: <span class="kw">function</span>() {
+        <span class="kw">return</span> document.body.classList.<span class="fn">contains</span>(<span class="s">'dark-mode'</span>) ? <span class="s">'dark'</span> : <span class="s">'light'</span>;
+    },
+
+    <span class="cm">// Change le thème ET le persiste en localStorage</span>
+    setTheme: <span class="kw">function</span>(theme) {
+        <span class="kw">if</span> (theme === <span class="s">'dark'</span>) {
+            document.body.classList.<span class="fn">add</span>(<span class="s">'dark-mode'</span>);
+            localStorage.<span class="fn">setItem</span>(<span class="s">'peartech-theme'</span>, <span class="s">'dark'</span>);
+        } <span class="kw">else</span> {
+            document.body.classList.<span class="fn">remove</span>(<span class="s">'dark-mode'</span>);
+            localStorage.<span class="fn">setItem</span>(<span class="s">'peartech-theme'</span>, <span class="s">'light'</span>);
+        }
+    }
+};</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Pourquoi window.PearTech plutôt qu'une simple fonction ?</div>
+    <div class="fork f3">
+      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:var(--t3);margin-bottom:.3rem;">Namespace</div>
+        <div style="font-size:.77rem;color:var(--t2);">Toutes les fonctions groupées sous un seul nom évitent les collisions avec d'autres librairies</div>
+      </div>
+      <div style="background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#93c5fd;margin-bottom:.3rem;">Accessibilité globale</div>
+        <div style="font-size:.77rem;color:var(--t2);">N'importe quel script peut appeler <ic>PearTech.notify()</ic> sans import ni dépendance</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#d3a8ff;margin-bottom:.3rem;">Extensibilité</div>
+        <div style="font-size:.77rem;color:var(--t2);">Facile d'ajouter de nouvelles méthodes sans casser l'existant</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sn"><span class="sni">💡</span><span><ic>window.PearTech.notify()</ic> dispatche un <ic>showNotification</ic> CustomEvent mais aucun listener ne l'écoute encore dans le projet — c'est une <b>infrastructure prête à l'emploi</b> pour une future implémentation de toasts (messages de notification visuels). Le pattern est déjà en place, il suffit d'ajouter l'écouteur.</span></div>
+</div>
+<hr>
+
+<!-- ══ 04 PERF ══ -->
+<div class="sec" id="perf">
+  <div class="slabel">04 — Mesure de performance</div>
+  <h2>performance.now() — mesurer le chargement réel</h2>
+<div class="diag">
+  <div class="dtitle">DOMContentLoaded vs window.load — chronologie</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;">
+    <div style="display:grid;grid-template-columns:100px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div>
+      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#7dd3fc;">Navigation → premier octet HTML reçu</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#c4b5fd;">~200-400ms</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#c4b5fd;">DOMContentLoaded — HTML parsé, scripts init()</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">...</div>
+      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t3);">Images, CSS externes, polices chargées...</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">~800-2000ms</div>
+      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#7ee8b8;">window.load → performance.now() → loadTime loggé</div>
+    </div>
+  </div>
+  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">CONFIG.debug = false en prod → ces logs n'apparaissent pas. Mettre à true en développement pour mesurer les régressions de perf.</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (CONFIG.debug) {
+    window.<span class="fn">addEventListener</span>(<span class="s">'load'</span>, <span class="kw">function</span>() {
+        <span class="kw">const</span> <span class="vr">loadTime</span> = performance.<span class="fn">now</span>();
+        console.<span class="fn">log</span>(<span class="s">'Page chargée en'</span>, Math.<span class="fn">round</span>(loadTime), <span class="s">'ms'</span>);
+    });
+}</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">DOMContentLoaded vs window.load — la différence</div>
+    <div class="fork f2" style="max-width:700px;margin:0 auto;">
+      <div style="background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#93c5fd;margin-bottom:.3rem;">DOMContentLoaded</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">HTML parsé et DOM construit. Les images et CSS ne sont <b>pas encore</b> chargés. C'est là que la plupart des scripts s'initialisent.</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">window.load</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Tout est chargé : HTML, CSS, images, scripts. <ic>performance.now()</ic> ici donne le temps <b>total</b> de chargement de la page.</div>
+      </div>
+    </div>
+    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span><ic>performance.now()</ic> retourne le nombre de millisecondes écoulées depuis que la page a commencé à se charger (navigation timing). C'est plus précis que <ic>Date.now()</ic> car il utilise une horloge haute résolution (sous-milliseconde).</span></div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ RECAP ══ -->
+<div class="sec" id="recap">
+  <div class="slabel">05 — Récapitulatif</div>
+  <h2>Vue d'ensemble — CONFIG, CustomEvents et window.PearTech</h2>
+  <div class="diag">
+    <div class="dtitle">Flux d'exécution complet</div>
+    <div class="vc">
+      <div class="vn w cgr">IIFE — exécution immédiate, scope isolé</div>
+      <div class="va">↓<div class="val">const CONFIG = { siteName, version, debug }</div></div>
+      <div class="vn w cblu">DOMContentLoaded</div>
+      <div class="va">↓<div class="val">CONFIG.debug → logs démarrage</div></div>
+      <div class="vn w cgr">3 addEventListener CustomEvent (filterChanged, productAddedToCart, productSelected)</div>
+      <div class="va">↓</div>
+      <div class="vn w cp">window.PearTech = { version, notify, getTheme, setTheme } — exposé globalement</div>
+      <div class="va">↓<div class="val">window.addEventListener('load')</div></div>
+      <div class="vn w cy">performance.now() → console.log temps de chargement</div>
+    </div>
+  </div>
+  <div style="background:rgba(96,165,250,.07);border:1px solid rgba(96,165,250,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;margin-top:1.2rem;">
+    <b style="color:#93c5fd;">Dépendances :</b> aucune. main.js n'importe rien et ne lit aucun localStorage. Il expose <ic>window.PearTech</ic> qui peut être utilisé par tous les autres modules. Les CustomEvents qu'il écoute sont émis par filtre.js, panier.js, product_grid.js et catalogue.js.
+  </div>
+</div>
+
+</div>
+</body>
+</html>

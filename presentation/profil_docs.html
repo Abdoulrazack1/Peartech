@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta n
+<div class="diag">
+  <div class="dtitle">Les 4 utilitaires — transformation et effets</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:580px;">
+    <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.7rem .9rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.35rem;">escapeHtml(str)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">"&lt;b&gt;texte&lt;/b&gt;" → "&amp;lt;b&amp;gt;texte&amp;lt;/b&amp;gt;" — protection XSS</div>
+    </div>
+    <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.7rem .9rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.35rem;">validateEmail(email)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">regex 3 segments · "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c3d1c3e723f">[email&#160;protected]</a>" → true · "pas-email" → false · retourne bool</div>
+    </div>
+    <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:9px;padding:.7rem .9rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.35rem;">showMessage(el, msg, type)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">injecte dans el · className = type (success/error/info) · setTimeout 4s → efface</div>
+    </div>
+    <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.7rem .9rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.35rem;">attachTogglePw(btn, input)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">clic → bascule input.type entre 'password' et 'text' · icône oeil change</div>
+    </div>
+  </div>
+</div>
+ame="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — profil.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#f97316;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;gap:.9rem;height:56px;overflow-x:auto;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);text-decoration:none;padding:.28rem .48rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  .sec p b{color:var(--t);font-weight:700;}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#fdba74;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .co{background:rgba(249,115,22,.11);border:1px solid rgba(249,115,22,.4);color:#fdba74;}
+  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+  .fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
+  .fork.f4{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;width:100%;}
+  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .fc .vn{width:100%;max-width:100%;}
+  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
+  .flo{background:rgba(249,115,22,.15);color:#fdba74;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;}
+  .box.info{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);color:#fdba74;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#fdba74}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+  .grow:last-child{border-bottom:none;}
+  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tc{font-family:'JetBrains Mono',monospace;color:#fdba74;font-size:.76rem;}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+  @media(max-width:600px){.fork.f2,.fork.f3,.fork.f4{grid-template-columns:1fr;}}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── SCHEMAS PASS 2 ─── */
+  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+  .kbox{border-radius:11px;padding:.9rem 1rem;}
+  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .kbox-item:last-child{border-bottom:none;}
+  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
+  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+  .seq{display:flex;flex-direction:column;gap:.3rem;}
+  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+  .trans-line{width:28px;height:1px;background:var(--t3);}
+  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">profil.js</div>
+  <a href="#intro">Intro</a>
+  <a href="#stockage">Stockage</a>
+  <a href="#auth">Auth</a>
+  <a href="#panels">4 panels</a>
+  <a href="#token">Reset token</a>
+  <a href="#profil">Profil</a>
+  <a href="#sections">7 sections</a>
+  <a href="#utilitaires">Utilitaires</a>
+  <a href="#recap">Récap</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>localStorage peartech-session</b><br><span style="color:var(--t3);font-size:.71rem;">utilisateur connecté</span></div>
+<div class="carte-item"><b>localStorage peartech-users</b><br><span style="color:var(--t3);font-size:.71rem;">base utilisateurs</span></div>
+<div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>isLoggedIn()</b><br><span style="color:var(--t3);font-size:.71rem;">vérifie la session active</span></div>
+<div class="carte-item"><b>showAuthScreen()</b><br><span style="color:var(--t3);font-size:.71rem;">injecte le formulaire login/register</span></div>
+<div class="carte-item"><b>loginUser(email, pass)</b><br><span style="color:var(--t3);font-size:.71rem;">validation + session</span></div>
+<div class="carte-item"><b>initProfile()</b><br><span style="color:var(--t3);font-size:.71rem;">charge le profil connecté</span></div>
+<div class="carte-item"><b>showSection(id)</b><br><span style="color:var(--t3);font-size:.71rem;">SPA: switch entre 7 sections</span></div>
+<div class="carte-item"><b>logoutUser()</b><br><span style="color:var(--t3);font-size:.71rem;">supprime la session</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>localStorage peartech-session</b><br><span style="color:var(--t3);font-size:.71rem;">email de l'utilisateur</span></div>
+<div class="carte-item"><b>localStorage peartech-user-{b64}</b><br><span style="color:var(--t3);font-size:.71rem;">données profil mises à jour</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>profil.js</span></h1>
+  <p>Le fichier le plus complexe du projet : authentification simulée en localStorage, 4 panels (connexion, inscription, mot de passe oublié, réinitialisation), profil complet à 7 sections, gestion des adresses/paiements/préférences, upload de photo, tokens de réinitialisation avec expiration, et injection de CSS dynamique.</p>
+  <div class="fbadge"><div class="dot"></div>profil.js · ~750 lignes · 35+ fonctions · 7 sections · 3 clés localStorage · 0 backend</div>
+</div>
+
+<!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro">
+  <div class="slabel">00 — Vue d'ensemble</div>
+  <h2>La grande architecture en 3 phases</h2>
+  <div class="box ana"><span class="bi">🏗️</span><div><b>Analogie :</b> profil.js est comme un portier d'hôtel. Si vous n'avez pas de chambre, il vous accueille à la réception (écran d'auth). Une fois inscrit/connecté, il vous accompagne dans votre chambre (profil) où chaque section est une pièce différente. Si vous oubliez votre clé (mot de passe), il prépare un pass temporaire (token de 30 minutes).</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Les 3 grandes phases de profil.js</div>
+    <div class="fork f3">
+      <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:11px;padding:1rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;">Phase 1 — Auth</div>
+        <div style="font-size:.77rem;color:var(--t2);line-height:1.7;">showAuthScreen() · 4 panels · login · register · forgot · reset password</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:11px;padding:1rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">Phase 2 — Profil</div>
+        <div style="font-size:.77rem;color:var(--t2);line-height:1.7;">initProfile() → startProfile() · 7 sections · navigation sidebar · userData</div>
+      </div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:1rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">Phase 3 — Reset</div>
+        <div style="font-size:.77rem;color:var(--t2);line-height:1.7;">generateResetToken() · validateResetToken() · consumeResetToken() · expiration 30min</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">Point d'entrée — DOMContentLoaded</div>
+    <div class="vc">
+      <div class="vn w cgr">DOMContentLoaded → initDemoAccount()</div>
+      <div class="va">↓<div class="val">URL contient ?reset_token=… ?</div></div>
+    </div>
+    <div class="fork f3" style="max-width:750px;margin:.3rem auto 0;">
+      <div class="fc">
+        <div class="fl flo" style="font-size:.6rem;">Token valide</div>
+        <div class="vn co" style="font-size:.68rem;">showAuthScreen()<br>showAuthPanel('reset')</div>
+      </div>
+      <div class="fc">
+        <div class="fl flr" style="font-size:.6rem;">Token invalide/expiré</div>
+        <div class="vn cr" style="font-size:.68rem;">showAuthScreen()<br>showAuthPanel('forgot')<br>+ message d'erreur</div>
+      </div>
+      <div class="fc">
+        <div class="fl flg" style="font-size:.6rem;">Pas de token</div>
+        <div class="vn cgr" style="font-size:.68rem;">isLoggedIn() ?<br>→ initProfile()<br>→ showAuthScreen()</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 01 STOCKAGE ══ -->
+<div class="sec" id="stockage">
+  <div class="slabel">01 — Stockage localStorage</div>
+  <h2>3 clés principales + 1 par utilisateur</h2>
+  <p>profil.js ne touche jamais à un serveur. Tout l'état de l'application est dans <b>localStorage</b>, qui persiste même après fermeture du navigateur.</p>
+<div class="diag">
+  <div class="dtitle">Les clés localStorage de profil.js — lecture/écriture et cycle de vie</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:620px;">
+    <div style="display:grid;grid-template-columns:200px 80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#fda4af;background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;">peartech-session</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-align:center;">R/W</div>
+      <div style="font-size:.73rem;color:var(--t2);">Email (string). Présent = connecté. Absent = déconnecté. Supprimé au logout.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:200px 80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#fdba74;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.2);border-radius:7px;padding:.4rem .7rem;">peartech-users</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-align:center;">R/W</div>
+      <div style="font-size:.73rem;color:var(--t2);">Objet {"email": {password, prenom, nom, ...}}. Annuaire de tous les comptes. Jamais supprimé.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:200px 80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7dd3fc;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;">peartech-user-{b64}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-align:center;">R/W</div>
+      <div style="font-size:.73rem;color:var(--t2);">Profil complet : commandes, adresses, préférences. Clé = btoa(email). 1 clé par compte.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:200px 80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.4rem .7rem;">peartech-reset-token-{email}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);text-align:center;">R/W</div>
+      <div style="font-size:.73rem;color:var(--t2);">Token 32 hex + timestamp expiry (30min). Supprimé après consommation unique.</div>
+    </div>
+  </div>
+</div>
+
+
+  <table class="tbl">
+    <thead><tr><th>Clé localStorage</th><th>Contenu</th><th>Durée de vie</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="tc">peartech-session</td>
+        <td style="color:var(--t2)">Email de l'utilisateur connecté (chaîne simple). Sa présence = utilisateur connecté.</td>
+        <td style="color:var(--t2)">Jusqu'à déconnexion manuelle</td>
+      </tr>
+      <tr>
+        <td class="tc">peartech-users</td>
+        <td style="color:var(--t2)">Objet JSON : <ic>{ "email": {password, prenom, nom} }</ic>. Annuaire de tous les comptes.</td>
+        <td style="color:var(--t2)">Permanent</td>
+      </tr>
+      <tr>
+        <td class="tc">peartech-reset-tokens</td>
+        <td style="color:var(--t2)">Objet JSON : <ic>{ "token32hex": {email, expiry} }</ic>. Tokens de réinit avec timestamp d'expiration.</td>
+        <td style="color:var(--t2)">Nettoyage auto à chaque génération</td>
+      </tr>
+      <tr>
+        <td class="tc">peartech-user-{base64}</td>
+        <td style="color:var(--t2)">Données complètes du profil : nom, photo, commandes, adresses, paiements, préférences.</td>
+        <td style="color:var(--t2)">Permanent</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>userDataKey() — pourquoi encoder l'email en base64 ?</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">userDataKey</span>(email) {
+    <span class="kw">return</span> <span class="s">'peartech-user-'</span> + <span class="fn">btoa</span>(<span class="fn">unescape</span>(<span class="fn">encodeURIComponent</span>(email)));
+}
+
+<span class="cm">// Exemple :
+// email  = "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f19b94909fdf9584819e9f85b1949c90989ddf9783">[email&#160;protected]</a>"
+// btoa() = "amVhbi5kdXBvbnRAZW1haWwuZnI="  ← base64 safe pour une clé localStorage
+// clé    = "peartech-user-amVhbi5kdXBvbnRAZW1haWwuZnI="</span>
+</pre></div>
+
+  <div class="glos">
+    <div class="glos-head">📖 btoa / encodeURIComponent / unescape — la triplette
+<div class="schema2">
+  <div class="s2t">userDataKey() — pourquoi encoder l'email en base64 ?</div>
+  <div style="display:flex;flex-direction:column;gap:.4rem;max-width:600px;">
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">Email brut</div>
+      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fda4af;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9df7f8fcf3b3f9e8edf2f3e9ddf8f0fcf4f1b3fbef">[email&#160;protected]</a><br><span style="font-size:.58rem;opacity:.7;">contient @ . — caractères problématiques comme clé</span></div>
+    </div>
+    <div class="arr-down">↓ encodeURIComponent() → unescape() → btoa()</div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">Clé finale</div>
+      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7ee8b8;">peartech-user-amVhbi5kdXBvbnRAZW1haWwuZnI=<br><span style="font-size:.58rem;opacity:.7;">uniquement [a-z A-Z 0-9 + / = -] — safe localStorage</span></div>
+    </div>
+    <div style="margin-top:.3rem;font-size:.74rem;color:var(--t3);">Clé unique par utilisateur → deux profils avec des emails différents ne se chevauchent jamais dans localStorage</div>
+  </div>
+</div>
+</div>
+    <div class="grow">
+      <div class="gterm">encodeURIComponent</div>
+      <div class="gdef">Encode les caractères spéciaux en séquences UTF-8. Nécessaire pour gérer les emails avec des accents ou caractères non-ASCII (ex: <ic>café@example.fr</ic>).</div>
+    </div>
+    <div class="grow">
+      <div class="gterm">unescape</div>
+      <div class="gdef">Convertit les séquences <ic>%XX</ic> produites par encodeURIComponent en caractères binaires que <ic>btoa()</ic> peut traiter. Sans ça, <ic>btoa()</ic> échoue sur les caractères non-Latin.</div>
+    </div>
+    <div class="grow">
+      <div class="gterm">btoa</div>
+      <div class="gdef">Encode en Base64. Transforme une chaîne binaire en caractères alphanumériques + <ic>+/=</ic>. Résultat utilisable comme clé localStorage sans caractères spéciaux problématiques comme <ic>@</ic> ou <ic>.</ic>.</div>
+    </div>
+  </div>
+
+  <h3>buildDefaultUserData() — la structure d'un nouveau profil</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">buildDefaultUserData</span>(prenom, nom, email) {
+    <span class="kw">return</span> {
+        prenom, nom, email,
+        naissance:  <span class="s">''</span>,
+        telephone:  <span class="s">''</span>,
+        photo:      <span class="kw">null</span>,       <span class="cm">// Base64 de l'image ou null</span>
+        commandes:  [],           <span class="cm">// Historique des commandes</span>
+        adresses:   [],           <span class="cm">// Tableau d'objets adresse</span>
+        paiements:  [],           <span class="cm">// Tableau d'objets moyen de paiement</span>
+        preferences: {
+            newsletter:              <span class="kw">false</span>,
+            offres_personnalisees:   <span class="kw">false</span>,
+            notifications_commandes: <span class="kw">true</span>,  <span class="cm">// Activé par défaut</span>
+            notifications_promos:    <span class="kw">false</span>
+        }
+    };
+}</pre></div>
+</div>
+<hr>
+
+<!-- ══ 02 AUTH ══ -->
+<div class="sec" id="auth">
+  <div class="slabel">02 — Écran d'authentification</div>
+  <h2>showAuthScreen() — construire le HTML dans le JS</h2>
+<div class="schema2">
+  <div class="s2t">Les 4 panels — un seul visible à la fois</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;">
+    <div style="border-radius:10px;padding:.8rem;text-align:center;background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">#auth-login</div>
+      <div style="font-size:.7rem;color:var(--t2);">Connexion<br>email + mdp<br>→ session</div>
+    </div>
+    <div style="border-radius:10px;padding:.8rem;text-align:center;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem;">#auth-register</div>
+      <div style="font-size:.7rem;color:var(--t2);">Inscription<br>email + mdp + prénom<br>→ nouveau compte</div>
+    </div>
+    <div style="border-radius:10px;padding:.8rem;text-align:center;background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">#auth-forgot</div>
+      <div style="font-size:.7rem;color:var(--t2);">Mot de passe<br>oublié → token<br>32 hex + expiry</div>
+    </div>
+    <div style="border-radius:10px;padding:.8rem;text-align:center;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.25);">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;">#auth-reset</div>
+      <div style="font-size:.7rem;color:var(--t2);">Nouveau mdp<br>valide token<br>→ consumeToken()</div>
+    </div>
+  </div>
+  <div style="margin-top:.7rem;font-size:.74rem;color:var(--t3);">showPanel(id) → querySelector('.auth-panel').classList.remove('active') sur tous · add('active') sur le panel cible</div>
+</div>
+
+  <p>Contrairement à la plupart des pages, l'écran d'auth est entièrement <b>généré par JavaScript</b>. Il n'existe pas dans le HTML statique. Avantage : tout le code d'auth est encapsulé dans profil.js, sans dépendance vers le HTML de la page.</p>
+<div class="diag">
+  <div class="dtitle">Les 4 panels d'auth — transitions entre états</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:.8rem;">
+    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.3);border-radius:9px;padding:.75rem;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">#auth-login</div>
+      <div style="font-size:.68rem;color:var(--t2);line-height:1.6;">email + mdp<br>→ session</div>
+    </div>
+    <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:9px;padding:.75rem;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">#auth-register</div>
+      <div style="font-size:.68rem;color:var(--t2);line-height:1.6;">nom + email + mdp<br>→ nouveau compte</div>
+    </div>
+    <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:9px;padding:.75rem;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">#auth-forgot</div>
+      <div style="font-size:.68rem;color:var(--t2);line-height:1.6;">email seulement<br>→ génère token</div>
+    </div>
+    <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.3);border-radius:9px;padding:.75rem;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">#auth-reset</div>
+      <div style="font-size:.68rem;color:var(--t2);line-height:1.6;">token + nouveau mdp<br>→ consumeToken()</div>
+    </div>
+  </div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">showAuthPanel(name) → tous les panels → classList.remove('active') → panel cible → classList.add('active'). Un seul visible à la fois, même conteneur #auth-container.</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript — pattern de construction dynamique</span><pre><span class="kw">function</span> <span class="fn">showAuthScreen</span>() {
+    <span class="cm">// 1. Masque le layout profil (qui existe dans le HTML mais n'est pas accessible)</span>
+    <span class="kw">const</span> <span class="vr">layout</span> = document.<span class="fn">querySelector</span>(<span class="s">'.profil-layout'</span>);
+    <span class="kw">if</span> (layout) layout.style.display = <span class="s">'none'</span>;
+
+    <span class="cm">// 2. Crée un div, y injecte tout le HTML, puis l'ajoute au DOM</span>
+    <span class="kw">const</span> <span class="vr">authDiv</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+    authDiv.id  = <span class="s">'auth-screen'</span>;
+    authDiv.innerHTML = <span class="s">`... 4 panels ...`</span>;
+
+    <span class="cm">// 3. Injecte les styles CSS via une balise &lt;style&gt; dans &lt;head&gt;</span>
+    <span class="fn">injectAuthStyles</span>();
+
+    <span class="cm">// 4. Ajoute le div dans le DOM</span>
+    <span class="kw">const</span> <span class="vr">main</span> = document.<span class="fn">getElementById</span>(<span class="s">'main-content'</span>);
+    <span class="kw">if</span> (main) main.<span class="fn">appendChild</span>(authDiv);
+
+    <span class="cm">// 5. Attache tous les écouteurs d'événements</span>
+    <span class="fn">attachAuthEvents</span>(authDiv);
+}</pre></div>
+
+  <div class="box warn"><span class="bi">💡</span><div><b>injectAuthStyles()</b> ajoute une balise <ic>&lt;style id="auth-styles"&gt;</ic> dans <ic>&lt;head&gt;</ic> avec tout le CSS de l'écran d'auth. Le guard <ic>if (document.getElementById('auth-styles')) return</ic> évite de l'injecter deux fois si la fonction est appelée plusieurs fois.</div></div>
+</div>
+<hr>
+
+<!-- ══ 03 PANELS ══ -->
+<div class="sec" id="panels">
+  <div class="slabel">03 — Les 4 panels d'auth</div>
+  <h2>Un seul conteneur, 4 panels cachés/affichés</h2>
+  <p>Tous les panels existent dans le DOM simultanément. La navigation entre eux consiste à mettre <ic>hidden</ic> sur 3 et l'enlever sur 1.</p>
+
+  <div class="cb2"><span class="cbl2">javascript — showAuthPanel()</span><pre><span class="kw">function</span> <span class="fn">showAuthPanel</span>(name) {
+    [<span class="s">'login'</span>, <span class="s">'register'</span>, <span class="s">'forgot'</span>, <span class="s">'reset'</span>].<span class="fn">forEach</span>(p => {
+        <span class="kw">const</span> <span class="vr">el</span> = document.<span class="fn">getElementById</span>(<span class="s">'auth-panel-'</span> + p);
+        <span class="kw">if</span> (el) el.hidden = (p !== name); <span class="cm">// Masque tout sauf le panel demandé</span>
+    });
+}
+<span class="cm">// showAuthPanel('forgot') → login:hidden, register:hidden, forgot:visible, reset:hidden</span></pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Navigation entre les 4 panels</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:11px;padding:1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fdba74;margin-bottom:.5rem;">Panel login</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Email + mot de passe · Hint compte démo · Lien "mot de passe oublié ?" → panel forgot</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:11px;padding:1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;">Panel register</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Prénom · Nom · Email · Mot de passe · Confirmation · Checkbox CGU/CGV obligatoire</div>
+      </div>
+      <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.5rem;">Panel forgot</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Email → génère token → lien Gmail ou copier. Message générique si email inconnu (sécurité).</div>
+      </div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">Panel reset</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Nouveau mot de passe + confirmation. Valide le token, change le mdp, consomme le token, redirige vers login.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;">Transitions entre panels</div>
+    <div style="display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;">
+      <span style="color:#fdba74;">login</span><span style="color:var(--t3);">→ (onglet)</span><span style="color:#d3a8ff;">register</span>
+      <span style="color:var(--t3);">·</span>
+      <span style="color:#fdba74;">login</span><span style="color:var(--t3);">→ (lien oublié)</span><span style="color:#7dd3fc;">forgot</span>
+      <span style="color:var(--t3);">·</span>
+      <span style="color:#7dd3fc;">forgot</span><span style="color:var(--t3);">→ (bouton retour)</span><span style="color:#fdba74;">login</span>
+      <span style="color:var(--t3);">·</span>
+      <span style="color:var(--t3);">URL ?reset_token →</span><span style="color:#7ee8b8;">reset</span>
+      <span style="color:var(--t3);">→ (succès)</span><span style="color:#fdba74;">login</span>
+    </div>
+  </div>
+
+  <h3>Flux de connexion — loginForm submit</h3>
+  <div class="diag">
+    <div class="dtitle">Vérification des identifiants</div>
+    <div class="vc">
+      <div class="vn w cgr">Soumission : email + password</div>
+      <div class="va">↓<div class="val">Champs vides ?</div></div>
+      <div class="vn cr" style="max-width:400px;">showAuthError + return</div>
+      <div class="va">↓<div class="val">Email invalide (regex) ?</div></div>
+      <div class="vn cr" style="max-width:400px;">showAuthError + return</div>
+      <div class="va">↓<div class="val">users[email] && users[email].password === password ?</div></div>
+    </div>
+    <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+      <div class="fc">
+        <div class="fl flr">Non</div>
+        <div class="vn cr" style="font-size:.72rem;">showAuthError('Email ou mot de passe incorrect.')</div>
+      </div>
+      <div class="fc">
+        <div class="fl flg">Oui</div>
+        <div class="vn cg" style="font-size:.72rem;">localStorage.setItem(SESSION_KEY, email)<br>→ initProfile()</div>
+      </div>
+    </div>
+    <div class="sn" style="margin-top:.8rem;"><span class="sni">⚠️</span><span>Les mots de passe sont stockés <b>en clair</b> dans localStorage — c'est intentionnel pour ce projet pédagogique sans backend. En production, il faudrait un hash côté serveur (bcrypt).</span></div>
+  </div>
+
+  <h3>Flux d'inscription — registerForm submit</h3>
+  <div class="cb2"><span class="cbl2">javascript — validations en cascade</span><pre><span class="cm">// 7 vérifications dans l'ordre :</span>
+<span class="kw">if</span> (!prenom || !nom || !email || !password || !confirm) <span class="cm">→ showAuthError</span>
+<span class="kw">if</span> (!<span class="fn">validateEmail</span>(email))                            <span class="cm">→ showAuthError</span>
+<span class="kw">if</span> (password.length < <span class="nm">6</span>)                              <span class="cm">→ showAuthError</span>
+<span class="kw">if</span> (password !== confirm)                              <span class="cm">→ showAuthError</span>
+<span class="kw">if</span> (!cgu)                                              <span class="cm">→ showAuthError</span>
+<span class="kw">if</span> (users[email])                                      <span class="cm">→ showAuthError "compte déjà existant"</span>
+
+<span class="cm">// Si tout passe :</span>
+users[email] = { password, prenom, nom };               <span class="cm">// Ajoute à l'annuaire</span>
+<span class="fn">saveUsers</span>(users);
+localStorage.<span class="fn">setItem</span>(SESSION_KEY, email);               <span class="cm">// Connecte immédiatement</span>
+<span class="kw">const</span> <span class="vr">newUserData</span> = <span class="fn">buildDefaultUserData</span>(prenom, nom, email); <span class="cm">// Crée le profil vide</span>
+localStorage.<span class="fn">setItem</span>(<span class="fn">userDataKey</span>(email), JSON.<span class="fn">stringify</span>(newUserData));
+<span class="fn">initProfile</span>(); <span class="cm">// Affiche directement le profil</span></pre></div>
+</div>
+<hr>
+
+<!-- ══ 04 TOKEN RESET ══ -->
+<div class="sec" id="token">
+  <div class="slabel">04 — Réinitialisation du mot de passe</div>
+  <h2>Tokens cryptographiques avec expiration</h2>
+  <p>Le flux "mot de passe oublié" génère un token unique de 32 caractères hexadécimaux, valable 30 minutes. Tout se passe côté client — pas de serveur mail réel.</p>
+<div class="diag">
+  <div class="dtitle">Cycle de vie du token de réinitialisation</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:580px;">
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">génération</div>
+      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .6rem;font-size:.71rem;color:var(--t2);">crypto.getRandomValues(Uint8Array(16)) → 32 hex chars<br><span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7dd3fc;">ex: "a3f8e21bc49d07f61e852a9c3b740df1"</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">stockage</div>
+      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.4rem .6rem;font-size:.71rem;color:var(--t2);">localStorage['peartech-reset-token-{email}'] = {token, expiry: Date.now() + 30×60×1000}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">validation</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.4rem .6rem;font-size:.71rem;color:var(--t2);">token === stored.token <span style="color:#c4b5fd;">AND</span> Date.now() &lt; stored.expiry → valide</div>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">consommation</div>
+      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .6rem;font-size:.71rem;color:#7ee8b8;">removeItem() immédiat — usage unique, même logique que peartech-last-order</div>
+    </div>
+    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .6rem;font-size:.71rem;color:#fda4af;">Après 30min : Date.now() ≥ expiry → validateResetToken() retourne false → lien expiré</div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript — generateResetToken()</span><pre><span class="kw">function</span> <span class="fn">generateResetToken</span>(email) {
+    <span class="cm">// 16 octets aléatoires → 32 caractères hex (0-9, a-f)</span>
+    <span class="kw">const</span> <span class="vr">token</span> = Array.<span class="fn">from</span>(crypto.<span class="fn">getRandomValues</span>(<span class="kw">new</span> Uint8Array(<span class="nm">16</span>)))
+                        .<span class="fn">map</span>(b => b.<span class="fn">toString</span>(<span class="nm">16</span>).<span class="fn">padStart</span>(<span class="nm">2</span>, <span class="s">'0'</span>)).<span class="fn">join</span>(<span class="s">''</span>);
+    <span class="cm">// Ex: "a3f8e21bc49d07f61e852a9c3b740df1"</span>
+
+    <span class="kw">const</span> <span class="vr">expiry</span> = Date.<span class="fn">now</span>() + <span class="nm">30</span> * <span class="nm">60</span> * <span class="nm">1000</span>; <span class="cm">// Maintenant + 30min (en ms)</span>
+
+    <span class="cm">// Charge les tokens existants, nettoie les expirés, ajoute le nouveau</span>
+    <span class="kw">let</span> <span class="vr">tokens</span> = {};
+    <span class="kw">try</span> { tokens = JSON.<span class="fn">parse</span>(localStorage.<span class="fn">getItem</span>(RESET_TOKENS)) || {}; } <span class="kw">catch</span>(e) {}
+    Object.<span class="fn">keys</span>(tokens).<span class="fn">forEach</span>(t => {
+        <span class="kw">if</span> (tokens[t].expiry < Date.<span class="fn">now</span>()) <span class="kw">delete</span> tokens[t]; <span class="cm">// Nettoyage auto</span>
+    });
+
+    tokens[token] = { email, expiry };
+    localStorage.<span class="fn">setItem</span>(RESET_TOKENS, JSON.<span class="fn">stringify</span>(tokens));
+    <span class="kw">return</span> token;
+}</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Anatomie d'un token — de la génération à la consommation</div>
+    <div class="vc">
+      <div class="vn w cgr">crypto.getRandomValues(new Uint8Array(16))<br><span style="font-size:.68rem;font-weight:400;">16 octets aléatoires sécurisés (API Web Crypto)</span></div>
+      <div class="va">↓<div class="val">.map(b => b.toString(16).padStart(2, '0')).join('')</div></div>
+      <div class="vn w co">"a3f8e21bc49d07f61e852a9c3b740df1"<br><span style="font-size:.68rem;font-weight:400;">32 caractères hex — chaque octet → 2 caractères hex (00-ff)</span></div>
+      <div class="va">↓<div class="val">stocké dans peartech-reset-tokens avec expiry</div></div>
+      <div class="vn w cy">URL de reset : page_profil.html?reset_token=a3f8e21b…<br><span style="font-size:.68rem;font-weight:400;">lien Gmail ou copié dans le presse-papier</span></div>
+      <div class="va">↓<div class="val">utilisateur clique → DOMContentLoaded détecte ?reset_token</div></div>
+      <div class="vn w cp">validateResetToken() → retourne l'email si valide, null si expiré</div>
+      <div class="va">↓<div class="val">formulaire reset soumis avec succès</div></div>
+      <div class="vn w cg">consumeResetToken() → delete tokens[token] → usage unique garanti</div>
+    </div>
+  </div>
+
+  <div class="glos">
+    <div class="glos-head">📖 crypto.getRandomValues vs Math.random()</div>
+    <div class="grow">
+      <div class="gterm">Math.random()</div>
+      <div class="gdef">Nombre pseudo-aléatoire. Prévisible si l'attaquant connaît l'algorithme du générateur. <b>À ne pas utiliser</b> pour les tokens de sécurité.</div>
+    </div>
+    <div class="grow">
+      <div class="gterm">crypto.getRandomValues</div>
+      <div class="gdef">Octets vraiment aléatoires fournis par le système d'exploitation (entropie matérielle). Impossible à prédire. Standard pour les tokens de sécurité.</div>
+    </div>
+  </div>
+
+  <h3>Le flux "mot de passe oublié" côté UX — simulé sans serveur mail</h3>
+  <div class="cb2"><span class="cbl2">javascript — forgotForm submit</span><pre><span class="kw">if</span> (!users[email]) {
+    <span class="cm">// Compte inexistant : message générique pour ne pas révéler si l'email est enregistré</span>
+    succEl.innerHTML = <span class="s">'Si un compte est associé à cet email, un lien a été envoyé.'</span>;
+    <span class="kw">return</span>;
+}
+
+<span class="cm">// Compte existant :</span>
+<span class="kw">const</span> <span class="vr">token</span>    = <span class="fn">generateResetToken</span>(email);
+<span class="kw">const</span> <span class="vr">resetUrl</span> = window.location.origin + window.location.pathname + <span class="s">'?reset_token='</span> + token;
+
+<span class="cm">// Construit un lien "Composer dans Gmail" directement dans le navigateur</span>
+<span class="kw">const</span> <span class="vr">gmailUrl</span> = <span class="s">'https://mail.google.com/mail/?view=cm'</span>
+               + <span class="s">'&to='</span> + <span class="fn">encodeURIComponent</span>(email)
+               + <span class="s">'&su='</span> + mailSubject
+               + <span class="s">'&body='</span> + mailBody;
+
+<span class="cm">// Affiche : bouton "Envoyer via Gmail" + bouton "Copier le lien"</span></pre></div>
+  <div class="sn"><span class="sni">💡</span><span>L'URL Gmail <ic>https://mail.google.com/mail/?view=cm&to=...&body=...</ic> pré-remplit un nouveau mail dans l'interface web Gmail. C'est une astuce pour "envoyer" sans backend mail. Le bouton "Copier" utilise <ic>navigator.clipboard.writeText()</ic> avec un fallback <ic>prompt()</ic> pour les contextes HTTP.</span></div>
+</div>
+<hr>
+
+<!-- ══ 05 PROFIL ══ -->
+<div class="sec" id="profil">
+  <div class="slabel">05 — Navigation du profil</div>
+  <h2>showSection() — le routeur interne</h2>
+  <p>Après connexion, le profil fonctionne comme une <b>Single Page Application</b> simplifiée : un seul <ic>#profil-content</ic> dont le HTML est entièrement remplacé à chaque clic sur la sidebar. Pas de rechargement de page, pas de <ic>&lt;a href&gt;</ic> réels.</p>
+<div class="diag">
+  <div class="dtitle">SPA routing sans URL — les 7 sections du profil</div>
+  <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);border-radius:5px;padding:.25rem .5rem;color:#fda4af;">infos</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);border-radius:5px;padding:.25rem .5rem;color:#7dd3fc;">commandes</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:5px;padding:.25rem .5rem;color:#7ee8b8;">adresses</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:5px;padding:.25rem .5rem;color:#f7d97a;">favoris</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:5px;padding:.25rem .5rem;color:#c4b5fd;">securite</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(232,121,249,.1);border:1px solid rgba(232,121,249,.3);border-radius:5px;padding:.25rem .5rem;color:#f0abfc;">notifications</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);border-radius:5px;padding:.25rem .5rem;color:#fdba74;">donnees</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:520px;">
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--t3);">①</span><span>Clic sidebar "Commandes" → dataset.section = 'commandes'</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="font-family:'JetBrains Mono',monospace;color:#fda4af;">②</span><span>sidebarLinks.forEach → remove('active') sur tous</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="font-family:'JetBrains Mono',monospace;color:#7ee8b8;">③</span><span>lien 'commandes' → add('active') + aria-current='true'</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="font-family:'JetBrains Mono',monospace;color:#7dd3fc;">④</span><span>#profil-content.innerHTML = renderCommandes() — HTML entièrement remplacé</span>
+    </div>
+    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;font-size:.71rem;color:var(--t2);align-items:start;">
+      <span style="font-family:'JetBrains Mono',monospace;color:#7dd3fc;">⑤</span><span>attachCommandesEvents() — rebranche les listeners sur le nouveau DOM</span>
+    </div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">showSection</span>(sectionId) {
+    <span class="cm">// 1. Met à jour l'état actif dans la sidebar</span>
+    sidebarLinks.<span class="fn">forEach</span>(link => {
+        link.classList.<span class="fn">remove</span>(<span class="s">'active'</span>);
+        link.<span class="fn">removeAttribute</span>(<span class="s">'aria-current'</span>);
+        <span class="kw">if</span> (link.dataset.section === sectionId) {
+            link.classList.<span class="fn">add</span>(<span class="s">'active'</span>);
+            link.<span class="fn">setAttribute</span>(<span class="s">'aria-current'</span>, <span class="s">'true'</span>);
+        }
+    });
+
+    <span class="cm">// 2. Génère le HTML de la section</span>
+    <span class="kw">let</span> <span class="vr">html</span> = <span class="s">''</span>;
+    <span class="kw">switch</span> (sectionId) {
+        <span class="kw">case</span> <span class="s">'info'</span>:        html = <span class="fn">renderInfoSection</span>();        <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="s">'commandes'</span>:   html = <span class="fn">renderCommandesSection</span>();   <span class="kw">break</span>;
+        <span class="cm">// … 5 autres cas</span>
+    }
+
+    <span class="cm">// 3. Injecte dans le DOM (wipe + rebuild)</span>
+    contentDiv.innerHTML = html;
+
+    <span class="cm">// 4. Réattache les écouteurs (détruits par innerHTML)</span>
+    <span class="fn">attachSectionEvents</span>(sectionId);
+}</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Pattern render + attach — même cycle que cart.js / catalogue.js</div>
+    <div class="vc">
+      <div class="vn w cgr">Clic sidebar → showSection('adresses')</div>
+      <div class="va">↓</div>
+      <div class="vn w co">renderAdressesSection() → chaîne HTML</div>
+      <div class="va">↓<div class="val">contentDiv.innerHTML = html</div></div>
+      <div class="vn w cgr">DOM recréé — tous les boutons existent mais sans écouteurs</div>
+      <div class="va">↓<div class="val">attachSectionEvents('adresses')</div></div>
+      <div class="vn w cg">attachAdressesEvents() → querySelectorAll('.edit-adresse').forEach(btn → addEventListener)</div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 06 SECTIONS ══ -->
+<div class="sec" id="sections">
+  <div class="slabel">06 — Les 7 sections du profil</div>
+  <h2>Chaque section : render + attach</h2>
+<div class="schema2">
+  <div class="s2t">Les 7 sections du profil — navigation SPA</div>
+  <div style="display:grid;grid-template-columns:160px 1fr;gap:1rem;align-items:start;">
+    <div style="background:var(--bg3);border-radius:10px;overflow:hidden;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);padding:.5rem .7rem;border-bottom:1px solid var(--border);">SIDEBAR</div>
+      <div style="display:flex;flex-direction:column;">
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:#7ee8b8;background:rgba(86,209,158,.1);border-left:3px solid #7ee8b8;">👤 Mes informations</div>
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:var(--t2);border-left:3px solid transparent;">📦 Mes commandes</div>
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:var(--t2);border-left:3px solid transparent;">📍 Mes adresses</div>
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:var(--t2);border-left:3px solid transparent;">💳 Mes paiements</div>
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:var(--t2);border-left:3px solid transparent;">❤️ Mes favoris</div>
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:var(--t2);border-left:3px solid transparent;">🔔 Préférences</div>
+        <div style="padding:.38rem .7rem;font-size:.73rem;color:var(--t2);border-left:3px solid transparent;">🔒 Sécurité</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.4rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);margin-bottom:.1rem;">showSection(id) → contentDiv.innerHTML = renderXxx() → attachXxxEvents()</div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;">'info'</div>
+        <div style="font-size:.72rem;color:var(--t2);">Formulaire nom/photo (base64 FileReader) / téléphone</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2);">'commandes'</div>
+        <div style="font-size:.72rem;color:var(--t2);">userData.commandes[] + showSuiviModal() (modal ajouté au body)</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2);">'adresses'</div>
+        <div style="font-size:.72rem;color:var(--t2);">userData.adresses[] CRUD complet (ajouter / modifier / supprimer)</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2);">'paiements'</div>
+        <div style="font-size:.72rem;color:var(--t2);">Cards masquées (•••• 4 derniers chiffres) — ajout simulé</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2);">'favoris'</div>
+        <div style="font-size:.72rem;color:var(--t2);">Lit localStorage['peartech-favoris'] → grille avec PearTechCart</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2);">'preferences'</div>
+        <div style="font-size:.72rem;color:var(--t2);">Toggles notifications / newsletter — userData.preferences</div>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.55rem .8rem;display:grid;grid-template-columns:90px 1fr;gap:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t2);">'securite'</div>
+        <div style="font-size:.72rem;color:var(--t2);">Changement mdp (vérifie ancien) + bouton déconnexion</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="diag">
+    <div class="dtitle">Tableau des 7 sections</div>
+    <table class="tbl">
+      <thead><tr><th>Section</th><th>renderXxx()</th><th>attachXxxEvents()</th><th>Points clés</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tc">info</td>
+          <td style="color:var(--t2)">Formulaire nom/email/téléphone/naissance + upload photo</td>
+          <td style="color:var(--t2)">FileReader pour prévisualiser la photo · saveUserData</td>
+          <td style="color:var(--t2)">Photo encodée en base64, stockée dans userData.photo</td>
+        </tr>
+        <tr>
+          <td class="tc">commandes</td>
+          <td style="color:var(--t2)">Liste des commandes avec statut coloré</td>
+          <td style="color:var(--t2)">Bouton "Suivre" → showSuiviModal()</td>
+          <td style="color:var(--t2)">Modal créé/ajouté au body · fermeture clic extérieur</td>
+        </tr>
+        <tr>
+          <td class="tc">adresses</td>
+          <td style="color:var(--t2)">Grille de cards adresse avec badge "Principale"</td>
+          <td style="color:var(--t2)">edit · delete · set-principale · add-adresse</td>
+          <td style="color:var(--t2)">showAdresseForm() insère un formulaire inline après la grille</td>
+        </tr>
+        <tr>
+          <td class="tc">paiement</td>
+          <td style="color:var(--t2)">Liste Visa/MasterCard/PayPal avec icônes</td>
+          <td style="color:var(--t2)">edit · delete · add-paiement</td>
+          <td style="color:var(--t2)">showPaiementForm() avec toggleFields() selon le type</td>
+        </tr>
+        <tr>
+          <td class="tc">preferences</td>
+          <td style="color:var(--t2)">4 checkboxes newsletter/offres/notifications</td>
+          <td style="color:var(--t2)">form submit → met à jour userData.preferences</td>
+          <td style="color:var(--t2)">Lecture des checked via document.querySelector('input[name=…]')</td>
+        </tr>
+        <tr>
+          <td class="tc">securite</td>
+          <td style="color:var(--t2)">Formulaire 3 champs : actuel · nouveau · confirmation</td>
+          <td style="color:var(--t2)">Vérifie l'actuel, 6 chars min, concordance, écrit users[email].password</td>
+          <td style="color:var(--t2)">Seule section qui écrit dans users (pas userData)</td>
+        </tr>
+        <tr>
+          <td class="tc">deconnexion</td>
+          <td style="color:var(--t2)">Bouton "Se déconnecter"</td>
+          <td style="color:var(--t2)">removeItem(SESSION_KEY) → window.location.reload()</td>
+          <td style="color:var(--t2)">Le reload repart depuis DOMContentLoaded → isLoggedIn() = false → showAuthScreen()</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Upload de photo — FileReader et base64</h3>
+  <div class="cb2"><span class="cbl2">javascript — attachInfoEvents()</span><pre>photoInput.<span class="fn">addEventListener</span>(<span class="s">'change'</span>, <span class="kw">function</span>(e) {
+    <span class="kw">const</span> <span class="vr">file</span> = e.target.files[<span class="nm">0</span>];
+    <span class="kw">if</span> (!file) <span class="kw">return</span>;
+    <span class="kw">if</span> (file.size > <span class="nm">2</span> * <span class="nm">1024</span> * <span class="nm">1024</span>) { showMessage(<span class="s">'Photo max 2 Mo'</span>, <span class="s">'error'</span>); <span class="kw">return</span>; }
+    <span class="kw">if</span> (!file.type.<span class="fn">match</span>(<span class="s">'image/(jpeg|png)'</span>)) { showMessage(<span class="s">'Format JPG ou PNG'</span>, <span class="s">'error'</span>); <span class="kw">return</span>; }
+
+    <span class="kw">const</span> <span class="vr">reader</span> = <span class="kw">new</span> FileReader();
+    reader.onload = <span class="kw">function</span>(ev) {
+        <span class="cm">// ev.target.result = "data:image/jpeg;base64,/9j/4AAQ..."</span>
+        photoPreview.innerHTML = <span class="s">`&lt;img src="${ev.target.result}"&gt;`</span>;
+        userData.photo = ev.target.result; <span class="cm">// Stocke le data URL en base64</span>
+        <span class="fn">saveUserData</span>(userData);           <span class="cm">// Persist en localStorage</span>
+    };
+    reader.<span class="fn">readAsDataURL</span>(file);         <span class="cm">// Lance la lecture asynchrone</span>
+});</pre></div>
+
+  <div class="sn"><span class="sni">💡</span><span><ic>reader.readAsDataURL()</ic> est asynchrone. La lecture se fait en arrière-plan, et <ic>reader.onload</ic> est appelé quand elle est terminée. C'est pourquoi le code qui utilise <ic>ev.target.result</ic> est dans une fonction de callback, pas après <ic>readAsDataURL()</ic>. Une image de 2 Mo encodée en base64 prend ~2.7 Mo en mémoire.</span></div>
+
+  <h3>showAdresseForm() — formulaire inline dynamique</h3>
+  <div class="cb2"><span class="cbl2">javascript — ajout/modification d'adresse</span><pre><span class="kw">function</span> <span class="fn">showAdresseForm</span>(existing) {
+    <span class="kw">const</span> <span class="vr">isEdit</span> = !!existing; <span class="cm">// true = modification, false = ajout</span>
+
+    <span class="cm">// Construit le HTML du formulaire (optionnel : chaining ?.nom pour le mode ajout)</span>
+    <span class="kw">const</span> <span class="vr">formHtml</span> = <span class="s">`&lt;div class="adresse-form"&gt;...&lt;/div&gt;`</span>;
+
+    <span class="kw">const</span> <span class="vr">grid</span> = document.<span class="fn">querySelector</span>(<span class="s">'.adresses-grid'</span>);
+    document.<span class="fn">querySelector</span>(<span class="s">'.adresse-form'</span>)?.<span class="fn">remove</span>(); <span class="cm">// Supprime un éventuel formulaire déjà ouvert</span>
+    grid.<span class="fn">insertAdjacentHTML</span>(<span class="s">'afterend'</span>, formHtml); <span class="cm">// Insère APRÈS la grille, pas à l'intérieur</span>
+}</pre></div>
+
+  <div class="glos">
+    <div class="glos-head">📖 insertAdjacentHTML vs innerHTML</div>
+    <div class="grow">
+      <div class="gterm">innerHTML += html</div>
+      <div class="gdef">Ajoute au contenu existant, mais recrée tout le DOM de l'élément, détruisant les écouteurs déjà attachés. Dangereux si des boutons ont déjà des listeners.</div>
+    </div>
+    <div class="grow">
+      <div class="gterm">insertAdjacentHTML</div>
+      <div class="gdef">Insère du HTML à un endroit précis sans toucher au reste : <ic>'beforebegin'</ic> (avant l'élément), <ic>'afterbegin'</ic> (au début), <ic>'beforeend'</ic> (à la fin), <ic>'afterend'</ic> (après). Ici <ic>'afterend'</ic> place le formulaire après la grille sans modifier la grille.</div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 07 UTILITAIRES ══ -->
+<div class="sec" id="utilitaires">
+  <div class="slabel">07 — Utilitaires partagés</div>
+  <h2>escapeHtml(), validateEmail(), showMessage(), attachTogglePw()</h2><div class="diag">
+  <div class="dtitle">Les 4 utilitaires partagés — utilisés dans toutes les sections</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;">
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#fda4af;">escapeHtml(str)</div>
+      <div style="font-size:.76rem;color:var(--t2);">Remplace &lt; &gt; &amp; " ' par leurs entités HTML. Empêche les injections XSS si un utilisateur saisit du HTML dans son nom ou son adresse.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7dd3fc;">validateEmail(email)</div>
+      <div style="font-size:.76rem;color:var(--t2);">Regex /^[^\s@]+@[^\s@]+\.[^\s@]+$/ · retourne bool · utilisée à l'inscription et au changement d'email.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7ee8b8;">showMessage(el, msg, type)</div>
+      <div style="font-size:.76rem;color:var(--t2);">Injecte un message dans un élément DOM avec une classe de couleur (success/error/info). Timeout 4s → efface automatiquement.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem 1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#c4b5fd;">attachTogglePw(btn, input)</div>
+      <div style="font-size:.76rem;color:var(--t2);">Bouton 👁 → toggle input type password/text. Utilisé sur tous les champs mot de passe (login, register, reset, sécurité).</div>
+    </div>
+  </div>
+</div>
+chTogglePw()
+
+  <h3>escapeHtml() — protection contre l'injection XSS</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">escapeHtml</span>(str) {
+    <span class="kw">if</span> (!str) <span class="kw">return</span> <span class="s">''</span>;
+    <span class="kw">return</span> str.<span class="fn">replace</span>(/[&<>"]/g, m => ({
+        <span class="s">'&'</span>: <span class="s">'&amp;amp;'</span>,
+        <span class="s">'<'</span>: <span class="s">'&amp;lt;'</span>,
+        <span class="s">'>'</span>: <span class="s">'&amp;gt;'</span>,
+        <span class="s">'"'</span>: <span class="s">'&amp;quot;'</span>
+    }[m]));
+}
+<span class="cm">// Sans escapeHtml : un utilisateur nommé &lt;script&gt;alert('XSS')&lt;/script&gt;
+// serait exécuté dans la page quand son nom est affiché via innerHTML.
+// Avec escapeHtml : &amp;lt;script&amp;gt; est affiché comme texte, jamais exécuté.</span></pre></div>
+
+  <div class="box warn"><span class="bi">🛡️</span><div><b>XSS (Cross-Site Scripting)</b> : si on insère directement <ic>innerHTML = userData.prenom</ic> sans escaper, et que prenom vaut <ic>&lt;img src=x onerror=alert(1)&gt;</ic>, ce code serait exécuté. <ic>escapeHtml()</ic> convertit les caractères HTML spéciaux en entités inoffensives.</div></div>
+
+  <h3>attachTogglePw() — réutilisable pour tous les champs password</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachTogglePw</span>(btn) {
+    btn.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
+        <span class="kw">const</span> <span class="vr">input</span> = <span class="kw">this</span>.previousElementSibling; <span class="cm">// L'input juste avant le bouton dans le DOM</span>
+        <span class="kw">const</span> <span class="vr">icon</span>  = <span class="kw">this</span>.<span class="fn">querySelector</span>(<span class="s">'.material-symbols-outlined'</span>);
+        <span class="kw">if</span> (input && input.tagName === <span class="s">'INPUT'</span>) {
+            input.type = (input.type === <span class="s">'password'</span>) ? <span class="s">'text'</span> : <span class="s">'password'</span>;
+            <span class="kw">if</span> (icon) icon.textContent = (input.type === <span class="s">'password'</span>) ? <span class="s">'visibility'</span> : <span class="s">'visibility_off'</span>;
+        }
+    });
+}
+<span class="cm">// Utilisée dans 3 sections : auth (login, register, reset) + securite</span></pre></div>
+</div>
+<hr>
+
+<!-- ══ RECAP ══ -->
+<div class="sec" id="recap">
+  <div class="slabel">08 — Récapitulatif</div>
+  <h2>Toutes les fonctions — 35 au total</h2>
+<div class="diag" style="margin-top:.8rem;">
+  <div class="dtitle">35 fonctions — répartition par groupe fonctionnel</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;">
+    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.8rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">Auth helpers (8)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.8;">generateResetToken<br>validateResetToken<br>consumeResetToken<br>userDataKey(email)<br>isLoggedIn()<br>getSessionEmail()<br>getUsers / saveUsers<br>initDemoAccount()</div>
+    </div>
+    <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:9px;padding:.8rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.5rem;">Auth UI (5)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.8;">showAuthScreen()<br>showAuthPanel(name)<br>attachAuthEvents<br>showAuthError<br>injectAuthStyles()</div>
+    </div>
+    <div style="background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.8rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.5rem;">Profil data (4)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.8;">buildDefaultUserData<br>loadUserData()<br>saveUserData(user)<br>initProfile / start</div>
+    </div>
+    <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">Navigation (3)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.8;">showSection(id)<br>renderNavLinks()<br>attachNavEvents()</div>
+    </div>
+    <div style="background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.8rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">7 sections (14)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.8;">render + attach pour :<br>Infos · Commandes<br>Adresses · Favoris<br>Sécurité · Notifs<br>Données personnelles</div>
+    </div>
+    <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:9px;padding:.8rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t2);margin-bottom:.5rem;">Utilitaires (4)</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.8;">escapeHtml(str)<br>validateEmail(e)<br>showMessage(el,msg,t)<br>attachTogglePw(b,i)</div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="diag">
+    <div class="dtitle">Carte des fonctions par groupe</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#fdba74;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">🔐 Auth helpers (8)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">generateResetToken(email)<br>validateResetToken(token)<br>consumeResetToken(token)<br>userDataKey(email)<br>isLoggedIn()<br>getSessionEmail()<br>getUsers() / saveUsers()<br>initDemoAccount()</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">🖥️ Auth UI (5)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">showAuthScreen()<br>showAuthPanel(name)<br>attachAuthEvents(authDiv)<br>showAuthError(el, msg)<br>injectAuthStyles()</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">👤 Profil data (4)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">buildDefaultUserData(p,n,e)<br>loadUserData()<br>saveUserData(user)<br>initProfile() / startProfile()</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#7dd3fc;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">🧭 Navigation (1)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">showSection(sectionId)</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">📄 Rendus HTML (7)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">renderInfoSection()<br>renderCommandesSection()<br>renderAdressesSection()<br>renderPaiementSection()<br>renderPreferencesSection()<br>renderSecuriteSection()<br>renderDeconnexionSection()</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#ff9090;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">🎪 Events (9)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">attachSectionEvents(id)<br>attachInfoEvents()<br>attachCommandesEvents()<br>attachAdressesEvents()<br>attachPaiementEvents()<br>attachPreferencesEvents()<br>attachSecuriteEvents()<br>attachDeconnexionEvents()<br>showSuiviModal(cmd)</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:#86efac;margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">🛠 Formulaires (2)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">showAdresseForm(existing)<br>showPaiementForm(existing)</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;color:var(--t2);margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:1px solid var(--border);">🔧 Utilitaires (4)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t2);line-height:2;">attachTogglePw(btn)<br>escapeHtml(str)<br>validateEmail(email)<br>showMessage(text, type)</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem;background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:1.1rem;font-size:.83r

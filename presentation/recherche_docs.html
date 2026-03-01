@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — recherche.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
+    --accent:#56d19e; --accent2:#ff6b6b; --accent3:#4f8eff;
+    --accent4:#f5c542; --accent5:#c084fc;
+    --text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+  .nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--accent);white-space:nowrap;}
+  .nav-links{display:flex;gap:.15rem;flex-wrap:wrap;}
+  .nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+  .nav-links a:hover{background:var(--bg3);color:var(--text);}
+
+  .page{max-width:1040px;margin:0 auto;padding:80px 1.5rem 5rem;}
+
+  .hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent);background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);padding:.28rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1.2rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
+  .hero h1 span{color:var(--accent);}
+  .hero p{color:var(--text2);font-size:1rem;max-width:640px;line-height:1.8;}
+  .file-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.38rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+  .section{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+  .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .section h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;}
+  .section h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+  .section h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
+  .section p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
+  .section p b{color:var(--text);font-weight:600;}
+  .section p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
+
+  /* DIAGRAMMES */
+  .diagram{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;margin:1.5rem 0;}
+  .diagram-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.8rem;}
+  .vchain{display:flex;flex-direction:column;align-items:center;}
+  .vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+  .vnode.wide{max-width:700px;}
+  .varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
+  .varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
+  .c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+  .c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+  .fork{display:grid;gap:1rem;width:100%;max-width:700px;}
+  .fork.f2{grid-template-columns:1fr 1fr;}
+  .fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
+  .fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
+  .fl-green{background:rgba(86,209,158,.15);color:#7ee8b8;}
+  .fl-red  {background:rgba(255,107,107,.15);color:#ff9090;}
+  .fork-col .vnode{max-width:100%;width:100%;}
+  .fork-col .varrow{width:100%;}
+
+  /* CALLOUTS */
+  .callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
+  .callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
+  .callout.info    {background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+  .callout.warn    {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .callout.success {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+  .callout.danger  {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+  .callout.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+  .callout.analogy {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .callout b{font-weight:700;}
+  .callout code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:rgba(255,255,255,.08);padding:.1rem .3rem;border-radius:3px;}
+
+  /* CODE */
+  .code-block{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .code-block pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+  .cb-lang{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);}
+  .kw{color:#c084fc}.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
+
+  /* TERME */
+  .term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+  .term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+  .term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
+  .term-row:last-child{border-bottom:none;}
+  .term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
+  .term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
+
+  /* SCHEMA */
+  .schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
+  .schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
+  .schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+  .schema-card.green::before {background:linear-gradient(to right,var(--accent),transparent);}
+  .schema-card.blue::before  {background:linear-gradient(to right,var(--accent3),transparent);}
+  .schema-card.yellow::before{background:linear-gradient(to right,var(--accent4),transparent);}
+  .schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
+  .schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
+  .schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
+  .schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+  .schema-card code{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:#7eb5ff;}
+  .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
+  .tag-green {background:rgba(86,209,158,.15);color:var(--accent);}
+  .tag-blue  {background:rgba(79,142,255,.15);color:var(--accent3);}
+  .tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
+
+  /* DEBOUNCE VIZ */
+  .debounce
+<div class="schema">
+  <div class="schema-title">Debounce 300ms — l'utilisateur tape "iphone 15"</div>
+  <div class="timing-wrap" style="max-width:580px;">
+    <div class="timing-row">
+      <div class="timing-t">0ms</div>
+      <div class="timing-bar" style="background:rgba(139,147,168,.07);border:1px solid var(--border);color:var(--t2);">frappe "i" → clearTimeout(prev) → setTimeout(search, 300)</div>
+    </div>
+    <div class="timing-row">
+      <div class="timing-t">120ms</div>
+      <div class="timing-bar" style="background:rgba(139,147,168,.07);border:1px solid var(--border);color:var(--t2);">frappe "p" → clearTimeout! → nouveau setTimeout(search, 300)</div>
+    </div>
+    <div class="timing-row">
+      <div class="timing-t">210ms</div>
+      <div class="timing-bar" style="background:rgba(139,147,168,.07);border:1px solid var(--border);color:var(--t2);">frappe "h" → clearTimeout! → nouveau setTimeout</div>
+    </div>
+    <div class="timing-row">
+      <div class="timing-t">…</div>
+      <div class="timing-bar" style="background:rgba(139,147,168,.07);border:1px solid var(--border);color:var(--t2);">"i", "p", "h", "o", "n", "e", " ", "1", "5" — 8 timers annulés</div>
+    </div>
+    <div class="timing-row">
+      <div class="timing-t">~800ms</div>
+      <div class="timing-bar" style="background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:#6ee7b7;">dernier frappe "5" → setTimeout(search, 300)</div>
+    </div>
+    <div class="timing-row">
+      <div class="timing-t">~1100ms</div>
+      <div class="timing-bar" style="background:rgba(86,209,158,.15);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;font-weight:700;">⚡ PearTechDB.search("iphone 15") — 1 seul appel pour 9 frappes</div>
+    </div>
+  </div>
+</div>
+-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;}
+  .dbv-scenario{margin-bottom:1.5rem;}
+  .dbv-label{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;margin-bottom:.8rem;}
+  .dbv-track{position:relative;height:52px;margin-bottom:.3rem;}
+  .dbv-line{position:absolute;left:0;right:0;top:50%;height:2px;background:var(--border);}
+  .dbv-event{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.2rem;}
+  .dbv-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+  .dbv-top{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text2);white-space:nowrap;position:absolute;bottom:100%;margin-bottom:.1rem;}
+  .dbv-bot{font-family:'JetBrains Mono',monospace;font-size:.6rem;white-space:nowrap;position:absolute;top:100%;margin-top:.1rem;}
+  .dbv-window{position:absolute;top:50%;height:4px;transform:translateY(-50%);border-radius:2px;}
+
+  /* OBJ */
+  .obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+  .obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
+  .obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
+  .obj-row:last-child{border-bottom:none;}
+  .obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
+  .obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
+  .obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
+
+  /* TABLE */
+  .data-table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
+  .data-table th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .data-table td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:hover td{background:rgba(255,255,255,.015);}
+  .td-code{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+  .td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
+
+  /* KEYBOARD */
+  .key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.2rem 0;}
+  .key-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.1rem;display:flex;gap:.9rem;align-items:flex-start;}
+  .key-badge{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;padding:.3rem .7rem;border-radius:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text);white-space:nowrap;flex-shrink:0;}
+  .key-desc{font-size:.83rem;color:var(--text2);line-height:1.6;}
+
+  /* SIDE NOTE */
+  .side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
+  .side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+  /* TIMELINE */
+  .timeline{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+  .timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+  .tl-item{position:relative;margin-bottom:1.8rem;}
+  .tl-dot{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+  .tl-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+  .tl-step{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);}
+  .tl-title{font-size:.95rem;font-weight:700;}
+  .tl-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+  .tl-body code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:#7eb5ff;}
+
+  .sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+
+  @media(max-width:600px){
+    .fork.f2{grid-template-columns:1fr;}
+    nav{padding:0 1rem;}
+    .schema-grid,.key-grid{grid-template-columns:1fr;}
+  }
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── EXTRA SCHEMAS ─── */
+  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+  .ls-key{font-weight:700;margin-bottom:.25rem;}
+  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-box{border-radius:11px;padding:1rem;}
+  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .cmp-item:last-child{border-bottom:none;}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">recherche.js</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#structure">Structure</a>
+    <a href="#debounce">Debounce</a>
+    <a href="#search">performSearch</a>
+    <a href="#display">Affichage</a>
+    <a href="#keyboard">Clavier</a>
+    <a href="#fermeture">Fermeture</a>
+    <a href="#resume">Récap</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-tag">Documentation complète · niveau débutant</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">pour PearTechDB.search()</span></div>
+<div class="carte-item"><b>input sur #search-input</b><br><span style="color:var(--t3);font-size:.71rem;">frappe utilisateur</span></div>
+<div class="carte-item"><b>CustomEvent categorySelected</b><br><span style="color:var(--t3);font-size:.71rem;">contexte de recherche</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#34d39922;color:#34d399;border:1px solid #34d39944;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>debounce(fn, 300ms)</b><br><span style="color:var(--t3);font-size:.71rem;">limite les appels au moteur</span></div>
+<div class="carte-item"><b>PearTechDB.search(q)</b><br><span style="color:var(--t3);font-size:.71rem;">moteur texte du projet</span></div>
+<div class="carte-item"><b>renderResults
+<div class="schema">
+  <div class="schema-title">Structure d'un résultat de recherche</div>
+  <div style="display:flex;flex-direction:column;gap:.4rem;max-width:500px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);margin-bottom:.2rem;">PearTechDB.search("iphone") → [{id, name, category, price, image}, …]</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:.7rem;padding:.7rem;align-items:center;border-bottom:1px solid var(--border);">
+        <div style="width:40px;height:40px;background:rgba(56,189,248,.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📱</div>
+        <div>
+          <div style="font-size:.78rem;color:var(--t);font-weight:700;">iPhone 15 Pro Max — <span style="color:#7ee8b8;">iphone</span> 15 Pro Max</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">Apple · 1 329,00 €</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:.7rem;padding:.7rem;align-items:center;">
+        <div style="width:40px;height:40px;background:rgba(56,189,248,.1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📱</div>
+        <div>
+          <div style="font-size:.78rem;color:var(--t);font-weight:700;"><span style="color:#7ee8b8;">iPhone</span> 14 — <span style="color:#7ee8b8;">iphone</span> 14</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">Apple · 829,00 €</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:.71rem;color:var(--t3);">Termes trouvés surlignés par <ic>highlightMatch(text, query)</ic> → <ic>&lt;mark&gt;iphone&lt;/mark&gt;</ic></div>
+  </div>
+</div>
+(results)</b><br><span style="color:var(--t3);font-size:.71rem;">génère la modale de résultats</span></div>
+<div class="carte-item"><b>highlightMatch(text,q)</b><br><span style="color:var(--t3);font-size:.71rem;">surligne le terme trouvé</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>Modale résultats</b><br><span style="color:var(--t3);font-size:.71rem;">affichée sous le champ</span></div>
+<div class="carte-item"><b>Redirect page_produit.html?id=</b><br><span style="color:var(--t3);font-size:.71rem;">au clic sur un résultat</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+    <h1>Comprendre<br><span>recherche.js</span></h1>
+    <p>Ce fichier gère la barre de recherche en temps réel. Il affiche des suggestions pendant la frappe, gère la navigation au clavier, et ferme automatiquement les résultats quand on clique ailleurs.</p>
+    <div class="file-badge"><div class="dot"></div>recherche.js · 4 fonctions · 4 événements · ~100 lignes</div>
+  </div>
+
+  <!-- ══════ 00 INTRO ══════ -->
+  <div class="section" id="intro">
+    <div class="section-label">00 — Avant de commencer</div>
+    <h2>Debounce, requête PearTechDB et modale de résultats</h2>
+    <p>Quand l'utilisateur tape dans la barre de recherche, <code>recherche.js</code> attend qu'il s'arrête de frapper, interroge la base de données, et affiche les résultats correspondants sous le champ.</p>
+
+    <div class="callout analogy">
+      <span class="callout-icon">🔎</span>
+      <div><b>Analogie :</b> C'est comme une bibliothécaire. Vous commencez à lui dire un titre — elle attend que vous ayez fini de parler avant d'aller chercher. Si vous changez d'avis en milieu de phrase, elle ignore l'ancienne demande et repart sur la nouvelle. Quand elle trouve des livres, elle les pose sur le comptoir. Si vous regardez ailleurs, elle les rerange.</div>
+    </div>
+
+    <div class="term-box">
+      <div class="term-box-title">📚 Vocabulaire spécifique à ce fichier</div>
+      <div class="term-row">
+        <div class="term-name">Debounce</div>
+        <div class="term-def">Technique qui retarde une action jusqu'à ce que l'utilisateur se soit arrêté. Sans debounce, chaque lettre frappée lancerait une recherche — soit des dizaines de requêtes inutiles pour un seul mot.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">setTimeout(fn, ms)</div>
+        <div class="term-def">"Dans X millisecondes, exécute cette fonction." 300ms = 0,3 secondes. Si on appelle <code>clearTimeout</code> avant que le délai soit écoulé, la fonction n'est jamais exécutée.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">clearTimeout(id)</div>
+        <div class="term-def">Annule un timer créé par <code>setTimeout</code> avant qu'il se déclenche. C'est le mécanisme central du debounce.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">classList.add / remove</div>
+        <div class="term-def">Ajoute ou retire une classe CSS sur un élément HTML. Ici, ajouter la classe <code>active</code> sur <code>#search-results</code> le rend visible (défini dans le CSS). La retirer le cache.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">e.target</div>
+        <div class="term-def">Dans un événement, <code>e.target</code> est l'élément exact qui a déclenché l'événement. Si on clique sur un texte dans un résultat, <code>e.target</code> = ce texte précis (pas le conteneur parent).</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">element.contains()</div>
+        <div class="term-def">Retourne <code>true</code> si l'élément en paramètre est l'élément lui-même ou l'un de ses descendants dans le HTML. Utile pour savoir si un clic est "à l'intérieur" d'une zone.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">Object.values()</div>
+        <div class="term-def">Extrait toutes les valeurs d'un objet dans un tableau, sans avoir besoin de connaître les noms des propriétés. <code>Object.values({a:1, b:2})</code> → <code>[1, 2]</code>.</div>
+      </div>
+      <div class="term-row">
+        <div class="term-name">window.location.href</div>
+        <div class="term-def">L'URL actuelle de la page. En lui assignant une nouvelle valeur, on navigue vers cette URL — c'est l'équivalent de cliquer sur un lien.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 01 STRUCTURE ══════ -->
+  <div class="section" id="structure">
+    <div class="section-label">01 — Vue d'ensemble</div>
+    <h2>La structure globale du fichier</h2>
+    <p>Le fichier suit le même schéma que les autres : IIFE + DOMContentLoaded. Il contient <b>4 fonctions</b> et installe <b>4 événements</b>.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">🗂 Ordre d'exécution complet</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">📄 recherche.js est chargé</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-green wide">L'IIFE s'exécute — crée une bulle isolée</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-purple wide">Enregistre : "quand le HTML sera prêt, lance la configuration"</div>
+        <div class="varrow">↓<div class="varrow-label">HTML prêt</div></div>
+        <div class="vnode c-blue wide">Récupère <code>#search-input</code> et <code>#search-results</code></div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">Les deux éléments existent ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-red">NON → arrêt</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red"><code>console.warn + return</code><br>Pas de barre de recherche sur cette page</div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-green">OUI → on continue</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-gray">Déclare <code>let searchTimeout</code> (vide pour l'instant)</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-blue">Installe 3 écouteurs d'événements</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green">Log du nombre de produits indexés</div>
+        </div>
+      </div>
+
+      <div class="vchain" style="margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;">Les 3 écouteurs installés :</div>
+        <div class="vnode c-blue wide">① input sur #search-input → debounce + recherche</div>
+        <div class="varrow" style="padding:.1rem 0"></div>
+        <div class="vnode c-yellow wide">② click sur document → fermeture si clic extérieur</div>
+        <div class="varrow" style="padding:.1rem 0"></div>
+        <div class="vnode c-purple wide">③ keydown sur #search-input → Enter et Escape</div>
+      </div>
+    </div>
+
+    <div class="callout beginner">
+      <span class="callout-icon">🔤</span>
+      <div><b>Pourquoi <code>let</code> pour searchTimeout ?</b> La variable doit pouvoir être réassignée à chaque frappe (elle stocke l'identifiant du timer courant). <code>const</code> interdirait la réassignation. <code>let</code> permet de changer la valeur autant de fois qu'on veut.</div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 02 DEBOUNCE ══════ -->
+  <div class="section" id="debounce">
+    <div class="section-label">02 — Le debounce</div>
+    <h2>Attendre la fin de la frappe</h2>
+    <p>Sans debounce, taper "iPhone 15" déclencherait <b>9 recherches</b> : une pour "i", une pour "iP", une pour "iPh"… C'est du gaspillage. Le debounce n'en lance qu'<b>une seule</b> — 300ms après la dernière lettre.</p>
+
+    <div class="callout analogy">
+      <span class="callout-icon">⏳</span>
+      <div><b>Analogie :</b> Imaginez un assistant qui attend que vous ayez fini de parler avant d'aller chercher. À chaque mot que vous prononcez, il remet le minuteur à zéro. Ce n'est qu'au bout de 300ms de silence qu'il part chercher. Si vous continuez à parler, il ne bouge pas.</div>
+    </div>
+
+    <div class="debounce-box">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem;">⌨ Visualisation pour la frappe "mac"</div>
+
+      <div class="dbv-scenario">
+        <div class="dbv-label" style="color:var(--accent2);">❌ SANS debounce — 3 recherches lancées</div>
+        <div class="dbv-track">
+          <div class="dbv-line"></div>
+          <div class="dbv-event" style="left:15%">
+            <div class="dbv-dot" style="background:var(--accent3);"></div>
+            <div class="dbv-top">frappe "m"</div>
+            <div class="dbv-bot" style="color:var(--accent2);">recherche "m"</div>
+          </div>
+          <div class="dbv-event" style="left:45%">
+            <div class="dbv-dot" style="background:var(--accent3);"></div>
+            <div class="dbv-top">frappe "a"</div>
+            <div class="dbv-bot" style="color:var(--accent2);">recherche "ma"</div>
+          </div>
+          <div class="dbv-event" style="left:75%">
+            <div class="dbv-dot" style="background:var(--accent3);"></div>
+            <div class="dbv-top">frappe "c"</div>
+            <div class="dbv-bot" style="color:var(--accent2);">recherche "mac"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dbv-scenario" style="margin-bottom:0">
+        <div class="dbv-label" style="color:var(--accent);">✅ AVEC debounce 300ms — 1 seule recherche</div>
+        <div class="dbv-track">
+          <div class="dbv-line"></div>
+          <div class="dbv-window" style="left:15%;width:18%;background:rgba(255,107,107,.18);"></div>
+          <div class="dbv-event" style="left:15%">
+            <div class="dbv-dot" style="background:var(--accent3);"></div>
+            <div class="dbv-top">frappe "m"</div>
+            <div class="dbv-bot" style="color:var(--accent2);">annulé</div>
+          </div>
+          <div class="dbv-window" style="left:38%;width:20%;background:rgba(255,107,107,.18);"></div>
+          <div class="dbv-event" style="left:38%">
+            <div class="dbv-dot" style="background:var(--accent3);"></div>
+            <div class="dbv-top">frappe "a"</div>
+            <div class="dbv-bot" style="color:var(--accent2);">annulé</div>
+          </div>
+          <div class="dbv-window" style="left:62%;width:24%;background:rgba(86,209,158,.18);"></div>
+          <div class="dbv-event" style="left:62%">
+            <div class="dbv-dot" style="background:var(--accent3);"></div>
+            <div class="dbv-top">frappe "c"</div>
+            <div class="dbv-bot" style="color:var(--text3);">— 300ms —</div>
+          </div>
+          <div class="dbv-event" style="left:86%">
+            <div class="dbv-dot" style="background:var(--accent);"></div>
+            <div class="dbv-top" style="color:var(--accent);">recherche "mac"</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">⌨ Flux de l'événement "input"</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">Utilisateur frappe une lettre → événement "input" déclenché</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>this.value.trim()</code> — récupère le texte saisi sans espaces parasites</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide"><code>clearTimeout(searchTimeout)</code> — annule le timer précédent s'il existe encore</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">Le champ est-il vide après le .trim() ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-red">OUI — champ vide</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red">Retire la classe <code>active</code> → la zone résultats se cache</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-gray" style="font-size:.72rem;"><code>return</code> — fin, pas de recherche</div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-green">NON — texte saisi</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green"><code>setTimeout(fn, 300)</code> — programme la recherche dans 300ms</div>
+          <div class="varrow">↓<div class="varrow-label">si 300ms s'écoulent sans autre frappe</div></div>
+          <div class="vnode c-blue"><code>performSearch(query)</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre><span class="kw">let</span> <span class="var">searchTimeout</span>;  <span class="cmt">// Vide au départ. Contiendra l'ID du timer actif.</span>
+
+searchInput.<span class="fn">addEventListener</span>(<span class="str">'input'</span>, <span class="kw">function</span>() {
+    <span class="kw">const</span> <span class="var">query</span> = <span class="kw">this</span>.value.<span class="fn">trim</span>();
+    <span class="cmt">// "  mac  " → "mac"
+    // trim() supprime les espaces en début et fin de chaîne</span>
+
+    <span class="fn">clearTimeout</span>(searchTimeout);
+    <span class="cmt">// Annule le timer précédent.
+    // Si searchTimeout est undefined (première frappe), clearTimeout l'ignore sans erreur.</span>
+
+    <span class="kw">if</span> (query.length <span class="op">===</span> <span class="nm">0</span>) {
+        searchResults.classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="cmt">// Programme la recherche dans 300ms
+    // setTimeout retourne un identifiant (nombre) qu'on stocke dans searchTimeout
+    // pour pouvoir annuler ce timer lors de la prochaine frappe</span>
+    searchTimeout = <span class="fn">setTimeout</span>(<span class="kw">function</span>() {
+        <span class="fn">performSearch</span>(query);
+    }, <span class="nm">300</span>);
+});
+</pre></div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 03 PERFORM SEARCH ══════ -->
+  <div class="section" id="search">
+    <div class="section-label">03 — performSearch</div>
+    <h2>performSearch( query )</h2>
+    <p>Cette fonction ne fait pas la recherche elle-même. Elle <b>vérifie les conditions</b> et délègue le travail à <code>PearTechDB.search()</code> de <code>data.js</code>.</p>
+
+    <div class="callout analogy">
+      <span class="callout-icon">📋</span>
+      <div><b>Analogie :</b> C'est un chef de projet. Il vérifie que les ressources sont disponibles (PearTechDB chargée), et si oui, confie le travail au spécialiste (data.js qui connaît la logique de recherche). Il ne cherche pas lui-même — il orchestre.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔍 Flux de performSearch</div>
+      <div class="vchain">
+        <div class="vnode c-yellow wide">Entrée : query = "mac" (le texte saisi après debounce)</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>window.PearTechDB</code> est-elle disponible ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-red">NON — pas encore chargée</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-yellow">Affiche "Chargement en cours…" dans la zone résultats</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-yellow">Ajoute <code>active</code> pour montrer ce message</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-gray" style="font-size:.72rem;"><code>return</code></div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-green">OUI — DB prête</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green"><code>PearTechDB.search("mac")</code><br>Renvoie un tableau de produits correspondants</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-blue"><code>displaySearchResults(results)</code></div>
+        </div>
+      </div>
+      <div class="side-note" style="margin-top:1rem;">
+        <span class="side-note-icon">🔗</span>
+        <span>Séparation des responsabilités : recherche.js <b>affiche</b>, data.js <b>cherche</b>. La logique de recherche (comparaison de texte, prise en compte des accents, etc.) est entièrement dans data.js. Si on veut améliorer la recherche, on ne touche qu'à data.js.</span>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">✂️ Séparation des responsabilités — qui fait quoi</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.8rem;align-items:center;">
+        <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;text-align:center;">
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">👤</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">recherche.js</div>
+          <div style="font-size:.78rem;color:var(--text2);line-height:1.6;">• Écoute la frappe<br>• Gère le debounce<br>• Affiche les résultats<br>• Gère le clavier<br>• Ferme la liste</div>
+          <div style="margin-top:.6rem;background:rgba(86,209,158,.1);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;">UI + comportement</div>
+        </div>
+        <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);">
+          <div>appelle</div>
+          <div style="font-size:1.2rem;">→</div>
+          <div style="font-size:.62rem;">PearTechDB<br>.search("mac")</div>
+          <div style="font-size:1.2rem;">←</div>
+          <div>reçoit</div>
+          <div style="font-size:.62rem;">[{id:5...}, ...]</div>
+        </div>
+        <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:12px;padding:1.1rem;text-align:center;">
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">🔍</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;">data.js</div>
+          <div style="font-size:.78rem;color:var(--text2);line-height:1.6;">• Contient les produits<br>• Logique de recherche<br>• Gestion des accents<br>• Tri des résultats<br>• Indexation</div>
+          <div style="margin-top:.6rem;background:rgba(192,132,252,.1);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#d3a8ff;">données + logique</div>
+        </div>
+        <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);">
+          <div>passe</div>
+          <div style="font-size:1.2rem;">→</div>
+          <div style="font-size:.62rem;">cartItem</div>
+          <div style="font-size:1.2rem;">←</div>
+          <div>confirme</div>
+        </div>
+        <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:1.1rem;text-align:center;">
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">🛒</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7eb5ff;margin-bottom:.5rem;">panier.js</div>
+          <div style="font-size:.78rem;color:var(--text2);line-height:1.6;">• Gère le panier<br>• Stocke en localStorage<br>• Met à jour le badge<br>• Calcule les totaux<br>• Expose PearTechCart</div>
+          <div style="margin-top:.6rem;background:rgba(79,142,255,.1);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7eb5ff;">panier</div>
+        </div>
+      </div>
+      <div class="side-note" style="margin-top:1rem;">
+        <span class="side-note-icon">💡</span>
+        <span>Avantage : si demain on veut une recherche qui tient compte des synonymes ("téléphone" → trouve aussi "smartphone"), on modifie <b>uniquement data.js</b>. recherche.js n'a rien à changer — il appelle toujours <code>PearTechDB.search(query)</code> et affiche ce qu'il reçoit.</span>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre><span class="kw">function</span> <span class="fn">performSearch</span>(query) {
+
+    <span class="kw">if</span> (!window.PearTechDB) {
+        <span class="cmt">// ! = "n'est pas". !window.PearTechDB = PearTechDB n'existe pas encore</span>
+        console.<span class="fn">warn</span>(<span class="str">'PearTechDB non chargé, recherche impossible'</span>);
+        searchResults.innerHTML = <span class="str">'&lt;div class="search-no-results"&gt;Chargement en cours...&lt;/div&gt;'</span>;
+        searchResults.classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="cmt">// PearTechDB.search() est définie dans data.js
+    // Elle reçoit la chaîne "mac" et retourne un tableau de produits
+    // Exemple : [{id:5, name:"MacBook Air"...}, {id:8, name:"Mac Mini"...}]</span>
+    <span class="kw">const</span> <span class="var">results</span> = PearTechDB.<span class="fn">search</span>(query);
+
+    <span class="fn">displaySearchResults</span>(results);
+}
+</pre></div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 04 DISPLAY ══════ -->
+  <div class="section" id="display">
+    <div class="section-label">04 — Affichage des résultats</div>
+    <h2>displaySearchResults + attachSearchResultEvents</h2>
+    <p>Deux fonctions travaillent ensemble : l'une génère le HTML des résultats, l'autre installe les écouteurs de clic sur chaque ligne.</p>
+
+    <div class="diagram">
+      <div class="diagram-title">📋 Flux de displaySearchResults</div>
+      <div class="vchain">
+        <div class="vnode c-yellow wide">Entrée : results = tableau de produits (peut être vide)</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide">results.length === 0 ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-red">OUI — aucun résultat</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red">Affiche "Aucun résultat trouvé"</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red">Ajoute <code>active</code> pour montrer ce message</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-gray" style="font-size:.72rem;"><code>return</code></div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-green">NON — résultats trouvés</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green">forEach — construit le HTML de chaque résultat</div>
+          <div class="varrow">↓<div class="varrow-label">pour chaque produit</div></div>
+          <div class="vnode c-purple">Extrait les 2 premières specs avec<br>Object.values(specs).slice(0,2).join(' - ')</div>
+          <div class="varrow">↓<div class="varrow-label">fin du forEach</div></div>
+          <div class="vnode c-blue">innerHTML = html — injecte tout d'un coup</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-yellow">Ajoute <code>active</code> pour rendre visible</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-green">attachSearchResultEvents()</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Pourquoi Object.values(specs).slice(0, 2) ?</h3>
+    <div class="callout beginner">
+      <span class="callout-icon">🔤</span>
+      <div>Les specs d'un produit sont un objet : <code>{processor: "M2", ram: "8 Go", storage: "256 Go"}</code>.<br><br>
+      <b>Object.values()</b> extrait juste les valeurs : <code>["M2", "8 Go", "256 Go"]</code>. On n'a pas besoin des noms de propriétés, juste des valeurs à afficher.<br><br>
+      <b>.slice(0, 2)</b> prend les 2 premiers éléments : <code>["M2", "8 Go"]</code>. On ne veut pas tout afficher dans une liste de résultats — juste un aperçu compact.<br><br>
+      <b>.join(' - ')</b> les colle en une chaîne : <code>"M2 - 8 Go"</code>.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔗 Chaîne complète : objet specs → texte affiché</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.4rem;align-items:center;flex-wrap:wrap;">
+        <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.35);border-radius:10px;padding:.9rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:.4rem;">product.specs</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#d3a8ff;line-height:1.7;">{<br>&nbsp;processor: "M2",<br>&nbsp;ram: "8 Go",<br>&nbsp;storage: "256 Go"<br>}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);margin-top:.4rem;">3 paires clé:valeur</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#f7d97a;margin-bottom:.15rem;">Object<br>.values()</div>
+          <div style="font-size:1.1rem;color:var(--text3);">→</div>
+        </div>
+        <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.35);border-radius:10px;padding:.9rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:.4rem;">tableau de valeurs</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#f7d97a;line-height:1.7;">["M2",<br>"8 Go",<br>"256 Go"]</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);margin-top:.4rem;">clés retirées</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#7eb5ff;margin-bottom:.15rem;">.slice<br>(0, 2)</div>
+          <div style="font-size:1.1rem;color:var(--text3);">→</div>
+        </div>
+        <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:10px;padding:.9rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:.4rem;">2 premières valeurs</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7eb5ff;line-height:1.7;">["M2",<br>"8 Go"]</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);margin-top:.4rem;">"256 Go" ignoré</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#7ee8b8;margin-bottom:.15rem;">.join<br>(' - ')</div>
+          <div style="font-size:1.1rem;color:var(--text3);">→</div>
+        </div>
+        <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.35);border-radius:10px;padding:.9rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);margin-bottom:.4rem;">texte affiché</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#7ee8b8;">"M2 - 8 Go"</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);margin-top:.4rem;">dans .search-result-specs</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Pourquoi re-attacher les événements à chaque affichage ?</h3>
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div><b>Le problème du innerHTML :</b> Quand on écrit <code>searchResults.innerHTML = html</code>, le navigateur détruit tous les anciens éléments et les recrée. Les anciens écouteurs de clic disparaissent avec les anciens éléments. Il faut donc réinstaller les écouteurs sur les <b>nouveaux</b> éléments à chaque affichage. C'est pourquoi <code>attachSearchResultEvents()</code> est appelée après chaque injection de résultats.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🔄 Ce que innerHTML fait aux écouteurs d'événements</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;margin-bottom:1rem;">
+        <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7eb5ff;margin-bottom:.7rem;">Avant — recherche "mac"</div>
+          <div style="display:flex;flex-direction:column;gap:.4rem;">
+            <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.35);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">MacBook Air  🖱 clic attaché ✓</div>
+            <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.35);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">MacBook Pro  🖱 clic attaché ✓</div>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#ff9090;">innerHTML=</div>
+          <div style="font-size:1.4rem;">→</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);">détruit tout</div>
+        </div>
+        <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:1rem;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ff9090;margin-bottom:.7rem;">Après — nouveaux éléments créés</div>
+          <div style="display:flex;flex-direction:column;gap:.4rem;">
+            <div style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ff9090;">MacBook Air  ⚠️ clic perdu</div>
+            <div style="background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ff9090;">MacBook Pro  ⚠️ clic perdu</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:1.4rem;color:var(--accent);">↓</div>
+      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:1rem;margin-top:.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">Après attachSearchResultEvents() — écouteurs réinstallés</div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+          <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.35);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">MacBook Air  🖱 clic attaché ✓</div>
+          <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.35);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">MacBook Pro  🖱 clic attaché ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🖱 Flux de attachSearchResultEvents</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide"><code>querySelectorAll('.search-result-item')</code> — tous les résultats fraîchement injectés</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide">forEach — installe un écouteur de clic sur chacun</div>
+        <div class="varrow">↓<div class="varrow-label">quand l'utilisateur clique un résultat</div></div>
+        <div class="vnode c-yellow wide"><code>this.dataset.id</code> — lit l'id du produit cliqué (ex: "42")</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-green wide"><code>window.location.href = 'page_produit.html?id=42'</code><br>Le navigateur charge la page de ce produit</div>
+      </div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre><span class="kw">function</span> <span class="fn">displaySearchResults</span>(results) {
+    <span class="kw">if</span> (results.length <span class="op">===</span> <span class="nm">0</span>) {
+        searchResults.innerHTML = <span class="str">'&lt;div class="search-no-results"&gt;Aucun résultat trouvé&lt;/div&gt;'</span>;
+        searchResults.classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">let</span> <span class="var">html</span> = <span class="str">''</span>;  <span class="cmt">// On va construire le HTML en ajoutant morceau par morceau</span>
+
+    results.<span class="fn">forEach</span>(product <span class="op">=&gt;</span> {
+        <span class="cmt">// Object.values(product.specs) → ["M2", "8 Go", "256 Go"]
+        // .slice(0, 2)               → ["M2", "8 Go"]
+        // .join(' - ')               → "M2 - 8 Go"</span>
+        <span class="kw">const</span> <span class="var">specsPreview</span> = Object.<span class="fn">values</span>(product.specs).<span class="fn">slice</span>(<span class="nm">0</span>, <span class="nm">2</span>).<span class="fn">join</span>(<span class="str">' - '</span>);
+
+        html <span class="op">+=</span> <span class="str">`
+            &lt;div class="search-result-item" data-id="${product.id}"&gt;
+                &lt;div class="search-result-name"&gt;${product.name}&lt;/div&gt;
+                &lt;div class="search-result-specs"&gt;${specsPreview}&lt;/div&gt;
+            &lt;/div&gt;
+        `</span>;
+    });
+
+    searchResults.innerHTML = html;           <span class="cmt">// Injection d'un coup (plus performant)</span>
+    searchResults.classList.<span class="fn">add</span>(<span class="str">'active'</span>);    <span class="cmt">// Rend visible la zone</span>
+    <span class="fn">attachSearchResultEvents</span>();               <span class="cmt">// ← OBLIGATOIRE après chaque innerHTML</span>
+}
+
+<span class="kw">function</span> <span class="fn">attachSearchResultEvents</span>() {
+    <span class="kw">const</span> <span class="var">resultItems</span> = document.<span class="fn">querySelectorAll</span>(<span class="str">'.search-result-item'</span>);
+    resultItems.<span class="fn">forEach</span>(item <span class="op">=&gt;</span> {
+        item.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>() {
+            <span class="kw">const</span> <span class="var">productId</span> = <span class="kw">this</span>.dataset.id;
+            window.location.href = <span class="str">`page_produit.html?id=${productId}`</span>;
+            <span class="cmt">// Navigate vers ex: "page_produit.html?id=42"
+            // Le ?id=42 est un "paramètre d'URL" que la page produit pourra lire</span>
+        });
+    });
+}
+</pre></div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 05 CLAVIER ══════ -->
+  <div class="section" id="keyboard">
+    <div class="section-label">05 — Navigation clavier</div>
+    <h2>Raccourcis clavier</h2>
+    <p>Deux touches sont gérées pour améliorer l'expérience utilisateur, notamment pour les personnes qui n'utilisent pas la souris.</p>
+
+    <div class="key-grid">
+      <div class="key-card">
+        <div class="key-badge">Entrée ↵</div>
+        <div class="key-desc">Sélectionne le premier résultat. Trouve le premier <code>.search-result-item</code> dans la liste et simule un clic dessus — ce qui déclenche la navigation vers la fiche produit.</div>
+      </div>
+      <div class="key-card">
+        <div class="key-badge">Échap ⎋</div>
+        <div class="key-desc">Ferme les résultats ET retire le focus du champ (<code>.blur()</code>). L'utilisateur peut reprendre sa navigation au clavier sans que la liste reste ouverte.</div>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">⌨ Flux de l'événement "keydown"</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">Touche pressée dans le champ de recherche</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">Quelle touche ? (<code>e.key</code>)</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-green">'Enter'</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-blue"><code>querySelector('.search-result-item')</code><br>Cherche le premier résultat</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-yellow">Un résultat existe ?</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%;margin-top:.3rem;">
+            <div class="fork-col">
+              <div class="fork-label fl-green" style="font-size:.62rem;">OUI</div>
+              <div class="varrow">↓</div>
+              <div class="vnode c-green" style="font-size:.72rem;">.click() → navigation</div>
+            </div>
+            <div class="fork-col">
+              <div class="fork-label fl-red" style="font-size:.62rem;">NON</div>
+              <div class="varrow">↓</div>
+              <div class="vnode c-gray" style="font-size:.72rem;">Rien — liste vide</div>
+            </div>
+          </div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-red">'Escape'</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red">classList.remove('active')<br>Ferme la liste</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-gray">searchInput.blur()<br>Retire le curseur du champ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <div><b>Pourquoi appeler .click() plutôt que reproduire la logique de navigation ?</b> Le handler de clic sur les résultats gère déjà la navigation vers la fiche produit. En appelant <code>.click()</code>, on réutilise ce handler sans dupliquer le code. Un changement dans un seul endroit suffit.</div>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre>searchInput.<span class="fn">addEventListener</span>(<span class="str">'keydown'</span>, <span class="kw">function</span>(e) {
+    <span class="cmt">// e.key retourne le nom de la touche pressée : "Enter", "Escape", "a", "Backspace"...</span>
+
+    <span class="kw">if</span> (e.key <span class="op">===</span> <span class="str">'Enter'</span>) {
+        <span class="kw">const</span> <span class="var">firstResult</span> = searchResults.<span class="fn">querySelector</span>(<span class="str">'.search-result-item'</span>);
+        <span class="kw">if</span> (firstResult) {
+            firstResult.<span class="fn">click</span>();  <span class="cmt">// Simule un clic → déclenche la navigation</span>
+        }
+
+    } <span class="kw">else if</span> (e.key <span class="op">===</span> <span class="str">'Escape'</span>) {
+        searchResults.classList.<span class="fn">remove</span>(<span class="str">'active'</span>);  <span class="cmt">// Cache la liste</span>
+        searchInput.<span class="fn">blur</span>();
+        <span class="cmt">// blur() = retire le focus (le curseur clignotant) du champ
+        // L'opposé de focus() qui donnerait le focus</span>
+    }
+});
+</pre></div>
+
+    <div class="diagram">
+      <div class="diagram-title">🗺 Carte des états — le champ de recherche au fil des actions</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-bottom:.8rem;">
+        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:.5rem;">ÉTAT A</div>
+          <div style="font-size:1.3rem;margin-bottom:.4rem;">💤</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text2);">Au repos</div>
+          <div style="font-size:.74rem;color:var(--text3);margin-top:.4rem;line-height:1.5;">champ vide, pas de focus, liste cachée</div>
+        </div>
+        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:.5rem;">ÉTAT B</div>
+          <div style="font-size:1.3rem;margin-bottom:.4rem;">✍️</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;">En saisie</div>
+          <div style="font-size:.74rem;color:var(--text3);margin-top:.4rem;line-height:1.5;">champ focusé, debounce actif, liste visible</div>
+        </div>
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text3);margin-bottom:.5rem;">ÉTAT C</div>
+          <div style="font-size:1.3rem;margin-bottom:.4rem;">🧭</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;">Navigation</div>
+          <div style="font-size:.74rem;color:var(--text3);margin-top:.4rem;line-height:1.5;">page produit chargée</div>
+        </div>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2.2;color:var(--text2);">
+        <span style="color:var(--text3);">A</span> →<span style="color:#f7d97a;">[clic dans champ]</span>→ <span style="color:#f7d97a;">B</span><br>
+        <span style="color:#f7d97a;">B</span> →<span style="color:#ff9090;">[Échap]</span>→ <span style="color:var(--text3);">A</span> &nbsp;&nbsp; <span style="font-size:.6rem;color:var(--text3);">(blur() retire aussi le focus)</span><br>
+        <span style="color:#f7d97a;">B</span> →<span style="color:#ff9090;">[clic ailleurs]</span>→ <span style="color:var(--text3);">A</span> &nbsp;&nbsp; <span style="font-size:.6rem;color:var(--text3);">(liste se ferme, focus perdu)</span><br>
+        <span style="color:#f7d97a;">B</span> →<span style="color:#7ee8b8;">[Entrée ou clic résultat]</span>→ <span style="color:#7ee8b8;">C</span> &nbsp;&nbsp; <span style="font-size:.6rem;color:var(--text3);">(page produit chargée)</span><br>
+        <span style="color:var(--text3);">A</span> →<span style="color:#7eb5ff;">[input vide — aucune action]</span>→ <span style="color:var(--text3);">A</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 06 FERMETURE ══════ -->
+  <div class="section" id="fermeture">
+    <div class="section-label">06 — Fermeture automatique</div>
+    <h2>Cliquer ailleurs ferme les résultats</h2>
+    <p>Un écouteur de clic est placé sur le <b>document entier</b>. Il est déclenché par chaque clic sur la page. Pour chaque clic, on vérifie si la cible est dans la zone de recherche ou non.</p>
+
+    <div class="callout analogy">
+      <span class="callout-icon">👁</span>
+      <div><b>Analogie :</b> Imaginez une caméra qui surveille toute la pièce. Chaque fois que quelqu'un touche quelque chose, elle vérifie : "est-ce que c'est dans la zone de recherche ?" Si oui, rien ne se passe. Si non, elle ferme les résultats. La caméra surveille tout mais ne réagit que dans un cas précis.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🖱 Flux de fermeture sur clic extérieur</div>
+      <div class="vchain">
+        <div class="vnode c-gray wide">Clic quelque part sur la page → événement "click" sur document</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>e.target</code> = l'élément exact qui a reçu le clic</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>searchInput.contains(e.target)</code> → clic dans le champ ou ses enfants ?</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-blue wide"><code>searchResults.contains(e.target)</code> → clic dans les résultats ou ses enfants ?</div>
+        <div class="varrow">↓</div>
+        <div class="vnode c-yellow wide">Au moins l'un des deux est vrai ?</div>
+      </div>
+      <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+        <div class="fork-col">
+          <div class="fork-label fl-green">OUI — clic dans la zone recherche</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-gray">Rien — les résultats restent affichés</div>
+        </div>
+        <div class="fork-col">
+          <div class="fork-label fl-red">NON — clic en dehors</div>
+          <div class="varrow">↓</div>
+          <div class="vnode c-red">classList.remove('active')<br>Les résultats disparaissent</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Comment fonctionne .contains() ?</h3>
+    <div class="callout beginner">
+      <span class="callout-icon">🔤</span>
+      <div><code>parent.contains(enfant)</code> retourne <code>true</code> si <code>enfant</code> est <code>parent</code> lui-même, ou n'importe quel descendant de <code>parent</code> dans l'arbre HTML.<br><br>
+      <b>Exemple :</b> Si on clique sur le texte "MacBook Air" à l'intérieur d'un résultat, <code>e.target</code> = le <code>&lt;div&gt;</code> du texte. <code>searchResults.contains(ce div)</code> retourne <code>true</code> car ce div est bien à l'intérieur de <code>#search-results</code>. Les résultats ne se ferment donc pas.</div>
+    </div>
+
+    <div class="diagram">
+      <div class="diagram-title">🌳 Arbre HTML — .contains() remonte la hiérarchie</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.8rem;">✅ Clic sur le texte d'un résultat</div>
+          <div style="background:var(--bg3);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;color:var(--text2);">
+            <div style="color:#7eb5ff;">#search-results <span style="color:var(--text3);font-size:.6rem;">&lt;— parent</span></div>
+            <div style="padding-left:1.2rem;color:var(--text2);">└─ .search-result-item</div>
+            <div style="padding-left:2.4rem;color:#f7d97a;">└─ .search-result-name <span style="color:var(--text3);font-size:.6rem;">&lt;— e.target</span></div>
+          </div>
+          <div style="margin-top:.6rem;font-size:.78rem;color:var(--text2);text-align:center;"><code>#search-results.contains(e.target)</code> → <span style="color:#7ee8b8;font-weight:600;">true</span><br>La liste reste ouverte</div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.8rem;">❌ Clic sur le header du site</div>
+          <div style="background:var(--bg3);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;color:var(--text2);">
+            <div style="color:var(--text2);">body</div>
+            <div style="padding-left:1.2rem;color:var(--text2);">└─ header</div>
+            <div style="padding-left:2.4rem;color:#f7d97a;">└─ nav <span style="color:var(--text3);font-size:.6rem;">&lt;— e.target</span></div>
+          </div>
+          <div style="margin-top:.6rem;font-size:.78rem;color:var(--text2);text-align:center;"><code>#search-results.contains(e.target)</code> → <span style="color:#ff9090;font-weight:600;">false</span><br>La liste se ferme</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Les 3 états possibles de la zone résultats</h3>
+    <div class="diagram">
+      <div class="diagram-title">💡 État de #search-results selon la situation</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;">
+        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;">
+          <div style="font-size:1.5rem;margin-bottom:.4rem;">🚫</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--text3);margin-bottom:.4rem;">SANS .active</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6;">État initial, champ vide, Échap pressé, clic ailleurs</div>
+          <div style="margin-top:.5rem;background:var(--bg3);border-radius:5px;padding:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);">display: none (CSS)</div>
+        </div>
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;">
+          <div style="font-size:1.5rem;margin-bottom:.4rem;">✅</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">AVEC .active + résultats</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6;">Recherche aboutie — liste de produits visible</div>
+          <div style="margin-top:.5rem;background:rgba(86,209,158,.1);border-radius:5px;padding:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;">display: block (CSS .active)</div>
+        </div>
+        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;">
+          <div style="font-size:1.5rem;margin-bottom:.4rem;">⚠️</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">AVEC .active + message</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6;">0 résultat, ou DB pas encore chargée</div>
+          <div style="margin-top:.5rem;background:rgba(245,197,66,.1);border-radius:5px;padding:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;">display: block (CSS .active)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="data-table">
+      <thead><tr><th>Situation</th><th>searchInput.contains</th><th>searchResults.contains</th><th>Résultat</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--text2)">Clic dans le champ</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">true</span></td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">false</span></td><td>Reste ouvert</td></tr>
+        <tr><td style="color:var(--text2)">Clic sur un résultat</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">false</span></td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">true</span></td><td>Reste ouvert (navigation)</td></tr>
+        <tr><td style="color:var(--text2)">Clic sur un onglet</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">false</span></td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">false</span></td><td>Se ferme</td></tr>
+        <tr><td style="color:var(--text2)">Clic sur fond de page</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">false</span></td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090">false</span></td><td>Se ferme</td></tr>
+      </tbody>
+    </div>
+
+    <div class="code-block"><span class="cb-lang">javascript</span>
+<pre>document.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>(e) {
+    <span class="cmt">// e.target = l'élément exact cliqué dans la page
+    //
+    // !A && !B = "ni A ni B"
+    // Si le clic n'est PAS dans le champ ET n'est PAS dans les résultats → ferme</span>
+
+    <span class="kw">if</span> (!searchInput.<span class="fn">contains</span>(e.target) <span class="op">&amp;&amp;</span> !searchResults.<span class="fn">contains</span>(e.target)) {
+        searchResults.classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+    }
+});
+</pre></div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ══════ 07 RECAP ══════ -->
+  <div class="section" id="resume">
+    <div class="section-label">07 — Récapitulatif</div>
+    <h2>Le film complet d'une recherche</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent3)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 1</div><div class="tl-title">Chargement et mise en place</div></div>
+        <div class="tl-body">L'IIFE s'exécute. Au <code>DOMContentLoaded</code>, les deux éléments HTML sont récupérés. <code>searchTimeout</code> est déclaré vide. Les 3 écouteurs sont installés. Le module est prêt.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent4)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 2</div><div class="tl-title">L'utilisateur commence à taper</div></div>
+        <div class="tl-body">L'événement <code>input</code> se déclenche à chaque lettre. <code>clearTimeout</code> annule le timer précédent. <code>setTimeout(fn, 300)</code> programme une nouvelle recherche dans 300ms. Si l'utilisateur continue à taper avant 300ms, le cycle recommence.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 3</div><div class="tl-title">300ms de silence → recherche lancée</div></div>
+        <div class="tl-body"><code>performSearch(query)</code> est appelée. Elle vérifie que PearTechDB est disponible, puis appelle <code>PearTechDB.search(query)</code> qui retourne un tableau de produits correspondants.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent5)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 4</div><div class="tl-title">Affichage des résultats</div></div>
+        <div class="tl-body"><code>displaySearchResults()</code> génère le HTML de chaque résultat (nom + aperçu 2 specs). Le tout est injecté dans <code>#search-results</code>. La classe <code>active</code> est ajoutée pour rendre la zone visible. Les écouteurs de clic sont (re)installés.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:var(--accent2)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 5</div><div class="tl-title">L'utilisateur sélectionne un résultat</div></div>
+        <div class="tl-body">Clic direct ou touche Entrée → <code>window.location.href = 'page_produit.html?id=42'</code>. Le navigateur quitte la page et charge la fiche produit.</div>
+      </div>
+      <div class="tl-item" style="margin-bottom:0">
+        <div class="tl-dot" style="background:var(--accent3)"></div>
+        <div class="tl-head"><div class="tl-step">Étape 6</div><div class="tl-title">Fermeture sans sélection</div></div>
+        <div class="tl-body">Clic ailleurs sur la page → <code>active</code> retirée, résultats cachés. Touche Échap → même chose + focus retiré du champ. Champ vidé → même chose dès la première frappe qui remet à vide.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -49,7 +49,8 @@
         menu.innerHTML = `
             <div class="mobile-menu-header">
                 <div class="mobile-logo">
-                    <div class="logo-icon"><img src="asset/image/LogoProjetEcf.png" alt="PearTech"></div>
+                    <div class="logo-icon"><img src="asset/image/LogoProjetEcf.png" alt="PearTech"
+                    onerror="this.onerror=null;this.style.display='none';this.insertAdjacentText('afterend','PearTech');"></div>
                     <div>
                         <div class="logo-title">PearTech</div>
                         <div class="logo-subtitle">Boutique high-tech</div>

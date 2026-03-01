@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — animation.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#84cc16;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(132,204,22,.1);border:1px solid rgba(132,204,22,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  .sec p b{color:var(--t);font-weight:700;}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#bef264;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .ca{background:rgba(132,204,22,.11);border:1px solid rgba(132,204,22,.4);color:#bef264;}
+  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .fc .vn{width:100%;max-width:100%;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;}
+  .box.info{background:rgba(132,204,22,.07);border:1px solid rgba(132,204,22,.25);color:#bef264;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#bef264}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+  .grow:last-child{border-bottom:none;}
+  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── EXTRA SCHEMAS ─── */
+  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+  .ls-key{font-weight:700;margin-bottom:.25rem;}
+  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-box{border-radius:11px;padding:1rem;}
+  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .cmp-item:last-child{border-bottom:none;}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">animation.js</div>
+  <a href="#intro">Intro</a>
+  <a href="#observer">IntersectionObserver</a>
+  <a href="#mutation">MutationObserver</a>
+  <a href="#header">Header scroll</a>
+  <a href="#search">Search focus</a>
+  <a href="#smooth">Smooth scroll</a>
+  <a href="#recap">Récap</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
+<div class="carte-item"><b>.reveal</b><br><span style="color:var(--t3);font-size:.71rem;">éléments à animer au scroll</span></div>
+<div class="carte-item"><b>Scroll / Resize</b><br><span style="color:var(--t3);font-size:.71rem;">événements navigateur</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#84cc1622;color:#84cc16;border:1px solid #84cc1644;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>IntersectionObserver</b><br><span style="color:var(--t3);font-size:.71rem;">détecte l'entrée en viewport</span></div>
+<div class="carte-item"><b>MutationObserver</b><br><span style="color:var(--t3);font-size:.71rem;">observe nouveaux éléments injectés</span></div>
+<div class="carte-item"><b>initScrollReveal()</b><br><span style="color:var(--t3);font-size:.71rem;">active les animations au scroll</span></div>
+<div class="carte-item"><b>initHeaderShadow()</b><br><span style="color:var(--t3);font-size:.71rem;">ombre header au scroll</span></div>
+<div class="carte-item"><b>initSearchFocus()</b><br><span style="color:var(--t3);font-size:.71rem;">effet focus champ recherche</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>classList.add('visible')</b><br><span style="color:var(--t3);font-size:.71rem;">active les transitions CSS</span></div>
+<div class="carte-item"><b>header.style.boxShadow</b><br><span style="color:var(--t3);font-size:.71rem;">ombre dynamique</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>animation.js</span></h1>
+  <p>Ce fichier gère <b>4 effets visuels</b> présents sur toutes les pages : l'apparition progressive des cartes au scroll (scroll reveal), l'ombre du header, l'agrandissement de la barre de recherche au clic, et le défilement fluide vers les ancres. Il utilise deux APIs modernes du navigateur : <ic>IntersectionObserver</ic> et <ic>MutationObserver</ic>.</p>
+  <div class="fbadge"><div class="dot"></div>animation.js · 4 effets · 2 observers · toutes les pages · ~130 lignes</div>
+</div>
+
+<!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro">
+  <div class="slabel">00 — Avant de commencer</div>
+  <h2>Les 4 effets d'animation</h2>
+<div class="diag">
+  <div class="dtitle">Les 4 effets de animation.js — déclencheurs et cibles</div>
+  <div class="effect-grid">
+    <div class="effect-card" style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);">
+      <div class="effect-icon">👁</div>
+      <div class="effect-name" style="color:#7ee8b8;">Scroll Reveal</div>
+      <div class="effect-desc">IntersectionObserver<br>Déclenché : scroll<br>Cibles : .reveal</div>
+    </div>
+    <div class="effect-card" style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);">
+      <div class="effect-icon">🧬</div>
+      <div class="effect-name" style="color:#7dd3fc;">Cartes DOM</div>
+      <div class="effect-desc">MutationObserver<br>Déclenché : inject dynamique<br>Cibles : .product-card</div>
+    </div>
+    <div class="effect-card" style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.25);">
+      <div class="effect-icon">🪪</div>
+      <div class="effect-name" style="color:#fdba74;">Header Shadow</div>
+      <div class="effect-desc">addEventListener scroll<br>Déclenché : window.scrollY<br>Cibles : header</div>
+    </div>
+    <div class="effect-card" style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);">
+      <div class="effect-icon">🔍</div>
+      <div class="effect-name" style="color:#c4b5fd;">Search Focus</div>
+      <div class="effect-desc">focus/blur events<br>Déclenché : clic barre<br>Cibles : .search-input</div>
+    </div>
+  </div>
+  <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:8px;padding:.6rem .9rem;font-size:.76rem;color:var(--t2);">Smooth Scroll (5e effet) : <ic>querySelectorAll('a[href^="#"]')</ic> → animation fluide vers les ancres internes</div>
+</div>
+
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.3rem 0;">
+    <div style="background:rgba(132,204,22,.07);border:1px solid rgba(132,204,22,.25);border-radius:12px;padding:1.1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#bef264;margin-bottom:.4rem;">1 — Scroll Reveal</div>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.7;">Les cartes produit et catégorie apparaissent progressivement quand elles entrent dans la zone visible. Utilise <ic>IntersectionObserver</ic> + <ic>MutationObserver</ic>.</div>
+    </div>
+    <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:12px;padding:1.1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">2 — Header Shadow</div>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.7;">Une ombre apparaît sous le header quand on scrolle de plus de 50px. Écoute l'événement <ic>scroll</ic> sur <ic>window</ic>.</div>
+    </div>
+    <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:1.1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">3 — Search Focus</div>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.7;">La barre de recherche s'agrandit légèrement (scale 1.02) quand elle reçoit le focus. Écoute <ic>focus</ic> et <ic>blur</ic>.</div>
+    </div>
+    <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:12px;padding:1.1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">4 — Smooth Scroll</div>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.7;">Les clics sur les liens ancres (<ic>href="#section"</ic>) défilent vers la cible de façon fluide au lieu d'un saut brutal. <ic>scrollIntoView</ic>.</div>
+    </div>
+  </div>
+
+  <div class="glos">
+    <div class="glos-head">📖 Termes nouveaux dans ce fichier</div>
+    <div class="grow"><div class="gterm">IntersectionObserver</div><div class="gdef">API navigateur qui surveille si un élément HTML est visible dans la fenêtre. Plus efficace qu'écouter l'événement <ic>scroll</ic> et calculer les positions manuellement. Le callback est déclenché uniquement quand l'élément entre ou sort du viewport.</div></div>
+    <div class="grow"><div class="gterm">MutationObserver</div><div class="gdef">API navigateur qui surveille les modifications du DOM. Ici il détecte quand de nouvelles cartes produits sont ajoutées dynamiquement par JavaScript (product_grid.js, catalogue.js) pour leur appliquer l'animation d'entrée.</div></div>
+    <div class="grow"><div class="gterm">threshold: 0.1</div><div class="gdef">Seuil de déclenchement de l'IntersectionObserver. <ic>0.1</ic> = l'animation se déclenche quand 10% de l'élément est visible. <ic>0</ic> = dès qu'un pixel est visible. <ic>1</ic> = seulement quand tout l'élément est visible.</div></div>
+    <div class="grow"><div class="gterm">rootMargin</div><div class="gdef">Marge virtuelle autour de la zone observée. <ic>'0px 0px -50px 0px'</ic> = la zone visible est réduite de 50px en bas. Concrètement, l'animation se déclenche 50px avant que l'élément atteigne le bord visible de l'écran.</div></div>
+    <div class="grow"><div class="gterm">getBoundingClientRect()</div><div class="gdef">Méthode qui retourne la position et les dimensions d'un élément par rapport à la fenêtre. <ic>rect.top</ic> = distance entre le haut de l'élément et le haut de la fenêtre. Utilisé pour savoir si un élément est déjà visible au chargement.</div></div>
+    <div class="grow"><div class="gterm">dataset.scrollObserved</div><div class="gdef">Attribut HTML <ic>data-scroll-observed</ic> utilisé comme flag. Une fois qu'une carte a été prise en charge par <ic>observeCard()</ic>, ce flag empêche de la traiter deux fois si le MutationObserver la détecte à nouveau.</div></div>
+    <div class="grow"><div class="gterm">childList: true, subtree: true</div><div class="gdef">Options du MutationObserver. <ic>childList</ic> = surveille les ajouts/suppressions d'enfants directs. <ic>subtree</ic> = surveille aussi tous les descendants. Nécessaire pour détecter les cartes peu importe leur niveau d'imbrication.</div></div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 01 INTERSECTION OBSERVER ══ -->
+<div class="sec" id="observer">
+  <div class="slabel">01 — Scroll Reveal</div>
+  <h2>IntersectionObserver — animer l'entrée dans le viewport</h2>
+<div class="schema">
+  <div class="schema-title">IntersectionObserver — comment il détecte l'entrée dans le viewport</div>
+  <div style="display:flex;flex-direction:column;gap:.4rem;align-items:center;">
+    <div style="width:280px;background:var(--bg3);border:2px solid rgba(132,204,22,.3);border-radius:10px;overflow:hidden;">
+      <div style="background:rgba(132,204,22,.08);padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#bef264;text-align:center;">viewport (ce que l'utilisateur voit)</div>
+      <div style="padding:.6rem;">
+        <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:6px;padding:.4rem .7rem;font-size:.72rem;color:#7ee8b8;margin-bottom:.3rem;text-align:center;">✅ .reveal.visible — déjà animé</div>
+        <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:6px;padding:.4rem .7rem;font-size:.72rem;color:#7ee8b8;text-align:center;">✅ .reveal.visible — déjà animé</div>
+      </div>
+    </div>
+    <div style="font-size:.65rem;color:var(--t3);font-family:'JetBrains Mono',monospace;">↓ scroll vers le bas ↓</div>
+    <div style="width:280px;background:var(--bg3);border:2px dashed rgba(132,204,22,.5);border-radius:10px;padding:.6rem;">
+      <div style="background:rgba(245,197,66,.08);border:1px dashed rgba(245,197,66,.4);border-radius:6px;padding:.4rem .7rem;font-size:.72rem;color:#f7d97a;text-align:center;">⚡ .reveal — entre dans le viewport → classList.add('visible')</div>
+    </div>
+    <div style="font-size:.65rem;color:var(--t3);font-family:'JetBrains Mono',monospace;">↓ pas encore visible ↓</div>
+    <div style="width:280px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.6rem;opacity:.5;">
+      <div style="background:var(--bg3);border-radius:6px;padding:.4rem .7rem;font-size:.72rem;color:var(--t3);text-align:center;">🔲 .reveal — en attente (opacity:0, translateY)</div>
+    </div>
+  </div>
+  <div style="margin-top:.9rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">threshold: 0.1 → déclenche quand 10% de l'élément est visible · observer.unobserve(el) → ne re-déclenche pas</div>
+</div>
+
+  <div class="box ana"><span class="bi">🔭</span><div><b>Analogie :</b> L'IntersectionObserver est comme un vigile posté à l'entrée d'une salle. Au lieu de regarder en permanence si quelqu'un arrive (ce que ferait <ic>addEventListener('scroll', ...)</ic>), il attend sagement et est notifié automatiquement quand un élément passe la porte (entre dans le viewport).</div></div>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">observer</span> = <span class="kw">new</span> IntersectionObserver(<span class="kw">function</span>(entries) {
+    entries.<span class="fn">forEach</span>(entry => {
+        <span class="kw">if</span> (entry.isIntersecting) {         <span class="cm">// L'élément vient d'entrer dans le viewport</span>
+            entry.target.style.opacity    = <span class="s">'1'</span>;
+            entry.target.style.transform  = <span class="s">'translateY(0)'</span>; <span class="cm">// Annule le décalage vertical initial</span>
+        }
+    });
+}, {
+    threshold:  <span class="nm">0.1</span>,                       <span class="cm">// 10% visible → déclenche</span>
+    rootMargin: <span class="s">'0px 0px -50px 0px'</span>        <span class="cm">// Zone visible réduite de 50px en bas</span>
+});
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Comportement de rootMargin: '0px 0px -50px 0px'</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;align-items:start;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.5rem;">Sans rootMargin (threshold:0.1)</div>
+        <div style="background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.2);border-radius:8px;padding:.9rem;font-size:.77rem;color:var(--t2);line-height:1.8;">L'animation se déclenche quand la carte atteint le tout bas de l'écran. L'utilisateur ne voit l'animation qu'une fraction de seconde avant que la carte soit complètement visible — peu naturel.</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.5rem;">Avec rootMargin: -50px</div>
+        <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.9rem;font-size:.77rem;color:var(--t2);line-height:1.8;">L'animation se déclenche 50px <b>avant</b> que la carte atteigne le bas visible. La carte a déjà commencé à apparaître quand l'utilisateur l'aperçoit — effet plus doux et naturel.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>observeCard() — la logique de décision</h3>
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">observeCard</span>(card) {
+    <span class="kw">if</span> (card.dataset.scrollObserved) <span class="kw">return</span>; <span class="cm">// Déjà traitée → ignore (idempotence)</span>
+    card.dataset.scrollObserved = <span class="s">'1'</span>;       <span class="cm">// Marque comme traitée</span>
+
+    <span class="kw">const</span> <span class="vr">rect</span>      = card.<span class="fn">getBoundingClientRect</span>();
+    <span class="kw">const</span> <span class="vr">isVisible</span> = rect.top &lt; window.innerHeight && rect.bottom > <span class="nm">0</span>;
+    <span class="cm">// isVisible = la carte est actuellement visible dans la fenêtre</span>
+
+    <span class="kw">if</span> (isVisible) {
+        <span class="cm">// Déjà visible au chargement : afficher directement sans animation</span>
+        card.style.opacity   = <span class="s">'1'</span>;
+        card.style.transform = <span class="s">'translateY(0)'</span>;
+    } <span class="kw">else</span> {
+        <span class="cm">// Hors écran : préparer l'état initial + observer pour l'animation d'entrée</span>
+        card.style.opacity    = <span class="s">'0'</span>;
+        card.style.transform  = <span class="s">'translateY(20px)'</span>; <span class="cm">// 20px plus bas que sa position finale</span>
+        card.style.transition = <span class="s">'opacity 0.5s ease, transform 0.5s ease'</span>; <span class="cm">// Transition fluide</span>
+        observer.<span class="fn">observe</span>(card); <span class="cm">// L'observer commence à surveiller cet élément</span>
+    }
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">États d'une carte au fil du scroll</div>
+    <div class="vc">
+      <div class="vn w cgr">État 0 — Carte hors écran, non encore observée</div>
+      <div class="va">↓<div class="val">observeCard() appelée</div></div>
+      <div class="vn w ca">État 1 — opacity:0 · translateY(20px) · transition 0.5s<br><span style="font-size:.68rem;font-weight:400;">Invisible et légèrement décalée vers le bas</span></div>
+      <div class="va">↓<div class="val">L'utilisateur scrolle · 10% de la carte devient visible</div></div>
+      <div class="vn w cy">IntersectionObserver déclenche isIntersecting = true</div>
+      <div class="va">↓<div class="val">opacity: '1' · translateY(0) — transition CSS anime le passage</div></div>
+      <div class="vn w cg">État final — Carte visible et à sa position normale<br><span style="font-size:.68rem;font-weight:400;">Animation de 500ms (opacity + remontée de 20px)</span></div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 02 MUTATION OBSERVER ══ -->
+<div class="sec" id="mutation">
+  <div class="slabel">02 — Cartes dynamiques</div>
+  <h2>MutationObserver — surveiller le DOM en temps réel</h2>
+<div class="schema">
+  <div class="schema-title">MutationObserver — surveiller les éléments injectés dynamiquement</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;">
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);text-align:right;min-width:90px;">Sans MO</div>
+      <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+        <div style="font-size:.72rem;color:#fda4af;background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:6px;padding:.3rem .6rem;">product_grid.js injecte cartes</div>
+        <div style="font-size:.75rem;color:var(--t3);">→</div>
+        <div style="font-size:.72rem;color:var(--t3);background:var(--bg3);border-radius:6px;padding:.3rem .6rem;">nouvelles cartes sans animation (observées trop tard)</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);text-align:right;min-width:90px;">Avec MO</div>
+      <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+        <div style="font-size:.72rem;color:#7ee8b8;background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;">product_grid.js injecte cartes</div>
+        <div style="font-size:.75rem;color:var(--t3);">→</div>
+        <div style="font-size:.72rem;color:#7ee8b8;background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;">MO détecte les nouveaux nœuds</div>
+        <div style="font-size:.75rem;color:var(--t3);">→</div>
+        <div style="font-size:.72rem;color:#7ee8b8;background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;">IntersectionObserver relancé</div>
+        <div style="font-size:.75rem;color:var(--t3);">→</div>
+        <div style="font-size:.72rem;color:#bef264;background:rgba(132,204,22,.08);border:1px solid rgba(132,204,22,.2);border-radius:6px;padding:.3rem .6rem;">✅ cartes animées</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">observer.observe({childList: true, subtree: true}) → détecte ajouts/suppressions dans tout le DOM</div>
+</div>
+
+  <p>Un problème : les cartes produits sont générées <b>après</b> le chargement de la page par product_grid.js ou catalogue.js. Au moment où animation.js s'exécute, ces cartes n'existent pas encore. Le MutationObserver résout ce problème.</p>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">mutationObs</span> = <span class="kw">new</span> MutationObserver(<span class="kw">function</span>(mutations) {
+    mutations.<span class="fn">forEach</span>(<span class="kw">function</span>(mutation) {
+        mutation.addedNodes.<span class="fn">forEach</span>(<span class="kw">function</span>(node) {
+            <span class="kw">if</span> (node.nodeType !== <span class="nm">1</span>) <span class="kw">return</span>; <span class="cm">// Ignore les nœuds texte (type 3) et commentaires (type 8)</span>
+
+            <span class="cm">// Cas 1 : le nœud ajouté EST directement une card</span>
+            <span class="kw">if</span> (node.classList && node.classList.<span class="fn">contains</span>(<span class="s">'product-card'</span>)) {
+                <span class="fn">observeCard</span>(node);
+            }
+            <span class="cm">// Cas 2 : le nœud est un conteneur (ex: innerHTML réécrit)</span>
+            <span class="cm">// → cherche toutes les .product-card à l'intérieur</span>
+            node.querySelectorAll && node.<span class="fn">querySelectorAll</span>(<span class="s">'.product-card'</span>).<span class="fn">forEach</span>(<span class="fn">observeCard</span>);
+        });
+    });
+});
+
+<span class="kw">const</span> <span class="vr">productsGrid</span> = document.<span class="fn">getElementById</span>(<span class="s">'products-grid'</span>);
+<span class="kw">if</span> (productsGrid) {
+    mutationObs.<span class="fn">observe</span>(productsGrid, { childList: <span class="kw">true</span>, subtree: <span class="kw">true</span> });
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Pourquoi deux cas (node direct vs conteneur) ?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div style="background:rgba(132,204,22,.07);border:1px solid rgba(132,204,22,.25);border-radius:10px;padding:1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#bef264;margin-bottom:.4rem;">Cas 1 — Node direct</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Quand un script fait <ic>productsGrid.appendChild(card)</ic>. Le nœud ajouté est directement la card. <ic>node.classList.contains('product-card')</ic> est vrai.</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">Cas 2 — Conteneur</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Quand un script fait <ic>productsGrid.innerHTML = '...'</ic>. Tout le HTML est remplacé d'un coup. Le MutationObserver détecte 1 gros nœud → il faut chercher les cards en profondeur avec <ic>querySelectorAll</ic>.</div>
+      </div>
+    </div>
+    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span>catalogue.js et product_grid.js utilisent <ic>innerHTML = html</ic> (cas 2). Sans le <ic>querySelectorAll</ic>, les cartes seraient générées mais aucune n'aurait l'animation d'entrée.</span></div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 03 HEADER ══ -->
+<div class="sec" id="header">
+  <div class="slabel">03 — Header Shadow</div>
+  <h2>Ombre sous le header au scroll</h2>
+<div class="diag">
+  <div class="dtitle">Header Shadow — seuil de déclenchement scrollY</div>
+  <div style="display:flex;flex-direction:column;gap:.35rem;max-width:520px;">
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">scrollY = 0</div>
+      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.73rem;color:var(--t2);">Header sans ombre — classList.remove('scrolled')</div>
+    </div>
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">scrollY = 49px</div>
+      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.73rem;color:var(--t2);">Toujours sans ombre</div>
+    </div>
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#f7d97a;">scrollY = 50px</div>
+      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.35rem .7rem;font-size:.73rem;color:#f7d97a;">Seuil atteint → classList.add('scrolled') → box-shadow CSS active</div>
+    </div>
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">scrollY = 200px</div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.73rem;color:#7ee8b8;">Ombre persistante — pas de re-déclenchement au-delà du seuil</div>
+    </div>
+    <div style="display:grid;grid-template-columns:90px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">scrollY &lt; 50</div>
+      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.35rem .7rem;font-size:.73rem;color:#fda4af;">Retour en haut → classList.remove('scrolled') → ombre disparaît</div>
+    </div>
+  </div>
+  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">window.scrollY > 50 ? header.classList.add('scrolled') : header.classList.remove('scrolled') — évalué à chaque événement scroll</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre>window.<span class="fn">addEventListener</span>(<span class="s">'scroll'</span>, <span class="kw">function</span>() {
+    <span class="kw">if</span> (window.pageYOffset > <span class="nm">50</span>) {
+        header.style.boxShadow = <span class="s">'0 4px 12px rgba(0,0,0,0.3)'</span>; <span class="cm">// Ombre portée</span>
+    } <span class="kw">else</span> {
+        header.style.boxShadow = <span class="s">'none'</span>; <span class="cm">// Pas d'ombre en haut de page</span>
+    }
+});
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Pourquoi 50px et pas 0 ?</div>
+    <div style="font-size:.85rem;color:var(--t2);line-height:1.85;">
+      Avec un seuil à <ic>0px</ic>, l'ombre apparaît dès qu'on bouge la molette d'un pixel. Cela crée un flash visuel désagréable. Avec <ic>50px</ic>, la transition est imperceptible car l'utilisateur a déjà quitté le haut de page et ne voit plus le changement brusque.
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 04 SEARCH FOCUS ══ -->
+<div class="sec" id="search">
+  <div class="slabel">04 — Search Focus</div>
+  <h2>Agrandissement de la barre au focus</h2>
+<div class="diag">
+  <div class="dtitle">Cycle focus/blur — états et délai 200ms</div>
+  <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:.6rem;align-items:center;max-width:540px;">
+    <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:10px;padding:.9rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);margin-bottom:.6rem;">BLUR — état normal</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);margin-bottom:.4rem;">width: 200px</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">transform: scale(1)</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem;">
+      <div style="font-size:.65rem;color:var(--t3);">focus →</div>
+      <div style="font-size:.65rem;color:var(--t3);">← blur</div>
+      <div style="font-size:.57rem;color:var(--t3);text-align:center;margin-top:.3rem;">200ms délai blur</div>
+    </div>
+    <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:10px;padding:.9rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.6rem;">FOCUS — état actif</div>
+      <div style="background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7dd3fc;margin-bottom:.4rem;">width: 300px</div>
+      <div style="background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7dd3fc;">transform: scale(1.02)</div>
+    </div>
+  </div>
+  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Le setTimeout(200ms) sur blur évite un flash si l'utilisateur clique sur un résultat de recherche — la barre reste élargie le temps que le clic soit enregistré.</div>
+</div>
+
+<div class="diag">
+  <div class="dtitle">Agrandissement de la barre au focus — avant / après</div>
+  <div class="two-col">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);margin-bottom:.4rem;">ÉTAT NORMAL (blur)</div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;display:flex;align-items:center;gap:.5rem;">
+        <span style="font-size:.8rem;color:var(--t3);">🔍</span>
+        <div style="flex:1;height:2px;background:var(--border);border-radius:2px;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">width: 200px</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem;">ÉTAT FOCUS (actif)</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.4);border-radius:8px;padding:.5rem .9rem;display:flex;align-items:center;gap:.5rem;box-shadow:0 0 0 2px rgba(167,139,250,.2);">
+        <span style="font-size:.8rem;color:#c4b5fd;">🔍</span>
+        <div style="flex:1;height:2px;background:rgba(167,139,250,.4);border-radius:2px;"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#c4b5fd;">width: 300px</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">focus → classList.add('expanded') + style.width = '300px' · blur → classList.remove('expanded') + style.width = '200px'</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre>searchInput.<span class="fn">addEventListener</span>(<span class="s">'focus'</span>, <span class="kw">function</span>() {
+    searchBar.style.transform = <span class="s">'scale(1.02)'</span>; <span class="cm">// +2% de taille</span>
+});
+
+searchInput.<span class="fn">addEventListener</span>(<span class="s">'blur'</span>, <span class="kw">function</span>() {
+    <span class="fn">setTimeout</span>(<span class="kw">function</span>() {
+        searchBar.style.transform = <span class="s">'scale(1)'</span>; <span class="cm">// Retour à la taille normale</span>
+    }, <span class="nm">200</span>); <span class="cm">// Délai 200ms : évite un flash si l'utilisateur clique sur un résultat</span>
+});
+</pre></div>
+
+  <div class="box warn"><span class="bi">💡</span><div><b>Pourquoi le délai de 200ms sur blur ?</b> Si l'utilisateur tape dans la barre puis clique directement sur un résultat de recherche, <ic>blur</ic> se déclenche <b>avant</b> le clic sur le résultat. Sans délai, la barre retrouve sa taille et "saute" visuellement au moment où l'utilisateur clique. Les 200ms laissent le temps au clic de se traiter d'abord.</div></div>
+</div>
+<hr>
+
+<!-- ══ 05 SMOOTH SCROLL ══ -->
+<div class="sec" id="smooth">
+  <div class="slabel">05 — Smooth Scroll</div>
+  <h2>Défilement fluide vers les ancres</h2>
+<div class="diag">
+  <div class="dtitle">Smooth Scroll — comment l'ancre est calculée</div>
+  <div style="display:flex;flex-direction:column;gap:.35rem;max-width:560px;">
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">Clic &lt;a href="#section-faq"&gt;</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">e.preventDefault()</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">href.slice(1) → "section-faq"</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">getElementById("section-faq")</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">target trouvé</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">scrollIntoView({ behavior: 'smooth' })</div>
+    </div>
+    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#fda4af;">target null (href="#inexistant") → querySelector retourne null → return immédiat, pas d'erreur</div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre>document.<span class="fn">querySelectorAll</span>(<span class="s">'a[href^="#"]'</span>).<span class="fn">forEach</span>(anchor => {
+    anchor.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
+        e.<span class="fn">preventDefault</span>(); <span class="cm">// Annule le comportement par défaut (saut brutal)</span>
+        <span class="kw">const</span> <span class="vr">target</span> = document.<span class="fn">querySelector</span>(<span class="kw">this</span>.<span class="fn">getAttribute</span>(<span class="s">'href'</span>));
+        <span class="kw">if</span> (target) {
+            target.<span class="fn">scrollIntoView</span>({ behavior: <span class="s">'smooth'</span>, block: <span class="s">'start'</span> });
+        }
+    });
+});
+<span class="cm">// Sélecteur CSS 'a[href^="#"]' : tous les liens dont href COMMENCE PAR "#"
+// Cela cible href="#accueil" mais pas href="https://..." ni href="page.html"</span>
+</pre></div>
+
+  <div class="box info"><span class="bi">ℹ️</span><div>En 2024, <ic>scroll-behavior: smooth</ic> dans le CSS global suffit souvent à remplacer ce code. Mais animation.js garantit que ça fonctionne même sur les anciens navigateurs et donne un contrôle plus fin (ex: ajouter un délai ou un callback).</div></div>
+</div>
+<hr>
+
+<!-- ══ RECAP ══ -->
+<div class="sec" id="recap">
+  <div class="slabel">06 — Récapitulatif</div>
+  <h2>Architecture d'animation.js</h2>
+
+  <div class="diag">
+    <div class="dtitle">Vue d'ensemble — tout se passe dans DOMContentLoaded</div>
+    <div class="vc">
+      <div class="vn w cgr">document.addEventListener('DOMContentLoaded', …)</div>
+      <div class="va">↓<div class="val">1 seul point d'entrée pour les 4 modules</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:.3rem;">
+      <div class="vc">
+        <div class="vn ca" style="font-size:.68rem;text-align:center;max-width:100%;">Scroll Reveal<br>IntersectionObserver<br>+ MutationObserver</div>
+      </div>
+      <div class="vc">
+        <div class="vn cy" style="font-size:.68rem;text-align:center;max-width:100%;">Header Shadow<br>scroll event<br>pageYOffset > 50</div>
+      </div>
+      <div class="vc">
+        <div class="vn cp" style="font-size:.68rem;text-align:center;max-width:100%;">Search Focus<br>focus + blur<br>scale(1.02)</div>
+      </div>
+      <div class="vc">
+        <div class="vn cg" style="font-size:.68rem;text-align:center;max-width:100%;">Smooth Scroll<br>a[href^="#"]<br>scrollIntoView</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;">
+    <div style="background:rgba(132,204,22,.07);border:1px solid rgba(132,204,22,.25);border-radius:12px;padding:1.1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#bef264;margin-bottom:.5rem;">Dépendances</div>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.8;">N'importe quel fichier JS — animation.js est <b>entièrement autonome</b>. Il ne lit pas PearTechDB, ne touche pas localStorage, n'émet aucun événement personnalisé. Il observe le DOM passivement.</div>
+    </div>
+    <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:12px;padding:1.1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">Performance</div>
+      <div style="font-size:.8rem;color:var(--t2);line-height:1.8;"><ic>IntersectionObserver</ic> est bien plus performant qu'écouter <ic>scroll</ic> + calculer des positions à chaque frame. Le navigateur gère la détection en dehors du thread principal.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

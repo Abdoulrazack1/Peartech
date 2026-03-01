@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — data.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#38bdf8;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  .sec p b{color:var(--t);font-weight:700;}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#7dd3fc;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
+  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .fc .vn{width:100%;max-width:100%;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#7dd3fc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+  .grow:last-child{border-bottom:none;}
+  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tc{font-family:'JetBrains Mono',monospace;color:#7dd3fc;font-size:.76rem;}
+  .tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+  .tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+  .tli{position:relative;margin-bottom:1.8rem;}
+  .tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+  .tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+  .tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+  .tlt{font-size:.95rem;font-weight:700;}
+  .tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── SCHEMAS PASS 2 ─── */
+  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+  .kbox{border-radius:11px;padding:.9rem 1rem;}
+  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .kbox-item:last-child{border-bottom:none;}
+  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
+  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+  .seq{display:flex;flex-direction:column;gap:.3rem;}
+  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+  .trans-line{width:28px;height:1px;background:var(--t3);}
+  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">data.js</div>
+  <a href="#intro">Intro</a>
+  <a href="#structure">Données</a>
+  <a href="#produit">Produit</a>
+  <a href="#api">API</a>
+  <a href="#search">Recherche</a>
+  <a href="#liens">Liens</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>Aucune</b><br><span style="color:var(--t3);font-size:.71rem;">fichier autonome — tout est codé en dur</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#38bdf822;color:#38bdf8;border:1px solid #38bdf844;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">objet global avec 4 catégories et ~34 produits</span></div>
+<div class="carte-item"><b>getProductById(id)</b><br><span style="color:var(--t3);font-size:.71rem;">retourne un produit ou null</span></div>
+<div class="carte-item"><b>search(query)</b><br><span style="color:var(--t3);font-size:.71rem;">recherche dans nom + description</span></div>
+<div class="carte-item"><b>getProductsByCategory(id)</b><br><span style="color:var(--t3);font-size:.71rem;">filtre par catégorie</span></div>
+<div class="carte-item"><b>getBestSellers(n)</b><br><span style="color:var(--t3);font-size:.71rem;">produits isBestSeller: true</span></div>
+<div class="carte-item"><b>getNewProducts(n)</b><br><span style="color:var(--t3);font-size:.71rem;">produits isNew: true</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">9 fichiers en dépendent</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>data.js</span></h1>
+  <p>Ce fichier est la <b>base de données centrale</b> du site. Il contient toutes les catégories et tous les produits, expose des fonctions pour les interroger, et rend le tout accessible via <ic>window.PearTechDB</ic>. Tous les autres scripts en dépendent et doivent être chargés après lui.</p>
+  <div class="fbadge"><div class="dot"></div>data.js · 4 catégories · ~34 produits · 7 fonctions API · 1 278 lignes</div>
+</div>
+
+<div class="sec" id="intro">
+  <div class="slabel">00 — Avant de commencer</div>
+  <h2>Le bibliothécaire central</h2>
+<div class="diag">
+  <div class="dtitle">data.js — le seul fichier sans dépendance, avec 7 dépendants</div>
+  <div class="two-col">
+    <div class="mini-box" style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);">
+      <div class="mini-title" style="color:#7dd3fc;">Ce que data.js REÇOIT (0 dépendances)</div>
+      <div class="mini-item">Aucun import, aucun require</div>
+      <div class="mini-item">Aucun localStorage/sessionStorage</div>
+      <div class="mini-item">Aucun CustomEvent écouté</div>
+      <div class="mini-item" style="color:#7ee8b8;">→ s'exécute en premier sans contrainte</div>
+    </div>
+    <div class="mini-box" style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);">
+      <div class="mini-title" style="color:#7ee8b8;">Ce que data.js EXPOSE (window.PearTechDB)</div>
+      <div class="mini-item">products[ ] — 34 produits avec toutes leurs propriétés</div>
+      <div class="mini-item">categories[ ] — 4 catégories avec IDs</div>
+      <div class="mini-item">7 méthodes : getProductById, getBestSellers, getNewProducts, search, getProductsByCategory, getSimilarProducts, getProductsByIds</div>
+    </div>
+  </div>
+</div>
+
+  <div class="box ana"><span class="bi">🗄️</span><div><b>Analogie :</b> data.js est le bibliothécaire du site. Il a en tête le catalogue complet de tous les livres (produits) et toutes les sections (catégories). Quand un autre script demande "donne-moi tous les produits Apple" ou "cherche le mot MacBook", le bibliothécaire répond instantanément depuis sa mémoire — pas besoin d'aller sur un serveur.</div></div>
+
+  <div class="glos">
+    <div class="glos-head">📖 Termes essentiels</div>
+    <div class="grow"><div class="gterm">window.PearTechDB</div><div class="gdef">L'objet global exposé par data.js. En écrivant <ic>window.PearTechDB = {...}</ic>, il rend données et fonctions accessibles à tous les autres scripts.</div></div>
+    <div class="grow"><div class="gterm">...helpers</div><div class="gdef">L'opérateur spread <ic>...</ic> "étale" toutes les propriétés de <ic>helpers</ic> dans le nouvel objet. <ic>PearTechDB</ic> contient ainsi données ET fonctions à plat.</div></div>
+    <div class="grow"><div class="gterm">.find()</div><div class="gdef">Retourne le <b>premier élément</b> du tableau pour lequel la condition est vraie, ou <ic>undefined</ic> si aucun ne correspond.</div></div>
+    <div class="grow"><div class="gterm">.filter()</div><div class="gdef">Retourne un <b>nouveau tableau</b> avec tous les éléments satisfaisant la condition. <ic>products.filter(p => p.isNew)</ic> → tous les nouveaux produits.</div></div>
+    <div class="grow"><div class="gterm">.some()</div><div class="gdef">Retourne <ic>true</ic> si <b>au moins un</b> élément du tableau satisfait la condition. Utilisé pour chercher dans les tags.</div></div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="structure">
+  <div class="slabel">01 — Les données</div>
+  <h2>Deux tableaux : categories et products</h2>
+
+  <div class="diag">
+    <div class="dtitle">Structure des deux tableaux dans data.js</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.3);border-radius:12px;padding:1.1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7dd3fc;margin-bottom:.7rem;">categories — 4 entrées</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--bg3);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);">
+          { id: <span style="color:#f7d97a;">'cat_apple'</span>,<br>
+          &nbsp;&nbsp;name: <span style="color:#86efac;">'Apple'</span>,<br>
+          &nbsp;&nbsp;slug: <span style="color:#86efac;">'apple'</span>,<br>
+          &nbsp;&nbsp;subcategories: [<span style="color:#86efac;">'iPhone'</span>, …] }
+        </div>
+        <div style="margin-top:.6rem;font-size:.75rem;color:var(--t2);">4 slugs : <ic>apple</ic> · <ic>android</ic> · <ic>montres</ic> · <ic>tablettes</ic></div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:12px;padding:1.1rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;margin-bottom:.7rem;">products — ~34 entrées</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--bg3);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);">
+          { id: <span style="color:#f7d97a;">1</span>,<br>
+          &nbsp;&nbsp;categoryId: <span style="color:#86efac;">'cat_apple'</span>,<br>
+          &nbsp;&nbsp;basePrice: <span style="color:#f7d97a;">1479</span>,<br>
+          &nbsp;&nbsp;images: [<span style="color:#86efac;">'…'</span>],<br>
+          &nbsp;&nbsp;tags: [<span style="color:#86efac;">'iphone'</span>, …] }
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.8rem 1rem;font-size:.82rem;color:var(--t2);">
+      <b style="color:#7dd3fc;">Lien clé :</b> <ic>product.categoryId === 'cat_apple'</ic> ↔ <ic>category.id === 'cat_apple'</ic>. <ic>getProductsByCategory('apple')</ic> résout d'abord le slug en id via <ic>categories.find()</ic>, puis filtre les produits.
+    </div>
+  </div>
+</div>
+<hr>
+
+  <h3>getProductsByCategory() — la jointure en deux étapes</h3>
+  <p>C'est la fonction la plus complexe de data.js. Elle ne reçoit pas un id de catégorie, mais un <b>slug</b> (le mot dans l'URL). Elle doit donc d'abord convertir le slug en id, puis filtrer les produits.</p>
+<div class="diag">
+  <div class="dtitle">Relation categories → products — via categoryId</div>
+  <div style="display:grid;grid-template-columns:1fr 50px 1fr;gap:.5rem;align-items:start;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;margin-bottom:.4rem;font-weight:700;">categories[]</div>
+      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:2;">
+        { id: <span style="color:#7ee8b8;">"cat_phones"</span>,<br>
+        &nbsp;&nbsp;name: "Smartphones",<br>
+        &nbsp;&nbsp;icon: "📱", count: 14 }<br>
+        { id: <span style="color:#7ee8b8;">"cat_laptops"</span>, ... }<br>
+        { id: <span style="color:#7ee8b8;">"cat_tablets"</span>, ... }<br>
+        { id: <span style="color:#7ee8b8;">"cat_wearables"</span>, ... }
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding-top:3rem;gap:.3rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);">categoryId</div>
+      <div style="color:var(--t3);font-size:1.2rem;">→</div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#c4b5fd;margin-bottom:.4rem;font-weight:700;">products[] (extrait)</div>
+      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:2;">
+        { id: 1,<br>
+        &nbsp;&nbsp;categoryId: <span style="color:#7ee8b8;">"cat_phones"</span>,<br>
+        &nbsp;&nbsp;name: "iPhone 15 Pro",<br>
+        &nbsp;&nbsp;price: 1199, ... }<br>
+        { id: 2,<br>
+        &nbsp;&nbsp;categoryId: <span style="color:#7ee8b8;">"cat_phones"</span>, ... }
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">getProductsByCategory('cat_phones') → products.filter(p => p.categoryId === 'cat_phones') → 14 produits</div>
+</div>
+
+
+  <div class="diag">
+    <div class="dtitle">getProductsByCategory('apple') — décomposée</div>
+    <div class="vc">
+      <div class="vn w cgr">Appel : PearTechDB.getProductsByCategory(<span style="color:#86efac;">'apple'</span>)</div>
+      <div class="va">↓<div class="val">étape 1 — résoudre le slug</div></div>
+      <div class="vn w cb" style="text-align:left;padding:1rem 1.3rem;font-size:.73rem;line-height:1.9;">
+        <span style="color:#555e74;">// categories.find(c => c.slug === 'apple')</span><br>
+        <span style="color:#7dd3fc;">→ {</span> id: <span style="color:#f7d97a;">'cat_apple'</span>, name: 'Apple', slug: 'apple', … <span style="color:#7dd3fc;">}</span><br>
+        <span style="color:#555e74;">// On extrait cat.id = 'cat_apple'</span>
+      </div>
+      <div class="va">↓<div class="val">étape 2 — filtrer les produits</div></div>
+      <div class="vn w cy" style="text-align:left;padding:1rem 1.3rem;font-size:.73rem;line-height:1.9;">
+        <span style="color:#555e74;">// products.filter(p => p.categoryId === 'cat_apple')</span><br>
+        <span style="color:#f7d97a;">→ [</span> {id:1, name:'iPhone 15 Pro Max', …}, {id:2, …}, … <span style="color:#f7d97a;">]</span><br>
+        <span style="color:#555e74;">// Tous les produits dont categoryId vaut 'cat_apple'</span>
+      </div>
+      <div class="va">↓<div class="val">résultat</div></div>
+      <div class="vn w cg">Tableau de tous les produits Apple — affiché par product_detail.js (similaires) et catalogue</div>
+    </div>
+    <div style="margin-top:1rem;background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);border-radius:9px;padding:.8rem 1rem;font-size:.82rem;color:#ff9090;">
+      <b>Cas limite :</b> Si <ic>categories.find()</ic> ne trouve pas le slug → retourne <ic>undefined</ic> → <ic>if (!cat) return []</ic> → tableau vide, pas de plantage.
+    </div>
+  </div>
+
+  <h3>L'IIFE — pourquoi encapsuler dans une fonction anonyme</h3>
+  <p>Comme tous les scripts du projet, data.js s'enveloppe dans une IIFE (<i>Immediately Invoked Function Expression</i>). Cela protège les variables internes de l'espace global.</p>
+
+  <div class="diag">
+    <div class="dtitle">Sans IIFE vs avec IIFE — protection du scope</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.5rem;">❌ Sans IIFE — dangereux</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--code);border-radius:8px;padding:.9rem;line-height:1.9;color:var(--t2);">
+          <span style="color:#c084fc;">const</span> <span style="color:#fde68a;">categories</span> = […];<br>
+          <span style="color:#c084fc;">const</span> <span style="color:#fde68a;">products</span>   = […];<br>
+          <br>
+          <span style="color:#555e74;font-style:italic;">// window.categories = [… // accessible !]</span><br>
+          <span style="color:#555e74;font-style:italic;">// window.products   = [… // accessible !]</span><br>
+          <span style="color:#555e74;font-style:italic;">// N'importe quel autre script peut</span><br>
+          <span style="color:#ff9090;font-style:italic;">// modifier ou écraser les tableaux</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.5rem;">✅ Avec IIFE — sécurisé</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--code);border-radius:8px;padding:.9rem;line-height:1.9;color:var(--t2);">
+          (<span style="color:#c084fc;">function</span>() {<br>
+          &nbsp;&nbsp;<span style="color:#c084fc;">const</span> <span style="color:#fde68a;">categories</span> = […];<br>
+          &nbsp;&nbsp;<span style="color:#c084fc;">const</span> <span style="color:#fde68a;">products</span>   = […];<br>
+          &nbsp;&nbsp;<span style="color:#555e74;font-style:italic;">// privés — invisibles depuis window</span><br>
+          &nbsp;&nbsp;window.PearTechDB = { …helpers };<br>
+          &nbsp;&nbsp;<span style="color:#555e74;font-style:italic;">// seul cet objet est accessible</span><br>
+          })();
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem;font-size:.81rem;color:var(--t2);">
+      Les variables <ic>categories</ic> et <ic>products</ic> restent privées. L'extérieur ne peut accéder aux données qu'à travers les méthodes contrôlées de <ic>window.PearTechDB</ic> — comme un objet avec des getters.
+    </div>
+  </div>
+
+<div class="sec" id="produit">
+  <div class="slabel">02 — Anatomie d'un produit</div>
+  <h2>Toutes les propriétés utilisées par les autres scripts</h2>
+  <div class="tbl">
+    <thead><tr><th>Propriété</th><th>Type</th><th>Utilisé par</th></tr></thead>
+    <tbody>
+      <tr><td class="tc">id</td><td style="color:var(--t3)">number</td><td style="color:var(--t2)">Transmis via URL <ic>?id=42</ic>. Clé de lookup dans product_detail.js, panier.js, cart.js.</td></tr>
+      <tr><td class="tc">categoryId</td><td style="color:var(--t3)">string</td><td style="color:var(--t2)">Relie le produit à une catégorie. product_detail.js l'utilise pour le fil d'Ariane et les similaires.</td></tr>
+      <tr><td class="tc">basePrice / oldPrice</td><td style="color:var(--t3)">number</td><td style="color:var(--t2)">basePrice = point de départ pour <ic>initOptions()</ic>. oldPrice = prix barré si présent.</td></tr>
+      <tr><td class="tc">images</td><td style="color:var(--t3)">string[]</td><td style="color:var(--t2)"><ic>images[0]</ic> = image principale. Galerie et lightbox dans product_detail.js. cart.js normalise ce champ.</td></tr>
+      <tr><td class="tc">tags</td><td style="color:var(--t3)">string[]</td><td style="color:var(--t2)">Mots-clés pour <ic>search()</ic>. Ex : <ic>['iphone', 'apple', 'ios']</ic>.</td></tr>
+      <tr><td class="tc">isNew / isBestSeller</td><td style="color:var(--t3)">boolean</td><td style="color:var(--t2)">Badges sur les cartes. <ic>getNewProducts()</ic> et <ic>getBestSellers()</ic> filtrent par ces champs.</td></tr>
+      <tr><td class="tc">options</td><td style="color:var(--t3)">object?</td><td style="color:var(--t2)"><ic>{ram:[{label,price}],…}</ic>. Options avec surcoût. <ic>initOptions()</ic> et <ic>addToCart()</ic> les lisent.</td></tr>
+    </tbody>
+  </div>
+
+  <h3>La structure options — objet imbriqué</h3>
+  <p>Le champ <ic>options</ic> est le plus complexe. C'est un objet dont les clés sont les noms des groupes d'options, et les valeurs sont des tableaux de choix possibles avec leur surcoût.</p>
+
+  <div class="diag">
+    <div class="dtitle">Exemple complet du champ options d'un MacBook</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--code);border-radius:10px;padding:1rem;line-height:2;color:var(--t2);">
+        options: {<br>
+        &nbsp;&nbsp;<span style="color:#7dd3fc;">ram</span>: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{ label: <span style="color:#86efac;">'8 Go'</span>,  price: <span style="color:#f7d97a;">0</span>   },<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{ label: <span style="color:#86efac;">'16 Go'</span>, price: <span style="color:#f7d97a;">200</span> },<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{ label: <span style="color:#86efac;">'24 Go'</span>, price: <span style="color:#f7d97a;">400</span> }<br>
+        &nbsp;&nbsp;],<br>
+        &nbsp;&nbsp;<span style="color:#7dd3fc;">storage</span>: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{ label: <span style="color:#86efac;">'256 Go'</span>, price: <span style="color:#f7d97a;">0</span>   },<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;{ label: <span style="color:#86efac;">'512 Go'</span>, price: <span style="color:#f7d97a;">230</span> }<br>
+        &nbsp;&nbsp;]<br>
+        }
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.8rem;color:var(--t2);">
+        <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:8px;padding:.7rem;line-height:1.7;"><b style="color:#7dd3fc;">product_detail.js</b> lit <ic>Object.entries(options)</ic> pour générer les boutons de chaque groupe. Le <ic>price</ic> est mis en <ic>data-price</ic> sur chaque bouton.</div>
+        <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);border-radius:8px;padding:.7rem;line-height:1.7;"><b style="color:#7ee8b8;">panier.js</b> récupère les options actives dans le DOM et les stocke dans <ic>cartItem.options</ic> pour la détection de doublons via JSON.stringify.</div>
+        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.7rem;line-height:1.7;"><b style="color:#f7d97a;">cart.js</b> affiche <ic>item.options.map(opt => opt.name + ': ' + opt.value)</ic> pour décrire la configuration choisie.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="api">
+  <div class="slabel">03 — L'API publique</div>
+  <h2>window.PearTechDB — 7 méthodes</h2>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">helpers</span> = {
+    <span class="fn">getProductById</span>:        (id)           => products.<span class="fn">find</span>(p => p.id === <span class="fn">parseInt</span>(id)),
+    <span class="fn">getProductsByCategory</span>: (categorySlug) => { <span class="cm">/* cherche cat par slug, filtre products */</span> },
+    <span class="fn">getBestSellers</span>:        (limit = <span class="nm">4</span>)    => products.<span class="fn">filter</span>(p => p.isBestSeller).<span class="fn">slice</span>(<span class="nm">0</span>, limit),
+    <span class="fn">getNewProducts</span>:        (limit = <span class="nm">4</span>)    => products.<span class="fn">filter</span>(p => p.isNew).<span class="fn">slice</span>(<span class="nm">0</span>, limit),
+    <span class="fn">search</span>:                (query)        => { <span class="cm">/* cherche dans name, description, tags */</span> },
+    <span class="fn">getCategoryBySlug</span>:     (slug)         => categories.<span class="fn">find</span>(c => c.slug === slug),
+    <span class="fn">getCategorySlugFromId</span>: (categoryId)   => categories.<span class="fn">find</span>(c => c.id === categoryId)?.slug || <span class="s">''</span>
+};
+
+window.PearTechDB = { categories, products, promotions: [], ...helpers };
+window.products   = products;  <span class="cm">// alias direct pour favoris.js</span>
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">L'opérateur spread — comment ...helpers fonctionne</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--code);border-radius:9px;padding:.9rem;line-height:2;color:var(--t2);">
+        <span style="color:#c084fc;">const</span> helpers = {<br>
+        &nbsp;&nbsp;getProductById: …,<br>
+        &nbsp;&nbsp;search: …,<br>
+        &nbsp;&nbsp;<span style="color:#555e74;">// 5 autres fonctions</span><br>
+        };
+      </div>
+      <div style="text-align:center;font-size:1.4rem;color:var(--t3);">+<br><span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7dd3fc;">...helpers</span></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.3);border-radius:9px;padding:.9rem;line-height:2;color:var(--t2);">
+        window.PearTechDB = {<br>
+        &nbsp;&nbsp;<span style="color:#86efac;">categories</span>: categories,<br>
+        &nbsp;&nbsp;<span style="color:#86efac;">products</span>:   products,<br>
+        &nbsp;&nbsp;<span style="color:#7dd3fc;">getProductById</span>: …, <span style="color:#555e74;">// ← étalé</span><br>
+        &nbsp;&nbsp;<span style="color:#7dd3fc;">search</span>: …,<br>
+        &nbsp;&nbsp;<span style="color:#555e74;">// + 5 autres</span><br>
+        };
+      </div>
+    </div>
+    <div style="margin-top:.8rem;font-size:.81rem;color:var(--t2);">
+      Sans spread, il faudrait écrire <ic>{ categories, products, getProductById: helpers.getProductById, search: helpers.search, … }</ic> — laborieux. Le spread copie toutes les propriétés en une seule opération.
+    </div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">getBestSellers(4) et getNewProducts(4) — comment elles filtrent</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">getBestSellers(limit = 4)</div>
+        <div class="vc">
+          <div class="vn cgr" style="font-size:.72rem;max-width:100%;">products — 34 objets</div>
+          <div class="va">↓<div class="val">.filter(p => p.isBestSeller)</div></div>
+          <div class="vn cy" style="font-size:.72rem;max-width:100%;">isBestSeller = true → 8 produits sélectionnés</div>
+          <div class="va">↓<div class="val">.slice(0, 4)</div></div>
+          <div class="vn cg" style="font-size:.72rem;max-width:100%;">Les 4 premiers meilleures ventes retournés</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#c084fc;margin-bottom:.5rem;">getProductById(id)</div>
+        <div class="vc">
+          <div class="vn cgr" style="font-size:.72rem;max-width:100%;">id reçu : "42" (string depuis l'URL)</div>
+          <div class="va">↓<div class="val">parseInt("42") = 42</div></div>
+          <div class="vn cb" style="font-size:.72rem;max-width:100%;">products.find(p => p.id === 42)</div>
+          <div class="va">↓</div>
+          <div class="vn cg" style="font-size:.72rem;max-width:100%;">{id:42, name:'…', …} ou undefined si absent</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box warn"><span class="bi">⚠️</span><div><b>data.js n'émet PAS l'événement PearTechDBReady.</b> Il écrit <ic>window.PearTechDB</ic> de façon synchrone à la fin de l'IIFE. Les autres scripts vérifient <ic>if (window.PearTechDB)</ic> ou utilisent un <ic>setTimeout</ic> de secours. Si data.js est dans le bon ordre dans les balises <ic>&lt;script&gt;</ic> du HTML, il sera toujours disponible en premier.</div></div>
+</div>
+<hr>
+
+<div class="sec" id="search">
+  <div class="slabel">04 — Recherche textuelle</div>
+  <h2>search(query) — 3 champs simultanément</h2>
+<div class="schema2">
+  <div class="s2t">search(query) — 3 champs vérifiés en même temps, toLowerCase partout</div>
+  <div style="display:flex;flex-direction:column;gap:.4rem;max-width:600px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border-radius:8px;padding:.55rem .8rem;color:#fde68a;">query = "iphone pro"  →  q = "iphone pro" (toLowerCase)</div>
+    <div class="arr-down">↓ pour chaque produit dans products[]</div>
+    <div style="display:flex;flex-direction:column;gap:.3rem;">
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;align-items:center;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.5rem .8rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">name.toLowerCase()</div>
+        <div style="font-size:.74rem;color:var(--t2);">"iphone 15 pro max" → <span style="color:#7ee8b8;">contient "iphone pro"</span> ✓ → inclus</div>
+      </div>
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;align-items:center;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.5rem .8rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">category.toLowerCase()</div>
+        <div style="font-size:.74rem;color:var(--t2);">"smartphones" → ne contient pas "iphone pro" → on continue</div>
+      </div>
+      <div style="display:grid;grid-template-columns:130px 1fr;gap:.6rem;align-items:center;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.5rem .8rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">tags.join(' ')</div>
+        <div style="font-size:.74rem;color:var(--t2);">"iphone apple 5g pro camera" → <span style="color:#7ee8b8;">contient "iphone pro"</span> ✓</div>
+      </div>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Logique OR : suffit qu'UN des 3 champs match pour inclure le produit · toLowerCase des deux côtés = recherche insensible à la casse</div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="fn">search</span>: <span class="kw">function</span>(query) {
+    <span class="kw">const</span> <span class="vr">q</span> = query.<span class="fn">toLowerCase</span>();  <span class="cm">// normalise : "MAC" → "mac"</span>
+    <span class="kw">return</span> products.<span class="fn">filter</span>(p =>
+        p.name.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(q) ||        <span class="cm">// ex: "macbook air m2" inclut "mac" ✓</span>
+        p.description.<span class="fn">toLowerCase</span>().<span class="fn">includes</span>(q) || <span class="cm">// si le name ne matche pas, tente ici</span>
+        p.tags.<span class="fn">some</span>(tag => tag.<span class="fn">includes</span>(q))        <span class="cm">// ["macbook","m2"] → "macbook" inclut "mac" ✓</span>
+    );
+}
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">search("mac") — analyse sur chaque produit</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;">
+      <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">1 — name</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#86efac;">"<b>Mac</b>Book Air M2"</div>
+        <div style="margin-top:.3rem;font-size:.75rem;color:#7ee8b8;">✓ inclut "mac"</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">2 — description</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#86efac;">"Le <b>Mac</b>Book Air le plus…"</div>
+        <div style="margin-top:.3rem;font-size:.75rem;color:var(--t3);">Si name ne matche pas</div>
+      </div>
+      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">3 — tags[]</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#86efac;">["<b>mac</b>book", "m2"]</div>
+        <div style="margin-top:.3rem;font-size:.75rem;color:var(--t3);">.some() vérifie chaque tag</div>
+      </div>
+    </div>
+    <div style="margin-top:.8rem;font-size:.8rem;color:var(--t2);text-align:center;">Le test s'arrête dès le premier <ic>true</ic> grâce au <ic>||</ic>. Si name matche, description et tags ne sont pas vérifiés.</div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="liens">
+  <div class="slabel">05 — Liens avec les autres fichiers</div>
+  <h2>data.js au centre de tout</h2>
+<div class="schema2">
+  <div class="s2t">data.js au centre — qui utilise quoi</div>
+  <div style="display:grid;grid-template-columns:1fr 90px 1fr;gap:.7rem;align-items:center;">
+    <div style="display:flex;flex-direction:column;gap:.35rem;align-items:flex-end;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.2rem;text-align:right;">lisent PearTechDB →</div>
+      <div class="pill" style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.35);color:#c4b5fd;">product_grid.js<br><span style="font-weight:400;font-size:.58rem;">getBestSellers, getNewProducts</span></div>
+      <div class="pill" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;">dropdown.js<br><span style="font-weight:400;font-size:.58rem;">categories[]</span></div>
+      <div class="pill" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;">recherche.js<br><span style="font-weight:400;font-size:.58rem;">search(query)</span></div>
+      <div class="pill" style="background:rgba(244,114,182,.12);border:1px solid rgba(244,114,182,.35);color:#f9a8d4;">product_detail.js<br><span style="font-weight:400;font-size:.58rem;">getProductById, getSimilar</span></div>
+      <div class="pill" style="background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.35);color:#67e8f9;">catalogue.js<br><span style="font-weight:400;font-size:.58rem;">products par catégorie</span></div>
+      <div class="pill" style="background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.35);color:#fde68a;">cart.js<br><span style="font-weight:400;font-size:.58rem;">getProductById (recommandations)</span></div>
+      <div class="pill" style="background:rgba(244,63,94,.12);border:1px solid rgba(244,63,94,.35);color:#fda4af;">favoris.js<br><span style="font-weight:400;font-size:.58rem;">getProductById (polling)</span></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <div style="text-align:center;padding:.8rem;border-radius:14px;background:rgba(56,189,248,.15);border:2px solid rgba(56,189,248,.5);box-shadow:0 0 30px rgba(56,189,248,.1);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;color:#7dd3fc;">data.js</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:rgba(125,211,252,.6);margin-top:.2rem;">window<br>.PearTechDB</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.4rem;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.2rem;">expose →</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">products[ ] — 34 produits</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">categories[ ] — 4 catégories</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">getProductById(id)</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">getBestSellers(n)</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">getNewProducts(n)</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">search(query)</div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.45rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">getProductsByCategory(id)</div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-size:.76rem;color:var(--t3);text-align:center;">data.js est le <em>seul</em> fichier qui n'a aucune dépendance — tous les autres en dépendent, lui n'en a aucune</div>
+</div>
+
+
+  <div class="tbl">
+    <thead><tr><th>Fichier</th><th>Ce qu'il lit dans PearTechDB</th></tr></thead>
+    <tbody>
+      <tr><td class="tc">product_grid.js</td><td style="color:var(--t2)"><ic>getBestSellers()</ic> · <ic>getNewProducts()</ic> · <ic>products</ic> pour les cartes de l'accueil</td></tr>
+      <tr><td class="tc">dropdown.js</td><td style="color:var(--t2)"><ic>PearTechDB.categories</ic> pour générer les items du menu</td></tr>
+      <tr><td class="tc">recherche.js</td><td style="color:var(--t2)"><ic>search(query)</ic> pour la recherche textuelle</td></tr>
+      <tr><td class="tc">product_detail.js</td><td style="color:var(--t2)"><ic>getProductById()</ic> · <ic>getProductsByCategory()</ic> · <ic>getCategorySlugFromId()</ic></td></tr>
+      <tr><td class="tc">cart.js</td><td style="color:var(--t2)"><ic>PearTechDB.products</ic> pour les recommandations aléatoires</td></tr>
+      <tr><td class="tc">filtre.js / panier.js</td><td style="color:var(--t2)">Aucun accès direct — lisent depuis le DOM ou localStorage</td></tr>
+    </tbody>
+  </div>
+</div>
+
+<hr>
+
+<div class="sec" id="recap" style="scroll-margin-top:70px;">
+  <div class="slabel">06 — Récapitulatif</div>
+  <h2>Le film complet de A à Z</h2>
+<div class="diag">
+  <div class="dtitle">Les 7 méthodes de window.PearTechDB</div>
+  <table class="recap-table">
+    <thead><tr><th>Méthode</th><th>Paramètre</th><th>Retourne</th><th>Utilisée par</th></tr></thead>
+    <tbody>
+      <tr><td class="fn-cell">getProductById(id)</td><td>number</td><td>Product | undefined</td><td>product_detail, favoris, cart, panier</td></tr>
+      <tr><td class="fn-cell">getBestSellers(n)</td><td>number (défaut 4)</td><td>Product[]</td><td>product_grid</td></tr>
+      <tr><td class="fn-cell">getNewProducts(n)</td><td>number (défaut 4)</td><td>Product[]</td><td>product_grid</td></tr>
+      <tr><td class="fn-cell">search(query)</td><td>string</td><td>Product[]</td><td>recherche</td></tr>
+      <tr><td class="fn-cell">getProductsByCategory(id)</td><td>string (cat_*)</td><td>Product[]</td><td>catalogue, dropdown</td></tr>
+      <tr><td class="fn-cell">getSimilarProducts(id)</td><td>number</td><td>Product[] (même cat, sauf id)</td><td>product_detail</td></tr>
+      <tr><td class="fn-cell">getProductsByIds(ids)</td><td>number[]</td><td>Product[]</td><td>favoris (page dédiée)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+  <p>Voici ce qui se passe, dans l'ordre, quand le navigateur exécute data.js.</p>
+<div class="diag" style="margin-top:.8rem;">
+  <div class="dtitle">Ordre de chargement et disponibilité — data.js doit être premier</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:600px;">
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7dd3fc;text-align:right;">data.js</div>
+      <div style="background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);border-radius:6px;padding:.3rem .7rem;font-size:.72rem;color:#7dd3fc;">window.PearTechDB = { products, categories, ... } exposé</div>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">panier.js</div>
+      <div style="background:rgba(110,231,183,.07);border:1px solid rgba(110,231,183,.2);border-radius:6px;padding:.3rem .7rem;font-size:.72rem;color:#7ee8b8;">window.PearTechCart exposé — ne lit pas PearTechDB</div>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">product_grid.js</div>
+      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:6px;padding:.3rem .7rem;font-size:.72rem;color:var(--t2);">PearTechDB.getBestSellers() ← disponible grâce à data.js</div>
+    </div>
+    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;">dropdown.js</div>
+      <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);border-radius:6px;padding:.3rem .7rem;font-size:.72rem;color:var(--t2);">PearTechDB.categories ← polling ou événement dataReady</div>
+    </div>
+    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#fda4af;margin-top:.2rem;">Si data.js est absent ou chargé après → window.PearTechDB = undefined → 6 modules cassés immédiatement</div>
+  </div>
+</div>
+
+
+  <div style="position:relative;padding-left:2.2rem;margin:1.5rem 0;">
+    <div style="position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);"></div>
+
+    <div style="position:relative;margin-bottom:1.8rem;">
+      <div style="position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--a4);border:2px solid var(--bg);"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;"><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Ligne 1</div><div style="font-size:.95rem;font-weight:700;">L'IIFE démarre</div></div>
+      <div style="font-size:.86rem;color:var(--t2);line-height:1.8;"><ic>(function() { 'use strict';</ic> — le code s'enveloppe. Tout ce qui est déclaré à l'intérieur reste privé au scope de cette fonction.</div>
+    </div>
+
+    <div style="position:relative;margin-bottom:1.8rem;">
+      <div style="position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--a);border:2px solid var(--bg);"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;"><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Lignes 4–42</div><div style="font-size:.95rem;font-weight:700;">Déclaration de categories</div></div>
+      <div style="font-size:.86rem;color:var(--t2);line-height:1.8;"><ic>const categories = [...]</ic> — les 4 catégories (Apple, Android, Montres, Tablettes) sont créées en mémoire. Chacune a un <ic>id</ic>, <ic>name</ic>, <ic>slug</ic>, <ic>subcategories</ic>.</div>
+    </div>
+
+    <div style="position:relative;margin-bottom:1.8rem;">
+      <div style="position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--a3);border:2px solid var(--bg);"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;"><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Lignes 43–1222</div><div style="font-size:.95rem;font-weight:700;">Déclaration de products</div></div>
+      <div style="font-size:.86rem;color:var(--t2);line-height:1.8;"><ic>const products = [...]</ic> — les ~34 produits. Chacun contient toutes ses propriétés : <ic>id</ic>, <ic>categoryId</ic>, <ic>basePrice</ic>, <ic>images</ic>, <ic>specs</ic>, <ic>options</ic>, <ic>tags</ic>…</div>
+    </div>
+
+    <div style="position:relative;margin-bottom:1.8rem;">
+      <div style="position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--a5);border:2px solid var(--bg);"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;"><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Lignes 1223–1259</div><div style="font-size:.95rem;font-weight:700;">Création des fonctions utilitaires</div></div>
+      <div style="font-size:.86rem;color:var(--t2);line-height:1.8;"><ic>const helpers = {...}</ic> — les 7 fonctions de requête. Elles ont accès aux constantes <ic>categories</ic> et <ic>products</ic> via la closure.</div>
+    </div>
+
+    <div style="position:relative;margin-bottom:1.8rem;">
+      <div style="position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:#38bdf8;border:2px solid var(--bg);"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;"><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Lignes 1261–1273</div><div style="font-size:.95rem;font-weight:700;">Exposition globale</div></div>
+      <div style="font-size:.86rem;color:var(--t2);line-height:1.8;"><ic>window.PearTechDB = { categories, products, ...helpers }</ic> et <ic>window.products = products</ic>. Dès cet instant, tous les scripts chargés après peuvent accéder à ces données.</div>
+    </div>
+
+    <div style="position:relative;margin-bottom:0;">
+      <div style="position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:#34d399;border:2px solid var(--bg);"></div>
+      <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;"><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Ligne 1278</div><div style="font-size:.95rem;font-weight:700;">Log de confirmation</div></div>
+      <div style="font-size:.86rem;color:var(--t2);line-height:1.8;"><ic>console.log('✅ Base de données PearTech chargée : 34 produits, 4 catégories')</ic> — visible dans la console du navigateur (F12) à chaque chargement de page.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

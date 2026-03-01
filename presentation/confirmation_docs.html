@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — confirmation.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#34d399;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#6ee7b7;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .ca{background:rgba(52,211,153,.11);border:1px solid rgba(52,211,153,.4);color:#6ee7b7;}
+  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .cg{background:rgba(52,211,153,.11);border:1px solid rgba(52,211,153,.4);color:#6ee7b7;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .fc .vn{width:100%;max-width:100%;}
+  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;}
+  .box.info{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);color:#6ee7b7;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#6ee7b7}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tc{font-family:'JetBrains Mono',monospace;color:#6ee7b7;font-size:.76rem;}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── EXTRA SCHEMAS ─── */
+  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+  .ls-key{font-weight:700;margin-bottom:.25rem;}
+  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-box{border-radius:11px;padding:1rem;}
+  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .cmp-item:last-child{border-bottom:none;}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">confirmation.js</div>
+  <a href="#intro">Intro</a>
+  <a href="#session">sessionStorage</a>
+  <a href="#fallback">Fallback</a>
+  <a href="#affichage">Affichage</a>
+  <a href="#panier">Panier</a>
+  <a href="#recap">Récap</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>sessionStorage peartech-last-order</b><br><span style="color:var(--t3);font-size:.71rem;">écrit par paiement.js</span></div>
+<div class="carte-item"><b>window.PearTechCart</b><br><span style="color:var(--t3);font-size:.71rem;">pour clear() final</span></div>
+<div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#34d39922;color:#34d399;border:1px solid #34d39944;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>loadOrder()</b><br><span style="color:var(--t3);font-size:.71rem;">lit + supprime sessionStorage</span></div>
+<div class="carte-item"><b>renderOrder(data)</b><br><span style="color:var(--t3);font-size:.71rem;">injecte dans 9 éléments DOM</span></div>
+<div class="carte-item"><b>formatDate()</b><br><span style="color:var(--t3);font-size:.71rem;">date de livraison estimée +5j</span></div>
+<div class="carte-item"><b>clearCart()</b><br><span style="color:var(--t3);font-size:.71rem;">vide le panier après commande</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>sessionStorage supprimé</b><br><span style="color:var(--t3);font-size:.71rem;">peartech-last-order retiré</span></div>
+<div class="carte-item"><b>localStorage peartech-cart-count</b><br><span style="color:var(--t3);font-size:.71rem;">remis à 0</span></div>
+<div class="carte-item"><b>DOM</b><br><span style="color:var(--t3);font-size:.71rem;">9 zones de confirmation remplies</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>confirmation.js</span></h1>
+  <p>Ce fichier gère la page de confirmation de commande. Il lit les données de commande écrites par <ic>paiement.js</ic> dans <ic>sessionStorage</ic>, les injecte dans le DOM, nettoie le panier, puis supprime les données de session pour éviter qu'elles s'affichent à nouveau lors d'une prochaine visite.</p>
+  <div class="fbadge"><div class="dot"></div>confirmation.js · ~65 lignes · lecture sessionStorage → DOM → nettoyage panier</div>
+</div>
+
+<!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro">
+  <div class="slabel">00 — Avant de commencer</div>
+  <h2>Le maillon final de la chaîne d'achat</h2>
+<div class="schema">
+  <div class="schema-title">Cycle de vie complet — de la commande à la confirmation</div>
+  <div class="chain-seq">
+    <div class="cs-row">
+      <div class="cs-num">1</div>
+      <div class="cs-tag" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;">paiement.js</div>
+      <div class="cs-desc">Formulaire validé → <ic>generateOrderNumber()</ic> → assemble <ic>orderData</ic> → <ic>sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData))</ic></div>
+    </div>
+    <div class="cs-arrow">↓ PearTechCart.clear() → localStorage cart vidé → window.location = 'page_confirmation.html'</div>
+    <div class="cs-row">
+      <div class="cs-num">2</div>
+      <div class="cs-tag" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;">confirmation.js</div>
+      <div class="cs-desc"><ic>sessionStorage.getItem('peartech-last-order')</ic> → parse JSON → <b>usage unique : removeItem() immédiat</b></div>
+    </div>
+    <div class="cs-row">
+      <div class="cs-num">3</div>
+      <div class="cs-tag" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;">confirmation.js</div>
+      <div class="cs-desc">Injecte les données dans 8 zones DOM → badge panier mis à 0</div>
+    </div>
+    <div class="cs-arrow">↓ si l'utilisateur recharge la page : sessionStorage.getItem() retourne null → fallback affiché</div>
+    <div class="cs-row">
+      <div class="cs-num">4</div>
+      <div class="cs-tag" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">Rechargement</div>
+      <div class="cs-desc">La clé a été supprimée → <ic>null</ic> → fallback "Commande enregistrée avec succès" générique</div>
+    </div>
+  </div>
+  <div class="box warn" style="margin-top:1rem;"><span class="bi">🔒</span><div><b>Pourquoi removeItem() immédiatement ?</b> Un rafraîchissement de la page ne doit <em>pas</em> ré-afficher le récapitulatif comme si c'était une nouvelle commande. <ic>removeItem()</ic> dès la première lecture garantit l'usage unique — le récapitulatif n'est visible qu'une seule fois.</div></div>
+</div>
+
+  <div class="box ana"><span class="bi">📦</span><div><b>Place dans le parcours :</b> <ic>paiement.js</ic> écrit les données de commande dans <ic>sessionStorage</ic> juste avant de rediriger vers la page de confirmation. confirmation.js lit ces données, les affiche, puis les <b>supprime</b> pour que la page soit propre à la prochaine visite.</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Chaîne causale — de paiement.js à confirmation.js</div>
+    <div class="vc">
+      <div class="vn w cgr">paiement.js — l'utilisateur valide sa commande</div>
+      <div class="va">↓<div class="val">sessionStorage.setItem('peartech-last-order', JSON)</div></div>
+      <div class="vn w cy">sessionStorage contient l'objet orderData sérialisé</div>
+      <div class="va">↓<div class="val">window.location.href = 'page_confirmation.html'</div></div>
+      <div class="vn w cgr">page_confirmation.html se charge</div>
+      <div class="va">↓<div class="val">confirmation.js — DOMContentLoaded</div></div>
+      <div class="vn w ca">sessionStorage.getItem('peartech-last-order') → parse → affiche</div>
+      <div class="va">↓<div class="val">sessionStorage.removeItem() — consommation unique</div></div>
+      <div class="vn w cgr">Page propre — rechargement ne relit rien (fallback s'affiche)</div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 01 SESSION STORAGE ══ -->
+<div class="sec" id="session">
+  <div class="slabel">01 — Lecture du sessionStorage</div>
+  <h2>Lire, parser, et consommer les données</h2>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">orderData</span>;
+<span class="kw">const</span> <span class="vr">stored</span> = sessionStorage.<span class="fn">getItem</span>(<span class="s">'peartech-last-order'</span>);
+
+<span class="kw">if</span> (stored) {
+    <span class="kw">try</span> {
+        orderData = JSON.<span class="fn">parse</span>(stored);        <span class="cm">// Convertit la chaîne JSON en objet JS</span>
+        sessionStorage.<span class="fn">removeItem</span>(<span class="s">'peartech-last-order'</span>); <span class="cm">// ← Usage unique</span>
+    } <span class="kw">catch</span> (e) {
+        console.<span class="fn">warn</span>(<span class="s">'Impossible de parser peartech-last-order'</span>, e);
+        <span class="cm">// orderData reste undefined → fallback s'active</span>
+    }
+}</pre></div>
+
+  <div class="box info"><span class="bi">🗑️</span><div><b>Pourquoi removeItem() immédiatement après la lecture ?</b> Pour garantir que ces données ne sont affichées qu'<b>une seule fois</b>. Si l'utilisateur appuie sur F5 (rafraîchit la page), <ic>getItem</ic> retourne <ic>null</ic>, <ic>orderData</ic> reste <ic>undefined</ic>, et le fallback avec des données fictives s'affiche à la place.</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Structure de l'objet orderData attendu</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--code);border-radius:10px;padding:1.1rem 1.3rem;line-height:2;color:var(--t2);">
+      {<br>
+      &nbsp;&nbsp;<span style="color:#f7d97a;">orderNumber</span>: <span style="color:#86efac;">"CMD-847291"</span>,<br>
+      &nbsp;&nbsp;<span style="color:#f7d97a;">email</span>:       <span style="color:#86efac;">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553f30343b153120253a3b217b3327">[email&#160;protected]</a>"</span>,<br>
+      &nbsp;&nbsp;<span style="color:#f7d97a;">delivery</span>: {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">name</span>:    <span style="color:#86efac;">"Jean Dupont"</span>,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">address</span>: <span style="color:#86efac;">"15 rue de la Paix, 75001 Paris"</span>,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">mode</span>:    <span style="color:#86efac;">"Livraison standard (3-5 jours)"</span>,<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">payment</span>: <span style="color:#86efac;">"Carte bancaire **** 4242"</span><br>
+      &nbsp;&nbsp;},<br>
+      &nbsp;&nbsp;<span style="color:#f7d97a;">items</span>: [<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#f7d97a;">name</span>: <span style="color:#86efac;">"iPhone 15 Pro Max"</span>, <span style="color:#f7d97a;">quantity</span>: <span style="color:#f7d97a;">1</span>, <span style="color:#f7d97a;">price</span>: <span style="color:#f7d97a;">1479</span> },<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#555e74;">// … autres articles</span><br>
+      &nbsp;&nbsp;],<br>
+      &nbsp;&nbsp;<span style="color:#f7d97a;">shipping</span>: <span style="color:#f7d97a;">5.90</span>,<br>
+      &nbsp;&nbsp;<span style="color:#f7d97a;">total</span>:    <span style="color:#f7d97a;">1484.90</span><br>
+      }
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 02 FALLBACK ══ -->
+<div class="sec" id="fallback">
+  <div class="slabel">02 — Données de secours</div>
+  <h2>Le fallback — afficher quelque chose si sessionStorage est vide</h2>
+  <p>Si <ic>orderData</ic> est <ic>undefined</ic> (sessionStorage vide, page rafraîchie, ou JSON corrompu), un objet de démonstration prend le relais. La page ne reste jamais vide.</p>
+<div class="diag">
+  <div class="dtitle">Lecture et consommation de sessionStorage — séquence critique</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;">
+    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);padding-top:.1rem;">①</div>
+      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7dd3fc;">getItem('peartech-last-order') → string JSON ou null</div>
+    </div>
+    <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);">↓ si non-null</div>
+    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);padding-top:.1rem;">②</div>
+      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#f7d97a;">JSON.parse(stored) → objet orderData en mémoire</div>
+    </div>
+    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;padding-top:.1rem;">③</div>
+      <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fda4af;">removeItem('peartech-last-order') ← immédiatement après parse</div>
+    </div>
+    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;padding-top:.1rem;">④</div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">renderConfirmation(orderData) → injecte dans 9 zones DOM</div>
+    </div>
+    <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:7px;padding:.45rem .7rem;font-size:.73rem;color:var(--t2);">Si parse échoue (JSON corrompu) → catch → orderData = undefined → fallback générique affiché, pas de crash</div>
+    <div style="background:rgba(244,63,94,.05);border:1px solid rgba(244,63,94,.15);border-radius:7px;padding:.45rem .7rem;font-size:.73rem;color:var(--t2);">Rechargement F5 → getItem retourne null (déjà supprimé) → fallback. Comportement intentionnel.</div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (!orderData) {
+    orderData = {
+        orderNumber: <span class="s">'CMD-'</span> + Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>() * <span class="nm">1000000</span>), <span class="cm">// Numéro aléatoire</span>
+        email: <span class="s">'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf1fefaf5b5ffeeebf4f5efdbfef6faf2f7b5f8f4f6">[email&#160;protected]</a>'</span>,
+        delivery: {
+            name:    <span class="s">'Jean Dupont'</span>,
+            address: <span class="s">'15 rue de la Paix, 75001 Paris, France'</span>,
+            mode:    <span class="s">'Livraison standard (3-5 jours)'</span>,
+            payment: <span class="s">'Carte bancaire **** 4242'</span>
+        },
+        items: [
+            { name: <span class="s">'Ordinateur Portable Gamer X1'</span>, quantity: <span class="nm">1</span>, price: <span class="nm">1200.00</span> },
+            { name: <span class="s">'Souris sans fil Pro'</span>,          quantity: <span class="nm">1</span>, price: <span class="nm">50.00</span>   },
+            { name: <span class="s">'Sacoche de transport'</span>,         quantity: <span class="nm">1</span>, price: <span class="nm">30.00</span>   }
+        ],
+        shipping: <span class="nm">0</span>,
+        total:    <span class="nm">1280.00</span>
+    };
+}</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Quand le fallback s'active</div>
+    <div class="fork f2" style="max-width:700px;margin:0 auto;">
+      <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#6ee7b7;margin-bottom:.4rem;">orderData défini</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">sessionStorage contenait des données valides → commande réelle affichée</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">orderData undefined</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Page rafraîchie · Accès direct à la page · JSON corrompu · → données démo affichées</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 03 AFFICHAGE ══ -->
+<div class="sec" id="affichage">
+  <div class="slabel">03 — Injection dans le DOM</div>
+  <h2>Remplir 8 éléments HTML + générer la liste des articles</h2>
+<div class="schema">
+  <div class="schema-title">Les 8 zones DOM remplies par confirmation.js</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
+    <div style="display:flex;flex-direction:column;gap:.4rem;">
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#order-number</span>
+        <span style="font-size:.73rem;color:var(--t2);">CMD-K7X2-1706789012</span>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#customer-email</span>
+        <span style="font-size:.73rem;color:var(--t2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee4ebefe0ceebe3efe7e2a0ede1e3">[email&#160;protected]</a></span>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#delivery-name</span>
+        <span style="font-size:.73rem;color:var(--t2);">Jean Dupont</span>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#delivery-address</span>
+        <span style="font-size:.73rem;color:var(--t2);">12 rue de la Paix, Paris</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.4rem;">
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#delivery-mode</span>
+        <span style="font-size:.73rem;color:var(--t2);">Livraison standard</span>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#payment-method</span>
+        <span style="font-size:.73rem;color:var(--t2);">Carte bancaire</span>
+      </div>
+      <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#order-total</span>
+        <span style="font-size:.73rem;color:var(--t2);">1 134,09 €</span>
+      </div>
+      <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">#order-items</span>
+        <span style="font-size:.73rem;color:#7ee8b8;">loop articles → innerHTML</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Champs texte simples — remplissage direct</span>
+document.<span class="fn">getElementById</span>(<span class="s">'order-number'</span>).textContent     = orderData.orderNumber;
+document.<span class="fn">getElementById</span>(<span class="s">'customer-email'</span>).textContent    = orderData.email;
+document.<span class="fn">getElementById</span>(<span class="s">'delivery-name'</span>).textContent     = orderData.delivery.name;
+document.<span class="fn">getElementById</span>(<span class="s">'delivery-address'</span>).textContent  = orderData.delivery.address;
+document.<span class="fn">getElementById</span>(<span class="s">'delivery-mode'</span>).textContent     = orderData.delivery.mode;
+document.<span class="fn">getElementById</span>(<span class="s">'payment-method'</span>).textContent    = orderData.delivery.payment;
+
+<span class="cm">// Liste d'articles — génération HTML</span>
+<span class="kw">const</span> <span class="vr">itemsContainer</span> = document.<span class="fn">getElementById</span>(<span class="s">'order-items'</span>);
+<span class="kw">let</span> <span class="vr">itemsHtml</span> = <span class="s">''</span>;
+orderData.items.<span class="fn">forEach</span>(item => {
+    itemsHtml += <span class="s">`&lt;div class="order-item"&gt;
+        &lt;span class="item-name"&gt;${item.quantity}x ${item.name}&lt;/span&gt;
+        &lt;span class="item-price"&gt;${item.price.toFixed(2).replace('.',',')} €&lt;/span&gt;
+    &lt;/div&gt;`</span>;
+});
+itemsContainer.innerHTML = itemsHtml;
+
+<span class="cm">// Livraison : "Gratuit" si 0, sinon prix formaté</span>
+<span class="kw">const</span> <span class="vr">shippingText</span> = orderData.shipping === <span class="nm">0</span>
+    ? <span class="s">'Gratuit'</span>
+    : orderData.shipping.<span class="fn">toFixed</span>(<span class="nm">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>,<span class="s">','</span>) + <span class="s">' €'</span>;
+document.<span class="fn">getElementById</span>(<span class="s">'shipping-cost'</span>).textContent = shippingText;
+document.<span class="fn">getElementById</span>(<span class="s">'total-paid'</span>).textContent = orderData.total.<span class="fn">toFixed</span>(<span class="nm">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>,<span class="s">','</span>) + <span class="s">' €'</span>;</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Table de correspondance — propriétés → IDs DOM</div>
+    <table class="tbl">
+      <thead><tr><th>ID HTML</th><th>Propriété orderData</th></tr></thead>
+      <tbody>
+        <tr><td class="tc">order-number</td><td style="color:var(--t2)"><ic>orderData.orderNumber</ic></td></tr>
+        <tr><td class="tc">customer-email</td><td style="color:var(--t2)"><ic>orderData.email</ic></td></tr>
+        <tr><td class="tc">delivery-name</td><td style="color:var(--t2)"><ic>orderData.delivery.name</ic></td></tr>
+        <tr><td class="tc">delivery-address</td><td style="color:var(--t2)"><ic>orderData.delivery.address</ic></td></tr>
+        <tr><td class="tc">delivery-mode</td><td style="color:var(--t2)"><ic>orderData.delivery.mode</ic></td></tr>
+        <tr><td class="tc">payment-method</td><td style="color:var(--t2)"><ic>orderData.delivery.payment</ic></td></tr>
+        <tr><td class="tc">order-items</td><td style="color:var(--t2)"><ic>orderData.items[]</ic> — généré via forEach + innerHTML</td></tr>
+        <tr><td class="tc">shipping-cost</td><td style="color:var(--t2)"><ic>orderData.shipping</ic> — "Gratuit" si 0</td></tr>
+        <tr><td class="tc">total-paid</td><td style="color:var(--t2)"><ic>orderData.total</ic> — formaté en français</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<hr>
+
+<!-- ══ 04 PANIER ══ -->
+<div class="sec" id="panier">
+  <div class="slabel">04 — Nettoyage du panier</div>
+  <h2>Vider le panier après confirmation</h2>
+<div class="diag">
+  <div class="dtitle">Vider le panier après confirmation — pourquoi et comment</div>
+  <div style="display:flex;flex-direction:column;gap:.35rem;max-width:560px;">
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">Données orderData parsées avec succès</div>
+    </div>
+    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ immédiatement après l'affichage</div>
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">PearTechCart.clear()</div>
+      <div class="flow-arr">→</div>
+      <div style="font-size:.73rem;color:var(--t2);">localStorage.removeItem('peartech-cart')</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.25);color:#fdba74;">sessionStorage.removeItem('peartech-last-order')</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Badge panier → 0</div>
+      <div class="flow-arr">→</div>
+      <div style="font-size:.73rem;color:var(--t2);">updateCartBadge() via PearTechCart</div>
+    </div>
+  </div>
+  <div style="margin-top:.7rem;font-size:.75rem;color:var(--t3);">Si l'utilisateur recharge la page : panier déjà vide + orderData supprimé → fallback générique affiché. C'est le comportement voulu.</div>
+</div>
+
+  <p>Une fois la commande confirmée, le panier doit être vidé. confirmation.js utilise l'API centralisée si disponible, sinon un fallback direct.</p>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (window.PearTechCart) {
+    window.PearTechCart.<span class="fn">clear</span>(); <span class="cm">// API panier.js → vide + met à jour badge</span>
+} <span class="kw">else</span> {
+    localStorage.<span class="fn">setItem</span>(<span class="s">'peartech-cart-count'</span>, <span class="s">'0'</span>); <span class="cm">// Fallback direct</span>
+}
+
+<span class="kw">const</span> <span class="vr">badge</span> = document.<span class="fn">getElementById</span>(<span class="s">'cart-count'</span>);
+<span class="kw">if</span> (badge) {
+    badge.textContent    = <span class="s">'0'</span>;
+    badge.style.display  = <span class="s">'none'</span>; <span class="cm">// Cache le badge quand il est à 0</span>
+}</pre></div>
+
+  <div class="sn"><span class="sni">💡</span><span>Le localStorage <ic>'peartech-cart'</ic> lui-même n'est pas vidé ici — <ic>PearTechCart.clear()</ic> s'en charge. En fallback, seul le compteur est mis à zéro. Pour une robustesse maximale, il faudrait aussi faire <ic>localStorage.removeItem('peartech-cart')</ic> dans le fallback.</span></div>
+</div>
+<hr>
+
+<!-- ══ RECAP ══ -->
+<div class="sec" id="recap">
+  <div class="slabel">05 — Récapitulatif</div>
+  <h2>Vue d'ensemble — séquence complète</h2>
+  <div class="diag">
+    <div class="dtitle">Flux de confirmation.js — du chargement à l'affichage</div>
+    <div class="vc">
+      <div class="vn w cgr">DOMContentLoaded</div>
+      <div class="va">↓<div class="val">sessionStorage.getItem('peartech-last-order')</div></div>
+    </div>
+    <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
+      <div class="fc">
+        <div class="fl flg" style="font-size:.6rem;">Données trouvées</div>
+        <div class="vn ca" style="font-size:.7rem;">JSON.parse(stored)<br>removeItem() — consommation</div>
+      </div>
+      <div class="fc">
+        <div class="fl flr" style="font-size:.6rem;">Absent / corrompu</div>
+        <div class="vn cy" style="font-size:.7rem;">orderData = objet fallback<br>avec CMD-aléatoire</div>
+      </div>
+    </div>
+    <div class="vc" style="margin-top:.5rem;">
+      <div class="va">↓<div class="val">les deux chemins convergent ici</div></div>
+      <div class="vn w cgr">Injection dans 9 éléments DOM (textContent + innerHTML)</div>
+      <div class="va">↓</div>
+      <div class="vn w ca">PearTechCart.clear() ou fallback localStorage</div>
+      <div class="va">↓</div>
+      <div class="vn w cgr">Badge cart-count → "0" → display:none</div>
+    </div>
+  </div>
+  <div style="margin-top:1.5rem;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25

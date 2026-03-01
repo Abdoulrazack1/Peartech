@@ -146,7 +146,8 @@
         authDiv.innerHTML = `
             <div class="auth-container">
                 <div class="auth-logo">
-                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech" class="auth-logo-img">
+                    <img src="asset/image/LogoProjetEcf.png" alt="PearTech" class="auth-logo-img"
+             onerror="this.onerror=null;this.style.display='none';this.insertAdjacentText('afterend','PearTech');">
                     <div>
                         <div class="auth-logo-title">PearTech</div>
                         <div class="auth-logo-sub">Mon espace client</div>
@@ -699,7 +700,9 @@
                 <div class="photo-container">
                     <div class="photo-placeholder" id="photo-preview">
                         ${user.photo
-                            ? `<img src="${user.photo}" alt="Photo de profil">`
+                            ? `<img src="${user.photo}"
+                  alt="Photo de profil de ${user.prenom || ''} ${user.nom || ''}"
+                  onerror="this.onerror=null;this.src='/asset/image/no-image.png';">`
                             : '<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'}
                     </div>
                     <div class="photo-upload">

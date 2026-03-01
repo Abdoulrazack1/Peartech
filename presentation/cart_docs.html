@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — cart.js</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#fb923c;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;}
+  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;}
+  nav a:hover{background:var(--bg3);color:var(--t);}
+  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+  .hero h1 span{color:var(--a);}
+  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+  .sec p b{color:var(--t);font-weight:700;}
+  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#fdba74;white-space:nowrap;}
+  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+  .vc{display:flex;flex-direction:column;align-items:center;}
+  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+  .vn.w{max-width:720px;}
+  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+  .cb{background:rgba(251,146,60,.11);border:1px solid rgba(251,146,60,.4);color:#fdba74;}
+  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+  .cbl{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
+  .fc .vn{width:100%;max-width:100%;}
+  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+  .box .bi{font-size:1.25rem;flex-shrink:0;}
+  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+  .box b{font-weight:700;}
+  .box ic{background:rgba(255,255,255,.09);border:none;}
+  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+  .kw{color:#c084fc}.fn{color:#fdba74}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+  .grow:last-child{border-bottom:none;}
+  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+  .tbl tr:last-child td{border-bottom:none;}
+  .tc{font-family:'JetBrains Mono',monospace;color:#fdba74;font-size:.76rem;}
+  .tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+  .tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+  .tli{position:relative;margin-bottom:1.8rem;}
+  .tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+  .tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+  .tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+  .tlt{font-size:.95rem;font-weight:700;}
+  .tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
+  .tlb ic{background:var(--bg3);border:1px solid var(--border);}
+  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+  .sni{font-size:.95rem;flex-shrink:0;}
+  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+
+  /* ─── CARTE INTERNE ─── */
+  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
+  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+  .carte-item b{color:var(--t);font-weight:700;}
+  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+
+
+  /* ─── EXTRA SCHEMAS ─── */
+  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+  .ls-key{font-weight:700;margin-bottom:.25rem;}
+  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .cmp-box{border-radius:11px;padding:1rem;}
+  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .cmp-item:last-child{border-bottom:none;}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+
+  /* pass3 */
+  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
+  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+  .mini-box{border-radius:9px;padding:.75rem .9rem;}
+  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nl">cart.js</div>
+  <a href="#diff">panier vs cart</a>
+  <a href="#chargement">Chargement</a>
+  <a href="#render">Rendu</a>
+  <a href="#totaux">Totaux</a>
+  <a href="#promo">Promo</a>
+  <a href="#checkout">Checkout</a>
+  <a href="#reco">Recommandations</a>
+  <a href="#recap">Récap</a>
+</nav>
+<div class="page">
+
+<div class="hero">
+  <div class="htag">Documentation · niveau débutant absolu</div>
+
+<!-- CARTE INTERNE DIAGRAM -->
+<div class="carte">
+  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
+  <div class="carte-body">
+    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="carte-item"><b>localStorage peartech-cart</b><br><span style="color:var(--t3);font-size:.71rem;">articles du panier</span></div>
+<div class="carte-item"><b>window.PearTechCart</b><br><span style="color:var(--t3);font-size:.71rem;">API panier globale</span></div>
+<div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">recommandations aléatoires</span></div>
+<div class="carte-item"><b>Input code promo</b><br><span style="color:var(--t3);font-size:.71rem;">validPromoCodes{}</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#facc1522;color:#facc15;border:1px solid #facc1544;">⚙️ TRAITEMENTS</div>
+<div class="carte-item"><b>renderCart()</b><br><span style="color:var(--t3);font-size:.71rem;">génère le HTML du panier</span></div>
+<div class="carte-item"><b>calculateTotals()</b><br><span style="color:var(--t3);font-size:.71rem;">sous-total, promo, total</span></div>
+<div class="carte-item"><b>applyPromoCode(code)</b><br><span style="color:var(--t3);font-size:.71rem;">validation + discount</span></div>
+<div class="carte-item"><b>loadRecommendations()</b><br><span style="color:var(--t3);font-size:.71rem;">produits suggérés aléatoires</span></div>
+</div>
+    <div class="carte-arrow">→</div>
+    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>sessionStorage peartech-promo</b><br><span style="color:var(--t3);font-size:.71rem;">{code, discount} → paiement.js</span></div>
+<div class="carte-item"><b>Redirect page_paiement.html</b><br><span style="color:var(--t3);font-size:.71rem;">après validation</span></div>
+</div>
+  </div>
+</div>
+<!-- END CARTE -->
+
+  <h1>Comprendre<br><span>cart.js</span></h1>
+  <p>Ce fichier gère exclusivement la page panier (<ic>page_panier.html</ic>). Il lit les articles sauvegardés, les affiche, permet de modifier les quantités, applique des codes promo, calcule les totaux, et redirige vers le paiement en transmettant la promo via <ic>sessionStorage</ic>.</p>
+  <div class="fbadge"><div class="dot"></div>cart.js · ~250 lignes · page_panier.html uniquement · 6 codes promo</div>
+</div>
+
+<div class="sec" id="diff">
+  <div class="slabel">00 — Distinction fondamentale</div>
+  <h2>panier.js vs cart.js — deux fichiers, deux rôles</h2>
+<div class="schema">
+  <div class="schema-title">panier.js vs cart.js — qui fait quoi</div>
+  <div class="compare-grid">
+    <div class="cmp-box" style="background:rgba(110,231,183,.06);border:1px solid rgba(110,231,183,.25);">
+      <div class="cmp-title" style="color:#7ee8b8;">panier.js — le moteur (toutes les pages)</div>
+      <div class="cmp-item">✅ Écrit dans localStorage</div>
+      <div class="cmp-item">✅ Expose <ic>window.PearTechCart</ic></div>
+      <div class="cmp-item">✅ Écoute les clics "Ajouter" sur tout le site</div>
+      <div class="cmp-item">✅ Met à jour le badge du header</div>
+      <div class="cmp-item">✅ Émet <ic>productAddedToCart</ic></div>
+      <div class="cmp-item">🚫 N'affiche pas de récapitulatif</div>
+    </div>
+    <div class="cmp-box" style="background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.25);">
+      <div class="cmp-title" style="color:#fde68a;">cart.js — l'interface (page_panier.html uniquement)</div>
+      <div class="cmp-item">✅ Lit localStorage pour afficher les articles</div>
+      <div class="cmp-item">✅ Modifie les quantités via PearTechCart</div>
+      <div class="cmp-item">✅ Valide les codes promo</div>
+      <div class="cmp-item">✅ Calcule les totaux</div>
+      <div class="cmp-item">✅ Écrit <ic>sessionStorage['peartech-promo']</ic></div>
+      <div class="cmp-item">✅ Redirige vers page_paiement.html</div>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-size:.78rem;color:var(--t2);text-align:center;">Analogie : panier.js = la caisse enregistreuse invisible qui gère le stock · cart.js = le vendeur qui te montre le récapitulatif et prend ta commande</div>
+</div>
+
+
+  <div class="diag">
+    <div class="dtitle">Les deux fichiers "panier"</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
+      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:1.2rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">panier.js — TOUTES les pages</div>
+        <div style="font-size:.82rem;color:var(--t2);line-height:1.9;">
+          ✓ Écoute les clics "Ajouter au panier"<br>
+          ✓ Écrit dans localStorage<br>
+          ✓ Met à jour le badge de navigation<br>
+          ✓ Expose <ic>window.PearTechCart</ic><br>
+          ✗ Ne sait pas afficher le contenu du panier
+        </div>
+      </div>
+      <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.3);border-radius:12px;padding:1.2rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#fdba74;margin-bottom:.5rem;">cart.js — page_panier.html SEULEMENT</div>
+        <div style="font-size:.82rem;color:var(--t2);line-height:1.9;">
+          ✓ Lit localStorage et affiche les articles<br>
+          ✓ Modifie quantités avec +/-<br>
+          ✓ Applique des codes promo<br>
+          ✓ Calcule sous-total / livraison / total<br>
+          ✓ Transmet la promo vers le paiement
+        </div>
+      </div>
+    </div>
+    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span><b>Analogie :</b> panier.js est le caissier qui enregistre chaque ajout dans le caddie. cart.js est l'écran de caisse qui affiche le contenu complet et calcule le total.</span></div>
+  </div>
+
+  <div class="glos">
+    <div class="glos-head">📖 Termes nouveaux dans cart.js</div>
+    <div class="grow"><div class="gterm">sessionStorage</div><div class="gdef">Comme localStorage mais effacé à la fermeture de l'onglet. Utilisé pour transporter la promo de la page panier vers la page paiement. La promo ne doit pas persister indéfiniment.</div></div>
+    <div class="grow"><div class="gterm">.splice(index, 1)</div><div class="gdef">Supprime 1 élément à la position <ic>index</ic> en modifiant le tableau original sur place. <ic>cartItems.splice(2, 1)</ic> supprime l'article à l'index 2.</div></div>
+    <div class="grow"><div class="gterm">[...tableau].sort()</div><div class="gdef">Le spread <ic>[...]</ic> crée une copie avant de trier. Sans ça, <ic>.sort()</ic> modifierait <ic>PearTechDB.products</ic> définitivement — cassant toutes les fonctions qui en dépendent.</div></div>
+    <div class="grow"><div class="gterm">renderCart()</div><div class="gdef">Recrée <b>entièrement</b> le HTML du panier à chaque appel. Quand une quantité change, tout est regénéré. Les écouteurs doivent être ré-attachés à chaque render.</div></div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="chargement">
+  <div class="slabel">01 — Chargement</div>
+  <h2>Lire le panier et normaliser les images</h2>
+  <p>La première chose que fait cart.js est de lire le panier depuis localStorage et de corriger un problème de rétrocompatibilité : selon la page d'origine, l'image peut être sous le nom <ic>image</ic> (string) ou <ic>images</ic> (tableau ou string).</p>
+<div class="diag">
+  <div class="dtitle">Normalisation du champ image — 3 formats d'entrée → 1 format unifié</div>
+  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:580px;">
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:.5rem;align-items:center;">
+      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#fda4af;">item.image = "phone.jpg"<br><span style="color:var(--t3);font-size:.6rem;">// champ image déjà présent</span></div>
+      <div style="text-align:center;color:var(--t3);">→</div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">item.image = "phone.jpg" ✓</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:.5rem;align-items:center;">
+      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#fda4af;">item.images = ["a.jpg","b.jpg"]<br><span style="color:var(--t3);font-size:.6rem;">// tableau, pas de .image</span></div>
+      <div style="text-align:center;color:var(--t3);">→</div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">item.image = "a.jpg" ✓<br><span style="color:var(--t3);font-size:.6rem;">// item.images[0]</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:.5rem;align-items:center;">
+      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#fda4af;">item.images = "a.jpg"<br><span style="color:var(--t3);font-size:.6rem;">// string dans images (legacy)</span></div>
+      <div style="text-align:center;color:var(--t3);">→</div>
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.6rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">item.image = "a.jpg" ✓<br><span style="color:var(--t3);font-size:.6rem;">// string directement</span></div>
+    </div>
+    <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:8px;padding:.5rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Résultat : tous les items ont item.image (string). renderCart() peut faire &lt;img src="${item.image}"&gt; sans condition.</div>
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">cartItems</span> = (JSON.<span class="fn">parse</span>(localStorage.<span class="fn">getItem</span>(CART_STORAGE_KEY)) || [])
+    .<span class="fn">map</span>(item => {
+        <span class="kw">if</span> (!item.image) {
+            <span class="kw">if</span> (Array.<span class="fn">isArray</span>(item.images) && item.images.length > <span class="nm">0</span>)
+                item.image = item.images[<span class="nm">0</span>];          <span class="cm">// images est un tableau → prend [0]</span>
+            <span class="kw">else if</span> (<span class="kw">typeof</span> item.images === <span class="s">'string'</span>)
+                item.image = item.images;                <span class="cm">// images est une string → copie</span>
+        }
+        <span class="kw">return</span> item;
+    });
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">3 cas de normalisation de l'image</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;">
+      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">Cas normal</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t2);">{image: "/img/iph.jpg"}</div>
+        <div style="margin-top:.4rem;font-size:.74rem;color:var(--t3);">→ rien à faire</div>
+      </div>
+      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">Tableau</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t2);">{images: ["/img/…"]}</div>
+        <div style="margin-top:.4rem;font-size:.74rem;color:#f7d97a;">→ image = images[0]</div>
+      </div>
+      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;text-align:center;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;margin-bottom:.4rem;">String legacy</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t2);">{images: "/img/…"}</div>
+        <div style="margin-top:.4rem;font-size:.74rem;color:#ff9090;">→ image = images</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="render">
+  <div class="slabel">02 — Affichage</div>
+  <h2>renderCart() — reconstruire le DOM à chaque changement</h2>
+
+  <div class="box warn"><span class="bi">⚠️</span><div><b>Pourquoi ré-attacher les événements à chaque render ?</b> <ic>cartContainer.innerHTML = html</ic> détruit et recrée tous les éléments DOM. Les anciens boutons +/- et leurs écouteurs disparaissent. Les nouveaux boutons créés n'ont aucun écouteur. <ic>renderCart()</ic> doit donc se terminer par <ic>querySelectorAll + addEventListener</ic> pour réinstaller tous les handlers.</div></div>
+
+  <div class="diag">
+    <div class="dtitle">Cycle complet d'un clic "+" — de l'action au DOM rafraîchi</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem;">
+      <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:9px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t2);margin-bottom:.5rem;">Avant le clic</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.8;">cartItems[0].quantity = <span style="color:#f7d97a;">1</span><br>DOM : "1 article" · total = "985,90 €"<br>Bouton + a son écouteur installé</div>
+      </div>
+      <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.3);border-radius:9px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fdba74;margin-bottom:.5rem;">Après le clic</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.8;">cartItems[0].quantity = <span style="color:#fdba74;">2</span><br>DOM : "2 articles" · total = "1 971,90 €"<br>Bouton + recréé avec nouvel écouteur</div>
+      </div>
+    </div>
+    <div class="vc">
+      <div class="vn w cb" style="font-size:.75rem;">1. cartItems[0].quantity++ — donnée en mémoire mise à jour</div>
+      <div class="va">↓</div>
+      <div class="vn w cgr" style="font-size:.75rem;">2. renderCart() — cartContainer.innerHTML = html<br>Ancien DOM détruit · Nouveau DOM créé · Nouveaux boutons sans écouteurs</div>
+      <div class="va">↓</div>
+      <div class="vn w cy" style="font-size:.75rem;">3. querySelectorAll('.plus').forEach(btn => addEventListener('click', …))<br>Tous les écouteurs réinstallés sur les nouveaux boutons</div>
+      <div class="va">↓</div>
+      <div class="vn w cg" style="font-size:.75rem;">4. calculateTotals() — nouveau sous-total et total affichés</div>
+      <div class="va">↓</div>
+      <div class="vn w cp" style="font-size:.75rem;">5. saveCart() — localStorage mis à jour + badge navigation sync</div>
+    </div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">Arbre décisionnel — clic sur le bouton −</div>
+    <div class="vc">
+      <div class="vn w cgr">Clic sur bouton − (data-index="1")</div>
+      <div class="va">↓</div>
+      <div class="vn w cy">cartItems[1].quantity > 1 ?</div>
+    </div>
+    <div class="fork f2" style="margin:.3rem auto 0;">
+      <div class="fc">
+        <div class="fl flg">OUI</div>
+        <div class="va">↓</div>
+        <div class="vn cg" style="font-size:.74rem;">quantity-- simplement</div>
+      </div>
+      <div class="fc">
+        <div class="fl flr">NON (qty = 1)</div>
+        <div class="va">↓</div>
+        <div class="vn cy" style="font-size:.74rem;">confirm("Supprimer ?")</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;width:100%;margin-top:.3rem;">
+          <div class="fc"><div class="fl flg" style="font-size:.6rem;">OK</div><div class="vn cr" style="font-size:.68rem;">.splice(1,1)<br>supprime l'article</div></div>
+          <div class="fc"><div class="fl flr" style="font-size:.6rem;">Annuler</div><div class="vn cgr" style="font-size:.68rem;">return<br>rien ne change</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="vc" style="margin-top:.4rem;">
+      <div class="va">↓</div>
+      <div class="vn w cgr">renderCart() + calculateTotals() + saveCart()</div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="totaux">
+  <div class="slabel">03 — Calcul</div>
+  <h2>calculateTotals() — la formule</h2>
+<div class="schema">
+  <div class="schema-title">calculateTotals() — exemple avec des vrais chiffres</div>
+  <div style="display:grid;gap:.4rem;max-width:580px;">
+    <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .8rem;background:var(--bg3);border-radius:7px;font-size:.77rem;">
+      <span style="color:var(--t2);">Sous-total brut (reduce qty × price)</span>
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--t);">1 249,00 €</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .8rem;background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.15);border-radius:7px;font-size:.77rem;">
+      <span style="color:#fde68a;">Code promo PEARTECH10 (−10%)</span>
+      <span style="font-family:'JetBrains Mono',monospace;color:#fde68a;">− 124,90 €</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .8rem;background:rgba(139,147,168,.05);border-radius:7px;font-size:.77rem;">
+      <span style="color:var(--t2);">Livraison standard</span>
+      <span style="font-family:'JetBrains Mono',monospace;color:var(--t);">+ 9,99 €</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;padding:.6rem .8rem;background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;font-size:.82rem;font-weight:700;">
+      <span style="color:#7ee8b8;">TOTAL</span>
+      <span style="font-family:'JetBrains Mono',monospace;color:#7ee8b8;">1 134,09 €</span>
+    </div>
+  </div>
+  <div style="margin-top:.8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">
+    subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)<br>
+    discount = promoActive ? subtotal * promoDiscount : 0<br>
+    total = subtotal - discount + shippingCost
+  </div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">calculateTotals</span>() {
+    <span class="kw">const</span> <span class="vr">subtotal</span> = cartItems.<span class="fn">reduce</span>((acc, item) => acc + (item.price * item.quantity), <span class="nm">0</span>);
+    <span class="kw">const</span> <span class="vr">shipping</span> = <span class="nm">5.90</span>;
+    <span class="kw">let</span>   <span class="vr">discount</span> = currentPromo ? subtotal * currentPromo.discount : <span class="nm">0</span>;
+    <span class="cm">// discount s'applique SUR le sous-total, pas sur sous-total+livraison</span>
+    <span class="kw">const</span> <span class="vr">total</span>    = subtotal + shipping - discount;
+
+    subtotalSpan.textContent = <span class="fn">formatPrice</span>(subtotal);
+    shippingSpan.textContent = <span class="fn">formatPrice</span>(shipping);
+    discountSpan.textContent = <span class="s">`-${<span class="fn">formatPrice</span>(discount)}`</span>;
+    totalSpan.textContent    = <span class="fn">formatPrice</span>(total);
+}
+<span class="cm">// formatPrice(1299) → "1299.00" → "1299,00" → "1 299,00 €"</span>
+<span class="cm">// toFixed(2).replace('.', ',') + ' €'</span>
+</pre></div>
+
+  <div class="diag">
+    <div class="dtitle">Exemple : panier à 2 articles + code PEARTECH10</div>
+    <div style="display:flex;flex-direction:column;gap:.4rem;max-width:500px;margin:0 auto;">
+      <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .9rem;background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.73rem;">
+        <span style="color:var(--t2);">iPhone 15 × 1</span><span style="color:#f7d97a;">1 479,00 €</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .9rem;background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.73rem;">
+        <span style="color:var(--t2);">AirPods Pro × 2</span><span style="color:#f7d97a;">579,00 €</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .9rem;background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.3);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.73rem;">
+        <span style="color:#fdba74;">Sous-total</span><span style="color:#fdba74;">2 058,00 €</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .9rem;background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.73rem;">
+        <span style="color:var(--t2);">Livraison</span><span style="color:var(--t2);">+ 5,90 €</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;padding:.5rem .9rem;background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.73rem;">
+        <span style="color:#7ee8b8;">PEARTECH10 (−10% du sous-total)</span><span style="color:#7ee8b8;">−205,80 €</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto;padding:.65rem .9rem;background:rgba(251,146,60,.1);border:2px solid rgba(251,146,60,.4);border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:700;">
+        <span style="color:#fdba74;">TOTAL</span><span style="color:#fdba74;">1 858,10 €</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">formatPrice() — pipeline de transformation du nombre au texte</div>
+    <div class="vc">
+      <div class="vn w cgr" style="font-size:.75rem;">Valeur brute : <span style="color:#f7d97a;">1858.1</span> — float JavaScript avec point décimal</div>
+      <div class="va">↓<div class="val">.toFixed(2) — force exactement 2 décimales</div></div>
+      <div class="vn w cy" style="font-size:.75rem;">"1858.10" — chaîne de caractères</div>
+      <div class="va">↓<div class="val">.replace('.', ',') — format français</div></div>
+      <div class="vn w cb" style="font-size:.75rem;">"1858,10" — virgule à la place du point anglais</div>
+      <div class="va">↓<div class="val">+ ' €' — ajout de l'unité</div></div>
+      <div class="vn w cg" style="font-size:.75rem;">"1858,10 €" — texte final affiché dans le DOM</div>
+    </div>
+    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span>JavaScript calcule avec le point décimal (<ic>1858.10</ic>). La France utilise la virgule (<ic>1858,10</ic>). Le <ic>.replace('.', ',')</ic> fait cette conversion. Sans lui, les prix seraient au format américain.</span></div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">saveCart() — synchronisation localStorage + badge</div>
+    <div class="vc">
+      <div class="vn w cgr" style="font-size:.75rem;">cartItems modifiés en mémoire JavaScript</div>
+      <div class="va">↓</div>
+      <div class="vn w cb" style="font-size:.75rem;">localStorage.setItem('peartech-cart', JSON.stringify(cartItems))<br><span style="font-weight:400;font-size:.67rem;">Tableau → texte JSON → stocké sur disque (persiste après fermeture)</span></div>
+      <div class="va">↓<div class="val">window.PearTechCart disponible ?</div></div>
+    </div>
+    <div class="fork f2" style="max-width:700px;margin:0 auto;">
+      <div class="fc">
+        <div class="fl flg" style="font-size:.6rem;">OUI — panier.js chargé</div>
+        <div class="va">↓</div>
+        <div class="vn cg" style="font-size:.7rem;">PearTechCart.updateCart(cartItems)<br>panier.js synchronise le badge</div>
+      </div>
+      <div class="fc">
+        <div class="fl" style="background:rgba(245,197,66,.15);color:#f7d97a;font-size:.6rem;">NON — fallback</div>
+        <div class="va">↓</div>
+        <div class="vn cy" style="font-size:.7rem;">Calcule total par reduce()<br>Met à jour le badge directement<br>Écrit peartech-cart-count</div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="promo">
+  <div class="slabel">04 — Codes promo</div>
+  <h2>Validation côté client</h2>
+<div class="diag">
+  <div class="dtitle">Validation d'un code promo côté client</div>
+  <div style="display:flex;flex-direction:column;gap:.35rem;max-width:580px;">
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">Saisie "PEARTECH10" + bouton Appliquer</div>
+    </div>
+    <div class="flow-row"><div class="flow-arr">↓</div><div style="font-size:.67rem;color:var(--t3);">code.toUpperCase().trim()</div></div>
+    <div class="flow-row">
+      <div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">VALID_PROMOS["PEARTECH10"] existe ?</div>
+    </div>
+    <div class="two-col" style="margin-top:.3rem;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;margin-bottom:.3rem;">❌ Code inconnu</div>
+        <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:8px;padding:.5rem .7rem;font-size:.73rem;color:var(--t2);">promoMessage.textContent = "Code invalide"<br>Couleur rouge · promoDiscount = 0</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;margin-bottom:.3rem;">✅ Code valide</div>
+        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:8px;padding:.5rem .7rem;font-size:.73rem;color:var(--t2);">promoDiscount = 0.10 (10%)<br>promoActive = true<br>Affiche "−10% appliqué ✓"<br>calculateTotals() relancé</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">VALID_PROMOS = {{'PEARTECH10': 0.10, 'SUMMER20': 0.20, 'VIP30': 0.30}} — objet hardcodé côté client (pas de vrai serveur)</div>
+</div>
+
+
+  <div class="box warn"><span class="bi">⚠️</span><div><b>Limitation de sécurité :</b> les codes sont dans le code JavaScript, visibles par n'importe qui via "Inspecter". Dans un vrai site, la validation se ferait côté serveur. Ici c'est une simulation pédagogique.</div></div>
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">validPromoCodes</span> = {
+    <span class="s">'PEARTECH10'</span>:  { discount: <span class="nm">0.10</span>, label: <span class="s">'-10%'</span> },
+    <span class="s">'PEARTECH20'</span>:  { discount: <span class="nm">0.20</span>, label: <span class="s">'-20%'</span> },
+    <span class="s">'BIENVENUE'</span>:   { discount: <span class="nm">0.05</span>, label: <span class="s">'-5% bienvenue'</span> },
+    <span class="s">'SUMMER25'</span>:    { discount: <span class="nm">0.25</span>, label: <span class="s">'-25% offre été'</span> },
+    <span class="s">'FIDELITE15'</span>:  { discount: <span class="nm">0.15</span>, label: <span class="s">'-15% fidélité'</span> },
+    <span class="s">'BACK2SCHOOL'</span>: { discount: <span class="nm">0.12</span>, label: <span class="s">'-12% rentrée'</span> },
+};
+
+<span class="cm">// Validation : code → lookup dans l'objet dictionnaire</span>
+<span class="kw">const</span> <span class="vr">code</span> = promoInput.value.<span class="fn">trim</span>().<span class="fn">toUpperCase</span>();
+<span class="cm">// .trim() supprime les espaces : "  PEARTECH10  " → "PEARTECH10"
+// .toUpperCase() normalise : "peartech10" → "PEARTECH10"</span>
+
+<span class="kw">if</span> (validPromoCodes[code]) {           <span class="cm">// lookup O(1) : cherche la clé "PEARTECH10"</span>
+    currentPromo = { code, discount: validPromoCodes[code].discount };
+    <span class="cm">// currentPromo est lu par calculateTotals() à chaque recalcul</span>
+}
+</pre></div>
+</div>
+<hr>
+
+<div class="sec" id="checkout">
+  <div class="slabel">05 — Paiement</div>
+  <h2>Transmettre la promo via sessionStorage</h2>
+<div class="schema">
+  <div class="schema-title">Passage de données vers paiement.js via sessionStorage</div>
+  <div class="chain-seq">
+    <div class="cs-row">
+      <div class="cs-num">1</div>
+      <div class="cs-tag" style="background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.35);color:#fde68a;">cart.js</div>
+      <div class="cs-desc">Utilisateur valide un code promo → <ic>validatePromoCode(code)</ic> → objet <ic>{code, discount}</ic></div>
+    </div>
+    <div class="cs-arrow">↓ localStorage ne suffit pas (paiement.js a besoin de savoir si une promo est active pour cette session)</div>
+    <div class="cs-row">
+      <div class="cs-num">2</div>
+      <div class="cs-tag" style="background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.35);color:#fde68a;">cart.js</div>
+      <div class="cs-desc">Clic "Commander" → <ic>sessionStorage.setItem('peartech-promo', JSON.stringify({code, discount}))</ic></div>
+    </div>
+    <div class="cs-arrow">↓ navigation vers page_paiement.html</div>
+    <div class="cs-row">
+      <div class="cs-num">3</div>
+      <div class="cs-tag" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;">paiement.js</div>
+      <div class="cs-desc">Lit <ic>sessionStorage.getItem('peartech-promo')</ic> → parse → applique la réduction dans <ic>renderSummary()</ic></div>
+    </div>
+    <div class="cs-arrow">↓ sessionStorage disparaît à la fermeture de l'onglet — la promo ne persiste pas indéfiniment</div>
+  </div>
+  <div style="margin-top:.8rem;font-size:.76rem;color:var(--t3);font-style:italic;">Pourquoi pas localStorage ? Car le code promo est lié à <strong style="color:var(--t2);">cette session d'achat précise</strong>. Une promo utilisée en janvier ne doit pas réapparaître en mars.</div>
+</div>
+
+
+  <div class="diag">
+    <div class="dtitle">localStorage vs sessionStorage</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7eb5ff;margin-bottom:.4rem;">localStorage</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Persiste après fermeture du navigateur. → Panier <ic>peartech-cart</ic> doit survivre entre sessions.</div>
+      </div>
+      <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.3);border-radius:10px;padding:.9rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;">sessionStorage</div>
+        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Effacé à la fermeture de l'onglet. → Promo <ic>peartech-promo</ic> ne doit durer que cette session.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">Flux promo panier → paiement</div>
+    <div class="vc">
+      <div class="vn w cb">cart.js — currentPromo = {code:"PEARTECH10", discount:0.10}</div>
+      <div class="va">↓<div class="val">sessionStorage.setItem('peartech-promo', JSON.stringify(currentPromo))</div></div>
+      <div class="vn w cgr">sessionStorage — '{"code":"PEARTECH10","discount":0.1}'</div>
+      <div class="va">↓<div class="val">window.location.href = 'page_paiement.html'</div></div>
+      <div class="vn w cg">paiement.js lit sessionStorage et applique la réduction</div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="sec" id="reco">
+  <div class="slabel">06 — Recommandations</div>
+  <h2>4 produits aléatoires — spread avant sort</h2>
+<div class="diag">
+  <div class="dtitle">4 produits aléatoires — spread avant sort, pourquoi ?</div>
+  <div class="two-col">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.4rem;">❌ Sans spread — mutation du tableau original</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--code);border-radius:8px;padding:.7rem;line-height:1.9;color:var(--t2);">products.sort(() => Math.random() - .5)<br><span style="color:#fda4af;">← trie products[] en place</span><br>2e appel → ordre différent<br><span style="color:#fda4af;">← allProducts est corrompu</span></div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">✅ Avec spread — copie, puis tri</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;background:var(--code);border-radius:8px;padding:.7rem;line-height:1.9;color:var(--t2);">[...products]<br>.sort(() => Math.random() - .5)<br>.slice(0, 4)<br><span style="color:#7ee8b8;">← allProducts intact</span></div>
+    </div>
+  </div>
+  <div style="margin-top:.7rem;font-size:.76rem;color:var(--t2);">Le spread <ic>[...arr]</ic> crée une copie superficielle (shallow copy) du tableau — seul le tableau est copié, pas les objets dedans. Parfait pour trier sans effets de bord.</div>
+</div>
+
+
+  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">shuffled</span> = [...allProducts].<span class="fn">sort</span>(() => <span class="nm">0.5</span> - Math.<span class="fn">random</span>());
+<span class="cm">// [...]  = copie du tableau — OBLIGATOIRE
+// Sans ça, .sort() mélange PearTechDB.products en place
+// → getProductsByCategory() renvoie des produits dans un ordre cassé
+// () => 0.5 - Math.random() : positif ou négatif aléatoire → mélange</span>
+<span class="kw">const</span> <span class="vr">recommendations</span> = shuffled.<span class="fn">slice</span>(<span class="nm">0</span>, <span class="nm">4</span>);
+
+<span class="cm">// Appel conditionnel : PearTechDB disponible immédiatement ou dans 500ms</span>
+<span class="kw">if</span> (window.PearTechDB) { <span class="fn">loadRecommendations</span>(); }
+<span class="kw">else</span> { <span class="fn">setTimeout</span>(<span class="fn">loadRecommendations</span>, <span class="nm">500</span>); }
+</pre></div>
+</div>
+<hr>
+
+<div class="sec" id="recap">
+  <div class="slabel">07 — Récapitulatif</div>
+  <h2>Le film complet</h2>
+<div class="diag">
+  <div class="dtitle">Le film complet de cart.js — de DOMContentLoaded à la redirection</div>
+  <div style="display:flex;flex-direction:column;gap:.25rem;max-width:620px;">
+    <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">load localStorage 'peartech-cart' + normalizeImage()</div></div>
+    <div class="flow-row"><div class="flow-arr" style="margin-left:2rem;">↓</div></div>
+    <div class="flow-row"><div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">renderCart()</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">DOM reconstruit + calculateTotals() + attachEvents()</div></div>
+    <div class="flow-row"><div class="flow-arr" style="margin-left:2rem;">↓</div></div>
+    <div class="flow-row"><div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">Clic qty ± / supprimer</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">PearTechCart API → saveCart() → renderCart() (reboucle)</div></div>
+    <div class="flow-row"><div class="flow-arr" style="margin-left:2rem;">↓</div></div>
+    <div class="flow-row"><div class="flow-box" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;">Code promo</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">validatePromoCode() → promoActive + calculateTotals()</div></div>
+    <div class="flow-row"><div class="flow-arr" style="margin-left:2rem;">↓</div></div>
+    <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Clic Commander</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">sessionStorage 'peartech-promo' → location = 'page_paiement.html'</div></div>
+  </div>
+</div>
+
+  <div class="tl">
+    <div class="tli"><div class="tld" style="background:var(--a4)"></div>
+      <div class="tlh"><div class="tls">Au chargement</div><div class="tlt">Lecture + normalisation</div></div>
+      <div class="tlb"><ic>localStorage → JSON.parse → .map()</ic> normalise <ic>image</ic>. Références DOM récupérées. <ic>renderCart()</ic> + <ic>calculateTotals()</ic> + <ic>saveCart()</ic> s'enchaînent.</div>
+    </div>
+    <div class="tli"><div class="tld" style="background:var(--a)"></div>
+      <div class="tlh"><div class="tls">En permanence</div><div class="tlt">Interactions</div></div>
+      <div class="tlb">Clics +/- → <ic>quantity++/--</ic> ou <ic>splice()</ic> après <ic>confirm()</ic>. Code promo → lookup dans <ic>validPromoCodes</ic> → <ic>calculateTotals()</ic>.</div>
+    </div>
+    <div class="tli"><div class="tld" style="background:var(--a3)"></div>
+      <div class="tlh"><div class="tls">Au démarrage, asynchrone</div><div class="tlt">Recommandations</div></div>
+      <div class="tlb"><ic>[...PearTechDB.products].sort()</ic> mélange une copie. <ic>.slice(0, 4)</ic> prend 4 produits. Si PearTechDB absent → <ic>setTimeout(500)</ic>.</div>
+    </div>
+    <div class="tli" style="margin-bottom:0"><div class="tld" style="background:var(--a5)"></div>
+      <div class="tlh"><div class="tls">Sur clic "Passer la commande"</div><div class="tlt">Transition paiement</div></div>
+      <div class="tlb">Promo → <ic>sessionStorage.setItem('peartech-promo', …)</ic>. Navigation vers <ic>page_paiement.html</ic>.</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

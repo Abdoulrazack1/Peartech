@@ -147,12 +147,18 @@
         return `
             <div class="product-gallery">
                 <div class="main-image" id="main-image">
-                    <img src="${product.images[0]}" alt="${product.name}">
+                    <img src="${product.images[0]}"
+                         alt="${product.name}"
+                         loading="lazy"
+                         onerror="this.onerror=null;this.src='/asset/image/no-image.png';">
                 </div>
                 <div class="thumbnail-list" id="thumbnail-list">
                     ${product.images.map((img, index) => `
                         <div class="thumbnail ${index === 0 ? 'active' : ''}" data-index="${index}">
-                            <img src="${img}" alt="Miniature ${index+1}">
+                            <img src="${img}"
+                                 alt="${product.name} — vue ${index + 1}"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='/asset/image/no-image.png';">
                         </div>
                     `).join('')}
                 </div>
@@ -368,7 +374,7 @@
                 <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Image précédente">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
                 </button>
-                <img class="lightbox-img" id="lightbox-img" src="" alt="">
+                <img class="lightbox-img" id="lightbox-img" src="" alt="Vue agrandie du produit">
                 <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Image suivante">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </button>
