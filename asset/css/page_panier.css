@@ -1,475 +1,511 @@
-/* page_panier.css  */
+/* page_panier.css */
 
+/* Titre principal de la page */
 .page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: var(--spacing-md) 0;
-    color: var(--text-primary);
+    font-size: 2rem;                /* Grande taille pour le titre */
+    font-weight: 700;               /* Gras */
+    margin: var(--spacing-md) 0;    /* Marge verticale avec variable d'espacement */
+    color: var(--text-primary);     /* Couleur principale du texte */
 }
 
-/* ── Layout principal ── */
+/*  Layout principal  */
+/* Grille à deux colonnes : liste d'articles à gauche, récapitulatif à droite */
 .cart-layout {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    align-items: start;
-    overflow: visible;
+    display: grid;                          /* Active la grille CSS */
+    grid-template-columns: 1fr 350px;       /* Colonne gauche prend l'espace restant, colonne droite fixe 350px */
+    gap: var(--spacing-lg);                 /* Espace entre les deux colonnes */
+    margin-bottom: var(--spacing-xl);       /* Marge sous le layout */
+    align-items: start;                      /* Aligne les deux colonnes par le haut */
+    overflow: visible;                        /* Évite de couper les éléments positionnés (sticky) */
 }
 
-/* ── Liste des articles ── */
+/*  Liste des articles (colonne gauche)  */
 .cart-items {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-md);
-    min-width: 0;
+    background: var(--secondary);           /* Fond légèrement différent du fond principal */
+    border: 1px solid var(--border);         /* Bordure subtile */
+    border-radius: 12px;                     /* Coins arrondis */
+    padding: var(--spacing-md);               /* Espace intérieur */
+    min-width: 0;                             /* Autorise le rétrécissement dans la grille */
 }
 
+/* Ligne d'un article dans le panier */
 .cart-item {
-    display: grid;
-    grid-template-columns: 100px 1fr auto auto;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md) 0;
-    border-bottom: 1px solid var(--border);
-    align-items: start;
+    display: grid;                                      /* Grille interne pour organiser les éléments */
+    grid-template-columns: 100px 1fr auto auto;         /* Image (100px) | détails (flexible) | actions (auto) | prix (auto) */
+    gap: var(--spacing-md);                              /* Espace entre les colonnes */
+    padding: var(--spacing-md) 0;                        /* Espace vertical entre les articles */
+    border-bottom: 1px solid var(--border);              /* Séparateur entre les articles */
+    align-items: start;                                   /* Aligne le contenu en haut de chaque cellule */
 }
 
+/* Dernier article : supprime le séparateur et le padding en bas */
 .cart-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+    border-bottom: none;                                  /* Pas de bordure */
+    padding-bottom: 0;                                    /* Pas de padding en bas */
 }
 
+/* Image de l'article */
 .item-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 8px;
-    overflow: hidden;
-    background: var(--background);
-    flex-shrink: 0;
+    width: 100px;                                         /* Largeur fixe */
+    height: 100px;                                        /* Hauteur fixe */
+    border-radius: 8px;                                   /* Coins arrondis */
+    overflow: hidden;                                     /* Cache les débordements de l'image */
+    background: var(--background);                         /* Fond pendant le chargement */
+    flex-shrink: 0;                                       /* Empêche la réduction dans un contexte flex (utile sur mobile) */
 }
 
 .item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 100%;                                           /* L'image remplit le conteneur */
+    height: 100%;                                          /* L'image remplit le conteneur */
+    object-fit: cover;                                     /* Recadre pour couvrir sans déformer */
+    display: block;                                        /* Supprime l'espace sous l'image */
 }
 
+/* Détails de l'article (nom, caractéristiques, options, stock) */
 .item-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    min-width: 0;
+    display: flex;                                         /* Colonne verticale */
+    flex-direction: column;                                /* Empile les informations */
+    gap: 0.3rem;                                           /* Petit espace entre les lignes */
+    min-width: 0;                                          /* Autorise le rétrécissement */
 }
 
+/* Nom du produit (lien vers la fiche produit) */
 .item-name {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    text-decoration: none;
-    word-break: break-word;
+    font-size: 1rem;                                       /* Taille standard */
+    font-weight: 600;                                      /* Semi-gras */
+    color: var(--text-primary);                            /* Couleur principale */
+    text-decoration: none;                                 /* Pas de soulignement */
+    word-break: break-word;                                /* Coupe les mots trop longs */
 }
 
 .item-name:hover {
-    color: var(--primary);
+    color: var(--primary);                                 /* Devient bleu au survol */
 }
 
+/* Spécifications techniques (ex: "A17 Pro - 8 Go RAM") */
 .item-specs {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.85rem;                                    /* Petit texte */
+    color: var(--text-muted);                              /* Couleur atténuée */
 }
 
+/* Options choisies (ex: "Couleur: Titane, Stockage: 256 Go") */
 .item-options {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    margin-top: 0.2rem;
-    font-style: italic;
+    font-size: 0.8rem;                                     /* Très petit */
+    color: var(--text-secondary);                          /* Couleur secondaire */
+    margin-top: 0.2rem;                                    /* Petit espace au-dessus */
+    font-style: italic;                                    /* Italique pour les distinguer */
 }
 
+/* Indicateur de disponibilité (en stock / rupture) */
 .item-stock {
-    font-size: 0.8rem;
-    color: #10b981;
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
+    font-size: 0.8rem;                                     /* Petit */
+    color: #10b981;                                         /* Vert pour "en stock" */
+    display: flex;                                          /* Aligne l'icône et le texte */
+    align-items: center;                                    /* Centrage vertical */
+    gap: 0.2rem;                                            /* Espace icône/texte */
 }
 
+/* Bloc actions (quantité + liens) */
 .item-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-end;
+    display: flex;                                          /* Colonne par défaut */
+    flex-direction: column;                                 /* Quantité au-dessus, liens en-dessous */
+    gap: 0.5rem;                                            /* Espace entre les deux groupes */
+    align-items: flex-end;                                  /* Aligne à droite sur desktop */
 }
 
+/* Contrôle de quantité (+ / - / input) */
 .quantity-control {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
+    display: flex;                                          /* Aligne les boutons et l'input horizontalement */
+    align-items: center;                                    /* Centrage vertical */
+    gap: 0.3rem;                                            /* Espace entre les éléments */
 }
 
+/* Boutons + et - */
 .quantity-btn {
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--border);
-    background: var(--background);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-primary);
-    font-family: inherit;
+    width: 30px;                                            /* Taille fixe carrée */
+    height: 30px;                                           /* Taille fixe carrée */
+    border: 1px solid var(--border);                        /* Bordure */
+    background: var(--background);                          /* Fond différent */
+    border-radius: 6px;                                     /* Coins arrondis */
+    cursor: pointer;                                        /* Curseur main */
+    transition: var(--transition-fast);                     /* Animation au survol */
+    display: flex;                                          /* Centre le contenu (icône ou texte) */
+    align-items: center;                                    /* Centrage vertical */
+    justify-content: center;                                /* Centrage horizontal */
+    color: var(--text-primary);                             /* Couleur du symbole */
+    font-family: inherit;                                   /* Hérite de la police */
 }
 
 .quantity-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: var(--primary);                           /* Bordure bleue au survol */
+    color: var(--primary);                                  /* Symbole bleu */
 }
 
+/* Champ de saisie de la quantité */
 .quantity-input {
-    width: 50px;
-    text-align: center;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 0.3rem;
-    background: var(--background);
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    font-family: inherit;
+    width: 50px;                                            /* Largeur fixe */
+    text-align: center;                                     /* Texte centré */
+    border: 1px solid var(--border);                        /* Bordure */
+    border-radius: 6px;                                     /* Coins arrondis */
+    padding: 0.3rem;                                        /* Espace intérieur */
+    background: var(--background);                          /* Fond */
+    color: var(--text-primary);                             /* Couleur du texte */
+    font-size: 0.9rem;                                      /* Taille standard */
+    font-family: inherit;                                   /* Hérite police */
 }
 
 .quantity-input:focus {
-    outline: none;
-    border-color: var(--primary);
+    outline: none;                                          /* Supprime l'outline native */
+    border-color: var(--primary);                           /* Bordure bleue au focus */
 }
 
+/* Bloc des prix (unitaire et total) */
 .item-price {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.2rem;
+    display: flex;                                          /* Colonne verticale */
+    flex-direction: column;                                 /* Empile les prix */
+    align-items: flex-end;                                  /* Aligné à droite */
+    gap: 0.2rem;                                            /* Petit espace */
 }
 
+/* Prix unitaire (petit et grisé) */
 .unit-price {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-bottom: 0.2rem;
+    font-size: 0.85rem;                                     /* Petit */
+    color: var(--text-muted);                               /* Atténué */
+    margin-bottom: 0.2rem;                                  /* Espace sous le prix unitaire */
 }
 
+/* Prix total pour la ligne (quantité * prix unitaire) */
 .total-price {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--primary);
-    white-space: nowrap;
+    font-size: 1.1rem;                                      /* Plus grand */
+    font-weight: 700;                                        /* Gras */
+    color: var(--primary);                                   /* Bleu pour mettre en valeur */
+    white-space: nowrap;                                     /* Empêche la coupure */
 }
 
+/* Liens sous l'article (ex: "Supprimer", "Ajouter aux favoris") */
 .item-links {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.3rem;
+    display: flex;                                           /* Aligne les liens horizontalement */
+    gap: 1rem;                                               /* Espace entre les liens */
+    margin-top: 0.3rem;                                      /* Petit espace au-dessus */
 }
 
 .item-links a {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    text-decoration: none;
-    cursor: pointer;
-    transition: color var(--transition-fast);
+    font-size: 0.8rem;                                       /* Petit texte */
+    color: var(--text-muted);                                /* Couleur discrète */
+    text-decoration: none;                                   /* Pas de soulignement par défaut */
+    cursor: pointer;                                         /* Curseur main */
+    transition: color var(--transition-fast);                /* Animation au survol */
 }
 
 .item-links a:hover {
-    color: var(--primary);
-    text-decoration: underline;
+    color: var(--primary);                                   /* Bleu au survol */
+    text-decoration: underline;                              /* Soulignement pour confirmer l'interaction */
 }
 
-/* ── Récapitulatif ── */
+/*  Récapitulatif (colonne droite)  */
 .cart-summary {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
-    height: fit-content;
-    position: sticky;
-    top: 80px;
-    align-self: start;
-    z-index: 1;
+    background: var(--secondary);                           /* Fond identique à la liste */
+    border: 1px solid var(--border);                         /* Bordure */
+    border-radius: 12px;                                     /* Coins arrondis */
+    padding: var(--spacing-lg);                              /* Espace intérieur généreux */
+    height: fit-content;                                      /* Hauteur selon le contenu */
+    position: sticky;                                         /* Reste visible en défilant */
+    top: 80px;                                                /* Distance depuis le haut (place sous l'en-tête) */
+    align-self: start;                                        /* S'aligne en haut de la colonne */
+    z-index: 1;                                               /* Au-dessus du contenu normal */
 }
 
+/* Titre du récapitulatif */
 .cart-summary h2 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-primary);
+    font-size: 1.2rem;                                       /* Taille modérée */
+    font-weight: 700;                                         /* Gras */
+    margin-bottom: var(--spacing-md);                         /* Espace sous le titre */
+    color: var(--text-primary);                               /* Couleur principale */
 }
 
+/* Ligne d'une information (sous-total, livraison, etc.) */
 .summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.8rem;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    display: flex;                                            /* Aligne libellé et valeur */
+    justify-content: space-between;                           /* Libellé à gauche, valeur à droite */
+    align-items: center;                                      /* Centrage vertical */
+    gap: 0.5rem;                                              /* Espace entre les deux */
+    margin-bottom: 0.8rem;                                    /* Espace entre les lignes */
+    font-size: 0.95rem;                                       /* Taille standard */
+    color: var(--text-secondary);                             /* Couleur secondaire */
 }
 
+/* Ligne du total général (mise en valeur) */
 .summary-row.total {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    border-top: 1px solid var(--border);
-    padding-top: 0.8rem;
-    margin-top: 0.8rem;
+    font-size: 1.2rem;                                        /* Plus grand */
+    font-weight: 700;                                          /* Gras */
+    color: var(--text-primary);                                /* Couleur principale */
+    border-top: 1px solid var(--border);                       /* Trait de séparation au-dessus */
+    padding-top: 0.8rem;                                       /* Espace au-dessus du trait */
+    margin-top: 0.8rem;                                        /* Espace au-dessus de la ligne */
 }
 
-/* ── Code promo ── */
+/*  Bloc code promo  */
 .promo-code {
-    margin: var(--spacing-md) 0;
-    padding: var(--spacing-md) 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    margin: var(--spacing-md) 0;                               /* Espace vertical autour */
+    padding: var(--spacing-md) 0;                              /* Espace interne vertical */
+    border-top: 1px solid var(--border);                       /* Ligne de séparation au-dessus */
+    border-bottom: 1px solid var(--border);                    /* Ligne de séparation en-dessous */
 }
 
+/* Label du champ promo */
 .promo-code label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
+    display: block;                                            /* Affiché en propre ligne */
+    font-size: 0.9rem;                                         /* Taille standard */
+    font-weight: 600;                                          /* Semi-gras */
+    margin-bottom: 0.5rem;                                     /* Espace sous le label */
+    color: var(--text-primary);                                /* Couleur principale */
 }
 
+/* Groupe input + bouton */
 .promo-input-group {
-    display: flex;
-    gap: 0.5rem;
+    display: flex;                                             /* Aligne horizontalement */
+    gap: 0.5rem;                                               /* Espace entre l'input et le bouton */
 }
 
+/* Champ de saisie du code promo */
 .promo-input-group input {
-    flex: 1;
-    min-width: 0;
-    padding: 0.7rem;
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 0.9rem;
-    transition: border-color var(--transition-fast);
+    flex: 1;                                                   /* Prend tout l'espace disponible */
+    min-width: 0;                                              /* Autorise le rétrécissement */
+    padding: 0.7rem;                                           /* Espace intérieur */
+    background: var(--background);                             /* Fond */
+    border: 1px solid var(--border);                           /* Bordure */
+    border-radius: 6px;                                        /* Coins arrondis */
+    color: var(--text-primary);                                /* Couleur du texte */
+    font-family: inherit;                                      /* Hérite police */
+    font-size: 0.9rem;                                         /* Taille standard */
+    transition: border-color var(--transition-fast);           /* Animation focus */
 }
 
 .promo-input-group input::placeholder {
-    color: var(--text-muted);
+    color: var(--text-muted);                                  /* Placeholder discret */
 }
 
 .promo-input-group input:focus {
-    outline: none;
-    border-color: var(--primary);
+    outline: none;                                             /* Supprime l'outline native */
+    border-color: var(--primary);                              /* Bordure bleue au focus */
 }
 
+/* Bouton "Appliquer" */
 .promo-input-group button {
-    padding: 0.7rem 1.2rem;
-    flex-shrink: 0;
+    padding: 0.7rem 1.2rem;                                    /* Espace intérieur */
+    flex-shrink: 0;                                            /* Ne rétrécit pas */
 }
 
+/* Message de confirmation ou d'erreur du code promo */
 .promo-message {
-    font-size: 0.8rem;
-    margin-top: 0.3rem;
+    font-size: 0.8rem;                                         /* Petit */
+    margin-top: 0.3rem;                                        /* Espace au-dessus */
 }
 
-.promo-message.success { color: #10b981; }
-.promo-message.error   { color: #ef4444; }
+.promo-message.success { color: #10b981; }                     /* Vert pour succès */
+.promo-message.error   { color: #ef4444; }                     /* Rouge pour erreur */
 
+/* Bouton de validation de la commande (pleine largeur) */
 .checkout-btn {
-    width: 100%;
-    margin-bottom: 1rem;
+    width: 100%;                                               /* Occupe toute la largeur du récap */
+    margin-bottom: 1rem;                                       /* Espace sous le bouton */
 }
 
+/* Lien pour continuer les achats */
 .continue-shopping {
-    display: block;
-    text-align: center;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-    margin-bottom: 2rem;
+    display: block;                                            /* Affiché en bloc pour le centrer */
+    text-align: center;                                        /* Centré */
+    font-size: 0.9rem;                                         /* Taille standard */
+    color: var(--text-secondary);                              /* Couleur secondaire */
+    text-decoration: none;                                     /* Pas de soulignement */
+    transition: color var(--transition-fast);                  /* Animation au survol */
+    margin-bottom: 2rem;                                       /* Espace sous le lien */
 }
 
 .continue-shopping:hover {
-    color: var(--primary);
+    color: var(--primary);                                     /* Bleu au survol */
 }
 
-/* ── Garanties ── */
+/*  Garanties et informations de confiance (sous le récapitulatif)  */
 .trust-info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.8rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border);
-    list-style: none;
-    padding-left: 0;
+    display: grid;                                             /* Grille 3 colonnes */
+    grid-template-columns: repeat(3, 1fr);                     /* 3 colonnes égales */
+    gap: 0.8rem;                                               /* Espace entre les items */
+    margin-top: 2rem;                                          /* Espace au-dessus */
+    padding-top: 1.5rem;                                       /* Espace interne avant la bordure */
+    border-top: 1px solid var(--border);                       /* Ligne de séparation avec le reste */
+    list-style: none;                                          /* Supprime les puces si c'est une liste */
+    padding-left: 0;                                           /* Supprime le padding par défaut des listes */
 }
 
+/* Élément de confiance (livraison, paiement, retour) */
 .trust-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    gap: 0.3rem;
+    display: flex;                                             /* Colonne verticale */
+    flex-direction: column;                                    /* Icône au-dessus du texte */
+    align-items: center;                                       /* Centré horizontalement */
+    text-align: center;                                        /* Texte centré */
+    font-size: 0.8rem;                                         /* Petit texte */
+    color: var(--text-muted);                                  /* Couleur discrète */
+    gap: 0.3rem;                                               /* Espace entre icône et texte */
 }
 
 .trust-item .material-symbols-outlined {
-    font-size: 1.5rem;
-    color: var(--primary);
-    margin-bottom: 0.3rem;
+    font-size: 1.5rem;                                         /* Taille de l'icône */
+    color: var(--primary);                                     /* Bleu pour correspondre à la marque */
+    margin-bottom: 0.3rem;                                     /* Espace sous l'icône */
 }
 
-/* ── Recommandations ── */
+/*  Recommandations de produits (bas de page)  */
 .recommendations {
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-xl);                             /* Grand espace au-dessus */
 }
 
 .recommendations h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-primary);
+    font-size: 1.5rem;                                         /* Titre de section */
+    font-weight: 700;                                          /* Gras */
+    margin-bottom: var(--spacing-md);                          /* Espace sous le titre */
+    color: var(--text-primary);                                /* Couleur principale */
 }
 
+/* Grille des produits recommandés */
 .recommendations-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    display: grid;                                             /* Grille responsive */
+    grid-template-columns: repeat(4, 1fr);                     /* 4 colonnes par défaut */
+    gap: var(--spacing-md);                                    /* Espace entre les cartes */
+    margin-bottom: var(--spacing-md);                          /* Espace sous la grille */
 }
 
+/* Carte d'un produit recommandé */
 .recommendation-card {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    text-align: center;
-    transition: var(--transition-normal);
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    background: var(--secondary);                              /* Fond */
+    border: 1px solid var(--border);                           /* Bordure */
+    border-radius: 8px;                                        /* Coins arrondis */
+    padding: 1rem;                                             /* Espace intérieur */
+    text-align: center;                                        /* Contenu centré */
+    transition: var(--transition-normal);                      /* Animation au survol */
+    display: flex;                                             /* Colonne verticale */
+    flex-direction: column;                                    /* Empile les éléments */
+    gap: 0.4rem;                                               /* Espace entre les éléments */
 }
 
 .recommendation-card:hover {
-    border-color: var(--primary);
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+    border-color: var(--primary);                              /* Bordure bleue */
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);          /* Ombre légère */
 }
 
+/* Image du produit recommandé */
 .recommendation-card img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 6px;
-    flex-shrink: 0;
+    width: 100%;                                               /* Pleine largeur */
+    height: 140px;                                             /* Hauteur fixe pour uniformité */
+    object-fit: cover;                                         /* Recadre sans déformer */
+    border-radius: 6px;                                        /* Coins arrondis */
+    flex-shrink: 0;                                            /* Ne rétrécit pas */
 }
 
+/* Nom du produit */
 .recommendation-card h3 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.3;
-    /* Limiter à 2 lignes pour uniformiser les cards */
+    font-size: 0.9rem;                                         /* Petit */
+    font-weight: 600;                                          /* Semi-gras */
+    color: var(--text-primary);                                /* Couleur principale */
+    line-height: 1.3;                                          /* Interligne serré */
+    /* Limite le texte à 2 lignes pour uniformiser la hauteur des cartes */
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 2;                                     /* 2 lignes max */
     -webkit-box-orient: vertical;
-    overflow: hidden;
+    overflow: hidden;                                          /* Cache le surplus */
 }
 
+/* Prix du produit recommandé */
 .recommendation-card p {
-    font-size: 0.95rem;
-    color: var(--primary);
-    font-weight: 700;
+    font-size: 0.95rem;                                        /* Taille standard */
+    color: var(--primary);                                     /* Bleu */
+    font-weight: 700;                                          /* Gras */
 }
 
+/* Bouton "Voir le produit" */
 .recommendation-card .btn-view-product {
-    margin-top: auto;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: var(--transition-normal);
-    display: block;
-    cursor: pointer;
+    margin-top: auto;                                          /* Pousse le bouton vers le bas */
+    padding: 0.5rem 0.8rem;                                    /* Espace intérieur */
+    font-size: 0.8rem;                                         /* Petit */
+    background: transparent;                                   /* Fond transparent */
+    border: 1px solid var(--border);                           /* Bordure */
+    border-radius: 6px;                                        /* Coins arrondis */
+    color: var(--text-primary);                                /* Texte principal */
+    text-decoration: none;                                     /* Pas de soulignement */
+    transition: var(--transition-normal);                      /* Animation */
+    display: block;                                            /* Bloc pour occuper la largeur */
+    cursor: pointer;                                           /* Curseur main */
 }
 
 .recommendation-card .btn-view-product:hover {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--primary);
+    border-color: var(--primary);                              /* Bordure bleue */
+    background: rgba(59, 130, 246, 0.1);                       /* Fond léger bleu */
+    color: var(--primary);                                     /* Texte bleu */
 }
 
+/* Centrage de texte (ex: pour le lien "Voir tous les produits") */
 .text-center {
     text-align: center;
 }
 
-/* ── Lien arrow ── */
+/* ── Lien avec flèche (pour "Voir tous les produits") ── */
 .link-arrow {
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: color var(--transition-fast);
+    color: var(--primary);                                     /* Bleu */
+    text-decoration: none;                                     /* Pas de soulignement */
+    font-size: 0.9rem;                                         /* Taille standard */
+    font-weight: 500;                                          /* Medium */
+    transition: color var(--transition-fast);                  /* Animation */
 }
 
 .link-arrow:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
+    color: var(--primary-hover);                               /* Bleu plus foncé */
+    text-decoration: underline;                                /* Soulignement */
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
+/*  Écrans larges jusqu'à 1200px  */
 @media (max-width: 1200px) {
     .recommendations-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);                 /* Passe à 3 colonnes */
     }
 }
 
+/*  Tablette large / petit desktop (≤ 1024px)  */
 @media (max-width: 1024px) {
     .cart-layout {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
+        grid-template-columns: 1fr;                            /* Passe en une seule colonne */
+        gap: var(--spacing-md);                                 /* Espace réduit entre les sections */
     }
 
     .cart-summary {
-        position: static;
-        order: -1;
+        position: static;                                       /* Annule le sticky */
+        order: -1;                                              /* Place le récapitulatif au-dessus de la liste */
     }
 
     .recommendations-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);                 /* 3 colonnes */
     }
 }
 
+/*  Tablette / mobile large (≤ 768px)  */
 @media (max-width: 768px) {
     .page-title {
-        font-size: 1.6rem;
+        font-size: 1.6rem;                                     /* Titre réduit */
     }
 
-    /* Sur mobile : layout en 2 colonnes image | détails
-       puis quantité + prix sur toute la largeur en dessous */
+    /* Réorganisation de la carte article en grille 2x2 */
     .cart-item {
-        grid-template-columns: 80px 1fr;
-        grid-template-rows: auto auto auto;
-        gap: var(--spacing-sm);
+        grid-template-columns: 80px 1fr;                       /* Image 80px, détails prennent le reste */
+        grid-template-rows: auto auto auto;                    /* Trois lignes automatiques */
+        gap: var(--spacing-sm);                                 /* Espace réduit */
     }
 
     /* Image : ligne 1, colonne 1 */
     .item-image {
         grid-column: 1;
         grid-row: 1;
-        width: 80px;
+        width: 80px;                                            /* Réduction de l'image */
         height: 80px;
     }
 
@@ -479,98 +515,99 @@
         grid-row: 1;
     }
 
-    /* Quantité + prix : ligne 2, toute la largeur */
+    /* Bloc actions (quantité + prix + liens) : ligne 2, toute la largeur */
     .item-actions {
-        grid-column: 1 / -1;
+        grid-column: 1 / -1;                                    /* Occupe les deux colonnes */
         grid-row: 2;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: row;                                    /* Passe en ligne pour mobile */
+        align-items: center;                                    /* Centrage vertical */
+        justify-content: space-between;                         /* Quantité à gauche, prix à droite */
         gap: 0.5rem;
     }
 
-    /* Prix : inline dans item-actions sur mobile */
+    /* Prix : réglages pour être dans la même ligne que la quantité */
     .item-price {
-        grid-column: unset;
+        grid-column: unset;                                     /* Annule les règles précédentes */
         grid-row: unset;
-        text-align: right;
+        text-align: right;                                      /* Aligné à droite */
     }
 
     .unit-price {
-        margin-bottom: 0;
-        font-size: 0.8rem;
+        margin-bottom: 0;                                       /* Supprime la marge pour rester sur la même ligne */
+        font-size: 0.8rem;                                      /* Légèrement réduit */
     }
 
     .recommendations-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);                  /* 2 colonnes */
     }
 
     .recommendation-card img {
-        height: 120px;
+        height: 120px;                                           /* Image moins haute */
     }
 
     .cart-summary {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md);                              /* Padding réduit */
     }
 }
 
+/*  Mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .page-title {
-        font-size: 1.4rem;
+        font-size: 1.4rem;                                      /* Titre encore réduit */
     }
 
     .cart-items {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-sm);                              /* Padding interne plus petit */
     }
 
     .cart-item {
-        grid-template-columns: 70px 1fr;
-        padding: var(--spacing-sm) 0;
+        grid-template-columns: 70px 1fr;                        /* Image encore plus petite */
+        padding: var(--spacing-sm) 0;                            /* Padding vertical réduit */
     }
 
     .item-image {
-        width: 70px;
+        width: 70px;                                             /* Image 70x70 */
         height: 70px;
     }
 
     .item-name {
-        font-size: 0.9rem;
+        font-size: 0.9rem;                                      /* Nom plus petit */
     }
 
     .total-price {
-        font-size: 1rem;
+        font-size: 1rem;                                         /* Prix total réduit */
     }
 
     .recommendations-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-sm);
+        grid-template-columns: repeat(2, 1fr);                  /* Toujours 2 colonnes */
+        gap: var(--spacing-sm);                                  /* Espace réduit */
     }
 
     .recommendation-card {
-        padding: 0.75rem;
+        padding: 0.75rem;                                        /* Padding interne réduit */
     }
 
     .recommendation-card img {
-        height: 100px;
+        height: 100px;                                           /* Image plus basse */
     }
 
     .trust-info {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
+        grid-template-columns: 1fr;                              /* Une seule colonne */
+        gap: 0.5rem;                                             /* Espace réduit */
     }
 
     .trust-item {
-        flex-direction: row;
-        justify-content: flex-start;
-        text-align: left;
-        gap: 0.5rem;
+        flex-direction: row;                                     /* Icône et texte en ligne */
+        justify-content: flex-start;                             /* Alignés à gauche */
+        text-align: left;                                        /* Texte à gauche */
+        gap: 0.5rem;                                             /* Espace icône/texte */
     }
 
     .promo-input-group {
-        flex-direction: column;
+        flex-direction: column;                                  /* Input et bouton l'un sous l'autre */
     }
 
     .promo-input-group button {
-        width: 100%;
+        width: 100%;                                             /* Bouton pleine largeur */
     }
 }

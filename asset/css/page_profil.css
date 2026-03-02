@@ -1,686 +1,749 @@
 /* page_profil.css */
 
-/* ── Layout principal ── */
+/*  Layout principal  */
+/* Grille à deux colonnes : sidebar fixe à gauche, contenu principal à droite */
 .profil-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: var(--spacing-lg);
-    margin: var(--spacing-lg) 0;
-    align-items: start;
-    overflow: visible;
+    display: grid;                          /* Active la grille CSS */
+    grid-template-columns: 280px 1fr;       /* Colonne gauche largeur fixe 280px, colonne droite prend l'espace restant */
+    gap: var(--spacing-lg);                  /* Espace entre les colonnes (variable CSS) */
+    margin: var(--spacing-lg) 0;              /* Marge verticale autour du layout */
+    align-items: start;                      /* Aligne les deux colonnes par le haut */
+    overflow: visible;                        /* Évite de couper le contenu sticky ou les débordements volontaires */
 }
 
-/* ── Sidebar ── */
+/*   Sidebar (colonne gauche)  */
 .profil-sidebar {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-md);
-    height: fit-content;
-    position: sticky;
-    top: 80px;
-    align-self: start;
-    z-index: 1;
+    background: var(--secondary);            /* Fond légèrement différent du fond principal */
+    border: 1px solid var(--border);          /* Bordure subtile */
+    border-radius: 12px;                      /* Coins arrondis */
+    padding: var(--spacing-md);                /* Espace intérieur confortable */
+    height: fit-content;                       /* La hauteur s'adapte au contenu */
+    position: sticky;                           /* Reste visible lors du défilement */
+    top: 80px;                                   /* Distance depuis le haut de la fenêtre (place sous l'en-tête) */
+    align-self: start;                           /* S'aligne en haut de la colonne (utile si d'autres éléments) */
+    z-index: 1;                                   /* Légèrement au-dessus du contenu mais sous les modales */
 }
 
+/* Titre de la sidebar (ex: "Mon compte") */
 .sidebar-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-primary);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border);
+    font-size: 1.2rem;                           /* Taille modérée */
+    font-weight: 700;                             /* Gras */
+    margin-bottom: var(--spacing-md);              /* Espace sous le titre */
+    color: var(--text-primary);                    /* Couleur texte principale */
+    padding-bottom: var(--spacing-sm);              /* Espace sous le texte avant la bordure */
+    border-bottom: 1px solid var(--border);        /* Ligne de séparation avec la navigation */
 }
 
+/* Navigation de la sidebar (liste de liens) */
 .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    display: flex;                                 /* Organisation en colonne via flex */
+    flex-direction: column;                        /* Empile les liens verticalement */
+    gap: 0.3rem;                                   /* Petit espace entre chaque lien */
 }
 
+/* Lien de navigation individuel */
 .sidebar-link {
-    display: block;
-    padding: 0.8rem 1rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    border-radius: 8px;
-    transition: var(--transition-fast);
-    font-size: 0.95rem;
-    cursor: pointer;
-    border: none;
-    background: none;
-    text-align: left;
-    width: 100%;
-    font-family: inherit;
+    display: block;                                /* Prend toute la largeur disponible */
+    padding: 0.8rem 1rem;                          /* Espace intérieur pour zone cliquable confortable */
+    color: var(--text-secondary);                   /* Couleur secondaire par défaut */
+    text-decoration: none;                          /* Pas de soulignement */
+    border-radius: 8px;                             /* Coins arrondis */
+    transition: var(--transition-fast);              /* Animation fluide au survol */
+    font-size: 0.95rem;                              /* Taille de police standard */
+    cursor: pointer;                                 /* Curseur main (même si ce n'est pas un <a>) */
+    border: none;                                    /* Supprime toute bordure par défaut */
+    background: none;                                /* Fond transparent */
+    text-align: left;                                /* Texte aligné à gauche */
+    width: 100%;                                     /* Occupe toute la largeur du parent */
+    font-family: inherit;                            /* Hérite de la police du site */
 }
 
+/* Survol d'un lien */
 .sidebar-link:hover {
-    background: rgba(59, 130, 246, 0.1);
-    color: var(--text-primary);
+    background: rgba(59, 130, 246, 0.1);            /* Fond bleu très léger */
+    color: var(--text-primary);                      /* Texte légèrement renforcé */
 }
 
+/* Lien actif (page en cours) */
 .sidebar-link.active {
-    background: var(--primary);
-    color: white;
+    background: var(--primary);                       /* Fond bleu principal */
+    color: white;                                      /* Texte blanc */
 }
 
-/* ── Contenu principal ── */
+/*   Contenu principal (colonne droite)  */
 .profil-content {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
-    min-height: 500px;
-    min-width: 0;
-    position: relative;
+    background: var(--secondary);                      /* Même fond que la sidebar pour homogénéité */
+    border: 1px solid var(--border);                    /* Bordure subtile */
+    border-radius: 12px;                                /* Coins arrondis */
+    padding: var(--spacing-lg);                          /* Espace intérieur généreux */
+    min-height: 500px;                                   /* Hauteur minimale pour éviter un affichage trop plat */
+    min-width: 0;                                        /* Autorise le rétrécissement en dessous du contenu (utile pour flex/grid) */
+    position: relative;                                  /* Pour d'éventuels positionnements internes */
 }
 
+/* Titre de la section active (ex: "Mes informations") */
 .content-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-lg);
-    color: var(--text-primary);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border);
+    font-size: 1.5rem;                                   /* Taille plus grande */
+    font-weight: 700;                                     /* Gras */
+    margin-bottom: var(--spacing-lg);                     /* Espace sous le titre */
+    color: var(--text-primary);                            /* Couleur principale */
+    padding-bottom: var(--spacing-sm);                      /* Espace avant la bordure */
+    border-bottom: 1px solid var(--border);                /* Ligne de séparation avec le contenu */
 }
 
-/* ── Section photo ── */
+/*  Section photo de profil  */
 .photo-section {
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-lg);
-    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--spacing-lg);                      /* Espace sous la section photo */
+    padding-bottom: var(--spacing-lg);                      /* Espace interne avant la bordure */
+    border-bottom: 1px solid var(--border);                /* Séparation avec le formulaire */
 }
 
+/* Conteneur pour la photo et le bouton d'upload */
 .photo-container {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-lg);
-    flex-wrap: wrap;
+    display: flex;                                          /* Aligne les éléments horizontalement */
+    align-items: center;                                    /* Centre verticalement */
+    gap: var(--spacing-lg);                                  /* Espace entre la photo et les boutons */
+    flex-wrap: wrap;                                         /* Passe à la ligne sur petits écrans */
 }
 
+/* Zone d'affichage de la photo (placeholder ou image) */
 .photo-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: var(--background);
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    flex-shrink: 0;
+    width: 100px;                                            /* Taille fixe */
+    height: 100px;                                           /* Taille fixe */
+    border-radius: 50%;                                      /* Forme ronde */
+    background: var(--background);                           /* Fond différent pour se distinguer */
+    border: 2px solid var(--border);                         /* Bordure discrète */
+    display: flex;                                           /* Centre l'icône ou l'image */
+    align-items: center;                                     /* Centrage vertical */
+    justify-content: center;                                 /* Centrage horizontal */
+    overflow: hidden;                                         /* Cache les débordements (pour l'image) */
+    flex-shrink: 0;                                           /* Empêche la réduction en dessous de 100px */
 }
 
+/* Icône par défaut quand pas de photo */
 .photo-placeholder .material-symbols-outlined {
-    font-size: 3rem;
-    color: var(--text-muted);
+    font-size: 3rem;                                         /* Grande icône */
+    color: var(--text-muted);                                 /* Couleur atténuée */
 }
 
+/* Image réelle chargée */
 .photo-placeholder img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%;                                              /* Remplit le conteneur */
+    height: 100%;                                             /* Remplit le conteneur */
+    object-fit: cover;                                        /* Recadre sans déformer */
 }
 
+/* Groupe du bouton d'upload et du texte indicatif */
 .photo-upload {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    display: flex;                                            /* Aligne les éléments verticalement */
+    flex-direction: column;                                   /* Colonne : bouton puis hint */
+    gap: 0.5rem;                                              /* Espace entre les éléments */
 }
 
+/* Texte indicatif (ex: "JPG, PNG max 2 Mo") */
 .photo-hint {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+    font-size: 0.8rem;                                        /* Petit texte */
+    color: var(--text-muted);                                 /* Couleur discrète */
 }
 
-/* ── Formulaire ── */
+/*  Formulaire de modification  */
+/* Ligne de formulaire avec deux champs côte à côte */
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    display: grid;                                            /* Grille pour deux colonnes égales */
+    grid-template-columns: 1fr 1fr;                           /* Deux colonnes de largeur égale */
+    gap: var(--spacing-md);                                    /* Espace entre les champs */
+    margin-bottom: var(--spacing-md);                          /* Espace sous la ligne */
 }
 
+/* Groupe de champ (label + input) */
 .form-group {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);                          /* Espace sous chaque groupe */
 }
 
+/* Label du champ */
 .form-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: var(--text-primary);
+    display: block;                                            /* Affiche le label en propre ligne */
+    font-size: 0.9rem;                                         /* Taille légèrement réduite */
+    font-weight: 600;                                          /* Semi-gras */
+    margin-bottom: 0.3rem;                                     /* Petit espace sous le label */
+    color: var(--text-primary);                                /* Couleur principale */
 }
 
+/* Champs de saisie : input, select, textarea */
 .form-group input,
 .form-group select,
 .form-group textarea {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    transition: var(--transition-fast);
-    font-family: inherit;
+    width: 100%;                                               /* Pleine largeur */
+    padding: 0.8rem 1rem;                                      /* Espace intérieur confortable */
+    background: var(--background);                             /* Fond différent de la carte pour contraste */
+    border: 1px solid var(--border);                           /* Bordure subtile */
+    border-radius: 8px;                                        /* Coins arrondis */
+    color: var(--text-primary);                                /* Couleur du texte saisi */
+    font-size: 0.95rem;                                        /* Taille standard */
+    transition: var(--transition-fast);                        /* Animation au focus/survol */
+    font-family: inherit;                                      /* Hérite de la police du site */
 }
 
+/* Focus sur un champ */
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    outline: none;                                             /* Supprime l'outline native */
+    border-color: var(--primary);                              /* Bordure bleue */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);            /* Halo léger pour meilleure accessibilité */
 }
 
+/* Survol d'un champ non focus */
 .form-group input:hover,
 .form-group select:hover {
-    border-color: var(--input-hover-blue-light);
+    border-color: var(--input-hover-blue-light);               /* Variable pour une couleur de survol (définie ailleurs) */
 }
 
+/* Barre d'actions du formulaire (boutons) */
 .form-actions {
-    display: flex;
-    gap: var(--spacing-sm);
-    margin-top: var(--spacing-lg);
-    flex-wrap: wrap;
+    display: flex;                                             /* Aligne les boutons horizontalement */
+    gap: var(--spacing-sm);                                     /* Espace entre les boutons */
+    margin-top: var(--spacing-lg);                              /* Espace au-dessus des actions */
+    flex-wrap: wrap;                                            /* Passe à la ligne si manque de place */
 }
 
-/* ── Boutons ── */
+/*  Boutons principaux  */
 .btn-primary {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.6rem;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    font-size: 0.9rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-family: inherit;
-    text-decoration: none;
+    background: var(--primary);                                /* Fond bleu */
+    color: white;                                              /* Texte blanc */
+    border: none;                                              /* Pas de bordure */
+    padding: 0.8rem 1.6rem;                                    /* Espace intérieur */
+    border-radius: 8px;                                        /* Coins arrondis */
+    font-weight: 600;                                          /* Semi-gras */
+    cursor: pointer;                                           /* Curseur main */
+    transition: var(--transition-normal);                      /* Animation douce */
+    font-size: 0.9rem;                                         /* Taille standard */
+    display: inline-flex;                                      /* Aligne l'icône et le texte */
+    align-items: center;                                       /* Centrage vertical */
+    gap: 0.3rem;                                               /* Espace icône/texte */
+    font-family: inherit;                                      /* Hérite de la police */
+    text-decoration: none;                                     /* Pour les liens qui ressemblent à des boutons */
 }
 
 .btn-primary:hover {
-    background: var(--primary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    background: var(--primary-hover);                          /* Fond bleu plus sombre */
+    transform: translateY(-2px);                               /* Légère élévation */
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);            /* Ombre portée */
 }
 
 .btn-secondary {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-    padding: 0.8rem 1.6rem;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    font-size: 0.9rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-family: inherit;
-    text-decoration: none;
+    background: transparent;                                   /* Fond transparent */
+    border: 1px solid var(--border);                           /* Bordure discrète */
+    color: var(--text-primary);                                /* Texte principal */
+    padding: 0.8rem 1.6rem;                                    /* Même taille que .btn-primary */
+    border-radius: 8px;                                        /* Coins arrondis */
+    font-weight: 500;                                          /* Medium */
+    cursor: pointer;                                           /* Curseur main */
+    transition: var(--transition-fast);                        /* Animation */
+    font-size: 0.9rem;                                         /* Taille standard */
+    display: inline-flex;                                      /* Aligne icône et texte */
+    align-items: center;                                       /* Centrage vertical */
+    gap: 0.3rem;                                               /* Espace icône/texte */
+    font-family: inherit;                                      /* Hérite police */
+    text-decoration: none;                                     /* Pour les liens */
 }
 
 .btn-secondary:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: var(--primary);                              /* Bordure bleue au survol */
+    color: var(--primary);                                     /* Texte bleu */
 }
 
+/* Bouton icon seul (sans fond, avec icône) */
 .btn-icon {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--text-secondary);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.4rem;
-    border-radius: 6px;
-    transition: var(--transition-fast);
-    font-family: inherit;
+    background: transparent;                                   /* Fond transparent */
+    border: none;                                              /* Pas de bordure */
+    cursor: pointer;                                           /* Curseur main */
+    color: var(--text-secondary);                              /* Couleur secondaire par défaut */
+    display: inline-flex;                                      /* Aligne l'icône */
+    align-items: center;                                       /* Centrage vertical */
+    justify-content: center;                                   /* Centrage horizontal */
+    padding: 0.4rem;                                           /* Espace autour de l'icône */
+    border-radius: 6px;                                        /* Coins arrondis */
+    transition: var(--transition-fast);                        /* Animation */
+    font-family: inherit;                                      /* Hérite police */
 }
 
 .btn-icon:hover {
-    color: var(--primary);
-    background: rgba(59, 130, 246, 0.1);
+    color: var(--primary);                                     /* Icône bleue */
+    background: rgba(59, 130, 246, 0.1);                       /* Fond léger */
 }
 
+/* Bouton "Suivi de commande" spécifique */
 .btn-suivi {
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 0.4rem 1rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: var(--transition-fast);
-    align-self: flex-start;
-    font-family: inherit;
-    white-space: nowrap;
+    background: var(--primary);                                /* Fond bleu */
+    color: white;                                              /* Texte blanc */
+    border: none;                                              /* Pas de bordure */
+    padding: 0.4rem 1rem;                                      /* Petit padding (compact) */
+    border-radius: 6px;                                        /* Coins arrondis */
+    font-size: 0.8rem;                                         /* Petit texte */
+    cursor: pointer;                                           /* Curseur main */
+    transition: var(--transition-fast);                        /* Animation */
+    align-self: flex-start;                                    /* Ne s'étire pas dans un conteneur flex */
+    font-family: inherit;                                      /* Hérite police */
+    white-space: nowrap;                                       /* Empêche le retour à la ligne */
 }
 
 .btn-suivi:hover {
-    background: var(--primary-hover);
+    background: var(--primary-hover);                          /* Fond plus sombre au survol */
 }
 
-/* ── Messages ── */
+/*  Messages de feedback (succès / erreur)  */
 .form-message {
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-    font-size: 0.9rem;
+    padding: 0.8rem 1rem;                                      /* Espace intérieur */
+    border-radius: 8px;                                        /* Coins arrondis */
+    margin-top: 1rem;                                          /* Espace au-dessus */
+    font-size: 0.9rem;                                         /* Taille standard */
 }
 
 .form-message.success {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid #10b981;
-    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);                       /* Fond vert très clair */
+    border: 1px solid #10b981;                                 /* Bordure verte */
+    color: #10b981;                                            /* Texte vert */
 }
 
 .form-message.error {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid #ef4444;
-    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);                        /* Fond rouge clair */
+    border: 1px solid #ef4444;                                 /* Bordure rouge */
+    color: #ef4444;                                            /* Texte rouge */
 }
 
-/* ── Section commandes ── */
+/*  Section "Mes commandes"  */
 .commandes-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: flex;                                             /* Colonne verticale */
+    flex-direction: column;                                    /* Empile les cartes de commande */
+    gap: 1rem;                                                 /* Espace entre les cartes */
 }
 
+/* Carte d'une commande */
 .commande-card {
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
+    background: var(--background);                             /* Fond différent de la carte parente */
+    border: 1px solid var(--border);                           /* Bordure subtile */
+    border-radius: 8px;                                        /* Coins arrondis */
+    padding: 1rem;                                             /* Espace intérieur */
+    display: flex;                                             /* Aligne les infos et le statut horizontalement */
+    flex-direction: row;                                       /* Par défaut, ligne */
+    align-items: center;                                       /* Centrage vertical */
+    justify-content: space-between;                            /* Infos à gauche, statut à droite */
+    gap: 1rem;                                                 /* Espace entre les blocs */
+    flex-wrap: wrap;                                           /* Passe à la ligne sur petits écrans */
 }
 
+/* Bloc des informations de la commande */
 .commande-infos {
-    flex: 1;
-    min-width: 0;
+    flex: 1;                                                   /* Prend l'espace disponible */
+    min-width: 0;                                              /* Autorise le rétrécissement */
 }
 
 .commande-infos h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.2rem;
+    font-size: 1rem;                                           /* Titre de la commande (ex: "iPhone 15 Pro") */
+    font-weight: 600;                                          /* Semi-gras */
+    color: var(--text-primary);                                /* Couleur principale */
+    margin-bottom: 0.2rem;                                     /* Petit espace sous le titre */
 }
 
 .commande-infos p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: 0.85rem;                                        /* Détails (date, montant) */
+    color: var(--text-secondary);                              /* Couleur secondaire */
 }
 
+/* Badge de statut de la commande */
 .commande-status {
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    width: fit-content;
-    white-space: nowrap;
-    flex-shrink: 0;
+    padding: 0.3rem 0.8rem;                                    /* Espace intérieur pour la pastille */
+    border-radius: 20px;                                       /* Forme très arrondie (pilule) */
+    font-size: 0.8rem;                                         /* Petit texte */
+    font-weight: 600;                                          /* Semi-gras */
+    width: fit-content;                                        /* Largeur selon le contenu */
+    white-space: nowrap;                                       /* Empêche la coupure du texte */
+    flex-shrink: 0;                                            /* Ne rétrécit pas */
 }
 
-.status-livre  { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-.status-encours { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.status-annule  { background: rgba(239, 68, 68, 0.1);  color: #ef4444; }
+/* Variantes de couleur selon le statut */
+.status-livre  { background: rgba(16, 185, 129, 0.1); color: #10b981; } /* Vert */
+.status-encours { background: rgba(245, 158, 11, 0.1); color: #f59e0b; } /* Orange */
+.status-annule  { background: rgba(239, 68, 68, 0.1);  color: #ef4444; } /* Rouge */
 
-/* ── Section adresses ── */
+/*  Section "Mes adresses"  */
+/* Grille responsive des cartes d'adresses */
 .adresses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
+    display: grid;                                             /* Grille CSS */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); /* Colonnes automatiques, taille min 260px */
+    gap: 1rem;                                                 /* Espace entre les cartes */
+    margin-bottom: 1rem;                                       /* Espace sous la grille */
 }
 
+/* Carte d'une adresse */
 .adresse-card {
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    background: var(--background);                             /* Fond alternatif */
+    border: 1px solid var(--border);                           /* Bordure */
+    border-radius: 8px;                                        /* Coins arrondis */
+    padding: 1rem;                                             /* Espace intérieur */
+    position: relative;                                        /* Pour positionner le badge "principale" */
+    display: flex;                                             /* Colonne verticale */
+    flex-direction: column;                                    /* Empile les infos */
+    gap: 0.3rem;                                               /* Espace entre les lignes */
 }
 
+/* Mise en avant de l'adresse par défaut */
 .adresse-card.principale {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.05);
+    border-color: var(--primary);                              /* Bordure bleue */
+    background: rgba(59, 130, 246, 0.05);                       /* Fond très léger bleuté */
 }
 
+/* Badge "Principale" dans le coin */
 .adresse-badge {
-    position: absolute;
-    top: 0.5rem;
+    position: absolute;                                        /* Positionné par rapport à la carte */
+    top: 0.5rem;                                               /* En haut à droite */
     right: 0.5rem;
-    font-size: 0.7rem;
-    background: var(--primary);
-    color: white;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+    font-size: 0.7rem;                                         /* Très petit */
+    background: var(--primary);                                /* Fond bleu */
+    color: white;                                              /* Texte blanc */
+    padding: 0.2rem 0.5rem;                                    /* Espace intérieur */
+    border-radius: 4px;                                        /* Coins légèrement arrondis */
 }
 
 .adresse-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.3rem;
-    padding-right: 4rem; /* évite overlap avec le badge */
+    font-size: 1rem;                                           /* Nom ou libellé de l'adresse */
+    font-weight: 600;                                          /* Semi-gras */
+    color: var(--text-primary);                                /* Couleur principale */
+    margin-bottom: 0.3rem;                                     /* Espace sous le titre */
+    padding-right: 4rem;                                       /* Évite le chevauchement avec le badge */
 }
 
 .adresse-card p {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.2rem;
+    font-size: 0.85rem;                                        /* Détails de l'adresse */
+    color: var(--text-secondary);                              /* Couleur secondaire */
+    margin-bottom: 0.2rem;                                     /* Petit espace */
 }
 
+/* Boutons d'action (modifier, supprimer, définir par défaut) */
 .adresse-actions {
-    display: flex;
-    gap: 0.3rem;
-    margin-top: 0.5rem;
+    display: flex;                                             /* Aligne les boutons horizontalement */
+    gap: 0.3rem;                                               /* Espace entre les boutons */
+    margin-top: 0.5rem;                                        /* Espace au-dessus */
 }
 
-/* ── Section paiement ── */
+/*  Section "Moyens de paiement"  */
 .paiement-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    display: flex;                                             /* Colonne verticale */
+    flex-direction: column;                                    /* Empile les cartes */
+    gap: 1rem;                                                 /* Espace entre les cartes */
+    margin-bottom: 1rem;                                       /* Espace sous la liste */
 }
 
+/* Carte d'un moyen de paiement */
 .paiement-card {
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    background: var(--background);                             /* Fond alternatif */
+    border: 1px solid var(--border);                           /* Bordure */
+    border-radius: 8px;                                        /* Coins arrondis */
+    padding: 1rem;                                             /* Espace intérieur */
+    display: flex;                                             /* Aligne l'icône, les infos et les actions */
+    align-items: center;                                       /* Centrage vertical */
+    gap: 1rem;                                                 /* Espace entre les éléments */
+    flex-wrap: wrap;                                           /* Passe à la ligne si nécessaire */
 }
 
+/* Icône de la carte (Visa, Mastercard, etc.) */
 .paiement-icon {
-    font-size: 2rem;
-    flex-shrink: 0;
+    font-size: 2rem;                                           /* Grande icône */
+    flex-shrink: 0;                                            /* Ne rétrécit pas */
 }
 
+/* Bloc des informations (nom, numéro masqué, date) */
 .paiement-infos {
-    flex: 1;
-    min-width: 0;
+    flex: 1;                                                   /* Prend l'espace disponible */
+    min-width: 0;                                              /* Autorise le rétrécissement */
 }
 
 .paiement-infos h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 1rem;                                           /* Type de carte */
+    font-weight: 600;                                          /* Semi-gras */
+    color: var(--text-primary);                                /* Couleur principale */
 }
 
 .paiement-infos p {
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    font-size: 0.85rem;                                        /* Détails (ex: "**** 1234") */
+    color: var(--text-muted);                                  /* Couleur atténuée */
 }
 
+/* Boutons d'action (modifier, supprimer) */
 .paiement-actions {
-    display: flex;
-    gap: 0.3rem;
-    flex-shrink: 0;
+    display: flex;                                             /* Aligne les boutons horizontalement */
+    gap: 0.3rem;                                               /* Espace entre les boutons */
+    flex-shrink: 0;                                            /* Empêche la réduction */
 }
 
-/* ── Section préférences ── */
+/*  Section "Préférences"  */
+/* Groupe de préférences (ex: notifications) */
 .preferences-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem;                                     /* Espace sous chaque groupe */
 }
 
 .preferences-group h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
-    color: var(--text-primary);
+    font-size: 1rem;                                           /* Titre du groupe */
+    font-weight: 600;                                          /* Semi-gras */
+    margin-bottom: 0.75rem;                                    /* Espace sous le titre */
+    color: var(--text-primary);                                /* Couleur principale */
 }
 
+/* Label d'une case à cocher personnalisée */
 .checkbox-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    color: var(--text-secondary);
-    line-height: 1.5;
+    display: flex;                                             /* Aligne la case et le texte */
+    align-items: flex-start;                                   /* Aligne la case en haut (pour texte multiligne) */
+    gap: 0.5rem;                                               /* Espace case/texte */
+    margin-bottom: 0.5rem;                                     /* Espace entre les lignes */
+    font-size: 0.9rem;                                         /* Taille standard */
+    cursor: pointer;                                           /* Curseur main */
+    color: var(--text-secondary);                              /* Couleur secondaire */
+    line-height: 1.5;                                          /* Interligne confortable */
 }
 
 .checkbox-label input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--primary);
-    flex-shrink: 0;
-    margin-top: 0.2rem;
+    width: 16px;                                               /* Taille fixe */
+    height: 16px;                                              /* Taille fixe */
+    accent-color: var(--primary);                              /* Couleur de la case cochée (bleu) */
+    flex-shrink: 0;                                            /* Ne rétrécit pas */
+    margin-top: 0.2rem;                                        /* Ajustement pour alignement vertical */
 }
 
-/* ── Section déconnexion ── */
+/*  Section "Déconnexion"  */
 .deconnexion-section {
-    text-align: center;
-    padding: 2rem;
+    text-align: center;                                        /* Contenu centré */
+    padding: 2rem;                                             /* Grand espace intérieur */
 }
 
 .deconnexion-section p {
-    margin-bottom: 1.5rem;
-    color: var(--text-secondary);
-    font-size: 1rem;
+    margin-bottom: 1.5rem;                                     /* Espace sous le texte */
+    color: var(--text-secondary);                              /* Couleur secondaire */
+    font-size: 1rem;                                           /* Taille normale */
 }
 
-/* ── Modale de suivi ── */
+/*  Modale de suivi de commande  */
+/* Overlay de la modale */
 .suivi-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1100;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition-normal);
-    padding: var(--spacing-sm);
+    position: fixed;                                           /* Fixé sur tout l'écran */
+    top: 0; left: 0; width: 100%; height: 100%;               /* Couvre toute la fenêtre */
+    background: rgba(0,0,0,0.5);                               /* Fond semi-transparent */
+    display: flex;                                             /* Centre le contenu */
+    align-items: center;                                       /* Centrage vertical */
+    justify-content: center;                                   /* Centrage horizontal */
+    z-index: 1100;                                             /* Au-dessus de tout (supérieur à la sidebar) */
+    opacity: 0;                                                /* Invisible par défaut */
+    visibility: hidden;                                        /* Non interactif par défaut */
+    transition: var(--transition-normal);                      /* Animation d'apparition */
+    padding: var(--spacing-sm);                                /* Petit padding pour ne pas coller aux bords */
 }
 
+/* Modale ouverte */
 .suivi-modal.active {
-    opacity: 1;
-    visibility: visible;
+    opacity: 1;                                                /* Visible */
+    visibility: visible;                                       /* Interactif */
 }
 
+/* Contenu de la modale */
 .suivi-modal-content {
-    background: var(--secondary);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
-    max-width: 500px;
-    width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
-    border: 1px solid var(--border);
+    background: var(--secondary);                              /* Fond de la carte */
+    border-radius: 12px;                                       /* Coins arrondis */
+    padding: var(--spacing-lg);                                /* Espace intérieur */
+    max-width: 500px;                                          /* Largeur maximale */
+    width: 100%;                                               /* Pleine largeur jusqu'à 500px */
+    max-height: 85vh;                                          /* Hauteur max pour éviter le débordement */
+    overflow-y: auto;                                          /* Scroll interne si contenu long */
+    border: 1px solid var(--border);                           /* Bordure subtile */
 }
 
 .suivi-modal-content h2 {
-    font-size: 1.2rem;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-primary);
-    font-weight: 700;
+    font-size: 1.2rem;                                         /* Titre de la modale */
+    margin-bottom: var(--spacing-md);                           /* Espace sous le titre */
+    color: var(--text-primary);                                /* Couleur principale */
+    font-weight: 700;                                          /* Gras */
 }
 
+/* Timeline de suivi */
 .suivi-timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: var(--spacing-md);
+    display: flex;                                             /* Colonne verticale */
+    flex-direction: column;                                    /* Empile les étapes */
+    gap: 1rem;                                                 /* Espace entre les étapes */
+    margin-bottom: var(--spacing-md);                           /* Espace sous la timeline */
 }
 
+/* Élément de la timeline */
 .timeline-item {
-    padding-left: 1.5rem;
-    position: relative;
-    border-left: 2px solid var(--border);
-    padding-bottom: 0.5rem;
+    padding-left: 1.5rem;                                      /* Espace pour la ligne de gauche */
+    position: relative;                                        /* Pour positionner le trait */
+    border-left: 2px solid var(--border);                      /* Line verticale par défaut (grise) */
+    padding-bottom: 0.5rem;                                    /* Espace sous l'item */
 }
 
+/* Étape terminée : ligne verte */
 .timeline-item.completed { border-left-color: #10b981; }
+
+/* Étape en cours : ligne bleue */
 .timeline-item.active    { border-left-color: var(--primary); }
+
+/* Dernier élément : ligne invisible pour ne pas dépasser */
 .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
 
+/* Date de l'étape */
 .timeline-date {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 0.2rem;
+    font-size: 0.8rem;                                         /* Petit */
+    color: var(--text-muted);                                  /* Atténué */
+    margin-bottom: 0.2rem;                                     /* Espace sous la date */
 }
 
+/* Titre de l'étape (ex: "Commande validée") */
 .timeline-title {
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.2rem;
+    font-weight: 600;                                          /* Semi-gras */
+    color: var(--text-primary);                                /* Couleur principale */
+    margin-bottom: 0.2rem;                                     /* Espace sous le titre */
 }
 
+/* Description optionnelle */
 .timeline-desc {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-size: 0.85rem;                                        /* Petit */
+    color: var(--text-secondary);                              /* Secondaire */
 }
 
-/* ── Formulaire adresse overlay ── */
+/*  Formulaire d'ajout/édition d'adresse (overlay)  */
 .adresse-form {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: var(--spacing-md);
-    margin-top: var(--spacing-md);
+    background: var(--secondary);                              /* Fond de la carte */
+    border: 1px solid var(--border);                           /* Bordure */
+    border-radius: 8px;                                        /* Coins arrondis */
+    padding: var(--spacing-md);                                /* Espace intérieur */
+    margin-top: var(--spacing-md);                             /* Espace au-dessus */
 }
 
-/* ── Navigation mobile ── */
+/*  Navigation mobile (remplace la sidebar sur petits écrans)  */
 .profil-mobile-nav {
-    display: none;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
-    margin-bottom: var(--spacing-md);
+    display: none;                                             /* Caché par défaut (visible seulement en mobile) */
+    overflow-x: auto;                                          /* Scroll horizontal si trop d'onglets */
+    -webkit-overflow-scrolling: touch;                         /* Scroll fluide sur iOS */
+    scrollbar-width: none;                                     /* Cache la scrollbar (Firefox) */
+    gap: 0.5rem;                                               /* Espace entre les liens */
+    padding-bottom: 0.5rem;                                    /* Espace sous les liens */
+    margin-bottom: var(--spacing-md);                          /* Espace sous la barre */
 }
 
+/* Cache la scrollbar sur Chrome/Safari */
 .profil-mobile-nav::-webkit-scrollbar { display: none; }
 
+/* Liens dans la navigation mobile */
 .profil-mobile-nav .sidebar-link {
-    white-space: nowrap;
-    padding: 0.6rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    display: inline-block;
-    width: auto;
-    flex-shrink: 0;
+    white-space: nowrap;                                       /* Empêche le retour à la ligne */
+    padding: 0.6rem 1rem;                                      /* Espace intérieur */
+    border: 1px solid var(--border);                           /* Bordure pour les distinguer */
+    border-radius: 20px;                                       /* Forme de pilule */
+    display: inline-block;                                     /* Affichage en ligne */
+    width: auto;                                               /* Largeur selon le contenu */
+    flex-shrink: 0;                                            /* Ne rétrécit pas */
 }
 
 .profil-mobile-nav .sidebar-link.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
+    background: var(--primary);                                /* Fond bleu pour l'onglet actif */
+    color: white;                                              /* Texte blanc */
+    border-color: var(--primary);                              /* Bordure assortie */
 }
 
 /* RESPONSIVE */
 
+/*  Tablette large (≤ 1024px)  */
 @media (max-width: 1024px) {
     .profil-layout {
-        grid-template-columns: 240px 1fr;
-        gap: var(--spacing-md);
+        grid-template-columns: 240px 1fr;                      /* Sidebar un peu moins large */
+        gap: var(--spacing-md);                                 /* Espace réduit */
     }
 }
 
+/*  Grand mobile / tablette portrait (≤ 768px)  */
 @media (max-width: 768px) {
     .profil-layout {
-        grid-template-columns: 1fr;
-        margin: var(--spacing-sm) 0;
+        grid-template-columns: 1fr;                             /* Passe en une seule colonne */
+        margin: var(--spacing-sm) 0;                            /* Marges réduites */
     }
 
-    /* Sidebar cachée, navigation horizontale à la place */
+    /* Sidebar masquée (remplacée par la navigation horizontale) */
     .profil-sidebar {
-        position: static;
-        display: none;
+        position: static;                                       /* Annule le sticky */
+        display: none;                                          /* Cache la sidebar */
     }
 
+    /* Affiche la navigation mobile */
     .profil-mobile-nav {
-        display: flex;
+        display: flex;                                          /* Visible */
     }
 
+    /* Contenu principal : padding réduit, hauteur automatique */
     .profil-content {
-        padding: var(--spacing-md);
-        min-height: auto;
+        padding: var(--spacing-md);                             /* Moins d'espace */
+        min-height: auto;                                       /* Pas de hauteur minimale fixe */
     }
 
+    /* Lignes de formulaire : une seule colonne */
     .form-row {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-sm);
+        grid-template-columns: 1fr;                             /* Passe en une colonne */
+        gap: var(--spacing-sm);                                 /* Espace réduit */
     }
 
+    /* Bloc photo : empilé verticalement */
     .photo-container {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: column;                                 /* Colonne */
+        align-items: flex-start;                                /* Aligné à gauche */
     }
 
+    /* Grille d'adresses : une seule colonne */
     .adresses-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;                             /* Pleine largeur */
     }
 
+    /* Carte de commande : permet le retour à la ligne */
     .commande-card {
-        flex-wrap: wrap;
+        flex-wrap: wrap;                                        /* Déjà présent, mais on insiste */
     }
 
+    /* Actions du formulaire : boutons l'un sous l'autre */
     .form-actions {
-        flex-direction: column;
+        flex-direction: column;                                 /* Colonne */
     }
 
     .form-actions .btn-primary,
     .form-actions .btn-secondary {
-        width: 100%;
-        justify-content: center;
+        width: 100%;                                            /* Pleine largeur */
+        justify-content: center;                                /* Texte centré */
     }
 }
 
+/*  Mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .profil-content {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-sm);                             /* Padding encore plus réduit */
     }
 
     .content-title {
-        font-size: 1.3rem;
+        font-size: 1.3rem;                                      /* Titre légèrement réduit */
     }
 
+    /* Carte de commande : empilée verticalement */
     .commande-card {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: column;                                 /* Colonne */
+        align-items: flex-start;                                /* Aligné à gauche */
     }
 
+    /* Carte de paiement : empilée verticalement */
     .paiement-card {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: column;                                 /* Colonne */
+        align-items: flex-start;                                /* Aligné à gauche */
     }
 
+    /* Modale : padding réduit */
     .suivi-modal-content {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md);                             /* Moins d'espace */
     }
 
+    /* Section déconnexion : padding réduit */
     .deconnexion-section {
         padding: 1rem;
     }

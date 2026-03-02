@@ -1,375 +1,401 @@
 /* page_faq.css */
 
-/* ── Titre ── */
+/*  Titre principal de la page  */
 .page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: var(--spacing-md) 0 var(--spacing-lg);
-    color: var(--text-primary);
+    font-size: 2rem;                      /* Grande taille pour le titre */
+    font-weight: 700;                     /* Gras */
+    margin: var(--spacing-md) 0 var(--spacing-lg); /* Marge : haut (md), bas (lg) */
+    color: var(--text-primary);            /* Couleur principale */
 }
 
-/* ── Barre de recherche ── */
+/*  Barre de recherche  */
 .faq-search {
-    position: relative;
-    max-width: 560px;
-    margin-bottom: var(--spacing-lg);
+    position: relative;                    /* Pour positionner l'icône de recherche en absolu */
+    max-width: 560px;                      /* Largeur maximale pour rester lisible */
+    margin-bottom: var(--spacing-lg);      /* Espace sous la barre de recherche */
 }
 
+/* Champ de saisie de la recherche */
 .faq-search input {
-    width: 100%;
-    padding: 0.85rem 1rem 0.85rem 3rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    font-family: inherit;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    box-sizing: border-box;
+    width: 100%;                           /* Pleine largeur du conteneur */
+    padding: 0.85rem 1rem 0.85rem 3rem;    /* Espace intérieur : haut/droit/bas/gauche (gauche plus grand pour l'icône) */
+    background: var(--secondary);           /* Fond secondaire */
+    border: 1px solid var(--border);        /* Bordure subtile */
+    border-radius: 10px;                    /* Coins arrondis */
+    color: var(--text-primary);             /* Couleur du texte saisi */
+    font-size: 0.95rem;                     /* Taille standard */
+    font-family: inherit;                   /* Hérite de la police du site */
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast); /* Animation focus */
+    box-sizing: border-box;                  /* Padding inclus dans la largeur */
 }
 
+/* Placeholder du champ de recherche */
 .faq-search input::placeholder {
-    color: var(--text-muted);
+    color: var(--text-muted);               /* Couleur discrète */
 }
 
+/* Champ de recherche au focus */
 .faq-search input:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+    outline: none;                          /* Supprime l'outline native */
+    border-color: var(--primary);           /* Bordure bleue */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12); /* Halo léger */
 }
 
+/* Icône de loupe positionnée dans l'input */
 .faq-search .search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    pointer-events: none;
-    line-height: 1;
+    position: absolute;                     /* Positionnée par rapport à .faq-search */
+    left: 1rem;                             /* À gauche */
+    top: 50%;                               /* Centrée verticalement */
+    transform: translateY(-50%);             /* Ajustement du centrage vertical */
+    color: var(--text-muted);                /* Couleur discrète */
+    font-size: 1.2rem;                       /* Taille de l'icône */
+    pointer-events: none;                    /* Empêche l'icône d'intercepter les clics (le clic va à l'input) */
+    line-height: 1;                           /* Assure que l'icône n'ajoute pas de hauteur excessive */
 }
 
-/* ── Filtres catégories ── */
+/*  Filtres par catégories (boutons)  */
 .faq-categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: var(--spacing-lg);
+    display: flex;                           /* Aligne les boutons horizontalement */
+    flex-wrap: wrap;                         /* Passe à la ligne si trop de boutons */
+    gap: 0.5rem;                             /* Espace entre les boutons */
+    margin-bottom: var(--spacing-lg);        /* Espace sous les filtres */
 }
 
+/* Bouton de catégorie */
 .category-btn {
-    padding: 0.5rem 1.1rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
+    padding: 0.5rem 1.1rem;                  /* Espace intérieur */
+    background: var(--secondary);             /* Fond secondaire */
+    border: 1px solid var(--border);          /* Bordure subtile */
+    border-radius: 20px;                      /* Forme de pilule */
+    color: var(--text-secondary);             /* Couleur secondaire */
+    font-size: 0.875rem;                      /* Petit texte */
+    font-weight: 500;                         /* Medium */
+    font-family: inherit;                     /* Hérite police */
+    cursor: pointer;                          /* Curseur main */
     transition: background var(--transition-fast),
                 border-color var(--transition-fast),
-                color var(--transition-fast);
-    white-space: nowrap;
-    user-select: none;
+                color var(--transition-fast); /* Animation au survol/activation */
+    white-space: nowrap;                      /* Empêche la coupure du texte */
+    user-select: none;                         /* Empêche la sélection du texte (comme un vrai bouton) */
 }
 
+/* Survol d'un bouton de catégorie */
 .category-btn:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(59, 130, 246, 0.06);
+    border-color: var(--primary);             /* Bordure bleue */
+    color: var(--primary);                    /* Texte bleu */
+    background: rgba(59, 130, 246, 0.06);     /* Fond très légèrement bleuté */
 }
 
+/* Bouton actif (catégorie sélectionnée) */
 .category-btn.active {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
+    background: var(--primary);               /* Fond bleu */
+    border-color: var(--primary);             /* Bordure bleue */
+    color: #fff;                               /* Texte blanc */
 }
 
-/* ── Liste FAQ ── */
+/*  Liste des questions FAQ (conteneur)  */
 .faq-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: var(--spacing-xl);
+    display: flex;                            /* Colonne verticale */
+    flex-direction: column;                    /* Empile les items */
+    gap: 0.5rem;                               /* Espace entre les items */
+    margin-bottom: var(--spacing-xl);          /* Grand espace sous la liste */
 }
 
-/* ── Item accordéon ── */
+/*  Item FAQ (accordéon)  */
 .faq-item {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    background: var(--secondary);              /* Fond secondaire */
+    border: 1px solid var(--border);           /* Bordure */
+    border-radius: 10px;                       /* Coins arrondis */
+    overflow: hidden;                          /* Cache les débordements (utile pour l'animation de hauteur) */
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast); /* Animation */
 }
 
+/* Survol d'un item (non actif) */
 .faq-item:hover {
-    border-color: rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.4);     /* Bordure légèrement bleutée */
 }
 
+/* Item actif (ouvert) */
 .faq-item.active {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
+    border-color: var(--primary);              /* Bordure bleue */
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1); /* Très léger halo */
 }
 
-/* ── Bouton question ── */
+/*  Bouton question (titre cliquable)  */
 .faq-question {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
-    padding: 1.1rem 1.4rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-    transition: background var(--transition-fast);
-    box-sizing: border-box;
+    display: flex;                             /* Aligne le texte et l'icône */
+    align-items: center;                       /* Centrage vertical */
+    justify-content: space-between;            /* Texte à gauche, icône à droite */
+    gap: 1rem;                                 /* Espace entre le texte et l'icône */
+    width: 100%;                                /* Pleine largeur */
+    padding: 1.1rem 1.4rem;                     /* Espace intérieur */
+    background: transparent;                    /* Fond transparent */
+    border: none;                               /* Pas de bordure */
+    cursor: pointer;                            /* Curseur main */
+    font-family: inherit;                       /* Hérite police */
+    text-align: left;                           /* Texte aligné à gauche */
+    transition: background var(--transition-fast); /* Animation de fond */
+    box-sizing: border-box;                      /* Padding inclus dans la largeur */
 }
 
+/* Survol du bouton question */
 .faq-question:hover {
-    background: rgba(59, 130, 246, 0.04);
+    background: rgba(59, 130, 246, 0.04);       /* Léger fond bleuté */
 }
 
+/* Bouton question quand l'item est actif */
 .faq-item.active .faq-question {
-    background: rgba(59, 130, 246, 0.05);
+    background: rgba(59, 130, 246, 0.05);       /* Fond légèrement plus marqué */
 }
 
+/* Texte de la question */
 .faq-question-text {
-    font-size: 0.975rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.45;
-    flex: 1;
-    min-width: 0;
+    font-size: 0.975rem;                         /* Taille standard */
+    font-weight: 600;                            /* Semi-gras */
+    color: var(--text-primary);                   /* Couleur principale */
+    line-height: 1.45;                            /* Interligne confortable */
+    flex: 1;                                       /* Prend l'espace disponible */
+    min-width: 0;                                  /* Autorise le rétrécissement */
 }
 
+/* Texte de la question quand l'item est actif */
 .faq-item.active .faq-question-text {
-    color: var(--primary);
+    color: var(--primary);                         /* Devient bleu */
 }
 
-/* ── Icône chevron ── */
+/*  Icône chevron (triangle pour indiquer l'ouverture/fermeture)  */
 .faq-icon {
-    display: flex;
+    display: flex;                                 /* Centre le pseudo-élément */
     align-items: center;
     justify-content: center;
-    width: 28px;
+    width: 28px;                                   /* Taille fixe du cercle */
     height: 28px;
-    border-radius: 50%;
-    background: var(--background);
-    border: 1px solid var(--border);
-    flex-shrink: 0;
-    transition: transform var(--transition-normal),
+    border-radius: 50%;                            /* Rond */
+    background: var(--background);                  /* Fond différent */
+    border: 1px solid var(--border);                /* Bordure */
+    flex-shrink: 0;                                 /* Ne rétrécit pas */
+    transition: transform var(--transition-normal), /* Animation rotation */
                 background var(--transition-fast),
                 border-color var(--transition-fast),
                 color var(--transition-fast);
-    color: var(--text-muted);
+    color: var(--text-muted);                       /* Couleur par défaut */
 }
 
+/* Icône quand l'item est actif : rotation + fond bleu */
 .faq-item.active .faq-icon {
-    transform: rotate(180deg);
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #fff;
+    transform: rotate(180deg);                      /* Pointe vers le haut (fermeture) */
+    background: var(--primary);                     /* Fond bleu */
+    border-color: var(--primary);                   /* Bordure bleue */
+    color: #fff;                                     /* Chevron blanc */
 }
 
-/* Chevron SVG inline via CSS */
+/* Création du chevron via un pseudo-élément (forme de V) */
 .faq-icon::after {
-    content: '';
+    content: '';                                    /* Élément vide */
     display: block;
-    width: 10px;
+    width: 10px;                                     /* Taille du chevron */
     height: 10px;
-    border-right: 2px solid currentColor;
+    border-right: 2px solid currentColor;            /* Deux côtés pour former un angle */
     border-bottom: 2px solid currentColor;
-    transform: rotate(45deg) translate(-2px, -2px);
+    transform: rotate(45deg) translate(-2px, -2px); /* Rotation pour obtenir un chevron vers le bas */
 }
 
-/* ── Réponse — animation hauteur réelle via JS ── */
+/*  Réponse (zone masquée par défaut, déroulée via JS)  */
 .faq-answer {
-    height: 0;
-    overflow: hidden;
-    transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-    background: var(--background);
+    height: 0;                                       /* Hauteur nulle par défaut (masqué) */
+    overflow: hidden;                                /* Cache le contenu */
+    transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1); /* Animation fluide avec easing */
+    background: var(--background);                   /* Fond différent pour distinguer la réponse */
 }
 
+/* Quand l'item est actif, on ajoute une bordure de séparation entre question et réponse */
 .faq-item.active .faq-answer {
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border);             /* Ligne de séparation */
 }
 
+/* Conteneur interne de la réponse (permet de gérer padding sans affecter l'animation de hauteur) */
 .faq-answer-inner {
-    padding: 1.1rem 1.4rem 1.3rem;
+    padding: 1.1rem 1.4rem 1.3rem;                   /* Espace intérieur */
 }
 
+/* Paragraphes dans la réponse */
 .faq-answer-inner p {
-    color: var(--text-secondary);
-    font-size: 0.925rem;
-    line-height: 1.75;
-    margin-bottom: 0.6rem;
+    color: var(--text-secondary);                    /* Couleur secondaire */
+    font-size: 0.925rem;                              /* Légèrement plus petit */
+    line-height: 1.75;                                 /* Interligne large pour lisibilité */
+    margin-bottom: 0.6rem;                             /* Espace entre paragraphes */
 }
 
 .faq-answer-inner p:last-child {
-    margin-bottom: 0;
+    margin-bottom: 0;                                  /* Pas de marge sous le dernier paragraphe */
 }
 
+/* Liens dans la réponse */
 .faq-answer-inner a {
-    color: var(--primary);
-    font-weight: 500;
-    text-decoration: none;
+    color: var(--primary);                            /* Bleu */
+    font-weight: 500;                                 /* Medium */
+    text-decoration: none;                            /* Pas de soulignement par défaut */
 }
 
 .faq-answer-inner a:hover {
-    text-decoration: underline;
+    text-decoration: underline;                       /* Soulignement au survol */
 }
 
-/* ── Aucun résultat ── */
+/*  État "Aucun résultat" (quand la recherche ne retourne rien)  */
 .faq-no-results {
-    text-align: center;
-    padding: 3rem 2rem;
-    color: var(--text-muted);
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 0.95rem;
-    display: none;
+    text-align: center;                               /* Centré */
+    padding: 3rem 2rem;                               /* Grand padding */
+    color: var(--text-muted);                         /* Couleur discrète */
+    background: var(--secondary);                      /* Fond secondaire */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 10px;                               /* Coins arrondis */
+    font-size: 0.95rem;                                /* Taille standard */
+    display: none;                                      /* Masqué par défaut */
 }
 
+/* Quand la classe "visible" est ajoutée (via JS), on affiche le message */
 .faq-no-results.visible {
     display: block;
 }
 
-/* ── Section contact ── */
+/*  Section de contact (si les questions ne suffisent pas)  */
 .faq-contact {
-    text-align: center;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg) var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
+    text-align: center;                               /* Centré */
+    background: var(--secondary);                      /* Fond secondaire */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 12px;                               /* Coins arrondis */
+    padding: var(--spacing-lg) var(--spacing-xl);       /* Espace intérieur généreux */
+    margin-bottom: var(--spacing-xl);                   /* Grand espace sous la section */
 }
 
+/* Titre de la section contact */
 .faq-contact h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
+    font-size: 1.3rem;                                 /* Taille modérée */
+    font-weight: 600;                                  /* Semi-gras */
+    margin-bottom: 0.5rem;                              /* Espace sous le titre */
+    color: var(--text-primary);                         /* Couleur principale */
 }
 
+/* Paragraphe de description */
 .faq-contact > p {
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-md);
-    font-size: 0.95rem;
+    color: var(--text-secondary);                      /* Couleur secondaire */
+    margin-bottom: var(--spacing-md);                   /* Espace sous le texte */
+    font-size: 0.95rem;                                 /* Taille standard */
 }
 
+/* Conteneur des boutons d'action */
 .faq-contact-actions {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
+    display: flex;                                      /* Aligne les boutons horizontalement */
+    justify-content: center;                            /* Centre les boutons */
+    gap: 0.75rem;                                       /* Espace entre les boutons */
+    flex-wrap: wrap;                                    /* Passe à la ligne si nécessaire */
 }
 
+/* Style des liens/boutons dans la section contact */
 .faq-contact-actions a {
-    display: inline-flex;
+    display: inline-flex;                               /* Aligne icône et texte */
     align-items: center;
-    gap: 0.4rem;
-    padding: 0.7rem 1.4rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    font-family: inherit;
-    text-decoration: none;
-    transition: var(--transition-normal);
-    cursor: pointer;
+    gap: 0.4rem;                                        /* Espace icône/texte */
+    padding: 0.7rem 1.4rem;                             /* Espace intérieur */
+    border-radius: 8px;                                 /* Coins arrondis */
+    font-size: 0.9rem;                                  /* Taille standard */
+    font-weight: 600;                                   /* Semi-gras */
+    font-family: inherit;                               /* Hérite police */
+    text-decoration: none;                              /* Pas de soulignement */
+    transition: var(--transition-normal);               /* Animation */
+    cursor: pointer;                                    /* Curseur main */
 }
 
+/* Bouton primaire (principal) */
 .faq-contact-actions .btn-primary {
-    background: var(--primary);
-    color: #fff;
-    border: 1px solid var(--primary);
+    background: var(--primary);                         /* Fond bleu */
+    color: #fff;                                        /* Texte blanc */
+    border: 1px solid var(--primary);                   /* Bordure bleue */
 }
 
 .faq-contact-actions .btn-primary:hover {
-    background: var(--primary-hover);
-    border-color: var(--primary-hover);
+    background: var(--primary-hover);                   /* Fond bleu plus sombre */
+    border-color: var(--primary-hover);                 /* Bordure assortie */
 }
 
+/* Bouton secondaire (contact) */
 .faq-contact-actions .btn-secondary {
-    background: var(--background);
-    color: var(--text-primary);
-    border: 1px solid var(--border);
+    background: var(--background);                      /* Fond du body */
+    color: var(--text-primary);                         /* Texte principal */
+    border: 1px solid var(--border);                    /* Bordure subtile */
 }
 
 .faq-contact-actions .btn-secondary:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: var(--primary);                       /* Bordure bleue */
+    color: var(--primary);                              /* Texte bleu */
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
+/*  Tablette / mobile large (≤ 768px)  */
 @media (max-width: 768px) {
     .page-title {
-        font-size: 1.6rem;
+        font-size: 1.6rem;                             /* Titre réduit */
     }
 
     .faq-search {
-        max-width: 100%;
+        max-width: 100%;                                /* Barre de recherche pleine largeur */
     }
 
     .faq-categories {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 0.4rem;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+        flex-wrap: nowrap;                              /* Empêche le retour à la ligne */
+        overflow-x: auto;                               /* Active le scroll horizontal */
+        padding-bottom: 0.4rem;                         /* Espace pour ne pas couper l'ombre/outline */
+        -webkit-overflow-scrolling: touch;               /* Scroll fluide sur iOS */
+        scrollbar-width: none;                           /* Cache la scrollbar (Firefox) */
     }
 
+    /* Cache la scrollbar sur Chrome/Safari */
     .faq-categories::-webkit-scrollbar {
         display: none;
     }
 
     .category-btn {
-        flex-shrink: 0;
+        flex-shrink: 0;                                 /* Empêche les boutons de rétrécir (ils gardent leur taille) */
     }
 
     .faq-question {
-        padding: 1rem 1.1rem;
+        padding: 1rem 1.1rem;                           /* Padding réduit */
     }
 
     .faq-question-text {
-        font-size: 0.9rem;
+        font-size: 0.9rem;                              /* Texte plus petit */
     }
 
     .faq-answer-inner {
-        padding: 0.9rem 1.1rem 1.1rem;
+        padding: 0.9rem 1.1rem 1.1rem;                  /* Padding réduit dans la réponse */
     }
 
     .faq-contact {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md);                      /* Padding interne réduit */
     }
 }
 
+/*  Mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .page-title {
-        font-size: 1.35rem;
+        font-size: 1.35rem;                             /* Titre encore plus compact */
     }
 
     .faq-question {
-        padding: 0.9rem 1rem;
+        padding: 0.9rem 1rem;                            /* Padding minimum */
     }
 
     .faq-question-text {
-        font-size: 0.875rem;
+        font-size: 0.875rem;                             /* Texte plus petit */
     }
 
     .faq-contact-actions {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: column;                          /* Boutons l'un sous l'autre */
+        align-items: stretch;                            /* Chaque bouton prend toute la largeur */
     }
 
     .faq-contact-actions a {
-        justify-content: center;
+        justify-content: center;                         /* Texte centré */
     }
 }

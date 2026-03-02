@@ -1,274 +1,299 @@
-/* page_contact.css  */
+/* page_contact.css */
 
+/* Titre principal de la page */
 .page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: var(--spacing-md) 0 var(--spacing-lg);
-    color: var(--text-primary);
+    font-size: 2rem;                      /* Grande taille pour le titre */
+    font-weight: 700;                     /* Gras */
+    margin: var(--spacing-md) 0 var(--spacing-lg); /* Marges verticales : haut (md), bas (lg) */
+    color: var(--text-primary);            /* Couleur principale */
 }
 
+/* Layout principal : deux colonnes (formulaire à gauche, infos à droite) */
 .contact-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xl);
-    margin-bottom: var(--spacing-xl);
-    align-items: start;
+    display: grid;                          /* Grille CSS */
+    grid-template-columns: 1fr 1fr;         /* Deux colonnes de largeur égale */
+    gap: var(--spacing-xl);                 /* Grand espace entre les colonnes */
+    margin-bottom: var(--spacing-xl);        /* Marge sous le layout */
+    align-items: start;                      /* Aligne les deux colonnes par le haut */
 }
 
-/* ── Formulaire ── */
+/*  Formulaire de contact (colonne gauche)  */
 .contact-form {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
+    background: var(--secondary);           /* Fond secondaire */
+    border: 1px solid var(--border);        /* Bordure subtile */
+    border-radius: 12px;                     /* Coins arrondis */
+    padding: var(--spacing-lg);               /* Espace intérieur généreux */
 }
 
+/* Titre du formulaire */
 .contact-form h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-primary);
+    font-size: 1.3rem;                       /* Taille modérée */
+    font-weight: 600;                         /* Semi-gras */
+    margin-bottom: var(--spacing-md);          /* Espace sous le titre */
+    color: var(--text-primary);                /* Couleur principale */
 }
 
+/* Ligne de formulaire à deux colonnes */
 .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    display: grid;                            /* Grille interne */
+    grid-template-columns: 1fr 1fr;           /* Deux colonnes égales */
+    gap: var(--spacing-md);                    /* Espace entre les champs */
+    margin-bottom: var(--spacing-md);          /* Espace sous la ligne */
 }
 
+/* Groupe de champ (label + input) */
 .form-group {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);          /* Espace sous chaque groupe */
 }
 
+/* Label du champ */
 .form-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: var(--text-primary);
+    display: block;                            /* Affiché en propre ligne */
+    font-size: 0.9rem;                         /* Taille légèrement réduite */
+    font-weight: 600;                           /* Semi-gras */
+    margin-bottom: 0.3rem;                      /* Petit espace sous le label */
+    color: var(--text-primary);                  /* Couleur principale */
 }
 
+/* Champs de saisie : input, textarea, select */
 .form-group input,
 .form-group textarea,
 .form-group select {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background: var(--background);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    transition: var(--transition-fast);
-    font-family: inherit;
+    width: 100%;                               /* Pleine largeur */
+    padding: 0.8rem 1rem;                       /* Espace intérieur confortable */
+    background: var(--background);               /* Fond du body (contraste) */
+    border: 1px solid var(--border);             /* Bordure subtile */
+    border-radius: 8px;                          /* Coins arrondis */
+    color: var(--text-primary);                  /* Couleur du texte saisi */
+    font-size: 0.95rem;                          /* Taille standard */
+    transition: var(--transition-fast);           /* Animation focus/survol */
+    font-family: inherit;                         /* Hérite police */
 }
 
+/* Zone de texte (message) : redimensionnable verticalement */
 .form-group textarea {
-    resize: vertical;
-    min-height: 120px;
+    resize: vertical;                           /* Seulement en hauteur */
+    min-height: 120px;                           /* Hauteur minimale pour écrire confortablement */
 }
 
+/* Focus sur les champs */
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+    outline: none;                               /* Supprime l'outline native */
+    border-color: var(--primary);                /* Bordure bleue */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15); /* Halo léger pour accessibilité */
 }
 
+/* Survol des champs (input et textarea) */
 .form-group input:hover,
 .form-group textarea:hover {
-    border-color: var(--input-hover-blue-light);
-    background: var(--secondary);
+    border-color: var(--input-hover-blue-light); /* Variable pour une couleur de survol (définie ailleurs) */
+    background: var(--secondary);                 /* Fond légèrement différent */
 }
 
+/* Groupe de case à cocher (RGPD, newsletter, etc.) */
 .checkbox-group {
-    margin: var(--spacing-md) 0;
+    margin: var(--spacing-md) 0;                 /* Marge verticale */
 }
 
+/* Label personnalisé pour une case à cocher */
 .checkbox-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    color: var(--text-secondary);
-    line-height: 1.5;
+    display: flex;                                /* Aligne la case et le texte */
+    align-items: flex-start;                      /* Aligne la case en haut (pour texte multiligne) */
+    gap: 0.5rem;                                   /* Espace case/texte */
+    font-size: 0.9rem;                             /* Taille standard */
+    cursor: pointer;                               /* Curseur main */
+    color: var(--text-secondary);                  /* Couleur secondaire */
+    line-height: 1.5;                              /* Interligne confortable */
 }
 
 .checkbox-label input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--primary);
-    flex-shrink: 0;
-    margin-top: 0.2rem;
+    width: 16px;                                   /* Taille fixe */
+    height: 16px;                                  /* Taille fixe */
+    accent-color: var(--primary);                   /* Couleur de la case cochée (bleu) */
+    flex-shrink: 0;                                 /* Ne rétrécit pas */
+    margin-top: 0.2rem;                             /* Ajustement pour alignement vertical */
 }
 
+/* Bouton d'envoi (pleine largeur) */
 .btn-primary {
-    width: 100%;
-    padding: 1rem;
+    width: 100%;                                   /* Prend toute la largeur */
+    padding: 1rem;                                 /* Espace intérieur confortable */
 }
 
+/* Message de confirmation ou d'erreur après soumission */
 .form-message {
-    margin-top: 1rem;
-    padding: 0.8rem 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    margin-top: 1rem;                              /* Espace au-dessus */
+    padding: 0.8rem 1rem;                          /* Espace intérieur */
+    border-radius: 8px;                             /* Coins arrondis */
+    font-size: 0.9rem;                              /* Taille standard */
 }
 
+/* Message de succès */
 .form-message.success {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid #10b981;
-    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);            /* Fond vert clair */
+    border: 1px solid #10b981;                      /* Bordure verte */
+    color: #10b981;                                 /* Texte vert */
 }
 
+/* Message d'erreur */
 .form-message.error {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid #ef4444;
-    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);             /* Fond rouge clair */
+    border: 1px solid #ef4444;                      /* Bordure rouge */
+    color: #ef4444;                                 /* Texte rouge */
 }
 
-/* ── Coordonnées ── */
+/*  Coordonnées (colonne droite)  */
 .contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
+    display: flex;                                  /* Colonne verticale */
+    flex-direction: column;                         /* Empile les éléments */
+    gap: var(--spacing-lg);                          /* Espace entre les blocs (carte, adresse, etc.) */
 }
 
+/* Titre de la section coordonnées */
 .contact-info h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
+    font-size: 1.3rem;                              /* Taille modérée */
+    font-weight: 600;                                /* Semi-gras */
+    color: var(--text-primary);                      /* Couleur principale */
+    margin-bottom: var(--spacing-sm);                /* Espace sous le titre */
 }
 
+/* Carte d'information (adresse, téléphone, email) */
 .info-card {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
+    background: var(--secondary);                    /* Fond secondaire */
+    border: 1px solid var(--border);                 /* Bordure */
+    border-radius: 12px;                              /* Coins arrondis */
+    padding: var(--spacing-lg);                       /* Espace intérieur */
+    display: flex;                                    /* Colonne verticale */
+    flex-direction: column;                           /* Empile les items */
+    gap: var(--spacing-md);                           /* Espace entre chaque information */
 }
 
+/* Un élément d'information (icône + texte) */
 .info-item {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
+    display: flex;                                    /* Aligne l'icône et le texte */
+    gap: 1rem;                                        /* Espace icône/texte */
+    align-items: flex-start;                          /* Aligne en haut (pour texte multiligne) */
 }
 
+/* Icône Material Symbols */
 .info-item .material-symbols-outlined {
-    font-size: 1.8rem;
-    color: var(--primary);
-    flex-shrink: 0;
-    margin-top: 0.1rem;
+    font-size: 1.8rem;                                /* Taille de l'icône */
+    color: var(--primary);                             /* Bleu */
+    flex-shrink: 0;                                    /* Ne rétrécit pas */
+    margin-top: 0.1rem;                                /* Ajustement fin pour alignement */
 }
 
+/* Titre de l'information (ex: "Téléphone") */
 .info-item h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.2rem;
-    color: var(--text-primary);
+    font-size: 1rem;                                  /* Taille standard */
+    font-weight: 600;                                 /* Semi-gras */
+    margin-bottom: 0.2rem;                            /* Petit espace sous le titre */
+    color: var(--text-primary);                       /* Couleur principale */
 }
 
+/* Texte de l'information (numéro, adresse, etc.) */
 .info-item p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
+    font-size: 0.9rem;                                /* Petit */
+    color: var(--text-secondary);                      /* Couleur secondaire */
+    line-height: 1.5;                                  /* Interligne confortable */
 }
 
+/* Liens dans les informations (email, téléphone cliquable) */
 .info-item a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
+    color: var(--text-secondary);                      /* Couleur secondaire */
+    text-decoration: none;                             /* Pas de soulignement */
+    transition: color var(--transition-fast);          /* Animation au survol */
 }
 
 .info-item a:hover {
-    color: var(--primary);
+    color: var(--primary);                             /* Bleu au survol */
 }
 
-/* ── Carte ── */
+/*  Carte (intégration Google Maps ou iframe)  */
 .map-container {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
+    background: var(--secondary);                      /* Fond secondaire */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 12px;                               /* Coins arrondis */
+    padding: var(--spacing-lg);                         /* Espace intérieur */
 }
 
 .map-container h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
+    font-size: 1rem;                                   /* Titre "Nous trouver" */
+    font-weight: 600;                                  /* Semi-gras */
+    margin-bottom: var(--spacing-sm);                   /* Espace sous le titre */
+    color: var(--text-primary);                         /* Couleur principale */
 }
 
+/* Conteneur de la carte (placeholder ou iframe) */
 .map-placeholder {
-    width: 100%;
-    height: 250px;
-    background: var(--background);
-    border-radius: 8px;
-    overflow: hidden;
+    width: 100%;                                        /* Pleine largeur */
+    height: 250px;                                      /* Hauteur fixe */
+    background: var(--background);                       /* Fond pendant le chargement */
+    border-radius: 8px;                                 /* Coins arrondis */
+    overflow: hidden;                                   /* Cache les débordements (pour les iframes) */
 }
 
 .map-placeholder iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
+    width: 100%;                                        /* Remplit le conteneur */
+    height: 100%;                                       /* Remplit le conteneur */
+    border: none;                                       /* Pas de bordure */
+    display: block;                                     /* Supprime l'espace sous l'iframe */
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/*  RESPONSIVE */
 
+/*  Petit desktop / tablette large (≤ 1024px)  */
 @media (max-width: 1024px) {
     .contact-layout {
-        gap: var(--spacing-lg);
+        gap: var(--spacing-lg);                         /* Espace réduit entre les colonnes */
     }
 }
 
+/*  Tablette / mobile large (≤ 768px)  */
 @media (max-width: 768px) {
     .contact-layout {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        grid-template-columns: 1fr;                      /* Passe en une seule colonne */
+        gap: var(--spacing-lg);                           /* Espace réduit entre les sections */
     }
 
     .form-row {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-sm);
+        grid-template-columns: 1fr;                       /* Champs en une seule colonne */
+        gap: var(--spacing-sm);                           /* Espace réduit */
+        margin-bottom: var(--spacing-sm);                 /* Marge réduite */
     }
 
     .page-title {
-        font-size: 1.6rem;
+        font-size: 1.6rem;                                /* Titre réduit */
     }
 
     .contact-form {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md);                        /* Padding interne réduit */
     }
 
     .info-card {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md);                        /* Padding interne réduit */
     }
 
     .map-placeholder {
-        height: 200px;
+        height: 200px;                                     /* Carte moins haute */
     }
 }
 
+/*  Mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .page-title {
-        font-size: 1.4rem;
+        font-size: 1.4rem;                                 /* Titre encore plus compact */
     }
 
     .contact-form,
     .info-card,
     .map-container {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-sm);                        /* Padding minimum */
     }
 
     .info-item .material-symbols-outlined {
-        font-size: 1.4rem;
+        font-size: 1.4rem;                                 /* Icônes réduites */
     }
 }

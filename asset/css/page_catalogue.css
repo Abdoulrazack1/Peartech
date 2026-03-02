@@ -1,149 +1,162 @@
-/* Page catalogue  */
+/* page_catalogue.css  */
 
+/* Layout principal : deux colonnes (filtres à gauche, résultats à droite) */
 .catalogue-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: var(--spacing-lg);
-    margin: var(--spacing-lg) 0;
-    align-items: start;
-    overflow: visible;
+    display: grid;                          /* Grille CSS */
+    grid-template-columns: 280px 1fr;       /* Colonne gauche fixe 280px, colonne droite prend le reste */
+    gap: var(--spacing-lg);                 /* Espace entre les colonnes */
+    margin: var(--spacing-lg) 0;            /* Marge verticale autour du layout */
+    align-items: start;                     /* Aligne les deux colonnes par le haut */
+    overflow: visible;                       /* Évite de couper les éléments sticky */
 }
 
-/* ── Sidebar filtres ── */
+/*  Sidebar des filtres (colonne gauche)  */
 .filters-sidebar {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-md);
-    height: fit-content;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 80px;
-    align-self: start;
-    z-index: 1;
+    background: var(--secondary);           /* Fond secondaire */
+    border: 1px solid var(--border);        /* Bordure subtile */
+    border-radius: 12px;                    /* Coins arrondis */
+    padding: var(--spacing-md);              /* Espace intérieur */
+    height: fit-content;                     /* Hauteur selon le contenu */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Ombre légère pour profondeur */
+    position: sticky;                        /* Reste visible lors du défilement */
+    top: 80px;                                /* Distance depuis le haut (place sous l'en-tête) */
+    align-self: start;                        /* S'aligne en haut de la colonne */
+    z-index: 1;                               /* Au-dessus du contenu normal */
 }
 
+/* En-tête de la sidebar (titre + bouton réinitialiser) */
 .filters-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border);
+    display: flex;                           /* Aligne le titre et le bouton */
+    justify-content: space-between;          /* Titre à gauche, bouton à droite */
+    align-items: center;                      /* Centrage vertical */
+    margin-bottom: var(--spacing-md);         /* Espace sous l'en-tête */
+    padding-bottom: var(--spacing-sm);        /* Espace avant la bordure */
+    border-bottom: 1px solid var(--border);  /* Ligne de séparation avec les filtres */
 }
 
+/* Titre "Filtres" */
 .filters-header h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-size: 1.1rem;                        /* Taille modérée */
+    font-weight: 600;                          /* Semi-gras */
+    color: var(--text-primary);                /* Couleur principale */
 }
 
+/* Bouton "Réinitialiser" */
 .reset-filters {
-    background: transparent;
-    border: none;
-    color: var(--primary);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: color var(--transition-fast);
-    text-decoration: underline;
-    font-family: inherit;
+    background: transparent;                   /* Fond transparent */
+    border: none;                              /* Pas de bordure */
+    color: var(--primary);                      /* Bleu */
+    font-size: 0.85rem;                        /* Petit */
+    cursor: pointer;                           /* Curseur main */
+    transition: color var(--transition-fast);  /* Animation au survol */
+    text-decoration: underline;                 /* Souligné pour indiquer l'action */
+    font-family: inherit;                       /* Hérite police */
 }
 
 .reset-filters:hover {
-    color: var(--primary-hover);
+    color: var(--primary-hover);                /* Bleu plus foncé au survol */
 }
 
+/* Section de filtre (ex: Catégorie, Prix, etc.) */
 .filter-section {
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);          /* Espace entre les sections */
 }
 
+/* Titre d'une section (ex: "CATÉGORIES") */
 .filter-section-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 0.9rem;                         /* Petit */
+    font-weight: 600;                           /* Semi-gras */
+    margin-bottom: var(--spacing-sm);           /* Espace sous le titre */
+    color: var(--text-primary);                 /* Couleur principale */
+    text-transform: uppercase;                   /* Majuscules pour hiérarchie */
+    letter-spacing: 0.5px;                       /* Espacement léger */
 }
 
-/* ── Checkbox list ── */
+/*  Liste de cases à cocher (filtres à choix multiples)  */
 .checkbox-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    max-height: 200px;
-    overflow-y: auto;
-    padding-right: 0.5rem;
+    display: flex;                              /* Colonne verticale */
+    flex-direction: column;                      /* Empile les items */
+    gap: 0.5rem;                                 /* Espace entre les items */
+    max-height: 200px;                           /* Hauteur max pour les longues listes */
+    overflow-y: auto;                            /* Scroll vertical si trop d'items */
+    padding-right: 0.5rem;                       /* Espace pour le scrollbar */
 }
 
+/* Item d'une liste à cocher (une ligne) */
 .checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: color var(--transition-fast);
+    display: flex;                               /* Aligne la case, le label et le compteur */
+    align-items: center;                         /* Centrage vertical */
+    gap: 0.5rem;                                 /* Espace entre les éléments */
+    font-size: 0.9rem;                           /* Taille standard */
+    color: var(--text-secondary);                 /* Couleur secondaire */
+    cursor: pointer;                              /* Curseur main */
+    transition: color var(--transition-fast);    /* Animation au survol */
 }
 
 .checkbox-item:hover {
-    color: var(--text-primary);
+    color: var(--text-primary);                   /* Texte plus visible au survol */
 }
 
+/* Case à cocher elle-même */
 .checkbox-item input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--primary);
-    cursor: pointer;
-    flex-shrink: 0;
+    width: 16px;                                  /* Taille fixe */
+    height: 16px;                                 /* Taille fixe */
+    accent-color: var(--primary);                 /* Couleur de la case cochée (bleu) */
+    cursor: pointer;                               /* Curseur main */
+    flex-shrink: 0;                                /* Ne rétrécit pas */
 }
 
+/* Le libellé du filtre (ex: "iPhone") */
 .checkbox-item span:first-of-type {
-    flex: 1;
+    flex: 1;                                       /* Prend l'espace disponible */
 }
 
+/* Le compteur (ex: "(12)") */
 .checkbox-count {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    background: var(--border);
-    padding: 0.1rem 0.4rem;
-    border-radius: 12px;
-    white-space: nowrap;
+    color: var(--text-muted);                      /* Discret */
+    font-size: 0.8rem;                             /* Petit */
+    background: var(--border);                      /* Fond gris */
+    padding: 0.1rem 0.4rem;                        /* Espace intérieur pour l'effet badge */
+    border-radius: 12px;                            /* Forme de pilule */
+    white-space: nowrap;                            /* Empêche la coupure */
 }
 
-/* ── Slider prix ── */
+/*  Filtre par plage de prix (slider)  */
 .price-range {
-    padding: 0.5rem 0;
+    padding: 0.5rem 0;                            /* Espace vertical */
 }
 
+/* Le slider HTML5 */
 .price-slider {
-    width: 100%;
-    margin: 0.5rem 0;
-    -webkit-appearance: none;
+    width: 100%;                                   /* Pleine largeur */
+    margin: 0.5rem 0;                              /* Espace vertical */
+    -webkit-appearance: none;                      /* Supprime le style par défaut sur WebKit */
     appearance: none;
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    outline: none;
-    cursor: pointer;
+    height: 6px;                                    /* Épaisseur de la piste */
+    background: var(--border);                      /* Couleur de la piste */
+    border-radius: 3px;                             /* Coins arrondis */
+    outline: none;                                  /* Supprime l'outline */
+    cursor: pointer;                                /* Curseur main */
 }
 
+/* Personnalisation du curseur (thumb) pour WebKit */
 .price-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 18px;
+    width: 18px;                                    /* Taille du curseur */
     height: 18px;
-    background: var(--primary);
-    border-radius: 50%;
+    background: var(--primary);                     /* Bleu */
+    border-radius: 50%;                             /* Rond */
     cursor: pointer;
-    transition: transform var(--transition-fast);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: transform var(--transition-fast);  /* Animation au survol */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);         /* Ombre légère */
 }
 
 .price-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
+    transform: scale(1.2);                          /* Agrandissement au survol */
 }
 
+/* Pour Firefox */
 .price-slider::-moz-range-thumb {
     width: 18px;
     height: 18px;
@@ -153,457 +166,482 @@
     border: none;
 }
 
+/* Affichage des valeurs min et max du slider */
 .price-values {
-    display: flex;
-    justify-content: center;
-    gap: 0.3rem;
-    font-size: 0.9rem;
-    color: var(--text-primary);
-    background: var(--background);
-    padding: 0.3rem;
-    border-radius: 6px;
-    margin-top: 0.5rem;
+    display: flex;                                  /* Aligne les valeurs */
+    justify-content: center;                        /* Centrées */
+    gap: 0.3rem;                                    /* Espace entre les valeurs */
+    font-size: 0.9rem;                              /* Taille standard */
+    color: var(--text-primary);                     /* Couleur principale */
+    background: var(--background);                   /* Fond pour les détacher */
+    padding: 0.3rem;                                 /* Espace intérieur */
+    border-radius: 6px;                              /* Coins arrondis */
+    margin-top: 0.5rem;                              /* Espace au-dessus */
 }
 
-/* ── Résultats ── */
+/*  Colonne droite (résultats du catalogue)  */
 .results-header {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);              /* Espace sous l'en-tête */
 }
 
+/* Titre de la catégorie (ex: "iPhone") */
 .category-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
-    color: var(--text-primary);
+    font-size: 2rem;                                /* Grande taille */
+    font-weight: 700;                               /* Gras */
+    margin-bottom: 0.25rem;                         /* Petit espace sous le titre */
+    color: var(--text-primary);                     /* Couleur principale */
 }
 
+/* Description de la catégorie (si existante) */
 .category-description {
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
+    color: var(--text-secondary);                   /* Couleur secondaire */
+    margin-bottom: 0.5rem;                          /* Espace sous la description */
+    font-size: 0.95rem;                              /* Taille standard */
 }
 
+/* Nombre de produits trouvés */
 .results-count {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
+    font-size: 0.9rem;                              /* Petit */
+    color: var(--text-muted);                        /* Discret */
+    margin-bottom: 1rem;                             /* Espace sous le compteur */
 }
 
+/* Barre d'outils (filtres actifs, tri, changement de vue) */
 .results-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    display: flex;                                   /* Aligne les éléments horizontalement */
+    justify-content: space-between;                  /* Espace entre les groupes */
+    align-items: center;                             /* Centrage vertical */
+    flex-wrap: wrap;                                 /* Passe à la ligne sur petits écrans */
+    gap: 1rem;                                       /* Espace entre les éléments */
+    padding: 1rem 0;                                 /* Espace vertical */
+    border-top: 1px solid var(--border);             /* Ligne de séparation */
+    border-bottom: 1px solid var(--border);          /* Ligne de séparation */
 }
 
+/* Conteneur des filtres actifs (tags) */
 .active-filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    flex: 1;
-    min-width: 0;
+    display: flex;                                   /* Aligne les tags horizontalement */
+    flex-wrap: wrap;                                 /* Retour à la ligne si trop de tags */
+    gap: 0.5rem;                                     /* Espace entre les tags */
+    flex: 1;                                          /* Prend l'espace disponible */
+    min-width: 0;                                     /* Autorise le rétrécissement */
 }
 
+/* Un tag de filtre actif */
 .filter-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.3rem 0.8rem;
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid var(--primary);
-    border-radius: 20px;
-    font-size: 0.8rem;
-    color: var(--primary);
-    font-weight: 500;
-    white-space: nowrap;
+    display: inline-flex;                            /* Aligne le texte et le bouton de suppression */
+    align-items: center;                             /* Centrage vertical */
+    gap: 0.3rem;                                     /* Espace texte/bouton */
+    padding: 0.3rem 0.8rem;                          /* Espace intérieur */
+    background: rgba(59, 130, 246, 0.1);             /* Fond bleu très léger */
+    border: 1px solid var(--primary);                /* Bordure bleue */
+    border-radius: 20px;                             /* Forme de pilule */
+    font-size: 0.8rem;                               /* Petit */
+    color: var(--primary);                            /* Texte bleu */
+    font-weight: 500;                                 /* Medium */
+    white-space: nowrap;                              /* Empêche la coupure du texte */
 }
 
+/* Bouton de suppression dans un tag */
 .filter-tag .remove {
-    background: none;
-    border: none;
-    padding: 0;
-    margin-left: 0.2rem;
-    font-family: inherit;
-    cursor: pointer;
-    font-size: 1rem;
-    line-height: 1;
-    font-weight: bold;
-    color: var(--primary);
-    display: inline-flex;
+    background: none;                                /* Fond transparent */
+    border: none;                                    /* Pas de bordure */
+    padding: 0;                                      /* Pas de padding */
+    margin-left: 0.2rem;                             /* Petit espace à gauche */
+    font-family: inherit;                            /* Hérite police */
+    cursor: pointer;                                 /* Curseur main */
+    font-size: 1rem;                                 /* Taille pour la croix */
+    line-height: 1;                                  /* Pas de hauteur excessive */
+    font-weight: bold;                               /* Gras */
+    color: var(--primary);                            /* Bleu */
+    display: inline-flex;                             /* Aligne la croix */
     align-items: center;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-fast);       /* Animation */
 }
 
 .filter-tag .remove:hover {
-    color: #ef4444;
+    color: #ef4444;                                   /* Rouge au survol */
 }
 
-/* ── Badges & stock ── */
+/*  Badges et indicateurs sur les cartes produits  */
 .badge-promo {
-    background: #ef4444;
-    color: white;
+    background: #ef4444;                             /* Rouge */
+    color: white;                                    /* Texte blanc */
 }
 
+/* Indicateur de stock (rupture ou faible stock) */
 .stock-alert,
 .stock-low {
-    position: absolute;
-    bottom: 0.6rem;
+    position: absolute;                              /* Positionné dans la carte produit */
+    bottom: 0.6rem;                                  /* En bas à gauche */
     left: 0.6rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    z-index: 2;
+    padding: 0.25rem 0.6rem;                         /* Espace intérieur */
+    border-radius: 6px;                              /* Coins arrondis */
+    font-size: 0.7rem;                               /* Très petit */
+    font-weight: 600;                                /* Semi-gras */
+    z-index: 2;                                       /* Au-dessus de l'image */
 }
 
 .stock-alert {
-    background: rgba(239, 68, 68, 0.9);
+    background: rgba(239, 68, 68, 0.9);              /* Rouge semi-transparent */
     color: white;
 }
 
 .stock-low {
-    background: rgba(245, 158, 11, 0.9);
+    background: rgba(245, 158, 11, 0.9);              /* Orange semi-transparent */
     color: white;
 }
 
-/* ── Bloc prix ── */
+/*  Bloc prix dans la carte produit  */
 .product-price-block {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.15rem;
+    display: flex;                                   /* Colonne verticale */
+    flex-direction: column;                          /* Prix actuel au-dessus, ancien prix en-dessous */
+    align-items: flex-start;                         /* Aligné à gauche */
+    gap: 0.15rem;                                    /* Petit espace */
 }
 
-/* ── Footer carte ── */
+/*  Footer de la carte produit (prix + actions) */
 .product-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: var(--spacing-sm);
-    gap: 0.5rem;
-    min-height: 52px;
+    display: flex;                                   /* Aligne le prix et les icônes */
+    justify-content: space-between;                  /* Prix à gauche, icônes à droite */
+    align-items: flex-end;                            /* Aligne en bas */
+    margin-bottom: var(--spacing-sm);                 /* Espace sous le footer */
+    gap: 0.5rem;                                      /* Espace entre prix et icônes */
+    min-height: 52px;                                 /* Hauteur minimale pour éviter les variations */
 }
 
+/* Ancien prix barré */
 .product-old-price {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-decoration: line-through;
-    font-weight: 400;
+    font-size: 0.85rem;                              /* Petit */
+    color: var(--text-muted);                          /* Discret */
+    text-decoration: line-through;                     /* Barré */
+    font-weight: 400;                                 /* Poids normal */
 }
 
-/* ── Actions carte ── */
+/* Actions sur la carte (favori, ajout panier) */
 .product-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-shrink: 0;
+    display: flex;                                   /* Aligne les icônes horizontalement */
+    align-items: center;                             /* Centrage vertical */
+    gap: 0.4rem;                                     /* Espace entre les icônes */
+    flex-shrink: 0;                                   /* Empêche la réduction */
 }
 
+/* Bouton d'ajout au panier (icône) */
 .btn-add-cart {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    display: flex;
+    width: 36px;                                      /* Taille fixe */
+    height: 36px;                                     /* Taille fixe */
+    padding: 0;                                       /* Pas de padding */
+    background: var(--primary);                        /* Fond bleu */
+    color: white;                                     /* Icône blanche */
+    border: none;                                     /* Pas de bordure */
+    border-radius: 8px;                               /* Coins arrondis */
+    display: flex;                                    /* Centre l'icône */
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    flex-shrink: 0;
+    cursor: pointer;                                  /* Curseur main */
+    transition: var(--transition-normal);             /* Animation */
+    flex-shrink: 0;                                   /* Ne rétrécit pas */
 }
 
 .btn-add-cart:hover {
-    background: var(--primary-hover);
-    transform: scale(1.08);
+    background: var(--primary-hover);                  /* Bleu plus foncé */
+    transform: scale(1.08);                            /* Légère augmentation */
 }
 
 .btn-add-cart:disabled {
-    background: #10b981;
-    transform: none;
-    cursor: default;
+    background: #10b981;                               /* Vert si déjà en panier (état désactivé) */
+    transform: none;                                   /* Pas d'animation */
+    cursor: default;                                   /* Curseur par défaut */
 }
 
 .btn-add-cart .material-symbols-outlined {
-    font-size: 1.1rem;
+    font-size: 1.1rem;                                 /* Taille de l'icône */
 }
 
+/* Bouton favori (cœur) */
 .btn-fav {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    display: flex;
+    width: 36px;                                      /* Taille fixe */
+    height: 36px;                                     /* Taille fixe */
+    padding: 0;                                       /* Pas de padding */
+    background: var(--secondary);                      /* Fond secondaire */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 8px;                                /* Coins arrondis */
+    display: flex;                                     /* Centre l'icône */
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    color: var(--text-secondary);
-    flex-shrink: 0;
+    cursor: pointer;                                   /* Curseur main */
+    transition: var(--transition-normal);              /* Animation */
+    color: var(--text-secondary);                      /* Couleur de l'icône par défaut */
+    flex-shrink: 0;                                    /* Ne rétrécit pas */
 }
 
 .btn-fav:hover {
-    border-color: #ef4444;
-    background: rgba(239, 68, 68, 0.06);
-    transform: scale(1.08);
+    border-color: #ef4444;                             /* Bordure rouge */
+    background: rgba(239, 68, 68, 0.06);               /* Fond léger rouge */
+    transform: scale(1.08);                             /* Agrandissement */
 }
 
+/* Icône SVG à l'intérieur (si utilisée) */
 .btn-fav svg {
     transition: fill 0.2s ease, stroke 0.2s ease;
-    pointer-events: none;
+    pointer-events: none;                               /* Évite que le SVG intercepte les clics */
 }
 
-/* ── Tri & vues ── */
+/*  Sélecteur de tri  */
 .sort-selector {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0;
+    display: flex;                                    /* Aligne label et select */
+    align-items: center;                              /* Centrage vertical */
+    gap: 0.5rem;                                      /* Espace entre label et select */
+    flex-shrink: 0;                                   /* Ne rétrécit pas */
 }
 
 .sort-selector label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    white-space: nowrap;
+    font-size: 0.85rem;                               /* Petit */
+    color: var(--text-secondary);                      /* Couleur secondaire */
+    white-space: nowrap;                               /* Empêche la coupure */
 }
 
 .sort-selector select {
-    padding: 0.3rem 0.8rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-primary);
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: border-color var(--transition-fast);
-    font-family: inherit;
+    padding: 0.3rem 0.8rem;                           /* Espace intérieur */
+    background: var(--secondary);                      /* Fond secondaire */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 6px;                                /* Coins arrondis */
+    color: var(--text-primary);                        /* Couleur du texte */
+    font-size: 0.85rem;                                /* Petit */
+    cursor: pointer;                                   /* Curseur main */
+    transition: border-color var(--transition-fast);  /* Animation focus */
+    font-family: inherit;                              /* Hérite police */
 }
 
 .sort-selector select:hover {
-    border-color: var(--primary);
+    border-color: var(--primary);                      /* Bordure bleue */
 }
 
+/*  Toggle de vue (grille / liste)  */
 .view-toggle {
-    display: flex;
-    gap: 0.3rem;
-    background: var(--secondary);
-    border-radius: 8px;
-    padding: 0.2rem;
-    flex-shrink: 0;
+    display: flex;                                     /* Aligne les deux boutons */
+    gap: 0.3rem;                                       /* Espace entre les boutons */
+    background: var(--secondary);                      /* Fond pour les détacher */
+    border-radius: 8px;                                /* Coins arrondis */
+    padding: 0.2rem;                                   /* Petit padding */
+    flex-shrink: 0;                                    /* Ne rétrécit pas */
 }
 
+/* Bouton de changement de vue */
 .view-btn {
-    padding: 0.3rem;
-    background: transparent;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--text-secondary);
-    transition: var(--transition-fast);
-    display: flex;
+    padding: 0.3rem;                                   /* Espace intérieur */
+    background: transparent;                            /* Fond transparent */
+    border: none;                                      /* Pas de bordure */
+    border-radius: 6px;                                /* Coins arrondis */
+    cursor: pointer;                                   /* Curseur main */
+    color: var(--text-secondary);                      /* Couleur par défaut */
+    transition: var(--transition-fast);                /* Animation */
+    display: flex;                                     /* Centre l'icône */
     align-items: center;
     justify-content: center;
 }
 
 .view-btn .material-symbols-outlined {
-    font-size: 1.2rem;
+    font-size: 1.2rem;                                 /* Taille de l'icône */
 }
 
 .view-btn:hover {
-    color: var(--text-primary);
-    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-primary);                        /* Plus visible */
+    background: rgba(59, 130, 246, 0.1);               /* Fond léger */
 }
 
 .view-btn.active {
-    background: var(--primary);
-    color: white;
+    background: var(--primary);                        /* Fond bleu pour le mode actif */
+    color: white;                                      /* Icône blanche */
 }
 
-/* ── Grille produits ── */
+/*  Grille des produits (par défaut 3 colonnes) */
 .products-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-md);
-    margin: var(--spacing-lg) 0;
+    display: grid;                                     /* Grille CSS */
+    grid-template-columns: repeat(3, 1fr);             /* 3 colonnes égales */
+    gap: var(--spacing-md);                            /* Espace entre les cartes */
+    margin: var(--spacing-lg) 0;                       /* Marge verticale */
 }
 
-/* ── Vue liste ── */
+/*  Vue liste (alternative à la grille)  */
 .products-grid.list-view {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr;                        /* Une seule colonne */
 }
 
+/* Carte produit en vue liste */
 .products-grid.list-view .product-card {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    display: flex;                                     /* Aligne l'image et les infos horizontalement */
+    flex-direction: row;                               /* Ligne */
+    gap: 1rem;                                         /* Espace entre image et texte */
 }
 
 .products-grid.list-view .product-image {
-    width: 200px;
+    width: 200px;                                      /* Image plus petite et fixe */
     height: 200px;
-    flex-shrink: 0;
+    flex-shrink: 0;                                    /* Ne rétrécit pas */
 }
 
 .products-grid.list-view .product-info {
-    flex: 1;
-    display: flex;
+    flex: 1;                                           /* Prend l'espace restant */
+    display: flex;                                     /* Colonne verticale */
     flex-direction: column;
-    justify-content: center;
+    justify-content: center;                            /* Centre verticalement */
 }
 
 .products-grid.list-view .product-footer {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: row;                               /* Garde le prix et les icônes en ligne */
+    align-items: center;                               /* Centrés */
 }
 
 .products-grid.list-view .product-actions {
-    flex-direction: row;
+    flex-direction: row;                               /* Icônes en ligne */
 }
 
 .products-grid.list-view .btn-view-product {
-    margin-top: 0.5rem;
-    width: auto;
-    align-self: flex-start;
+    margin-top: 0.5rem;                                /* Espace au-dessus */
+    width: auto;                                       /* Largeur automatique (pas pleine largeur) */
+    align-self: flex-start;                            /* Aligné à gauche */
 }
 
-/* ── Pagination ── */
+/*  Pagination  */
 .pagination {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+    display: flex;                                     /* Aligne les boutons */
+    justify-content: center;                           /* Centrés */
+    gap: 0.5rem;                                       /* Espace entre les boutons */
+    margin-top: 2rem;                                  /* Espace au-dessus */
+    flex-wrap: wrap;                                   /* Passe à la ligne sur mobile */
 }
 
+/* Bouton de page */
 .page-btn {
-    padding: 0.5rem 1rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: var(--transition-fast);
-    min-width: 40px;
-    text-align: center;
-    text-decoration: none;
-    font-family: inherit;
-    font-size: 0.9rem;
+    padding: 0.5rem 1rem;                              /* Espace intérieur */
+    background: var(--secondary);                      /* Fond secondaire */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 6px;                                /* Coins arrondis */
+    color: var(--text-primary);                        /* Couleur texte */
+    cursor: pointer;                                   /* Curseur main */
+    transition: var(--transition-fast);                /* Animation */
+    min-width: 40px;                                   /* Largeur minimale pour alignement */
+    text-align: center;                                /* Texte centré */
+    text-decoration: none;                             /* Si utilisé comme lien */
+    font-family: inherit;                              /* Hérite police */
+    font-size: 0.9rem;                                 /* Taille standard */
 }
 
 .page-btn:hover {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary);                      /* Bordure bleue */
+    background: rgba(59, 130, 246, 0.1);               /* Fond léger */
 }
 
 .page-btn.active {
-    background: var(--primary);
+    background: var(--primary);                        /* Fond bleu pour la page courante */
     border-color: var(--primary);
     color: white;
 }
 
 .page-btn.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: not-allowed;
+    opacity: 0.5;                                      /* Grise */
+    pointer-events: none;                               /* Non cliquable */
+    cursor: not-allowed;                                /* Curseur interdit */
 }
 
+/* Points de suspension (...) */
 .page-dots {
-    padding: 0.5rem;
-    color: var(--text-muted);
+    padding: 0.5rem;                                   /* Espace pour alignement */
+    color: var(--text-muted);                           /* Discret */
 }
 
-/* ── Scrollbar personnalisée ── */
+/* ── Scrollbar personnalisée pour les listes de filtres (esthétique) ── */
 .checkbox-list::-webkit-scrollbar { width: 6px; }
 .checkbox-list::-webkit-scrollbar-track { background: var(--border); border-radius: 3px; }
 .checkbox-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
 .checkbox-list::-webkit-scrollbar-thumb:hover { background: var(--primary-hover); }
 
-/* ── Breadcrumb ── */
+/*  Fil d'Ariane (breadcrumb) */
 .breadcrumb {
-    padding: 1rem 0;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.2rem;
+    padding: 1rem 0;                                   /* Espace vertical */
+    font-size: 0.85rem;                                /* Petit */
+    color: var(--text-muted);                           /* Discret */
+    display: flex;                                      /* Aligne les éléments */
+    align-items: center;                                /* Centrage vertical */
+    flex-wrap: wrap;                                    /* Retour à la ligne */
+    gap: 0.2rem;                                        /* Petit espace */
 }
 
 .breadcrumb a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
+    color: var(--text-secondary);                       /* Couleur secondaire */
+    text-decoration: none;                              /* Pas de soulignement */
+    transition: color var(--transition-fast);           /* Animation */
 }
 
 .breadcrumb a:hover {
-    color: var(--primary);
+    color: var(--primary);                              /* Bleu au survol */
 }
 
 .breadcrumb span {
-    margin: 0 0.3rem;
+    margin: 0 0.3rem;                                   /* Espace autour des séparateurs */
 }
 
-/* RESPONSIVE */
+/*  Wrapper des résultats (colonne droite)  */
+.catalogue-results {
+    min-width: 0;                                        /* Autorise le rétrécissement dans la grille */
+    display: flex;                                       /* Colonne verticale */
+    flex-direction: column;
+}
 
-/* Tablette large */
+/* ── RESPONSIVE */
+
+/*  Tablette large (≤ 1200px)  */
 @media (max-width: 1200px) {
     .catalogue-layout {
-        grid-template-columns: 240px 1fr;
-        gap: var(--spacing-md);
+        grid-template-columns: 240px 1fr;               /* Sidebar un peu moins large */
+        gap: var(--spacing-md);                          /* Espace réduit */
     }
     .products-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);          /* Passe à 2 colonnes */
     }
 }
 
-/* Tablette */
+/*  Tablette (≤ 1024px)  */
 @media (max-width: 1024px) {
     .catalogue-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;                      /* Passe en une seule colonne */
     }
 
     .filters-sidebar {
-        position: static; /* retire le sticky sur tablette */
-        order: -1;        /* sidebar EN HAUT sur tablette */
+        position: static;                                /* Annule le sticky */
+        order: -1;                                        /* Sidebar en haut du flux */
     }
 
     /* Filtres en accordéon horizontal scrollable sur tablette */
     .filter-section {
-        display: inline-block;
-        margin-right: var(--spacing-md);
+        display: inline-block;                            /* Permet le scroll horizontal */
+        margin-right: var(--spacing-md);                  /* Espace entre sections */
     }
 }
 
-/* Tablette portrait / grand mobile */
+/* Tablette portrait / grand mobile (≤ 900px) */
 @media (max-width: 900px) {
     .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-sm);
+        grid-template-columns: repeat(2, 1fr);           /* 2 colonnes */
+        gap: var(--spacing-sm);                           /* Espace réduit */
     }
 
     .results-toolbar {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: column;                           /* Passe en colonne */
+        align-items: stretch;                              /* Les éléments prennent la largeur */
     }
 
     .active-filters {
-        order: 3;
+        order: 3;                                          /* Filtres actifs en bas */
     }
 
     .sort-selector {
-        justify-content: space-between;
+        justify-content: space-between;                    /* Étale le label et le select */
     }
 
     .view-toggle {
-        align-self: flex-end;
+        align-self: flex-end;                              /* Aligné à droite */
     }
 
     /* Vue liste : image plus petite */
@@ -613,23 +651,23 @@
     }
 }
 
-/* Mobile */
+/*  Mobile (≤ 768px)  */
 @media (max-width: 768px) {
     .catalogue-layout {
-        gap: var(--spacing-sm);
+        gap: var(--spacing-sm);                            /* Espace réduit */
         margin: var(--spacing-sm) 0;
     }
 
     .filters-sidebar {
-        padding: var(--spacing-sm);
-        border-radius: 8px;
+        padding: var(--spacing-sm);                        /* Padding réduit */
+        border-radius: 8px;                                /* Coins moins arrondis */
     }
 
     .category-title {
-        font-size: 1.5rem;
+        font-size: 1.5rem;                                 /* Titre réduit */
     }
 
-    /* Filtres en grille 2 colonnes sur mobile */
+    /* Filtres reviennent en bloc (plus scroll horizontal) */
     .filter-section {
         display: block;
         margin-right: 0;
@@ -637,59 +675,52 @@
     }
 }
 
-/* Petit mobile */
+/* Petit mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .products-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;                        /* Une seule colonne */
     }
 
     /* Fix product-footer : empêche les boutons de sortir de la card */
     .product-footer {
-        flex-wrap: nowrap;
-        min-height: auto;
-        gap: 0.3rem;
+        flex-wrap: nowrap;                                 /* Pas de retour à la ligne */
+        min-height: auto;                                  /* Annule la hauteur minimale */
+        gap: 0.3rem;                                       /* Espace réduit */
     }
 
     .product-price {
-        font-size: 1rem;
+        font-size: 1rem;                                   /* Prix réduit */
     }
 
     .product-actions {
-        flex-shrink: 0;
+        flex-shrink: 0;                                    /* Maintient la non-réduction */
     }
 
     /* Vue liste → vue colonne sur très petit écran */
     .products-grid.list-view .product-card {
-        flex-direction: column;
+        flex-direction: column;                            /* Image au-dessus du texte */
     }
 
     .products-grid.list-view .product-image {
-        width: 100%;
+        width: 100%;                                       /* Image pleine largeur */
         height: 200px;
     }
 
     .category-title {
-        font-size: 1.3rem;
+        font-size: 1.3rem;                                 /* Titre compact */
     }
 
     .results-toolbar {
-        gap: 0.75rem;
+        gap: 0.75rem;                                      /* Espace réduit */
     }
 
     .sort-selector select {
-        flex: 1;
+        flex: 1;                                           /* Le select prend toute la largeur */
     }
 
     .page-btn {
-        padding: 0.4rem 0.7rem;
+        padding: 0.4rem 0.7rem;                            /* Boutons plus petits */
         min-width: 36px;
         font-size: 0.8rem;
     }
-}
-
-/* ── Wrapper colonne résultats ── */
-.catalogue-results {
-    min-width: 0; /* empêche le débordement */
-    display: flex;
-    flex-direction: column;
 }

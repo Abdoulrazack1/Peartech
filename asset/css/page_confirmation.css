@@ -1,255 +1,279 @@
 /* page_confirmation.css */
 
-/* ── En-tête de confirmation ── */
+/* En-tête de confirmation (message de succès) */
 .confirmation-header {
-    text-align: center;
-    margin: var(--spacing-xl) 0;
-    padding: var(--spacing-lg);
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    text-align: center;                      /* Centre tout le contenu de l'en-tête */
+    margin: var(--spacing-xl) 0;              /* Grand espace vertical autour */
+    padding: var(--spacing-lg);                /* Espace intérieur généreux */
+    background: var(--secondary);              /* Fond secondaire pour le distinguer */
+    border: 1px solid var(--border);           /* Bordure subtile */
+    border-radius: 12px;                       /* Coins arrondis */
 }
 
+/* Conteneur pour l'icône de validation (coche) */
 .checkmark-circle {
-    display: flex;
-    justify-content: center;
-    margin-bottom: var(--spacing-md);
+    display: flex;                             /* Centre l'icône horizontalement */
+    justify-content: center;                   /* Centrage horizontal */
+    margin-bottom: var(--spacing-md);           /* Espace sous l'icône */
 }
 
+/* Icône Material Symbols (coche) */
 .checkmark-circle .material-symbols-outlined {
-    font-size: 4rem;
-    color: #10b981;
+    font-size: 4rem;                           /* Très grande taille */
+    color: #10b981;                              /* Vert pour signifier le succès */
 }
 
+/* Titre principal (ex: "Merci pour votre commande !") */
 .confirmation-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-xs);
-    color: var(--text-primary);
+    font-size: 2rem;                           /* Grande taille */
+    font-weight: 700;                          /* Gras */
+    margin-bottom: var(--spacing-xs);           /* Petit espace sous le titre */
+    color: var(--text-primary);                 /* Couleur principale */
 }
 
+/* Sous-titre (ex: "Commande #12345 confirmée") */
 .confirmation-subtitle {
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-bottom: var(--spacing-xs);
-    color: var(--text-secondary);
+    font-size: 1.1rem;                         /* Taille intermédiaire */
+    font-weight: 500;                           /* Medium */
+    margin-bottom: var(--spacing-xs);           /* Petit espace sous le sous-titre */
+    color: var(--text-secondary);               /* Couleur secondaire */
 }
 
+/* Message concernant l'email de confirmation */
 .confirmation-email {
-    font-size: 0.95rem;
-    color: var(--text-muted);
+    font-size: 0.95rem;                         /* Taille standard */
+    color: var(--text-muted);                    /* Couleur discrète */
 }
 
+/* Mise en valeur de l'adresse email */
 .confirmation-email span {
-    font-weight: 600;
-    color: var(--text-primary);
+    font-weight: 600;                            /* Semi-gras */
+    color: var(--text-primary);                  /* Couleur principale */
 }
 
-/* ── Layout deux colonnes ── */
+/* Layout principal à deux colonnes */
 .confirmation-layout {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    align-items: start;
-    overflow: visible;
+    display: grid;                                /* Grille CSS */
+    grid-template-columns: 1fr 350px;             /* Colonne gauche flexible, colonne droite fixe 350px */
+    gap: var(--spacing-lg);                       /* Espace entre les colonnes */
+    margin-bottom: var(--spacing-xl);              /* Marge sous le layout */
+    align-items: start;                            /* Aligne les deux colonnes par le haut */
+    overflow: visible;                              /* Évite de couper les éléments sticky */
 }
 
-/* ── Colonne gauche ── */
+/* Colonne gauche (détails de la commande) */
 .confirmation-left {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-lg);
-    min-width: 0; /* évite le débordement */
+    display: flex;                                 /* Colonne verticale */
+    flex-direction: column;                         /* Empile les sections */
+    gap: var(--spacing-lg);                         /* Espace entre les sections */
+    min-width: 0;                                    /* Autorise le rétrécissement dans la grille */
 }
 
+/* Sections d'information (livraison, paiement) et résumé de commande */
 .info-section,
 .order-summary {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
+    background: var(--secondary);                   /* Fond secondaire */
+    border: 1px solid var(--border);                /* Bordure */
+    border-radius: 12px;                             /* Coins arrondis */
+    padding: var(--spacing-lg);                       /* Espace intérieur */
 }
 
+/* Titres des sections */
 .info-section h2,
 .order-summary h2 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-md);
-    color: var(--text-primary);
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border);
+    font-size: 1.2rem;                               /* Taille modérée */
+    font-weight: 700;                                /* Gras */
+    margin-bottom: var(--spacing-md);                 /* Espace sous le titre */
+    color: var(--text-primary);                       /* Couleur principale */
+    padding-bottom: var(--spacing-sm);                 /* Espace avant la bordure */
+    border-bottom: 1px solid var(--border);           /* Ligne de séparation avec le contenu */
 }
 
+/* Grille d'informations (adresse, email, etc.) */
 .info-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    display: flex;                                    /* Colonne verticale */
+    flex-direction: column;                           /* Empile les lignes */
+    gap: 1rem;                                         /* Espace entre les lignes */
 }
 
+/* Ligne d'une information (label + valeur) */
 .info-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: flex;                                    /* Aligne label et valeur */
+    flex-wrap: wrap;                                   /* Permet le passage à la ligne sur mobile */
+    gap: 0.5rem;                                       /* Espace entre label et valeur */
 }
 
+/* Label de l'information (ex: "Adresse de livraison :") */
 .info-label {
-    font-weight: 600;
-    min-width: 140px;
-    color: var(--text-primary);
-    flex-shrink: 0;
+    font-weight: 600;                                  /* Semi-gras */
+    min-width: 140px;                                  /* Largeur minimale pour aligner les valeurs */
+    color: var(--text-primary);                        /* Couleur principale */
+    flex-shrink: 0;                                     /* Ne rétrécit pas */
 }
 
+/* Valeur de l'information */
 .info-value {
-    color: var(--text-secondary);
-    flex: 1;
-    min-width: 0;
-    word-break: break-word;
+    color: var(--text-secondary);                      /* Couleur secondaire */
+    flex: 1;                                            /* Prend l'espace restant */
+    min-width: 0;                                       /* Autorise le rétrécissement */
+    word-break: break-word;                             /* Coupe les mots trop longs */
 }
 
-/* ── Résumé commande ── */
+/* Résumé de la commande (liste des articles) */
 .order-items {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-md);                   /* Espace sous la liste */
 }
 
+/* Ligne d'un article */
 .order-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed var(--border);
+    display: flex;                                      /* Aligne nom et prix */
+    justify-content: space-between;                     /* Nom à gauche, prix à droite */
+    align-items: center;                                /* Centrage vertical */
+    gap: 1rem;                                          /* Espace entre nom et prix */
+    padding: 0.5rem 0;                                  /* Espace vertical */
+    border-bottom: 1px dashed var(--border);            /* Ligne pointillée entre les articles */
 }
 
+/* Dernier article : supprime la bordure */
 .order-item:last-child {
     border-bottom: none;
 }
 
+/* Nom de l'article */
 .item-name {
-    font-size: 0.95rem;
-    color: var(--text-primary);
-    flex: 1;
-    min-width: 0;
+    font-size: 0.95rem;                                 /* Taille standard */
+    color: var(--text-primary);                         /* Couleur principale */
+    flex: 1;                                             /* Prend l'espace disponible */
+    min-width: 0;                                        /* Autorise le rétrécissement */
 }
 
+/* Prix de l'article (pour la quantité affichée) */
 .item-price {
-    font-weight: 600;
-    color: var(--text-primary);
-    white-space: nowrap;
-    flex-shrink: 0;
+    font-weight: 600;                                   /* Semi-gras */
+    color: var(--text-primary);                         /* Couleur principale */
+    white-space: nowrap;                                 /* Empêche la coupure */
+    flex-shrink: 0;                                      /* Ne rétrécit pas */
 }
 
+/* Bloc des totaux (sous-total, livraison, total) */
 .order-totals {
-    border-top: 1px solid var(--border);
-    padding-top: var(--spacing-md);
-    margin-top: var(--spacing-sm);
+    border-top: 1px solid var(--border);                /* Ligne de séparation au-dessus */
+    padding-top: var(--spacing-md);                      /* Espace au-dessus */
+    margin-top: var(--spacing-sm);                       /* Espace au-dessus (cumulé) */
 }
 
+/* Ligne d'une information de total */
 .total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    color: var(--text-secondary);
+    display: flex;                                       /* Aligne libellé et valeur */
+    justify-content: space-between;                      /* Libellé à gauche, valeur à droite */
+    align-items: center;                                 /* Centrage vertical */
+    gap: 1rem;                                           /* Espace entre les deux */
+    margin-bottom: 0.5rem;                               /* Espace entre les lignes */
+    font-size: 0.95rem;                                  /* Taille standard */
+    color: var(--text-secondary);                        /* Couleur secondaire */
 }
 
+/* Ligne du total général (grand total) */
 .total-row.grand-total {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    border-top: 1px solid var(--border);
-    padding-top: 0.8rem;
-    margin-top: 0.8rem;
+    font-size: 1.2rem;                                   /* Plus grand */
+    font-weight: 700;                                     /* Gras */
+    color: var(--text-primary);                           /* Couleur principale */
+    border-top: 1px solid var(--border);                  /* Trait de séparation */
+    padding-top: 0.8rem;                                  /* Espace au-dessus */
+    margin-top: 0.8rem;                                   /* Espace au-dessus (cumulé) */
 }
 
-/* ── Colonne droite ── */
+/* Colonne droite (actions post-commande) */
 .confirmation-right {
-    align-self: start;
-    position: sticky;
-    top: 80px;
-    z-index: 1;
+    align-self: start;                                    /* S'aligne en haut de la colonne */
+    position: sticky;                                     /* Reste visible en défilant */
+    top: 80px;                                             /* Distance depuis le haut (place sous l'en-tête) */
+    z-index: 1;                                            /* Au-dessus du contenu normal */
 }
 
+/* Carte des actions (boutons) */
 .actions-card {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: var(--spacing-lg);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    background: var(--secondary);                         /* Fond secondaire */
+    border: 1px solid var(--border);                      /* Bordure */
+    border-radius: 12px;                                  /* Coins arrondis */
+    padding: var(--spacing-lg);                            /* Espace intérieur */
+    display: flex;                                         /* Colonne verticale */
+    flex-direction: column;                                /* Empile les boutons */
+    gap: 1rem;                                             /* Espace entre les boutons */
 }
 
+/* Boutons dans la carte : pleine largeur */
 .actions-card .btn-primary,
 .actions-card .btn-secondary {
-    width: 100%;
-    text-align: center;
-    padding: 0.9rem 1.2rem;
+    width: 100%;                                           /* Occupent toute la largeur */
+    text-align: center;                                    /* Texte centré */
+    padding: 0.9rem 1.2rem;                                /* Espace intérieur confortable */
 }
 
-/* RESPONSIVE */
+/*  RESPONSIVE */
 
+/* Petit desktop (≤ 1024px)  */
 @media (max-width: 1024px) {
     .confirmation-layout {
-        grid-template-columns: 1fr 300px;
+        grid-template-columns: 1fr 300px;                 /* Colonne droite un peu moins large */
     }
 }
 
+/* Tablette / mobile large (≤ 768px)  */
 @media (max-width: 768px) {
     .confirmation-layout {
-        grid-template-columns: 1fr;
-        gap: var(--spacing-md);
+        grid-template-columns: 1fr;                        /* Passe en une seule colonne */
+        gap: var(--spacing-md);                             /* Espace réduit entre les sections */
     }
 
     .confirmation-right {
-        position: static;
-        order: -1; /* le bouton "Continuer" en haut sur mobile */
+        position: static;                                   /* Annule le sticky */
+        order: -1;                                          /* Place les actions au-dessus du contenu principal */
     }
 
     .info-row {
-        flex-direction: column;
-        gap: 0.2rem;
+        flex-direction: column;                             /* Label au-dessus de la valeur */
+        gap: 0.2rem;                                        /* Espace réduit */
     }
 
     .info-label {
-        min-width: auto;
+        min-width: auto;                                    /* Annule la largeur minimale fixe */
     }
 
     .confirmation-title {
-        font-size: 1.6rem;
+        font-size: 1.6rem;                                  /* Titre réduit */
     }
 
     .confirmation-header {
-        margin: var(--spacing-md) 0;
-        padding: var(--spacing-md);
+        margin: var(--spacing-md) 0;                        /* Marge réduite */
+        padding: var(--spacing-md);                         /* Padding réduit */
     }
 
     .checkmark-circle .material-symbols-outlined {
-        font-size: 3rem;
+        font-size: 3rem;                                    /* Icône plus petite */
     }
 }
 
+/*  Mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .confirmation-title {
-        font-size: 1.4rem;
+        font-size: 1.4rem;                                  /* Titre encore plus compact */
     }
 
     .confirmation-subtitle {
-        font-size: 1rem;
+        font-size: 1rem;                                    /* Sous-titre réduit */
     }
 
     .info-section,
     .order-summary {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-sm);                         /* Padding interne minimum */
     }
 
     .actions-card {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-sm);                         /* Padding interne minimum */
     }
 
     .total-row.grand-total {
-        font-size: 1.1rem;
+        font-size: 1.1rem;                                  /* Total légèrement réduit */
     }
 }

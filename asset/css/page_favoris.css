@@ -1,429 +1,456 @@
 /* page_favoris.css */
 
-/* ── Fil d'Ariane ── */
+/*  Fil d'Ariane (breadcrumb)  */
 .breadcrumb {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    margin: var(--spacing-md) 0 var(--spacing-lg);
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    display: flex;                      /* Aligne les éléments horizontalement */
+    align-items: center;                /* Centrage vertical */
+    flex-wrap: wrap;                    /* Permet le retour à la ligne sur petits écrans */
+    gap: 0.25rem;                       /* Petit espace entre les éléments */
+    margin: var(--spacing-md) 0 var(--spacing-lg); /* Marge verticale : haut (md), bas (lg) */
+    font-size: 0.85rem;                  /* Petit texte */
+    color: var(--text-muted);             /* Couleur discrète pour les séparateurs */
 }
 
+/* Liens du fil d'Ariane */
 .breadcrumb a {
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color var(--transition-fast);
+    color: var(--text-muted);            /* Couleur discrète pour les liens */
+    text-decoration: none;                /* Pas de soulignement par défaut */
+    transition: color var(--transition-fast); /* Animation au survol */
 }
 
 .breadcrumb a:hover {
-    color: var(--primary);
+    color: var(--primary);                /* Devient bleu au survol */
 }
 
+/* Dernier élément (page courante) indiqué par aria-current */
 .breadcrumb span[aria-current] {
-    color: var(--text-primary);
-    font-weight: 500;
+    color: var(--text-primary);           /* Couleur principale pour la page en cours */
+    font-weight: 500;                     /* Poids de police moyen (ni trop léger ni trop gras) */
 }
 
-/* ── En-tête de la page ── */
+/*  En-tête de la page des favoris  */
 .favoris-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--spacing-lg);
-    padding-bottom: var(--spacing-md);
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    gap: 1rem;
+    display: flex;                        /* Aligne le titre et le bouton "Tout supprimer" */
+    align-items: center;                  /* Centrage vertical */
+    justify-content: space-between;       /* Titre à gauche, bouton à droite */
+    margin-bottom: var(--spacing-lg);      /* Espace sous l'en-tête */
+    padding-bottom: var(--spacing-md);     /* Espace interne avant la bordure */
+    border-bottom: 1px solid var(--border); /* Ligne de séparation avec la grille */
+    flex-wrap: wrap;                       /* Permet le passage à la ligne sur mobile */
+    gap: 1rem;                             /* Espace entre les éléments quand ils passent à la ligne */
 }
 
+/* Partie gauche de l'en-tête (titre + sous-titre) */
 .favoris-header-left {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    min-width: 0;
+    display: flex;                         /* Colonne verticale */
+    flex-direction: column;                 /* Empile le titre et le sous-titre */
+    gap: 0.3rem;                            /* Petit espace entre eux */
+    min-width: 0;                           /* Autorise le rétrécissement */
 }
 
+/* Titre principal de la page */
 .favoris-title {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    flex-wrap: wrap;
+    display: flex;                          /* Aligne l'icône et le texte */
+    align-items: center;                    /* Centrage vertical */
+    gap: 0.6rem;                            /* Espace entre l'icône et le titre */
+    font-size: 1.8rem;                      /* Grande taille */
+    font-weight: 700;                       /* Gras */
+    color: var(--text-primary);              /* Couleur principale */
+    flex-wrap: wrap;                         /* Permet au titre de passer à la ligne si besoin */
 }
 
+/* Icône cœur dans le titre */
 .favoris-title .material-symbols-outlined {
-    color: #ef4444;
-    font-size: 2rem;
-    font-variation-settings: 'FILL' 1;
-    flex-shrink: 0;
+    color: #ef4444;                          /* Rouge pour le cœur */
+    font-size: 2rem;                         /* Taille de l'icône */
+    font-variation-settings: 'FILL' 1;       /* Cœur rempli */
+    flex-shrink: 0;                           /* Empêche la réduction de l'icône */
 }
 
+/* Sous-titre (ex: "3 articles") */
 .favoris-subtitle {
-    font-size: 0.9rem;
-    color: var(--text-muted);
+    font-size: 0.9rem;                       /* Petit */
+    color: var(--text-muted);                 /* Couleur discrète */
 }
 
+/* Bouton "Tout supprimer" */
 .btn-clear-all {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.6rem 1rem;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    font-family: inherit;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    white-space: nowrap;
-    flex-shrink: 0;
+    display: flex;                            /* Aligne l'icône et le texte */
+    align-items: center;                      /* Centrage vertical */
+    gap: 0.4rem;                              /* Espace entre l'icône et le texte */
+    padding: 0.6rem 1rem;                     /* Espace intérieur */
+    background: transparent;                   /* Fond transparent */
+    border: 1px solid var(--border);           /* Bordure subtile */
+    border-radius: 6px;                        /* Coins arrondis */
+    color: var(--text-muted);                  /* Texte discret */
+    font-size: 0.85rem;                        /* Petit */
+    font-family: inherit;                      /* Hérite de la police */
+    cursor: pointer;                           /* Curseur main */
+    transition: var(--transition-normal);      /* Animation */
+    white-space: nowrap;                       /* Empêche la coupure du texte */
+    flex-shrink: 0;                            /* Ne rétrécit pas */
 }
 
 .btn-clear-all:hover {
-    border-color: #ef4444;
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.06);
+    border-color: #ef4444;                     /* Bordure rouge au survol */
+    color: #ef4444;                            /* Texte rouge */
+    background: rgba(239, 68, 68, 0.06);       /* Fond très légèrement rouge */
 }
 
 .btn-clear-all .material-symbols-outlined {
-    font-size: 1.1rem;
+    font-size: 1.1rem;                         /* Taille de l'icône de poubelle */
 }
 
-/* ── Grille favoris ── */
+/*  Grille des produits favoris  */
 .favoris-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-xl);
-    align-items: start;
+    display: grid;                              /* Grille CSS */
+    grid-template-columns: repeat(4, 1fr);      /* 4 colonnes égales par défaut (desktop) */
+    gap: var(--spacing-md);                      /* Espace entre les cartes */
+    margin-bottom: var(--spacing-xl);            /* Grand espace sous la grille */
+    align-items: start;                          /* Aligne les cartes par le haut (évite l'étirement) */
 }
 
-/* ── Card produit favori ── */
+/*  Carte produit dans la grille favoris  */
 .favoris-grid .product-card {
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    transition:
+    background: var(--secondary);                /* Fond secondaire */
+    border: 1px solid var(--border);             /* Bordure subtile */
+    border-radius: 12px;                         /* Coins arrondis */
+    overflow: visible;                           /* Permet au bouton de suppression de dépasser (position absolute) */
+    display: flex;                                /* Colonne verticale */
+    flex-direction: column;                       /* Empile image, infos, footer */
+    transition:                                   /* Multi-transitions */
         border-color var(--transition-normal),
         box-shadow var(--transition-normal),
-        opacity 0.5s ease,
+        opacity 0.5s ease,                         /* Pour animation de suppression */
         transform 0.5s ease;
-    position: relative;
+    position: relative;                           /* Contexte pour le positionnement du bouton supprimer */
 }
 
 .favoris-grid .product-card:hover {
-    border-color: var(--primary);
-    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2);
+    border-color: var(--primary);                 /* Bordure bleue au survol */
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.2); /* Ombre bleutée */
 }
 
-/* ── Bouton supprimer ── */
+/*  Bouton "Supprimer des favoris" (petite croix rouge)  */
 .btn-remove-fav {
-    position: absolute;
-    top: 0.6rem;
+    position: absolute;                           /* Positionné par rapport à .product-card */
+    top: 0.6rem;                                   /* En haut à gauche */
     left: 0.6rem;
-    z-index: 5;
-    width: 32px;
+    z-index: 5;                                    /* Au-dessus de l'image */
+    width: 32px;                                   /* Taille fixe carrée */
     height: 32px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(239, 68, 68, 0.85);
-    color: white;
-    cursor: pointer;
-    display: flex;
+    border-radius: 50%;                            /* Rond */
+    border: none;                                  /* Pas de bordure */
+    background: rgba(239, 68, 68, 0.85);           /* Rouge semi-transparent */
+    color: white;                                   /* Croix blanche */
+    cursor: pointer;                                /* Curseur main */
+    display: flex;                                  /* Centre la croix */
     align-items: center;
     justify-content: center;
-    transition: var(--transition-fast);
-    backdrop-filter: blur(4px);
+    transition: var(--transition-fast);            /* Animation */
+    backdrop-filter: blur(4px);                     /* Léger flou derrière le bouton (effet de verre) */
 }
 
 .btn-remove-fav:hover {
-    background: #ef4444;
-    transform: scale(1.1);
+    background: #ef4444;                            /* Rouge opaque au survol */
+    transform: scale(1.1);                          /* Légère augmentation de taille */
 }
 
 .btn-remove-fav .material-symbols-outlined {
-    font-size: 1rem;
+    font-size: 1rem;                                /* Taille de l'icône de suppression */
 }
 
-/* ── Image ── */
+/*  Image du produit  */
 .favoris-grid .product-image {
-    position: relative;
-    width: 100%;
-    height: 220px;
-    overflow: hidden;
-    background: var(--background);
-    border-radius: 12px 12px 0 0;
-    flex-shrink: 0;
+    position: relative;                            /* Pour d'éventuels overlays */
+    width: 100%;                                    /* Pleine largeur */
+    height: 220px;                                  /* Hauteur fixe pour uniformité */
+    overflow: hidden;                               /* Cache le débordement lors du zoom */
+    background: var(--background);                   /* Fond pendant le chargement */
+    border-radius: 12px 12px 0 0;                   /* Arrondi seulement en haut */
+    flex-shrink: 0;                                 /* Ne rétrécit pas */
 }
 
 .favoris-grid .product-image img {
-    width: 100%;
+    width: 100%;                                    /* L'image remplit le conteneur */
     height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-slow);
+    object-fit: cover;                               /* Recadre sans déformer */
+    transition: transform var(--transition-slow);    /* Animation de zoom */
 }
 
 .favoris-grid .product-card:hover .product-image img {
-    transform: scale(1.05);
+    transform: scale(1.05);                          /* Zoom léger au survol */
 }
 
-/* ── Infos ── */
+/*  Informations produit  */
 .favoris-grid .product-info {
-    padding: var(--spacing-md);
-    flex: 1;
-    display: flex;
+    padding: var(--spacing-md);                      /* Espace intérieur */
+    flex: 1;                                         /* Prend l'espace restant */
+    display: flex;                                   /* Colonne verticale */
     flex-direction: column;
-    min-height: 0;
+    min-height: 0;                                   /* Autorise le rétrécissement */
 }
 
+/* Nom du produit */
 .favoris-grid .product-name {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: var(--text-primary);
+    font-size: 1rem;                                 /* Taille standard */
+    font-weight: 600;                                /* Semi-gras */
+    margin-bottom: 0.3rem;                           /* Espace sous le nom */
+    color: var(--text-primary);                       /* Couleur principale */
 }
 
+/* Spécifications techniques (ex: "A17 Pro - 256 Go") */
 .favoris-grid .product-specs {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 0.4rem;
+    font-size: 0.8rem;                               /* Petit */
+    color: var(--text-muted);                         /* Discret */
+    margin-bottom: 0.4rem;                            /* Espace sous les specs */
 }
 
+/* Bloc des étoiles et nombre d'avis */
 .favoris-grid .product-rating {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-bottom: var(--spacing-sm);
+    display: flex;                                    /* Aligne les étoiles et le compteur */
+    align-items: center;                              /* Centrage vertical */
+    gap: 0.4rem;                                      /* Espace entre les étoiles et le texte */
+    margin-bottom: var(--spacing-sm);                 /* Espace sous le bloc */
 }
 
+/* Étoiles */
 .favoris-grid .product-rating .stars {
-    color: #f59e0b;
-    font-size: 0.95rem;
-    letter-spacing: -1px;
+    color: #f59e0b;                                   /* Doré */
+    font-size: 0.95rem;                               /* Taille standard */
+    letter-spacing: -1px;                              /* Réduit l'espacement entre les étoiles */
 }
 
+/* Nombre d'avis */
 .favoris-grid .product-rating .rating-count {
-    font-size: 0.75rem;
-    color: var(--text-muted);
+    font-size: 0.75rem;                               /* Très petit */
+    color: var(--text-muted);                          /* Discret */
 }
 
-/* ── Footer card ── */
+/* Pied de la carte (prix + icônes d'action) */
 .favoris-grid .product-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: var(--spacing-sm);
-    gap: 0.5rem;
-    min-height: 52px;
+    display: flex;                                    /* Aligne le prix et les icônes */
+    justify-content: space-between;                   /* Prix à gauche, icônes à droite */
+    align-items: flex-end;                             /* Aligne en bas */
+    margin-bottom: var(--spacing-sm);                  /* Espace sous le footer */
+    gap: 0.5rem;                                       /* Espace entre prix et icônes */
+    min-height: 52px;                                  /* Hauteur minimale pour éviter les variations */
 }
 
+/* Bloc contenant le prix (actuel et ancien) */
 .favoris-grid .product-price-block {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.15rem;
+    display: flex;                                    /* Colonne verticale */
+    flex-direction: column;                           /* Prix actuel au-dessus, ancien prix en-dessous */
+    align-items: flex-start;                           /* Alignés à gauche */
+    gap: 0.15rem;                                      /* Petit espace entre les prix */
 }
 
+/* Prix actuel */
 .favoris-grid .product-price {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--primary);
+    font-size: 1.2rem;                                /* Plus grand */
+    font-weight: 700;                                 /* Gras */
+    color: var(--primary);                             /* Bleu */
 }
 
+/* Ancien prix barré */
 .favoris-grid .product-old-price {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-decoration: line-through;
+    font-size: 0.85rem;                               /* Petit */
+    color: var(--text-muted);                          /* Discret */
+    text-decoration: line-through;                     /* Barré */
 }
 
+/* Groupe des icônes d'action (panier, etc.) */
 .favoris-grid .product-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    flex-shrink: 0;
+    display: flex;                                    /* Aligne les icônes horizontalement */
+    align-items: center;                              /* Centrage vertical */
+    gap: 0.4rem;                                      /* Espace entre les icônes */
+    flex-shrink: 0;                                   /* Empêche la réduction */
 }
 
-/* ── Bouton voir la fiche ── */
+/* Bouton "Voir la fiche" (pleine largeur)  */
 .favoris-grid .btn-view-product {
-    width: 100%;
-    padding: 0.7rem;
-    background: transparent;
-    color: var(--text-primary);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: var(--transition-normal);
-    margin-top: auto;
-    font-family: inherit;
-    text-decoration: none;
-    text-align: center;
-    display: block;
+    width: 100%;                                      /* Prend toute la largeur */
+    padding: 0.7rem;                                  /* Espace intérieur */
+    background: transparent;                           /* Fond transparent */
+    color: var(--text-primary);                        /* Texte principal */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 6px;                                /* Coins arrondis */
+    font-size: 0.85rem;                                /* Petit */
+    cursor: pointer;                                   /* Curseur main */
+    transition: var(--transition-normal);              /* Animation */
+    margin-top: auto;                                  /* Pousse le bouton vers le bas (si contenu variable) */
+    font-family: inherit;                              /* Hérite police */
+    text-decoration: none;                             /* Pour le cas où ce serait un lien */
+    text-align: center;                                /* Texte centré */
+    display: block;                                    /* Comportement bloc */
 }
 
 .favoris-grid .btn-view-product:hover {
-    border-color: var(--primary);
-    background: rgba(59, 130, 246, 0.1);
+    border-color: var(--primary);                      /* Bordure bleue */
+    background: rgba(59, 130, 246, 0.1);               /* Fond léger bleu */
 }
 
-/* ── État vide ── */
+/* État "Aucun favori" (liste vide) */
 .favoris-empty {
-    display: flex;
+    display: flex;                                    /* Colonne centrée */
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 5rem 2rem;
-    text-align: center;
-    gap: 1.2rem;
+    padding: 5rem 2rem;                               /* Grand padding pour occuper l'espace */
+    text-align: center;                               /* Texte centré */
+    gap: 1.2rem;                                      /* Espace entre les éléments */
 }
 
+/* Cache l'état vide quand il a l'attribut hidden (géré par JS) */
 .favoris-empty[hidden] {
     display: none;
 }
 
+/* Icône de cœur vide dans l'état vide */
 .empty-icon .material-symbols-outlined {
-    font-size: 5rem;
-    color: var(--border);
-    font-variation-settings: 'FILL' 0;
-    display: block;
+    font-size: 5rem;                                  /* Très grande icône */
+    color: var(--border);                              /* Couleur de bordure (grise) */
+    font-variation-settings: 'FILL' 0;                /* Cœur vide */
+    display: block;                                    /* Pas d'espace sous l'icône */
 }
 
+/* Titre de l'état vide (ex: "Votre wishlist est vide") */
 .empty-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-size: 1.5rem;                                /* Grand */
+    font-weight: 700;                                 /* Gras */
+    color: var(--text-primary);                        /* Couleur principale */
 }
 
+/* Description (texte d'invitation) */
 .empty-description {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.7;
-    max-width: 420px;
+    font-size: 0.95rem;                               /* Taille standard */
+    color: var(--text-muted);                          /* Discret */
+    line-height: 1.7;                                  /* Interligne large */
+    max-width: 420px;                                  /* Largeur max pour ne pas trop s'étaler */
 }
 
+/* Icône de cœur dans le texte (petite) */
 .empty-description .inline-icon {
-    font-size: 1rem;
-    vertical-align: middle;
-    color: #ef4444;
-    font-variation-settings: 'FILL' 0;
+    font-size: 1rem;                                   /* Taille normale */
+    vertical-align: middle;                             /* Aligné avec le texte */
+    color: #ef4444;                                    /* Rouge */
+    font-variation-settings: 'FILL' 0;                 /* Cœur vide */
 }
 
-/* ── Toast notification ── */
+/* Toast de notification (quand on supprime un favori) */
 .fav-toast {
-    position: fixed;
+    position: fixed;                                   /* Fixé en bas à droite */
     bottom: 1.5rem;
     right: 1.5rem;
-    background: var(--secondary);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.9rem 1.3rem;
-    display: flex;
+    background: var(--secondary);                      /* Fond */
+    border: 1px solid var(--border);                   /* Bordure */
+    border-radius: 10px;                               /* Coins arrondis */
+    padding: 0.9rem 1.3rem;                            /* Espace intérieur */
+    display: flex;                                     /* Aligne l'icône et le texte */
     align-items: center;
-    gap: 0.6rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-    z-index: 9999;
-    animation: toastIn 0.3s ease;
-    max-width: calc(100vw - 3rem);
+    gap: 0.6rem;                                       /* Espace icône/texte */
+    font-size: 0.9rem;                                 /* Taille standard */
+    font-weight: 500;                                  /* Medium */
+    color: var(--text-primary);                        /* Texte principal */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);        /* Ombre prononcée */
+    z-index: 9999;                                      /* Très haut pour passer au-dessus de tout */
+    animation: toastIn 0.3s ease;                      /* Animation d'apparition */
+    max-width: calc(100vw - 3rem);                     /* Évite de dépasser de l'écran */
 }
 
+/* Icône dans le toast */
 .fav-toast .material-symbols-outlined {
-    color: #ef4444;
-    font-size: 1.2rem;
-    font-variation-settings: 'FILL' 1;
-    flex-shrink: 0;
+    color: #ef4444;                                    /* Rouge */
+    font-size: 1.2rem;                                 /* Taille modérée */
+    font-variation-settings: 'FILL' 1;                 /* Cœur rempli */
+    flex-shrink: 0;                                     /* Ne rétrécit pas */
 }
 
+/* Animation d'entrée du toast */
 @keyframes toastIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
+    from { transform: translateY(20px); opacity: 0; }   /* Part du bas, invisible */
+    to   { transform: translateY(0);    opacity: 1; }   /* Arrive à sa position, visible */
 }
 
 /* RESPONSIVE */
 
+/*  Desktop large → 3 colonnes */
 @media (max-width: 1200px) {
     .favoris-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);         /* Passe à 3 colonnes */
     }
 }
 
+/* Tablette paysage / petit desktop → 2 colonnes */
 @media (max-width: 900px) {
     .favoris-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-sm);
+        grid-template-columns: repeat(2, 1fr);         /* 2 colonnes */
+        gap: var(--spacing-sm);                         /* Espace réduit entre les cartes */
     }
 }
 
+/* Tablette portrait / mobile large (≤ 768px) */
 @media (max-width: 768px) {
     .favoris-title {
-        font-size: 1.4rem;
+        font-size: 1.4rem;                             /* Titre réduit */
     }
 
     .favoris-header {
-        flex-direction: row;
+        flex-direction: row;                             /* Maintient l'alignement horizontal */
         align-items: center;
     }
 
     .favoris-grid .product-image {
-        height: 180px;
+        height: 180px;                                  /* Image moins haute */
     }
 
     .fav-toast {
-        bottom: 1rem;
+        bottom: 1rem;                                    /* Toast plus proche du bord */
         right: 1rem;
-        left: 1rem;
-        max-width: none;
+        left: 1rem;                                      /* Prend toute la largeur (avec marges) */
+        max-width: none;                                 /* Annule la limite */
     }
 }
 
+/* Mobile (≤ 480px)  */
 @media (max-width: 480px) {
     .favoris-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr;                      /* Une seule colonne */
     }
 
     .favoris-title {
-        font-size: 1.3rem;
+        font-size: 1.3rem;                               /* Titre encore plus compact */
     }
 
     .favoris-header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: column;                           /* Passe en colonne */
+        align-items: flex-start;                          /* Aligné à gauche */
     }
 
     .favoris-grid .product-image {
-        height: 220px;
+        height: 220px;                                    /* Image plus haute sur une colonne */
     }
 
-    /* Fix : boutons ne sortent plus de la card */
+    /* Fix : éviter que les boutons sortent de la carte */
     .favoris-grid .product-footer {
-        flex-wrap: nowrap;
-        min-height: auto;
-        gap: 0.3rem;
+        flex-wrap: nowrap;                                /* Empêche le retour à la ligne */
+        min-height: auto;                                 /* Annule la hauteur minimale */
+        gap: 0.3rem;                                      /* Espace réduit */
     }
 
     .favoris-grid .product-price {
-        font-size: 1rem;
+        font-size: 1rem;                                  /* Prix réduit */
     }
 
     .favoris-grid .product-actions {
-        flex-shrink: 0;
+        flex-shrink: 0;                                   /* Maintient la non-réduction */
     }
 
     .empty-title {
-        font-size: 1.3rem;
+        font-size: 1.3rem;                                /* Titre vide réduit */
     }
 
     .favoris-empty {
-        padding: 3rem 1rem;
+        padding: 3rem 1rem;                               /* Padding réduit */
     }
 }
