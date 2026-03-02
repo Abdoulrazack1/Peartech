@@ -5,829 +5,385 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — catalogue.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#22d3ee;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  .sec p b{color:var(--t);font-weight:700;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#67e8f9;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cb{background:rgba(34,211,238,.11);border:1px solid rgba(34,211,238,.4);color:#67e8f9;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-  .fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
-  .fork.f4{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;width:100%;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-  .fc .vn{width:100%;max-width:100%;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;}
-  .box.info{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);color:#67e8f9;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box b{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#67e8f9}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
-  .grow:last-child{border-bottom:none;}
-  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
-  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
-  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
-  .tbl tr:last-child td{border-bottom:none;}
-  .tc{font-family:'JetBrains Mono',monospace;color:#67e8f9;font-size:.76rem;}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2,.fork.f3,.fork.f4{grid-template-columns:1fr;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── SCHEMAS PASS 2 ─── */
-  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
-  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
-  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
-  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-  .kbox{border-radius:11px;padding:.9rem 1rem;}
-  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .kbox-item:last-child{border-bottom:none;}
-  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
-  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-  .seq{display:flex;flex-direction:column;gap:.3rem;}
-  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-  .trans-line{width:28px;height:1px;background:var(--t3);}
-  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#22d3ee;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+.sec p b{color:var(--t);font-weight:700;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#67e8f9;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cb{background:rgba(34,211,238,.11);border:1px solid rgba(34,211,238,.4);color:#67e8f9;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+.fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
+.fork.f4{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;width:100%;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+.fc .vn{width:100%;max-width:100%;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;}
+.box.info{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);color:#67e8f9;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box b{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#67e8f9}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+.grow:last-child{border-bottom:none;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+.tbl tr:last-child td{border-bottom:none;}
+.tc{font-family:'JetBrains Mono',monospace;color:#67e8f9;font-size:.76rem;}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2,.fork.f3,.fork.f4{grid-template-columns:1fr;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── SCHEMAS PASS 2 ─── */
+.schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+.pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+.pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+.row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+.sp-row{display:flex;flex-direction:column;gap:.3rem;}
+.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+.trans-line{width:28px;height:1px;background:var(--t3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">catalogue.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#etat">État global</a>
-  <a href="#init">Init</a>
-  <a href="#filtres">Filtres</a>
-  <a href="#matchers">Matchers</a>
-  <a href="#apply">applyFilters</a>
-  <a href="#pagination">Pagination</a>
-  <a href="#tags">Tags actifs</a>
-  <a href="#panier">Panier</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">catalogue.js</div> <a href="#intro">Intro</a> <a href="#etat">État global</a> <a href="#init">Init</a> <a href="#filtres">Filtres</a> <a href="#matchers">Matchers</a> <a href="#apply">applyFilters</a> <a href="#pagination">Pagination</a> <a href="#tags">Tags actifs</a> <a href="#panier">Panier</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>URL ?categorie=cat_apple</b><br><span style="color:var(--t3);font-size:.71rem;">filtre initial</span></div>
 <div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">tous les produits</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#22d3ee22;color:#22d3ee;border:1px solid #22d3ee44;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#22d3ee22;color:#22d3ee;border:1px solid #22d3ee44;"> TRAITEMENTS</div>
 <div class="carte-item"><b>parseURLParams()</b><br><span style="color:var(--t3);font-size:.71rem;">lit la catégorie depuis l'URL</span></div>
 <div class="carte-item"><b>filterProducts()</b><br><span style="color:var(--t3);font-size:.71rem;">filtre combiné: catégorie + prix + tri</span></div>
 <div class="carte-item"><b>renderGrid(products)</b><br><span style="color:var(--t3);font-size:.71rem;">génère les cartes</span></div>
 <div class="carte-item"><b>renderPagination()</b><br><span style="color:var(--t3);font-size:.71rem;">boutons page précédente/suivante</span></div>
 <div class="carte-item"><b>addToCart(id)</b><br><span style="color:var(--t3);font-size:.71rem;">ajout local sans panier.js</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>localStorage peartech-cart</b><br><span style="color:var(--t3);font-size:.71rem;">articles ajoutés</span></div>
 <div class="carte-item"><b>DOM</b><br><span style="color:var(--t3);font-size:.71rem;">grille filtrée + paginée</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>catalogue.js</span></h1> <p>Ce fichier gère entièrement la page catalogue (<ic>page_catalogue.html</ic>). Il lit la catégorie depuis l'URL, charge les produits correspondants depuis <ic>PearTechDB</ic>, construit les filtres dynamiques, applique le filtrage multi-critères, trie, pagine, et gère l'ajout au panier depuis la grille.</p> <div class="fbadge"><div class="dot"></div>catalogue.js · ~380 lignes · 10 fonctions · 5 types de filtres · pagination 12/page</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Le chef d'orchestre de la page catalogue</h2>
+<div class="diag"> <div class="dtitle">Chef d'orchestre — catalogue.js coordonne 6 sous-systèmes</div> <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:.5rem 0;"> <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#67e8f9;margin-bottom:.25rem;">Filtres</div> <div style="font-size:.7rem;color:var(--t2);">Sidebar dynamique<br>checkboxes + sliders</div> </div> <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#d3a8ff;margin-bottom:.25rem;">SUBCAT_MATCHERS</div> <div style="font-size:.7rem;color:var(--t2);">Prédicats précis<br>anti-faux-positifs</div> </div> <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.25rem;">Tri</div> <div style="font-size:.7rem;color:var(--t2);">price-asc/desc<br>rating · isNew</div> </div> <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7ee8b8;margin-bottom:.25rem;">Pagination</div> <div style="font-size:.7rem;color:var(--t2);">12 produits/page<br>ellipses intelligentes</div> </div> <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#fdba74;margin-bottom:.25rem;">Tags actifs</div> <div style="font-size:.7rem;color:var(--t2);">Pastilles ×<br>suppression rapide</div> </div> <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#fda4af;margin-bottom:.25rem;">Panier local</div> <div style="font-size:.7rem;color:var(--t2);">addToCart() direct<br>pas de délégation</div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;">Toutes ces fonctions partagent les mêmes variables d'état : allProducts · filteredProducts · currentPage · filters · sortBy</div>
+</div> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> catalogue.js est comme le vendeur d'un magasin qui, quand vous entrez, regarde votre demande (l'URL), va chercher les bons rayons (catégorie), organise les articles sur les étagères (grille), installe les panneaux de filtres (sidebar), et met à jour l'affichage chaque fois que vous cochez une préférence.</div></div> <div class="glos"> <div class="glos-head"> Termes nouveaux dans ce fichier</div> <div class="grow"><div class="gterm">URLSearchParams</div><div class="gdef">API navigateur pour lire les paramètres d'une URL. <ic>new URLSearchParams(window.location.search)</ic> sur <ic>?categorie=apple</ic> permet d'écrire <ic>params.get('categorie')</ic> <ic>'apple'</ic>.</div></div> <div class="grow"><div class="gterm">Map</div><div class="gdef">Structure de données clévaleur. Contrairement à un objet, les clés peuvent être de n'importe quel type et l'ordre d'insertion est garanti. Utilisée ici pour compter les produits par sous-catégorie ou marque.</div></div> <div class="grow"><div class="gterm">Set</div><div class="gdef">Collection sans doublons. <ic>featSet.add('5G')</ic> plusieurs fois ne l'insère qu'une seule fois. Utilisé pour lister les caractéristiques disponibles.</div></div> <div class="grow"><div class="gterm">Object.values().flat()</div><div class="gdef"><ic>Object.values(obj)</ic> retourne les valeurs d'un objet en tableau. <ic>.flat()</ic> aplatit un tableau de tableaux en un seul. Ex : <ic>{a:[1,2], b:[3]}</ic> <ic>[1,2,3]</ic>.</div></div> <div class="grow"><div class="gterm">prédicat</div><div class="gdef">Fonction qui retourne <ic>true</ic> ou <ic>false</ic>. Dans <ic>SUBCAT_MATCHERS</ic>, chaque entrée est un prédicat : <ic>'iPhone': p => p.tags.includes('iphone')</ic> retourne vrai si le produit a le tag "iphone".</div></div> <div class="grow"><div class="gterm">.every()</div><div class="gdef">Retourne <ic>true</ic> si <b>tous</b> les éléments du tableau satisfont la condition (AND logique). Utilisé pour les features : le produit doit posséder <b>toutes</b> les caractéristiques cochées.</div></div> <div class="grow"><div class="gterm">.some()</div><div class="gdef">Retourne <ic>true</ic> si <b>au moins un</b> élément satisfait la condition (OR logique). Utilisé pour les sous-catégories : le produit doit appartenir <b>à au moins une</b> des sous-catégories cochées.</div></div> <div class="grow"><div class="gterm">aria-*</div><div class="gdef">Attributs HTML d'accessibilité pour les lecteurs d'écran. <ic>aria-label</ic> donne un nom vocal à un élément, <ic>aria-current="page"</ic> indique la page active, <ic>aria-pressed</ic> indique l'état d'un bouton toggle.</div></div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>catalogue.js</span></h1>
-  <p>Ce fichier gère entièrement la page catalogue (<ic>page_catalogue.html</ic>). Il lit la catégorie depuis l'URL, charge les produits correspondants depuis <ic>PearTechDB</ic>, construit les filtres dynamiques, applique le filtrage multi-critères, trie, pagine, et gère l'ajout au panier depuis la grille.</p>
-  <div class="fbadge"><div class="dot"></div>catalogue.js · ~380 lignes · 10 fonctions · 5 types de filtres · pagination 12/page</div>
+<hr> <!-- ══ 01 ÉTAT GLOBAL ══ -->
+<div class="sec" id="etat"> <div class="slabel">01 — État global</div> <h2>Les variables partagées entre toutes les fonctions</h2> <p>catalogue.js déclare ses variables d'état <b>en dehors de toutes les fonctions</b> mais à l'intérieur de l'IIFE. Cela leur permet d'être lues et modifiées par n'importe quelle fonction du module.</p> <div class="diag"> <div class="dtitle">Les 8 variables d'état — rôle et valeur initiale</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;"> <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:9px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#67e8f9;margin-bottom:.6rem;">Données produits</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;line-height:2;color:var(--t2);"> <span style="color:#fde68a;">currentCategory</span> = <span style="color:#c084fc;">null</span><br> <span style="color:#fde68a;">allProducts</span> = [] <span style="color:#555e74;">// bruts, non filtrés</span><br> <span style="color:#fde68a;">filteredProducts</span> = [] <span style="color:#555e74;">// après filtres+tri</span><br> <span style="color:#fde68a;">displayedProducts</span> = [] <span style="color:#555e74;">// page courante</span> </div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:9px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;margin-bottom:.6rem;">UI & Filtres</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;line-height:2;color:var(--t2);"> <span style="color:#fde68a;">currentPage</span> = <span style="color:#f7d97a;">1</span><br> <span style="color:#fde68a;">PRODUCTS_PER_PAGE</span> = <span style="color:#f7d97a;">12</span> <span style="color:#555e74;">// const</span><br> <span style="color:#fde68a;">sortBy</span> = <span style="color:#86efac;">'relevance'</span><br> <span style="color:#fde68a;">viewMode</span> = <span style="color:#86efac;">'grid'</span> </div> </div> </div> <div style="margin-top:.8rem;background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:9px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;">L'objet filters — 5 critères</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;line-height:2;color:var(--t2);"> filters = { subcategories: <span style="color:#86efac;">[]</span>, priceMin: <span style="color:#f7d97a;">0</span>, priceMax: <span style="color:#f7d97a;">Infinity</span>, brands: <span style="color:#86efac;">[]</span>, features: <span style="color:#86efac;">[]</span> }
+</div> <div style="font-size:.77rem;color:var(--t2);margin-top:.4rem;">Les tableaux vides = filtre inactif. <ic>applyFilters()</ic> les vérifie avec <ic>.length</ic> pour savoir si un filtre est actif.</div> </div> </div> <div class="diag"> <div class="dtitle">Pipeline de transformation des données</div> <div class="vc"> <div class="vn w cgr">PearTechDB.products (34 produits)<br><span style="font-size:.68rem;font-weight:400;">ou getProductsByCategory('apple') (N produits)</span></div> <div class="va"><div class="val">stocké dans allProducts</div></div> <div class="vn w cb">allProducts — référence immuable pendant la session<br><span style="font-size:.68rem;font-weight:400;">jamais modifié directement</span></div> <div class="va"><div class="val">applyFilters() — filter() + sort()</div></div> <div class="vn w cy">filteredProducts — résultat après tous les filtres et le tri</div> <div class="va"><div class="val">displayCurrentPage() — slice()</div></div> <div class="vn w cg">displayedProducts — les 12 produits (max) de la page courante</div> <div class="va"><div class="val">renderProducts()</div></div> <div class="vn w cgr">DOM — HTML des cards injecté dans productsGrid.innerHTML</div> </div> </div>
 </div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Avant de commencer</div>
-  <h2>Le chef d'orchestre de la page catalogue</h2>
-<div class="diag">
-  <div class="dtitle">Chef d'orchestre — catalogue.js coordonne 6 sous-systèmes</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin:.5rem 0;">
-    <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#67e8f9;margin-bottom:.25rem;">Filtres</div>
-      <div style="font-size:.7rem;color:var(--t2);">Sidebar dynamique<br>checkboxes + sliders</div>
-    </div>
-    <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#d3a8ff;margin-bottom:.25rem;">SUBCAT_MATCHERS</div>
-      <div style="font-size:.7rem;color:var(--t2);">Prédicats précis<br>anti-faux-positifs</div>
-    </div>
-    <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.25rem;">Tri</div>
-      <div style="font-size:.7rem;color:var(--t2);">price-asc/desc<br>rating · isNew</div>
-    </div>
-    <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7ee8b8;margin-bottom:.25rem;">Pagination</div>
-      <div style="font-size:.7rem;color:var(--t2);">12 produits/page<br>ellipses intelligentes</div>
-    </div>
-    <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#fdba74;margin-bottom:.25rem;">Tags actifs</div>
-      <div style="font-size:.7rem;color:var(--t2);">Pastilles ×<br>suppression rapide</div>
-    </div>
-    <div style="border-radius:9px;padding:.7rem;text-align:center;background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#fda4af;margin-bottom:.25rem;">Panier local</div>
-      <div style="font-size:.7rem;color:var(--t2);">addToCart() direct<br>pas de délégation</div>
-    </div>
-  </div>
-  <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;">Toutes ces fonctions partagent les mêmes variables d'état : allProducts · filteredProducts · currentPage · filters · sortBy</div>
-</div>
-
-  <div class="box ana"><span class="bi">🛍️</span><div><b>Analogie :</b> catalogue.js est comme le vendeur d'un magasin qui, quand vous entrez, regarde votre demande (l'URL), va chercher les bons rayons (catégorie), organise les articles sur les étagères (grille), installe les panneaux de filtres (sidebar), et met à jour l'affichage chaque fois que vous cochez une préférence.</div></div>
-
-  <div class="glos">
-    <div class="glos-head">📖 Termes nouveaux dans ce fichier</div>
-    <div class="grow"><div class="gterm">URLSearchParams</div><div class="gdef">API navigateur pour lire les paramètres d'une URL. <ic>new URLSearchParams(window.location.search)</ic> sur <ic>?categorie=apple</ic> permet d'écrire <ic>params.get('categorie')</ic> → <ic>'apple'</ic>.</div></div>
-    <div class="grow"><div class="gterm">Map</div><div class="gdef">Structure de données clé→valeur. Contrairement à un objet, les clés peuvent être de n'importe quel type et l'ordre d'insertion est garanti. Utilisée ici pour compter les produits par sous-catégorie ou marque.</div></div>
-    <div class="grow"><div class="gterm">Set</div><div class="gdef">Collection sans doublons. <ic>featSet.add('5G')</ic> plusieurs fois ne l'insère qu'une seule fois. Utilisé pour lister les caractéristiques disponibles.</div></div>
-    <div class="grow"><div class="gterm">Object.values().flat()</div><div class="gdef"><ic>Object.values(obj)</ic> retourne les valeurs d'un objet en tableau. <ic>.flat()</ic> aplatit un tableau de tableaux en un seul. Ex : <ic>{a:[1,2], b:[3]}</ic> → <ic>[1,2,3]</ic>.</div></div>
-    <div class="grow"><div class="gterm">prédicat</div><div class="gdef">Fonction qui retourne <ic>true</ic> ou <ic>false</ic>. Dans <ic>SUBCAT_MATCHERS</ic>, chaque entrée est un prédicat : <ic>'iPhone': p => p.tags.includes('iphone')</ic> retourne vrai si le produit a le tag "iphone".</div></div>
-    <div class="grow"><div class="gterm">.every()</div><div class="gdef">Retourne <ic>true</ic> si <b>tous</b> les éléments du tableau satisfont la condition (AND logique). Utilisé pour les features : le produit doit posséder <b>toutes</b> les caractéristiques cochées.</div></div>
-    <div class="grow"><div class="gterm">.some()</div><div class="gdef">Retourne <ic>true</ic> si <b>au moins un</b> élément satisfait la condition (OR logique). Utilisé pour les sous-catégories : le produit doit appartenir <b>à au moins une</b> des sous-catégories cochées.</div></div>
-    <div class="grow"><div class="gterm">aria-*</div><div class="gdef">Attributs HTML d'accessibilité pour les lecteurs d'écran. <ic>aria-label</ic> donne un nom vocal à un élément, <ic>aria-current="page"</ic> indique la page active, <ic>aria-pressed</ic> indique l'état d'un bouton toggle.</div></div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 ÉTAT GLOBAL ══ -->
-<div class="sec" id="etat">
-  <div class="slabel">01 — État global</div>
-  <h2>Les variables partagées entre toutes les fonctions</h2>
-  <p>catalogue.js déclare ses variables d'état <b>en dehors de toutes les fonctions</b> mais à l'intérieur de l'IIFE. Cela leur permet d'être lues et modifiées par n'importe quelle fonction du module.</p>
-
-  <div class="diag">
-    <div class="dtitle">Les 8 variables d'état — rôle et valeur initiale</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
-      <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:9px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#67e8f9;margin-bottom:.6rem;">Données produits</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;line-height:2;color:var(--t2);">
-          <span style="color:#fde68a;">currentCategory</span>   = <span style="color:#c084fc;">null</span><br>
-          <span style="color:#fde68a;">allProducts</span>       = [] <span style="color:#555e74;">// bruts, non filtrés</span><br>
-          <span style="color:#fde68a;">filteredProducts</span>  = [] <span style="color:#555e74;">// après filtres+tri</span><br>
-          <span style="color:#fde68a;">displayedProducts</span> = [] <span style="color:#555e74;">// page courante</span>
-        </div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:9px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;margin-bottom:.6rem;">UI & Filtres</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;line-height:2;color:var(--t2);">
-          <span style="color:#fde68a;">currentPage</span>      = <span style="color:#f7d97a;">1</span><br>
-          <span style="color:#fde68a;">PRODUCTS_PER_PAGE</span> = <span style="color:#f7d97a;">12</span> <span style="color:#555e74;">// const</span><br>
-          <span style="color:#fde68a;">sortBy</span>           = <span style="color:#86efac;">'relevance'</span><br>
-          <span style="color:#fde68a;">viewMode</span>         = <span style="color:#86efac;">'grid'</span>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top:.8rem;background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:9px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;">L'objet filters — 5 critères</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;line-height:2;color:var(--t2);">
-        filters = { subcategories: <span style="color:#86efac;">[]</span>, priceMin: <span style="color:#f7d97a;">0</span>, priceMax: <span style="color:#f7d97a;">Infinity</span>, brands: <span style="color:#86efac;">[]</span>, features: <span style="color:#86efac;">[]</span> }
-      </div>
-      <div style="font-size:.77rem;color:var(--t2);margin-top:.4rem;">Les tableaux vides = filtre inactif. <ic>applyFilters()</ic> les vérifie avec <ic>.length</ic> pour savoir si un filtre est actif.</div>
-    </div>
-  </div>
-
-  <div class="diag">
-    <div class="dtitle">Pipeline de transformation des données</div>
-    <div class="vc">
-      <div class="vn w cgr">PearTechDB.products (34 produits)<br><span style="font-size:.68rem;font-weight:400;">ou getProductsByCategory('apple') (N produits)</span></div>
-      <div class="va">↓<div class="val">stocké dans allProducts</div></div>
-      <div class="vn w cb">allProducts — référence immuable pendant la session<br><span style="font-size:.68rem;font-weight:400;">jamais modifié directement</span></div>
-      <div class="va">↓<div class="val">applyFilters() — filter() + sort()</div></div>
-      <div class="vn w cy">filteredProducts — résultat après tous les filtres et le tri</div>
-      <div class="va">↓<div class="val">displayCurrentPage() — slice()</div></div>
-      <div class="vn w cg">displayedProducts — les 12 produits (max) de la page courante</div>
-      <div class="va">↓<div class="val">renderProducts()</div></div>
-      <div class="vn w cgr">DOM — HTML des cards injecté dans productsGrid.innerHTML</div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 02 INIT ══ -->
-<div class="sec" id="init">
-  <div class="slabel">02 — Initialisation</div>
-  <h2>DOMContentLoaded — lire l'URL, charger les données</h2>
-<div class="schema2">
-  <div class="s2t">Lecture des paramètres URL au chargement</div>
-  <div style="display:flex;flex-direction:column;gap:.4rem;max-width:600px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.77rem;background:var(--bg3);border-radius:8px;padding:.55rem .9rem;color:var(--t2);">
-      page_catalogue.html<span style="color:#67e8f9;">?category=cat_smartphones</span><span style="color:#fde68a;">&sub=iPhone</span>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.2rem;">
-      <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);border-radius:8px;padding:.55rem .8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#67e8f9;margin-bottom:.3rem;">?category=cat_smartphones</div>
-        <div style="font-size:.72rem;color:var(--t2);">filteredProducts = PearTechDB.getProductsByCategory('cat_smartphones')<br>Titre de la page mis à jour</div>
-      </div>
-      <div style="background:rgba(250,204,21,.07);border:1px solid rgba(250,204,21,.2);border-radius:8px;padding:.55rem .8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fde68a;margin-bottom:.3rem;">&sub=iPhone</div>
-        <div style="font-size:.72rem;color:var(--t2);">filters.subcategories = ['iPhone']<br>La checkbox "iPhone" est pré-cochée<br>applyFilters() lancé d'emblée</div>
-      </div>
-    </div>
-    <div style="font-size:.73rem;color:var(--t3);">Un lien depuis le menu nav ou le dropdown peut pré-filtrer la page catalogue en ajoutant ?sub=Samsung dans l'URL</div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Lecture de la catégorie depuis l'URL</span>
-<span class="cm">// page_catalogue.html?categorie=apple → slug = "apple"</span>
-<span class="kw">const</span> <span class="vr">urlParams</span>    = <span class="kw">new</span> URLSearchParams(window.location.search);
+<hr> <!-- ══ 02 INIT ══ -->
+<div class="sec" id="init"> <div class="slabel">02 — Initialisation</div> <h2>DOMContentLoaded — lire l'URL, charger les données</h2>
+<div class="schema2"> <div class="s2t">Lecture des paramètres URL au chargement</div> <div style="display:flex;flex-direction:column;gap:.4rem;max-width:600px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.77rem;background:var(--bg3);border-radius:8px;padding:.55rem .9rem;color:var(--t2);"> page_catalogue.html<span style="color:#67e8f9;">?category=cat_smartphones</span><span style="color:#fde68a;">&sub=iPhone</span> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.2rem;"> <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.2);border-radius:8px;padding:.55rem .8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#67e8f9;margin-bottom:.3rem;">?category=cat_smartphones</div> <div style="font-size:.72rem;color:var(--t2);">filteredProducts = PearTechDB.getProductsByCategory('cat_smartphones')<br>Titre de la page mis à jour</div> </div> <div style="background:rgba(250,204,21,.07);border:1px solid rgba(250,204,21,.2);border-radius:8px;padding:.55rem .8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fde68a;margin-bottom:.3rem;">&sub=iPhone</div> <div style="font-size:.72rem;color:var(--t2);">filters.subcategories = ['iPhone']<br>La checkbox "iPhone" est pré-cochée<br>applyFilters() lancé d'emblée</div> </div> </div> <div style="font-size:.73rem;color:var(--t3);">Un lien depuis le menu nav ou le dropdown peut pré-filtrer la page catalogue en ajoutant ?sub=Samsung dans l'URL</div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Lecture de la catégorie depuis l'URL</span>
+<span class="cm">// page_catalogue.html?categorie=apple  slug = "apple"</span>
+<span class="kw">const</span> <span class="vr">urlParams</span> = <span class="kw">new</span> URLSearchParams(window.location.search);
 <span class="kw">const</span> <span class="vr">categorySlug</span> = urlParams.<span class="fn">get</span>(<span class="s">'categorie'</span>);
-
 <span class="kw">if</span> (categorySlug) {
-    <span class="kw">const</span> <span class="vr">cat</span> = PearTechDB.<span class="fn">getCategoryBySlug</span>(categorySlug);
-    <span class="kw">if</span> (cat) {
-        currentCategory = cat;
-        allProducts     = PearTechDB.<span class="fn">getProductsByCategory</span>(cat.slug);
-    } <span class="kw">else</span> {
-        window.location.href = <span class="s">'page_accueil.html'</span>; <span class="cm">// slug inconnu → redirige</span>
-        <span class="kw">return</span>;
-    }
+<span class="kw">const</span> <span class="vr">cat</span> = PearTechDB.<span class="fn">getCategoryBySlug</span>(categorySlug);
+<span class="kw">if</span> (cat) {
+currentCategory = cat;
+allProducts     = PearTechDB.<span class="fn">getProductsByCategory</span>(cat.slug);
 } <span class="kw">else</span> {
-    <span class="cm">// Pas de paramètre = "Tous les produits"</span>
-    currentCategory = { name: <span class="s">'Tous les produits'</span>, slug: <span class="s">'tous'</span>, subcategories: [] };
-    allProducts     = PearTechDB.products; <span class="cm">// Tous les ~34 produits</span>
+window.location.href = <span class="s">'page_accueil.html'</span>; <span class="cm">// slug inconnu  redirige</span> <span class="kw">return</span>;
 }
-
+} <span class="kw">else</span> {
+<span class="cm">// Pas de paramètre = "Tous les produits"</span> currentCategory = { name: <span class="s">'Tous les produits'</span>, slug: <span class="s">'tous'</span>, subcategories: [] };
+allProducts     = PearTechDB.products; <span class="cm">// Tous les ~34 produits</span>
+}
 <span class="fn">initFilters</span>();  <span class="cm">// Construit les checkboxes et sliders</span>
 <span class="fn">applyFilters</span>(); <span class="cm">// Affiche tout (aucun filtre actif au départ)</span>
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Lecture de l'URL — 3 cas d'entrée</div>
-    <div class="fork f3">
-      <div class="fc">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#67e8f9;text-align:center;margin-bottom:.4rem;">?categorie=apple</div>
-        <div class="vn cb" style="font-size:.7rem;text-align:left;padding:.7rem;">getCategoryBySlug('apple') → cat trouvée<br>allProducts = produits Apple seulement</div>
-      </div>
-      <div class="fc">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;text-align:center;margin-bottom:.4rem;">sans paramètre</div>
-        <div class="vn cy" style="font-size:.7rem;text-align:left;padding:.7rem;">currentCategory = objet synthétique "tous"<br>allProducts = PearTechDB.products (tout)</div>
-      </div>
-      <div class="fc">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;">?categorie=inconnu</div>
-        <div class="vn cr" style="font-size:.7rem;text-align:left;padding:.7rem;">getCategoryBySlug() → undefined<br>→ redirect page_accueil.html</div>
-      </div>
-    </div>
-  </div>
+</pre></div> <div class="diag"> <div class="dtitle">Lecture de l'URL — 3 cas d'entrée</div> <div class="fork f3"> <div class="fc"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#67e8f9;text-align:center;margin-bottom:.4rem;">?categorie=apple</div> <div class="vn cb" style="font-size:.7rem;text-align:left;padding:.7rem;">getCategoryBySlug('apple')  cat trouvée<br>allProducts = produits Apple seulement</div> </div> <div class="fc"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;text-align:center;margin-bottom:.4rem;">sans paramètre</div> <div class="vn cy" style="font-size:.7rem;text-align:left;padding:.7rem;">currentCategory = objet synthétique "tous"<br>allProducts = PearTechDB.products (tout)</div> </div> <div class="fc"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;">?categorie=inconnu</div> <div class="vn cr" style="font-size:.7rem;text-align:left;padding:.7rem;">getCategoryBySlug()  undefined<br> redirect page_accueil.html</div> </div> </div> </div>
 </div>
-<hr>
-
-<!-- ══ 03 FILTRES ══ -->
-<div class="sec" id="filtres">
-  <div class="slabel">03 — Construction des filtres</div>
-  <h2>initFilters() — générer la sidebar dynamiquement</h2>
-  <p>Les checkboxes de la sidebar ne sont pas codées en dur dans le HTML — elles sont générées à partir des <b>produits réels</b>. Si aucun produit du catalogue ne supporte le 5G, le filtre "Compatible 5G" n'apparaît pas.</p>
-<div class="diag">
-  <div class="dtitle">Les 4 blocs générés dynamiquement depuis les produits réels</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;max-width:560px;">
-    <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem;">Sous-catégories</div>
-      <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">Map slug→count depuis subcategories[] de la catégorie courante.<br><span style="color:var(--t3);">Ex : iPhone (14) · Samsung (8)</span></div>
-    </div>
-    <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">Marques</div>
-      <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">getBrand(p) → Map marque→count triée par count décroissant.<br><span style="color:var(--t3);">Ex : Apple (14) · Samsung (8)</span></div>
-    </div>
-    <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">Caractéristiques</div>
-      <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">Set auto-rempli — OS, 5G, GPS, RAM… N'apparaît que si au moins un produit correspond.<br><span style="color:var(--t3);">Pas de filtre fantôme.</span></div>
-    </div>
-    <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">Sliders prix</div>
-      <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">min/max calculés depuis les basePrice réels de la catégorie.<br><span style="color:var(--t3);">Pas de valeurs codées en dur.</span></div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Si tous les produits sont d'une seule marque, le bloc marques affiche une seule entrée. Si aucun produit n'a le GPS, le filtre GPS n'est pas créé. La sidebar s'adapte aux données.</div>
-</div>
-
-
-  <div class="diag">
-    <div class="dtitle">Les 4 blocs générés par initFilters()</div>
-    <div class="fork f4" style="margin-bottom:.8rem;">
-      <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:10px;padding:.8rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#67e8f9;margin-bottom:.3rem;">Sous-catégories</div>
-        <div style="font-size:.72rem;color:var(--t2);">Map slug→count depuis subcategories[] de la catégorie</div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.8rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">Marques</div>
-        <div style="font-size:.72rem;color:var(--t2);">Map marque→count via getBrand(), triée par count décroissant</div>
-      </div>
-      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:10px;padding:.8rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#d3a8ff;margin-bottom:.3rem;">Caractéristiques</div>
-        <div style="font-size:.72rem;color:var(--t2);">Set auto-rempli : OS, 5G, GPS, RAM, promos, isNew…</div>
-      </div>
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:10px;padding:.8rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">Sliders prix</div>
-        <div style="font-size:.72rem;color:var(--t2);">min/max calculés depuis les basePrice réels</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>Map et Set — pourquoi ces structures ?</h3>
-
-  <div class="cb2"><span class="cbl2">javascript — comptage des marques avec Map</span><pre><span class="kw">const</span> <span class="vr">brandsMap</span> = <span class="kw">new</span> Map();
+<hr> <!-- ══ 03 FILTRES ══ -->
+<div class="sec" id="filtres"> <div class="slabel">03 — Construction des filtres</div> <h2>initFilters() — générer la sidebar dynamiquement</h2> <p>Les checkboxes de la sidebar ne sont pas codées en dur dans le HTML — elles sont générées à partir des <b>produits réels</b>. Si aucun produit du catalogue ne supporte le 5G, le filtre "Compatible 5G" n'apparaît pas.</p>
+<div class="diag"> <div class="dtitle">Les 4 blocs générés dynamiquement depuis les produits réels</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;max-width:560px;"> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem;">Sous-catégories</div> <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">Map slugcount depuis subcategories[] de la catégorie courante.<br><span style="color:var(--t3);">Ex : iPhone (14) · Samsung (8)</span></div> </div> <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">Marques</div> <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">getBrand(p)  Map marquecount triée par count décroissant.<br><span style="color:var(--t3);">Ex : Apple (14) · Samsung (8)</span></div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">Caractéristiques</div> <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">Set auto-rempli — OS, 5G, GPS, RAM… N'apparaît que si au moins un produit correspond.<br><span style="color:var(--t3);">Pas de filtre fantôme.</span></div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">Sliders prix</div> <div style="font-size:.71rem;color:var(--t2);line-height:1.7;">min/max calculés depuis les basePrice réels de la catégorie.<br><span style="color:var(--t3);">Pas de valeurs codées en dur.</span></div> </div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Si tous les produits sont d'une seule marque, le bloc marques affiche une seule entrée. Si aucun produit n'a le GPS, le filtre GPS n'est pas créé. La sidebar s'adapte aux données.</div>
+</div> <div class="diag"> <div class="dtitle">Les 4 blocs générés par initFilters()</div> <div class="fork f4" style="margin-bottom:.8rem;"> <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:10px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#67e8f9;margin-bottom:.3rem;">Sous-catégories</div> <div style="font-size:.72rem;color:var(--t2);">Map slugcount depuis subcategories[] de la catégorie</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">Marques</div> <div style="font-size:.72rem;color:var(--t2);">Map marquecount via getBrand(), triée par count décroissant</div> </div> <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:10px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#d3a8ff;margin-bottom:.3rem;">Caractéristiques</div> <div style="font-size:.72rem;color:var(--t2);">Set auto-rempli : OS, 5G, GPS, RAM, promos, isNew…</div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:10px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">Sliders prix</div> <div style="font-size:.72rem;color:var(--t2);">min/max calculés depuis les basePrice réels</div> </div> </div> </div> <h3>Map et Set — pourquoi ces structures ?</h3> <div class="cb2"><span class="cbl2">javascript — comptage des marques avec Map</span><pre><span class="kw">const</span> <span class="vr">brandsMap</span> = <span class="kw">new</span> Map();
 allProducts.<span class="fn">forEach</span>(p => {
-    <span class="kw">const</span> <span class="vr">b</span> = <span class="fn">getBrand</span>(p);                        <span class="cm">// 'Apple', 'Samsung'…</span>
-    brandsMap.<span class="fn">set</span>(b, (brandsMap.<span class="fn">get</span>(b) || <span class="nm">0</span>) + <span class="nm">1</span>); <span class="cm">// Incrémente ou initialise à 1</span>
+<span class="kw">const</span> <span class="vr">b</span> = <span class="fn">getBrand</span>(p);                        <span class="cm">// 'Apple', 'Samsung'…</span> brandsMap.<span class="fn">set</span>(b, (brandsMap.<span class="fn">get</span>(b) || <span class="nm">0</span>) + <span class="nm">1</span>); <span class="cm">// Incrémente ou initialise à 1</span>
 });
-
-<span class="cm">// Trie par count décroissant → affiche Apple (le plus de produits) en premier</span>
+<span class="cm">// Trie par count décroissant  affiche Apple (le plus de produits) en premier</span>
 [...brandsMap.<span class="fn">entries</span>()].<span class="fn">sort</span>((a, b) => b[<span class="nm">1</span>] - a[<span class="nm">1</span>]).<span class="fn">forEach</span>(([label, count]) => {
-    <span class="cm">// Crée un label checkbox avec le compteur</span>
+<span class="cm">// Crée un label checkbox avec le compteur</span>
 });
-</pre></div>
-
-  <div class="cb2"><span class="cbl2">javascript — Set pour les caractéristiques (sans doublons)</span><pre><span class="kw">const</span> <span class="vr">featSet</span> = <span class="kw">new</span> Set();
+</pre></div> <div class="cb2"><span class="cbl2">javascript — Set pour les caractéristiques (sans doublons)</span><pre><span class="kw">const</span> <span class="vr">featSet</span> = <span class="kw">new</span> Set();
 allProducts.<span class="fn">forEach</span>(p => {
-    <span class="kw">if</span> (p.specs.os?.toLowerCase().<span class="fn">includes</span>(<span class="s">'ios'</span>)) featSet.<span class="fn">add</span>(<span class="s">'iOS / iPadOS'</span>);
-    <span class="kw">if</span> (<span class="fn">has5G</span>(p))  featSet.<span class="fn">add</span>(<span class="s">'Compatible 5G'</span>);   <span class="cm">// Add idempotent : 2e add ignoré</span>
-    <span class="kw">if</span> (<span class="fn">hasGPS</span>(p)) featSet.<span class="fn">add</span>(<span class="s">'GPS intégré'</span>);
-    <span class="kw">if</span> (p.specs.ram) {
-        <span class="kw">const</span> <span class="vr">r</span> = <span class="fn">parseInt</span>(p.specs.ram); <span class="cm">// "8 Go" → 8</span>
-        <span class="kw">if</span> (r &lt;= <span class="nm">4</span>)       featSet.<span class="fn">add</span>(<span class="s">'RAM ≤ 4 Go'</span>);
-        <span class="kw">else if</span> (r &lt;= <span class="nm">8</span>)  featSet.<span class="fn">add</span>(<span class="s">'RAM 6–8 Go'</span>);
-        <span class="kw">else if</span> (r &lt;= <span class="nm">12</span>) featSet.<span class="fn">add</span>(<span class="s">'RAM 12 Go'</span>);
-        <span class="kw">else</span>               featSet.<span class="fn">add</span>(<span class="s">'RAM 16 Go et +'</span>);
-    }
-    <span class="kw">if</span> (p.isNew)        featSet.<span class="fn">add</span>(<span class="s">'Nouveautés'</span>);
-    <span class="kw">if</span> (p.isBestSeller) featSet.<span class="fn">add</span>(<span class="s">'Meilleures ventes'</span>);
+<span class="kw">if</span> (p.specs.os?.toLowerCase().<span class="fn">includes</span>(<span class="s">'ios'</span>)) featSet.<span class="fn">add</span>(<span class="s">'iOS / iPadOS'</span>);
+<span class="kw">if</span> (<span class="fn">has5G</span>(p))  featSet.<span class="fn">add</span>(<span class="s">'Compatible 5G'</span>);   <span class="cm">// Add idempotent : 2e add ignoré</span> <span class="kw">if</span> (<span class="fn">hasGPS</span>(p)) featSet.<span class="fn">add</span>(<span class="s">'GPS intégré'</span>);
+<span class="kw">if</span> (p.specs.ram) {
+<span class="kw">const</span> <span class="vr">r</span> = <span class="fn">parseInt</span>(p.specs.ram); <span class="cm">// "8 Go"  8</span> <span class="kw">if</span> (r &lt;= <span class="nm">4</span>)       featSet.<span class="fn">add</span>(<span class="s">'RAM ≤ 4 Go'</span>);
+<span class="kw">else if</span> (r &lt;= <span class="nm">8</span>)  featSet.<span class="fn">add</span>(<span class="s">'RAM 6–8 Go'</span>);
+<span class="kw">else if</span> (r &lt;= <span class="nm">12</span>) featSet.<span class="fn">add</span>(<span class="s">'RAM 12 Go'</span>);
+<span class="kw">else</span> featSet.<span class="fn">add</span>(<span class="s">'RAM 16 Go et +'</span>);
+}
+<span class="kw">if</span> (p.isNew)        featSet.<span class="fn">add</span>(<span class="s">'Nouveautés'</span>);
+<span class="kw">if</span> (p.isBestSeller) featSet.<span class="fn">add</span>(<span class="s">'Meilleures ventes'</span>);
 });
 <span class="cm">// featSet contient chaque feature au plus une fois, peu importe combien de produits la partagent</span>
-</pre></div>
-
-  <h3>getBrand() — détecter la marque via les tags</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">BRAND_MAP</span> = {
-    <span class="s">'apple'</span>: <span class="s">'Apple'</span>, <span class="s">'iphone'</span>: <span class="s">'Apple'</span>, <span class="s">'ipad'</span>: <span class="s">'Apple'</span>,
-    <span class="s">'samsung'</span>: <span class="s">'Samsung'</span>, <span class="s">'google'</span>: <span class="s">'Google'</span>, <span class="s">'pixel'</span>: <span class="s">'Google'</span>,
-    <span class="cm">// … 12 marques au total</span>
+</pre></div> <h3>getBrand() — détecter la marque via les tags</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">BRAND_MAP</span> = {
+<span class="s">'apple'</span>: <span class="s">'Apple'</span>, <span class="s">'iphone'</span>: <span class="s">'Apple'</span>, <span class="s">'ipad'</span>: <span class="s">'Apple'</span>,
+<span class="s">'samsung'</span>: <span class="s">'Samsung'</span>, <span class="s">'google'</span>: <span class="s">'Google'</span>, <span class="s">'pixel'</span>: <span class="s">'Google'</span>,
+<span class="cm">// … 12 marques au total</span>
 };
-
 <span class="kw">function</span> <span class="fn">getBrand</span>(product) {
-    <span class="kw">for</span> (<span class="kw">const</span> <span class="vr">tag</span> <span class="kw">of</span> product.tags) {
-        <span class="kw">const</span> <span class="vr">b</span> = BRAND_MAP[tag.<span class="fn">toLowerCase</span>()];
-        <span class="kw">if</span> (b) <span class="kw">return</span> b; <span class="cm">// Retourne dès le premier tag reconnu</span>
-    }
-    <span class="kw">return</span> product.name.<span class="fn">split</span>(<span class="s">' '</span>)[<span class="nm">0</span>]; <span class="cm">// Fallback : premier mot du nom ("Samsung Galaxy" → "Samsung")</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">tag</span> <span class="kw">of</span> product.tags) {
+<span class="kw">const</span> <span class="vr">b</span> = BRAND_MAP[tag.<span class="fn">toLowerCase</span>()];
+<span class="kw">if</span> (b) <span class="kw">return</span> b; <span class="cm">// Retourne dès le premier tag reconnu</span> }
+<span class="kw">return</span> product.name.<span class="fn">split</span>(<span class="s">' '</span>)[<span class="nm">0</span>]; <span class="cm">// Fallback : premier mot du nom ("Samsung Galaxy"  "Samsung")</span>
 }
 </pre></div>
 </div>
-<hr>
-
-<!-- ══ 04 MATCHERS ══ -->
-<div class="sec" id="matchers">
-  <div class="slabel">04 — Matching sous-catégories</div>
-  <h2>SUBCAT_MATCHERS — prédicats précis contre les faux positifs</h2>
-  <p>Une approche naïve (<ic>name.includes('Apple Watch')</ic>) créerait des faux positifs : "Samsung Galaxy Watch" contient "Watch". La solution : un objet dictionnaire avec un prédicat (test) précis par sous-catégorie.</p>
-<div class="diag">
-  <div class="dtitle">Naïf vs prédicats précis — les faux positifs du includes()</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem;">
-    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.6rem;">Approche naïve — faux positifs</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);line-height:1.9;">
-        <div>p.name.includes("Watch")</div>
-        <div style="color:#fda4af;">→ "Apple Watch" ✓ mais aussi</div>
-        <div style="color:#fda4af;">→ "Samsung Galaxy Watch" ✗</div>
-        <div>p.name.includes("Apple")</div>
-        <div style="color:#fda4af;">→ "Apple Watch" ✓ mais aussi</div>
-        <div style="color:#fda4af;">→ "Apple AirPods" ✗ (mauvaise catég.)</div>
-      </div>
-    </div>
-    <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.6rem;">SUBCAT_MATCHERS — prédicats exacts</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);line-height:1.9;">
-        <div style="color:#fde68a;">'iPhone':</div>
-        <div style="padding-left:.8rem;color:#7ee8b8;">p => p.tags.includes('iphone')</div>
-        <div style="color:#fde68a;">'Apple Watch':</div>
-        <div style="padding-left:.8rem;color:#7ee8b8;">p => p.categoryId === 'cat_wearables'</div>
-        <div style="padding-left:.8rem;color:#7ee8b8;">   && p.tags.includes('apple')</div>
-        <div style="color:var(--t3);font-size:.6rem;">→ 2 conditions AND → 0 faux positif</div>
-      </div>
-    </div>
-  </div>
-  <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Usage : if (SUBCAT_MATCHERS[subcat]) return SUBCAT_MATCHERS[subcat](product)</div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript — extraits de SUBCAT_MATCHERS</span><pre><span class="kw">const</span> <span class="vr">SUBCAT_MATCHERS</span> = {
-    <span class="s">'iPhone'</span>:          p => p.tags.<span class="fn">includes</span>(<span class="s">'iphone'</span>),           <span class="cm">// Tag exact</span>
-    <span class="s">'Apple Watch'</span>:     p => p.categoryId === <span class="s">'cat_wearables'</span> && p.tags.<span class="fn">includes</span>(<span class="s">'apple'</span>),
-    <span class="cm">// ↑ Double condition pour ne pas inclure l'iPhone qui a aussi le tag 'apple'</span>
-    <span class="s">'Samsung'</span>:         p => p.tags.<span class="fn">includes</span>(<span class="s">'samsung'</span>)
-                            && !p.tags.<span class="fn">includes</span>(<span class="s">'tablette'</span>)
-                            && !p.tags.<span class="fn">some</span>(t => [<span class="s">'watch'</span>, <span class="s">'montre'</span>].<span class="fn">includes</span>(t)),
-    <span class="cm">// ↑ Samsung téléphones uniquement : exclut tablettes ET montres</span>
-    <span class="s">'Samsung Galaxy Watch'</span>: p => p.tags.<span class="fn">includes</span>(<span class="s">'samsung'</span>) && p.tags.<span class="fn">some</span>(t => [<span class="s">'watch'</span>,<span class="s">'montre'</span>].<span class="fn">includes</span>(t)),
-    <span class="s">'Samsung Galaxy Tab'</span>:   p => p.tags.<span class="fn">includes</span>(<span class="s">'samsung'</span>) && p.tags.<span class="fn">includes</span>(<span class="s">'tablette'</span>),
-    <span class="s">'Autres'</span>:          p => <span class="kw">true</span> <span class="cm">// Accepte tout — filet de sécurité</span>
+<hr> <!-- ══ 04 MATCHERS ══ -->
+<div class="sec" id="matchers"> <div class="slabel">04 — Matching sous-catégories</div> <h2>SUBCAT_MATCHERS — prédicats précis contre les faux positifs</h2> <p>Une approche naïve (<ic>name.includes('Apple Watch')</ic>) créerait des faux positifs : "Samsung Galaxy Watch" contient "Watch". La solution : un objet dictionnaire avec un prédicat (test) précis par sous-catégorie.</p>
+<div class="diag"> <div class="dtitle">Naïf vs prédicats précis — les faux positifs du includes()</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.6rem;">Approche naïve — faux positifs</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);line-height:1.9;"> <div>p.name.includes("Watch")</div> <div style="color:#fda4af;"> "Apple Watch"  mais aussi</div> <div style="color:#fda4af;"> "Samsung Galaxy Watch" </div> <div>p.name.includes("Apple")</div> <div style="color:#fda4af;"> "Apple Watch"  mais aussi</div> <div style="color:#fda4af;"> "Apple AirPods"  (mauvaise catég.)</div> </div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.6rem;">SUBCAT_MATCHERS — prédicats exacts</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);line-height:1.9;"> <div style="color:#fde68a;">'iPhone':</div> <div style="padding-left:.8rem;color:#7ee8b8;">p => p.tags.includes('iphone')</div> <div style="color:#fde68a;">'Apple Watch':</div> <div style="padding-left:.8rem;color:#7ee8b8;">p => p.categoryId === 'cat_wearables'</div> <div style="padding-left:.8rem;color:#7ee8b8;"> && p.tags.includes('apple')</div> <div style="color:var(--t3);font-size:.6rem;"> 2 conditions AND  0 faux positif</div> </div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Usage : if (SUBCAT_MATCHERS[subcat]) return SUBCAT_MATCHERS[subcat](product)</div>
+</div> <div class="cb2"><span class="cbl2">javascript — extraits de SUBCAT_MATCHERS</span><pre><span class="kw">const</span> <span class="vr">SUBCAT_MATCHERS</span> = {
+<span class="s">'iPhone'</span>:          p => p.tags.<span class="fn">includes</span>(<span class="s">'iphone'</span>),           <span class="cm">// Tag exact</span> <span class="s">'Apple Watch'</span>:     p => p.categoryId === <span class="s">'cat_wearables'</span> && p.tags.<span class="fn">includes</span>(<span class="s">'apple'</span>),
+<span class="cm">//  Double condition pour ne pas inclure l'iPhone qui a aussi le tag 'apple'</span> <span class="s">'Samsung'</span>:         p => p.tags.<span class="fn">includes</span>(<span class="s">'samsung'</span>)
+&& !p.tags.<span class="fn">includes</span>(<span class="s">'tablette'</span>)
+&& !p.tags.<span class="fn">some</span>(t => [<span class="s">'watch'</span>, <span class="s">'montre'</span>].<span class="fn">includes</span>(t)),
+<span class="cm">//  Samsung téléphones uniquement : exclut tablettes ET montres</span> <span class="s">'Samsung Galaxy Watch'</span>: p => p.tags.<span class="fn">includes</span>(<span class="s">'samsung'</span>) && p.tags.<span class="fn">some</span>(t => [<span class="s">'watch'</span>,<span class="s">'montre'</span>].<span class="fn">includes</span>(t)),
+<span class="s">'Samsung Galaxy Tab'</span>:   p => p.tags.<span class="fn">includes</span>(<span class="s">'samsung'</span>) && p.tags.<span class="fn">includes</span>(<span class="s">'tablette'</span>),
+<span class="s">'Autres'</span>:          p => <span class="kw">true</span> <span class="cm">// Accepte tout — filet de sécurité</span>
 };
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Problème du faux positif Samsung — résolu par les matchers</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;">❌ Approche naïve</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:1.9;color:var(--t2);">
-          p.name.includes('Samsung')<br>
-          → "Samsung Galaxy S24"  ✓<br>
-          → "Samsung Galaxy Tab"  ✓ <span style="color:#f7d97a;">← faux positif</span><br>
-          → "Samsung Galaxy Watch"✓ <span style="color:#f7d97a;">← faux positif</span>
-        </div>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.4rem;">✅ Matcher précis</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:1.9;color:var(--t2);">
-          samsung && !tablette && !watch<br>
-          → "Samsung Galaxy S24"  ✓<br>
-          → "Samsung Galaxy Tab"  ✗<br>
-          → "Samsung Galaxy Watch"✗
-        </div>
-      </div>
-    </div>
-  </div>
+</pre></div> <div class="diag"> <div class="dtitle">Problème du faux positif Samsung — résolu par les matchers</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;"> Approche naïve</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:1.9;color:var(--t2);"> p.name.includes('Samsung')<br> "Samsung Galaxy S24"  <br> "Samsung Galaxy Tab"   <span style="color:#f7d97a;"> faux positif</span><br> "Samsung Galaxy Watch" <span style="color:#f7d97a;"> faux positif</span> </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.4rem;"> Matcher précis</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:1.9;color:var(--t2);"> samsung && !tablette && !watch<br> "Samsung Galaxy S24"  <br> "Samsung Galaxy Tab"  <br> "Samsung Galaxy Watch"
+</div> </div> </div> </div>
 </div>
-<hr>
-
-<!-- ══ 05 APPLY FILTERS ══ -->
-<div class="sec" id="apply">
-  <div class="slabel">05 — Application des filtres</div>
-  <h2>applyFilters() — la fonction centrale</h2>
-<div class="schema2">
-  <div class="s2t">️ applyFilters() — pipeline de filtrage dans l'ordre d'exécution</div>
-  <div class="seq">
-    <div class="seq-row">
-      <div class="seq-n">1</div>
-      <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">matchesSubcategory(p)</span> — OR entre les sous-catégories cochées (iPhone OU iPad OU…)<br><span style="color:var(--t3);font-size:.7rem;">Échec → false immédiat, le produit est rejeté sans vérifier les autres filtres</span></div>
-    </div>
-    <div class="seq-arrow">↓ si passe</div>
-    <div class="seq-row">
-      <div class="seq-n">2</div>
-      <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">p.basePrice ≥ priceMin && ≤ priceMax</span> — fourchette de prix<br><span style="color:var(--t3);font-size:.7rem;">Les sliders min/max initialisés sur les valeurs réelles du catalogue</span></div>
-    </div>
-    <div class="seq-arrow">↓ si passe</div>
-    <div class="seq-row">
-      <div class="seq-n">3</div>
-      <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filters.brands.includes(getBrand(p))</span> — marque cochée<br><span style="color:var(--t3);font-size:.7rem;">Ignoré si aucune marque cochée (tableau vide → condition ignorée)</span></div>
-    </div>
-    <div class="seq-arrow">↓ si passe</div>
-    <div class="seq-row">
-      <div class="seq-n">4</div>
-      <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filters.features.every(f => matchesFeature(p, f))</span> — AND entre features<br><span style="color:var(--t3);font-size:.7rem;">Si "5G" ET "GPS" cochés → le produit doit avoir les DEUX</span></div>
-    </div>
-    <div class="seq-arrow">↓ tous les filtres passés</div>
-    <div class="seq-row">
-      <div class="seq-n">✓</div>
-      <div class="seq-body" style="color:#7ee8b8;">Produit inclus dans filteredProducts → trié → displayCurrentPage()</div>
-    </div>
-  </div>
-</div>
-
-  <p>C'est la fonction appelée à chaque changement d'un filtre. Elle refiltre <ic>allProducts</ic> entièrement à chaque fois — approche simple et lisible, suffisante pour ~34 produits.</p>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">applyFilters</span>() {
-    filteredProducts = allProducts.<span class="fn">filter</span>(p => {
-        <span class="kw">if</span> (!<span class="fn">matchesSubcategory</span>(p, filters.subcategories))             <span class="kw">return false</span>;
-        <span class="kw">if</span> (p.basePrice &lt; filters.priceMin || p.basePrice > filters.priceMax) <span class="kw">return false</span>;
-        <span class="kw">if</span> (filters.brands.length   && !filters.brands.<span class="fn">includes</span>(<span class="fn">getBrand</span>(p))) <span class="kw">return false</span>;
-        <span class="kw">if</span> (filters.features.length && !filters.features.<span class="fn">every</span>(f => <span class="fn">matchesFeature</span>(p, f))) <span class="kw">return false</span>;
-        <span class="kw">return true</span>;
-    });
-
-    <span class="cm">// Tri selon le critère actif</span>
-    <span class="kw">switch</span> (sortBy) {
-        <span class="kw">case</span> <span class="s">'price-asc'</span>:  filteredProducts.<span class="fn">sort</span>((a,b) => a.basePrice - b.basePrice);       <span class="kw">break</span>;
-        <span class="kw">case</span> <span class="s">'price-desc'</span>: filteredProducts.<span class="fn">sort</span>((a,b) => b.basePrice - a.basePrice);       <span class="kw">break</span>;
-        <span class="kw">case</span> <span class="s">'rating'</span>:     filteredProducts.<span class="fn">sort</span>((a,b) => (b.rating||<span class="nm">0</span>) - (a.rating||<span class="nm">0</span>)); <span class="kw">break</span>;
-        <span class="kw">case</span> <span class="s">'new'</span>:        filteredProducts.<span class="fn">sort</span>((a,b) => (b.isNew?<span class="nm">1</span>:<span class="nm">0</span>) - (a.isNew?<span class="nm">1</span>:<span class="nm">0</span>)); <span class="kw">break</span>;
-    }
-
-    currentPage = <span class="nm">1</span>;       <span class="cm">// Toujours revenir page 1 après un changement de filtre</span>
-    <span class="fn">displayCurrentPage</span>();  <span class="cm">// Découpe et affiche les 12 premiers</span>
-    <span class="fn">updatePagination</span>();    <span class="cm">// Régénère les boutons de navigation</span>
-    <span class="fn">updateActiveFilters</span>(); <span class="cm">// Met à jour les tags de filtres actifs</span>
+<hr> <!-- ══ 05 APPLY FILTERS ══ -->
+<div class="sec" id="apply"> <div class="slabel">05 — Application des filtres</div> <h2>applyFilters() — la fonction centrale</h2>
+<div class="schema2"> <div class="s2t"> applyFilters() — pipeline de filtrage dans l'ordre d'exécution</div> <div class="seq"> <div class="seq-row"> <div class="seq-n">1</div> <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">matchesSubcategory(p)</span> — OR entre les sous-catégories cochées (iPhone OU iPad OU…)<br><span style="color:var(--t3);font-size:.7rem;">Échec  false immédiat, le produit est rejeté sans vérifier les autres filtres</span></div> </div> <div class="seq-arrow"> si passe</div> <div class="seq-row"> <div class="seq-n">2</div> <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">p.basePrice ≥ priceMin && ≤ priceMax</span> — fourchette de prix<br><span style="color:var(--t3);font-size:.7rem;">Les sliders min/max initialisés sur les valeurs réelles du catalogue</span></div> </div> <div class="seq-arrow"> si passe</div> <div class="seq-row"> <div class="seq-n">3</div> <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filters.brands.includes(getBrand(p))</span> — marque cochée<br><span style="color:var(--t3);font-size:.7rem;">Ignoré si aucune marque cochée (tableau vide  condition ignorée)</span></div> </div> <div class="seq-arrow"> si passe</div> <div class="seq-row"> <div class="seq-n">4</div> <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filters.features.every(f => matchesFeature(p, f))</span> — AND entre features<br><span style="color:var(--t3);font-size:.7rem;">Si "5G" ET "GPS" cochés  le produit doit avoir les DEUX</span></div> </div> <div class="seq-arrow"> tous les filtres passés</div> <div class="seq-row"> <div class="seq-n"></div> <div class="seq-body" style="color:#7ee8b8;">Produit inclus dans filteredProducts  trié  displayCurrentPage()</div> </div> </div>
+</div> <p>C'est la fonction appelée à chaque changement d'un filtre. Elle refiltre <ic>allProducts</ic> entièrement à chaque fois — approche simple et lisible, suffisante pour ~34 produits.</p> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">applyFilters</span>() {
+filteredProducts = allProducts.<span class="fn">filter</span>(p => {
+<span class="kw">if</span> (!<span class="fn">matchesSubcategory</span>(p, filters.subcategories))             <span class="kw">return false</span>;
+<span class="kw">if</span> (p.basePrice &lt; filters.priceMin || p.basePrice > filters.priceMax) <span class="kw">return false</span>;
+<span class="kw">if</span> (filters.brands.length   && !filters.brands.<span class="fn">includes</span>(<span class="fn">getBrand</span>(p))) <span class="kw">return false</span>;
+<span class="kw">if</span> (filters.features.length && !filters.features.<span class="fn">every</span>(f => <span class="fn">matchesFeature</span>(p, f))) <span class="kw">return false</span>;
+<span class="kw">return true</span>;
+});
+<span class="cm">// Tri selon le critère actif</span> <span class="kw">switch</span> (sortBy) {
+<span class="kw">case</span> <span class="s">'price-asc'</span>:  filteredProducts.<span class="fn">sort</span>((a,b) => a.basePrice - b.basePrice);       <span class="kw">break</span>;
+<span class="kw">case</span> <span class="s">'price-desc'</span>: filteredProducts.<span class="fn">sort</span>((a,b) => b.basePrice - a.basePrice);       <span class="kw">break</span>;
+<span class="kw">case</span> <span class="s">'rating'</span>:     filteredProducts.<span class="fn">sort</span>((a,b) => (b.rating||<span class="nm">0</span>) - (a.rating||<span class="nm">0</span>)); <span class="kw">break</span>;
+<span class="kw">case</span> <span class="s">'new'</span>:        filteredProducts.<span class="fn">sort</span>((a,b) => (b.isNew?<span class="nm">1</span>:<span class="nm">0</span>) - (a.isNew?<span class="nm">1</span>:<span class="nm">0</span>)); <span class="kw">break</span>;
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">La logique AND/OR des filtres combinés</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:10px;padding:1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#67e8f9;margin-bottom:.5rem;">Entre les 4 filtres = AND (tous)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Un produit doit passer <b>les 4 vérifications</b> pour apparaître. Si la sous-catégorie ne matche pas → le produit est rejeté sans même vérifier le prix.</div>
-      </div>
-      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;">Dans features = AND (.every)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Si "5G" et "GPS" sont cochés, le produit doit avoir les <b>deux</b>. <ic>.every()</ic> retourne faux si une seule feature manque.</div>
-        <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;">Dans sous-catégories = OR (.some)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;margin-top:.3rem;">Si "iPhone" et "iPad" sont cochés, le produit doit appartenir <b>à au moins un</b> des deux.</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>displayCurrentPage() — la pagination en une ligne</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">displayCurrentPage</span>() {
-    <span class="kw">const</span> <span class="vr">start</span>     = (currentPage - <span class="nm">1</span>) * PRODUCTS_PER_PAGE; <span class="cm">// Ex page 3 : (3-1)*12 = 24</span>
-    displayedProducts = filteredProducts.<span class="fn">slice</span>(start, start + PRODUCTS_PER_PAGE);
-    <span class="cm">// .slice(24, 36) extrait les produits 24 à 35 (12 produits max)</span>
-    <span class="fn">renderProducts</span>(displayedProducts);
+currentPage = <span class="nm">1</span>;       <span class="cm">// Toujours revenir page 1 après un changement de filtre</span> <span class="fn">displayCurrentPage</span>();  <span class="cm">// Découpe et affiche les 12 premiers</span> <span class="fn">updatePagination</span>();    <span class="cm">// Régénère les boutons de navigation</span> <span class="fn">updateActiveFilters</span>(); <span class="cm">// Met à jour les tags de filtres actifs</span>
+}
+</pre></div> <div class="diag"> <div class="dtitle">La logique AND/OR des filtres combinés</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:10px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#67e8f9;margin-bottom:.5rem;">Entre les 4 filtres = AND (tous)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Un produit doit passer <b>les 4 vérifications</b> pour apparaître. Si la sous-catégorie ne matche pas  le produit est rejeté sans même vérifier le prix.</div> </div> <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.5rem;">Dans features = AND (.every)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">Si "5G" et "GPS" sont cochés, le produit doit avoir les <b>deux</b>. <ic>.every()</ic> retourne faux si une seule feature manque.</div> <div style="margin-top:.5rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;">Dans sous-catégories = OR (.some)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;margin-top:.3rem;">Si "iPhone" et "iPad" sont cochés, le produit doit appartenir <b>à au moins un</b> des deux.</div> </div> </div> </div> <h3>displayCurrentPage() — la pagination en une ligne</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">displayCurrentPage</span>() {
+<span class="kw">const</span> <span class="vr">start</span> = (currentPage - <span class="nm">1</span>) * PRODUCTS_PER_PAGE; <span class="cm">// Ex page 3 : (3-1)*12 = 24</span> displayedProducts = filteredProducts.<span class="fn">slice</span>(start, start + PRODUCTS_PER_PAGE);
+<span class="cm">// .slice(24, 36) extrait les produits 24 à 35 (12 produits max)</span> <span class="fn">renderProducts</span>(displayedProducts);
 }
 </pre></div>
 </div>
-<hr>
-
-<!-- ══ 06 PAGINATION ══ -->
-<div class="sec" id="pagination">
-  <div class="slabel">06 — Pagination</div>
-  <h2>updatePagination() — ellipses intelligentes</h2>
-  <p>La pagination n'affiche pas tous les numéros si il y en a beaucoup : elle montre toujours la page 1, la dernière, et les 2 pages autour de la page courante, avec des <ic>…</ic> pour les sauts.</p>
-<div class="diag">
-  <div class="dtitle">Règle d'affichage des boutons de pagination — page 5 sur 12</div>
-  <div style="display:flex;flex-direction:column;gap:.6rem;max-width:500px;">
-    <div style="display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);border-radius:6px;padding:.3rem .55rem;color:#7dd3fc;">1</div>
-      <div style="color:var(--t3);font-size:.8rem;padding:0 .2rem;">…</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">3</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">4</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(245,197,66,.2);border:1px solid rgba(245,197,66,.5);border-radius:6px;padding:.3rem .55rem;color:#f7d97a;font-weight:700;">5</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">6</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">7</div>
-      <div style="color:var(--t3);font-size:.8rem;padding:0 .2rem;">…</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);border-radius:6px;padding:.3rem .55rem;color:#7dd3fc;">12</div>
-    </div>
-    <div style="display:grid;grid-template-columns:70px 1fr;gap:.4rem;font-size:.72rem;color:var(--t2);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">i === 1</div><div>Toujours affiché (ancre de repère)</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">i === 12</div><div>Toujours affiché (fin connue)</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;">3, 4, 5, 6, 7</div><div>currentPage ± 2 → fenêtre glissante</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">2, 8→11</div><div>Masqués → remplacés par …</div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> = <span class="nm">1</span>; i &lt;= totalPages; i++) {
-    <span class="kw">if</span> (i === <span class="nm">1</span> || i === totalPages || (i >= currentPage - <span class="nm">2</span> && i &lt;= currentPage + <span class="nm">2</span>)) {
-        <span class="cm">// Toujours afficher : 1re page, dernière page, et fenêtre ±2 autour de la page courante</span>
-        html += bouton(i);
-    } <span class="kw">else if</span> (i === currentPage - <span class="nm">3</span> || i === currentPage + <span class="nm">3</span>) {
-        <span class="cm">// Juste en dehors de la fenêtre → afficher "…"</span>
-        html += <span class="s">'&lt;span class="page-dots"&gt;…&lt;/span&gt;'</span>;
-    }
-    <span class="cm">// Les autres numéros sont simplement ignorés</span>
+<hr> <!-- ══ 06 PAGINATION ══ -->
+<div class="sec" id="pagination"> <div class="slabel">06 — Pagination</div> <h2>updatePagination() — ellipses intelligentes</h2> <p>La pagination n'affiche pas tous les numéros si il y en a beaucoup : elle montre toujours la page 1, la dernière, et les 2 pages autour de la page courante, avec des <ic>…</ic> pour les sauts.</p>
+<div class="diag"> <div class="dtitle">Règle d'affichage des boutons de pagination — page 5 sur 12</div> <div style="display:flex;flex-direction:column;gap:.6rem;max-width:500px;"> <div style="display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);border-radius:6px;padding:.3rem .55rem;color:#7dd3fc;">1</div> <div style="color:var(--t3);font-size:.8rem;padding:0 .2rem;">…</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">3</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">4</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(245,197,66,.2);border:1px solid rgba(245,197,66,.5);border-radius:6px;padding:.3rem .55rem;color:#f7d97a;font-weight:700;">5</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">6</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.3rem .55rem;color:var(--t2);">7</div> <div style="color:var(--t3);font-size:.8rem;padding:0 .2rem;">…</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:rgba(56,189,248,.15);border:1px solid rgba(56,189,248,.4);border-radius:6px;padding:.3rem .55rem;color:#7dd3fc;">12</div> </div> <div style="display:grid;grid-template-columns:70px 1fr;gap:.4rem;font-size:.72rem;color:var(--t2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">i === 1</div><div>Toujours affiché (ancre de repère)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7dd3fc;">i === 12</div><div>Toujours affiché (fin connue)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;">3, 4, 5, 6, 7</div><div>currentPage ± 2  fenêtre glissante</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">2, 811</div><div>Masqués  remplacés par …</div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> = <span class="nm">1</span>; i &lt;= totalPages; i++) {
+<span class="kw">if</span> (i === <span class="nm">1</span> || i === totalPages || (i >= currentPage - <span class="nm">2</span> && i &lt;= currentPage + <span class="nm">2</span>)) {
+<span class="cm">// Toujours afficher : 1re page, dernière page, et fenêtre ±2 autour de la page courante</span> html += bouton(i);
+} <span class="kw">else if</span> (i === currentPage - <span class="nm">3</span> || i === currentPage + <span class="nm">3</span>) {
+<span class="cm">// Juste en dehors de la fenêtre  afficher "…"</span> html += <span class="s">'&lt;span class="page-dots"&gt;…&lt;/span&gt;'</span>;
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Exemple avec 10 pages, page courante = 5</div>
-    <div style="display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;padding:.8rem;">
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">← Préc</div>
-      <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#67e8f9;">1</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t3);">…</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">3</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">4</div>
-      <div style="background:rgba(34,211,238,.2);border:2px solid rgba(34,211,238,.6);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#22d3ee;">5</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">6</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">7</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t3);">…</div>
-      <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#67e8f9;">10</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">Suiv →</div>
-    </div>
-    <div style="font-size:.78rem;color:var(--t2);text-align:center;">Pages 2, 8, 9 sont ignorées — ni bouton ni ellipse. Pages 1 et 10 toujours présentes.</div>
-  </div>
+<span class="cm">// Les autres numéros sont simplement ignorés</span>
+}
+</pre></div> <div class="diag"> <div class="dtitle">Exemple avec 10 pages, page courante = 5</div> <div style="display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;padding:.8rem;"> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);"> Préc</div> <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#67e8f9;">1</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t3);">…</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">3</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">4</div> <div style="background:rgba(34,211,238,.2);border:2px solid rgba(34,211,238,.6);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#22d3ee;">5</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">6</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">7</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t3);">…</div> <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#67e8f9;">10</div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:6px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--t2);">Suiv </div> </div> <div style="font-size:.78rem;color:var(--t2);text-align:center;">Pages 2, 8, 9 sont ignorées — ni bouton ni ellipse. Pages 1 et 10 toujours présentes.</div> </div>
 </div>
-<hr>
-
-<!-- ══ 07 TAGS ACTIFS ══ -->
-<div class="sec" id="tags">
-  <div class="slabel">07 — Tags de filtres actifs</div>
-  <h2>updateActiveFilters() — les pastilles sous la toolbar</h2>
-  <p>Chaque filtre coché crée une pastille avec un bouton <ic>×</ic>. Cliquer dessus décoche la checkbox ET retire la valeur du tableau <ic>filters</ic> en même temps.</p>
-<div class="diag">
-  <div class="dtitle">Anatomie d'un tag actif — structure et comportement au clic ×</div>
-  <div style="display:flex;flex-direction:column;gap:.8rem;max-width:540px;">
-    <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;">
-      <div style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:.35rem .75rem;display:flex;align-items:center;gap:.4rem;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c4b5fd;">iPhone</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#c4b5fd;cursor:pointer;opacity:.7;">×</span>
-      </div>
-      <div style="background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);border-radius:20px;padding:.35rem .75rem;display:flex;align-items:center;gap:.4rem;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7dd3fc;">500 € – 1 500 €</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7dd3fc;cursor:pointer;opacity:.7;">×</span>
-      </div>
-      <div style="background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.35);border-radius:20px;padding:.35rem .75rem;display:flex;align-items:center;gap:.4rem;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fde68a;">Compatible 5G</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#fde68a;cursor:pointer;opacity:.7;">×</span>
-      </div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:.3rem;font-size:.73rem;color:var(--t2);">
-      <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#fda4af;">①</span><span>Clic × → data-filter-type + data-filter-value lus depuis le button</span></div>
-      <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#fda4af;">②</span><span>filters[type] → splice(indexOf(value), 1) ou reset si type=prix</span></div>
-      <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#fda4af;">③</span><span>La checkbox correspondante → .checked = false (sync UI)</span></div>
-      <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#7ee8b8;">④</span><span>applyFilters() → re-render grille + pagination + tags</span></div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="diag">
-    <div class="dtitle">Exemple de rendu des tags actifs</div>
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;padding:.8rem 0;">
-      <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">iPhone <span style="opacity:.6;cursor:pointer;">×</span></div>
-      <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">Prix : 500 € – 1 500 € <span style="opacity:.6;cursor:pointer;">×</span></div>
-      <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">Apple <span style="opacity:.6;cursor:pointer;">×</span></div>
-      <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">Compatible 5G <span style="opacity:.6;cursor:pointer;">×</span></div>
-    </div>
-    <div class="sn"><span class="sni">💡</span><span>Le tag prix n'est affiché que si les sliders ont été bougés (différents des valeurs min/max réelles). Le clic sur × le remet exactement aux valeurs par défaut calculées depuis allProducts.</span></div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript — suppression d'un tag "brand"</span><pre>btn.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
-    <span class="kw">const</span> <span class="vr">type</span>  = <span class="kw">this</span>.dataset.filter; <span class="cm">// 'sub', 'brand', 'feature', ou 'price'</span>
-    <span class="kw">const</span> <span class="vr">value</span> = <span class="kw">this</span>.dataset.value;  <span class="cm">// ex: 'Apple'</span>
-
-    <span class="kw">if</span> (type === <span class="s">'brand'</span>) {
-        <span class="cm">// Décoche la checkbox dans la sidebar</span>
-        document.<span class="fn">querySelectorAll</span>(<span class="s">'.brand-checkbox'</span>).<span class="fn">forEach</span>(cb => {
-            <span class="kw">if</span> (cb.value === value) cb.checked = <span class="kw">false</span>;
-        });
-        <span class="cm">// Retire la valeur du tableau filters.brands</span>
-        filters.brands = filters.brands.<span class="fn">filter</span>(v => v !== value);
-    }
-    <span class="cm">// … cas 'sub', 'feature', 'price' similaires</span>
-    <span class="fn">applyFilters</span>(); <span class="cm">// Relance tout</span>
+<hr> <!-- ══ 07 TAGS ACTIFS ══ -->
+<div class="sec" id="tags"> <div class="slabel">07 — Tags de filtres actifs</div> <h2>updateActiveFilters() — les pastilles sous la toolbar</h2> <p>Chaque filtre coché crée une pastille avec un bouton <ic>×</ic>. Cliquer dessus décoche la checkbox ET retire la valeur du tableau <ic>filters</ic> en même temps.</p>
+<div class="diag"> <div class="dtitle">Anatomie d'un tag actif — structure et comportement au clic ×</div> <div style="display:flex;flex-direction:column;gap:.8rem;max-width:540px;"> <div style="display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;"> <div style="background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.35);border-radius:20px;padding:.35rem .75rem;display:flex;align-items:center;gap:.4rem;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c4b5fd;">iPhone</span> <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#c4b5fd;cursor:pointer;opacity:.7;">×</span> </div> <div style="background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);border-radius:20px;padding:.35rem .75rem;display:flex;align-items:center;gap:.4rem;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7dd3fc;">500 € – 1 500 €</span> <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7dd3fc;cursor:pointer;opacity:.7;">×</span> </div> <div style="background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.35);border-radius:20px;padding:.35rem .75rem;display:flex;align-items:center;gap:.4rem;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fde68a;">Compatible 5G</span> <span style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#fde68a;cursor:pointer;opacity:.7;">×</span> </div> </div> <div style="display:flex;flex-direction:column;gap:.3rem;font-size:.73rem;color:var(--t2);"> <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#fda4af;">①</span><span>Clic ×  data-filter-type + data-filter-value lus depuis le button</span></div> <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#fda4af;">②</span><span>filters[type]  splice(indexOf(value), 1) ou reset si type=prix</span></div> <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#fda4af;">③</span><span>La checkbox correspondante  .checked = false (sync UI)</span></div> <div style="display:grid;grid-template-columns:18px 1fr;gap:.4rem;"><span style="color:#7ee8b8;">④</span><span>applyFilters()  re-render grille + pagination + tags</span></div> </div> </div>
+</div> <div class="diag"> <div class="dtitle">Exemple de rendu des tags actifs</div> <div style="display:flex;gap:.5rem;flex-wrap:wrap;padding:.8rem 0;"> <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">iPhone <span style="opacity:.6;cursor:pointer;">×</span></div> <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">Prix : 500 € – 1 500 € <span style="opacity:.6;cursor:pointer;">×</span></div> <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">Apple <span style="opacity:.6;cursor:pointer;">×</span></div> <div style="background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.3);border-radius:20px;padding:.3rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#67e8f9;display:flex;align-items:center;gap:.4rem;">Compatible 5G <span style="opacity:.6;cursor:pointer;">×</span></div> </div> <div class="sn"><span class="sni"></span><span>Le tag prix n'est affiché que si les sliders ont été bougés (différents des valeurs min/max réelles). Le clic sur × le remet exactement aux valeurs par défaut calculées depuis allProducts.</span></div> </div> <div class="cb2"><span class="cbl2">javascript — suppression d'un tag "brand"</span><pre>btn.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
+<span class="kw">const</span> <span class="vr">type</span> = <span class="kw">this</span>.dataset.filter; <span class="cm">// 'sub', 'brand', 'feature', ou 'price'</span> <span class="kw">const</span> <span class="vr">value</span> = <span class="kw">this</span>.dataset.value;  <span class="cm">// ex: 'Apple'</span> <span class="kw">if</span> (type === <span class="s">'brand'</span>) {
+<span class="cm">// Décoche la checkbox dans la sidebar</span> document.<span class="fn">querySelectorAll</span>(<span class="s">'.brand-checkbox'</span>).<span class="fn">forEach</span>(cb => {
+<span class="kw">if</span> (cb.value === value) cb.checked = <span class="kw">false</span>;
+});
+<span class="cm">// Retire la valeur du tableau filters.brands</span> filters.brands = filters.brands.<span class="fn">filter</span>(v => v !== value);
+}
+<span class="cm">// … cas 'sub', 'feature', 'price' similaires</span> <span class="fn">applyFilters</span>(); <span class="cm">// Relance tout</span>
 });
 </pre></div>
 </div>
-<hr>
-
-<!-- ══ 08 PANIER ══ -->
-<div class="sec" id="panier">
-  <div class="slabel">08 — Ajout au panier depuis la grille</div>
-  <h2>addToCart() — logique locale + feedback visuel</h2>
-  <p>catalogue.js gère son propre ajout au panier (sans déléguer à panier.js) car il a accès direct aux données du produit via <ic>allProducts</ic>. Il réutilise la même clé localStorage <ic>'peartech-cart'</ic> que le reste du site.</p>
-
-  <div class="diag">
-    <div class="dtitle">Feedback visuel — l'icône panier devient une coche</div>
-    <div class="vc">
-      <div class="vn w cgr">Clic sur bouton panier (data-id="5")</div>
-      <div class="va">↓<div class="val">allProducts.find(p => p.id === 5)</div></div>
-      <div class="vn w cb">Produit trouvé → charge cart depuis localStorage</div>
-      <div class="va">↓<div class="val">cart.find(i => i.id === 5) ?</div></div>
-    </div>
-    <div class="fork f2" style="max-width:700px;margin:0 auto .5rem;">
-      <div class="fc">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;background:rgba(245,197,66,.15);color:#f7d97a;padding:.15rem .4rem;border-radius:4px;margin-bottom:.3rem;">Déjà au panier</div>
-        <div class="vn cy" style="font-size:.72rem;">existing.quantity++</div>
-      </div>
-      <div class="fc">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;background:rgba(86,209,158,.15);color:#7ee8b8;padding:.15rem .4rem;border-radius:4px;margin-bottom:.3rem;">Nouveau produit</div>
-        <div class="vn cg" style="font-size:.72rem;">cart.push({id, name, image, price, specs, quantity:1})</div>
-      </div>
-    </div>
-    <div class="vc">
-      <div class="va">↓<div class="val">localStorage.setItem + badge</div></div>
-      <div class="vn w cp">btn.innerHTML = SVG coche · btn.disabled = true</div>
-      <div class="va">↓<div class="val">setTimeout 1600ms</div></div>
-      <div class="vn w cgr">btn.innerHTML = SVG panier original · btn.disabled = false</div>
-    </div>
-    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span><ic>btn.disabled = true</ic> pendant 1.6s empêche les double-clics qui duplieraient l'article. Le SVG change visuellement (panier → coche) pour confirmer l'action à l'utilisateur.</span></div>
-  </div>
+<hr> <!-- ══ 08 PANIER ══ -->
+<div class="sec" id="panier"> <div class="slabel">08 — Ajout au panier depuis la grille</div> <h2>addToCart() — logique locale + feedback visuel</h2> <p>catalogue.js gère son propre ajout au panier (sans déléguer à panier.js) car il a accès direct aux données du produit via <ic>allProducts</ic>. Il réutilise la même clé localStorage <ic>'peartech-cart'</ic> que le reste du site.</p> <div class="diag"> <div class="dtitle">Feedback visuel — l'icône panier devient une coche</div> <div class="vc"> <div class="vn w cgr">Clic sur bouton panier (data-id="5")</div> <div class="va"><div class="val">allProducts.find(p => p.id === 5)</div></div> <div class="vn w cb">Produit trouvé  charge cart depuis localStorage</div> <div class="va"><div class="val">cart.find(i => i.id === 5) ?</div></div> </div> <div class="fork f2" style="max-width:700px;margin:0 auto .5rem;"> <div class="fc"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;background:rgba(245,197,66,.15);color:#f7d97a;padding:.15rem .4rem;border-radius:4px;margin-bottom:.3rem;">Déjà au panier</div> <div class="vn cy" style="font-size:.72rem;">existing.quantity++</div> </div> <div class="fc"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;background:rgba(86,209,158,.15);color:#7ee8b8;padding:.15rem .4rem;border-radius:4px;margin-bottom:.3rem;">Nouveau produit</div> <div class="vn cg" style="font-size:.72rem;">cart.push({id, name, image, price, specs, quantity:1})</div> </div> </div> <div class="vc"> <div class="va"><div class="val">localStorage.setItem + badge</div></div> <div class="vn w cp">btn.innerHTML = SVG coche · btn.disabled = true</div> <div class="va"><div class="val">setTimeout 1600ms</div></div> <div class="vn w cgr">btn.innerHTML = SVG panier original · btn.disabled = false</div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span><ic>btn.disabled = true</ic> pendant 1.6s empêche les double-clics qui duplieraient l'article. Le SVG change visuellement (panier  coche) pour confirmer l'action à l'utilisateur.</span></div> </div>
 </div>
-<hr>
+<hr> <!-- ══ RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">09 — Récapitulatif</div> <h2>Les 10 fonctions — rôle et déclencheur</h2>
 
-<!-- ══ RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">09 — Récapitulatif</div>
-  <h2>Les 10 fonctions — rôle et déclencheur</h2>
 <div class="diag">
-  <div class="dtitle">Les 10 fonctions — rôle et déclencheur</div>
-  <table class="recap-table">
-    <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Ce qu'elle fait</th></tr></thead>
-    <tbody>
-      <tr><td class="fn-cell">initFilters()</td><td>DOMContentLoaded</td><td>Génère la sidebar checkboxes/sliders depuis allProducts</td></tr>
-      <tr><td class="fn-cell">initSortSelect()</td><td>DOMContentLoaded</td><td>Attache le listener sur le select de tri</td></tr>
-      <tr><td class="fn-cell">applyFilters()</td><td>Tout changement filtre/tri</td><td>Filtre + trie filteredProducts → page 1 → display + pagination + tags</td></tr>
-      <tr><td class="fn-cell">matchesSubcategory()</td><td>appelée par applyFilters</td><td>Délègue à SUBCAT_MATCHERS[sub](produit)</td></tr>
-      <tr><td class="fn-cell">getBrand()</td><td>appelée par applyFilters</td><td>Extrait la marque depuis p.tags (apple, samsung…)</td></tr>
-      <tr><td class="fn-cell">matchesFeature()</td><td>appelée par applyFilters</td><td>Vérifie si un produit a une feature (5G, GPS…)</td></tr>
-      <tr><td class="fn-cell">displayCurrentPage()</td><td>appelée par applyFilters</td><td>.slice(start, start+12) → renderProducts()</td></tr>
-      <tr><td class="fn-cell">updatePagination()</td><td>appelée par applyFilters</td><td>Génère boutons numérotés avec ellipses intelligentes</td></tr>
-      <tr><td class="fn-cell">updateActiveFilters()</td><td>appelée par applyFilters</td><td>Génère pastilles × pour chaque filtre actif</td></tr>
-      <tr><td class="fn-cell">addToCart(id)</td><td>Clic .btn-add-cart</td><td>PearTechCart.add() + feedback visuel ✓ 1.5s</td></tr>
-    </tbody>
-  </table>
-</div>
-
-  <div class="tbl">
-    <thead><tr><th>Fonction</th><th>Déclenchée par</th><th>Rôle</th></tr></thead>
-    <tbody>
-      <tr><td class="tc">initFilters()</td><td style="color:var(--t2)">DOMContentLoaded (1 fois)</td><td style="color:var(--t2)">Construit checkboxes, sliders, Map/Set à partir des produits réels</td></tr>
-      <tr><td class="tc">applyFilters()</td><td style="color:var(--t2)">Tout changement de filtre</td><td style="color:var(--t2)">Refiltre allProducts, trie, remet à la page 1, appelle 3 fonctions</td></tr>
-      <tr><td class="tc">displayCurrentPage()</td><td style="color:var(--t2)">applyFilters() + clic pagination</td><td style="color:var(--t2)">Découpe filteredProducts en tranche de 12 via .slice()</td></tr>
-      <tr><td class="tc">renderProducts()</td><td style="color:var(--t2)">displayCurrentPage()</td><td style="color:var(--t2)">Génère le HTML de toutes les cards + réattache les écouteurs</td></tr>
-      <tr><td class="tc">updatePagination()</td><td style="color:var(--t2)">applyFilters()</td><td style="color:var(--t2)">Calcule totalPages, génère boutons avec ellipses</td></tr>
-      <tr><td class="tc">updateActiveFilters()</td><td style="color:var(--t2)">applyFilters()</td><td style="color:var(--t2)">Génère les tags de filtres actifs avec bouton ×</td></tr>
-      <tr><td class="tc">resetFilters()</td><td style="color:var(--t2)">Clic bouton "Réinitialiser"</td><td style="color:var(--t2)">Décoche tout, remet sliders, appelle applyFilters()</td></tr>
-      <tr><td class="tc">matchesSubcategory()</td><td style="color:var(--t2)">applyFilters() via .filter()</td><td style="color:var(--t2)">Utilise SUBCAT_MATCHERS + fallbacks pour tester la sous-cat</td></tr>
-      <tr><td class="tc">matchesFeature()</td><td style="color:var(--t2)">applyFilters() via .filter()</td><td style="color:var(--t2)">Switch sur le nom de feature pour tester la propriété produit</td></tr>
-      <tr><td class="tc">addToCart()</td><td style="color:var(--t2)">Clic bouton panier d'une card</td><td style="color:var(--t2)">Lit/écrit localStorage, met à jour badge, anime le bouton</td></tr>
-    </tbody>
+  <div class="dtitle">Chaîne d'appel principale — du clic au rendu</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem">
+    <div class="flow-row"><span class="chain-title">Événement</span><span style="font-size:.78rem;color:var(--t2)">Clic checkbox / slider / select tri / bouton filtre-tag</span></div>
+    <div class="flow-row"><span class="chain-title">1</span><span style="font-size:.78rem;color:var(--t2)"><b>applyFilters()</b> — filtre allProducts selon l'état courant des contrôles</span></div>
+    <div class="flow-row"><span class="chain-title">2</span><span style="font-size:.78rem;color:var(--t2)"><b>sortProducts()</b> — trie filteredProducts selon le select actif</span></div>
+    <div class="flow-row"><span class="chain-title">3</span><span style="font-size:.78rem;color:var(--t2)"><b>renderProducts(page)</b> — tranche pagineé + génère le HTML des cards</span></div>
+    <div class="flow-row"><span class="chain-title">4</span><span style="font-size:.78rem;color:var(--t2)"><b>renderPagination()</b> — calcule les pages, génère les boutons + ellipses</span></div>
+    <div class="flow-row"><span class="chain-title">5</span><span style="font-size:.78rem;color:var(--t2)"><b>updateActiveFilters()</b> — génère les tags-pills des filtres actifs</span></div>
   </div>
 </div>
 
+<div class="diag">
+  <div class="dtitle">Regroupement par responsabilité</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;font-size:.78rem">
+    <div style="background:var(--bg);padding:.7rem 1rem;border-radius:8px;border-left:3px solid #7dd3fc">
+      <div style="color:#7dd3fc;font-weight:600;margin-bottom:.4rem">Initialisation (2)</div>
+      <div style="color:var(--t2);font-family:monospace;line-height:1.8">initFilters()<br>initSortSelect()</div>
+    </div>
+    <div style="background:var(--bg);padding:.7rem 1rem;border-radius:8px;border-left:3px solid #c4b5fd">
+      <div style="color:#c4b5fd;font-weight:600;margin-bottom:.4rem">Filtrage / Tri (3)</div>
+      <div style="color:var(--t2);font-family:monospace;line-height:1.8">applyFilters()<br>matchSubcat()<br>buildPagination()</div>
+    </div>
+    <div style="background:var(--bg);padding:.7rem 1rem;border-radius:8px;border-left:3px solid #7ee8b8">
+      <div style="color:#7ee8b8;font-weight:600;margin-bottom:.4rem">Affichage (3)</div>
+      <div style="color:var(--t2);font-family:monospace;line-height:1.8">renderProducts()<br>renderActiveFilters()<br>updateProductCount()</div>
+    </div>
+    <div style="background:var(--bg);padding:.7rem 1rem;border-radius:8px;border-left:3px solid #fda4af">
+      <div style="color:#fda4af;font-weight:600;margin-bottom:.4rem">Utilitaires (2)</div>
+      <div style="color:var(--t2);font-family:monospace;line-height:1.8">formatPrice()<br>resetFilters()</div>
+    </div>
+  </div>
+</div>
+
+<div class="diag"> <div class="dtitle">Les 10 fonctions — rôle et déclencheur</div> <table class="recap-table"> <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Ce qu'elle fait</th></tr></thead> <tbody> <tr><td class="fn-cell">initFilters()</td><td>DOMContentLoaded</td><td>Génère la sidebar checkboxes/sliders depuis allProducts</td></tr> <tr><td class="fn-cell">initSortSelect()</td><td>DOMContentLoaded</td><td>Attache le listener sur le select de tri</td></tr> <tr><td class="fn-cell">applyFilters()</td><td>Tout changement filtre/tri</td><td>Filtre + trie filteredProducts  page 1  display + pagination + tags</td></tr> <tr><td class="fn-cell">matchesSubcategory()</td><td>appelée par applyFilters</td><td>Délègue à SUBCAT_MATCHERS[sub](produit)</td></tr> <tr><td class="fn-cell">getBrand()</td><td>appelée par applyFilters</td><td>Extrait la marque depuis p.tags (apple, samsung…)</td></tr> <tr><td class="fn-cell">matchesFeature()</td><td>appelée par applyFilters</td><td>Vérifie si un produit a une feature (5G, GPS…)</td></tr> <tr><td class="fn-cell">displayCurrentPage()</td><td>appelée par applyFilters</td><td>.slice(start, start+12)  renderProducts()</td></tr> <tr><td class="fn-cell">updatePagination()</td><td>appelée par applyFilters</td><td>Génère boutons numérotés avec ellipses intelligentes</td></tr> <tr><td class="fn-cell">updateActiveFilters()</td><td>appelée par applyFilters</td><td>Génère pastilles × pour chaque filtre actif</td></tr> <tr><td class="fn-cell">addToCart(id)</td><td>Clic .btn-add-cart</td><td>PearTechCart.add() + feedback visuel  1.5s</td></tr> </tbody> </table>
+</div> <div class="tbl"> <thead><tr><th>Fonction</th><th>Déclenchée par</th><th>Rôle</th></tr></thead> <tbody> <tr><td class="tc">initFilters()</td><td style="color:var(--t2)">DOMContentLoaded (1 fois)</td><td style="color:var(--t2)">Construit checkboxes, sliders, Map/Set à partir des produits réels</td></tr> <tr><td class="tc">applyFilters()</td><td style="color:var(--t2)">Tout changement de filtre</td><td style="color:var(--t2)">Refiltre allProducts, trie, remet à la page 1, appelle 3 fonctions</td></tr> <tr><td class="tc">displayCurrentPage()</td><td style="color:var(--t2)">applyFilters() + clic pagination</td><td style="color:var(--t2)">Découpe filteredProducts en tranche de 12 via .slice()</td></tr> <tr><td class="tc">renderProducts()</td><td style="color:var(--t2)">displayCurrentPage()</td><td style="color:var(--t2)">Génère le HTML de toutes les cards + réattache les écouteurs</td></tr> <tr><td class="tc">updatePagination()</td><td style="color:var(--t2)">applyFilters()</td><td style="color:var(--t2)">Calcule totalPages, génère boutons avec ellipses</td></tr> <tr><td class="tc">updateActiveFilters()</td><td style="color:var(--t2)">applyFilters()</td><td style="color:var(--t2)">Génère les tags de filtres actifs avec bouton ×</td></tr> <tr><td class="tc">resetFilters()</td><td style="color:var(--t2)">Clic bouton "Réinitialiser"</td><td style="color:var(--t2)">Décoche tout, remet sliders, appelle applyFilters()</td></tr> <tr><td class="tc">matchesSubcategory()</td><td style="color:var(--t2)">applyFilters() via .filter()</td><td style="color:var(--t2)">Utilise SUBCAT_MATCHERS + fallbacks pour tester la sous-cat</td></tr> <tr><td class="tc">matchesFeature()</td><td style="color:var(--t2)">applyFilters() via .filter()</td><td style="color:var(--t2)">Switch sur le nom de feature pour tester la propriété produit</td></tr> <tr><td class="tc">addToCart()</td><td style="color:var(--t2)">Clic bouton panier d'une card</td><td style="color:var(--t2)">Lit/écrit localStorage, met à jour badge, anime le bouton</td></tr> </tbody> </div>
+</div> </div>
+
+<hr>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">localStorage</div>
+      <div class="glos-def">Stockage clé-valeur persistant dans le navigateur — survit à la fermeture. Capacité ~5 Mo. Clé/valeur uniquement en string : les objets passent par <ic>JSON.stringify()</ic> avant stockage et <ic>JSON.parse()</ic> à la lecture.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">dataset</div>
+      <div class="glos-def">Interface qui expose les attributs <ic>data-*</ic> d'un élément. <ic>el.dataset.productId</ic> lit <ic>data-product-id</ic>. Permet de stocker des données métier directement dans le HTML sans variables globales. La conversion camelCase est automatique : <ic>data-product-id</ic> → <ic>dataset.productId</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">classList</div>
+      <div class="glos-def">Interface de manipulation des classes CSS. <ic>add()</ic>, <ic>remove()</ic>, <ic>toggle()</ic>, <ic>contains()</ic>. Plus fiable que modifier <ic>className</ic> comme une string. <ic>toggle('active', condition)</ic> ajoute ou retire selon un booléen.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">debounce</div>
+      <div class="glos-def">Regroupe plusieurs appels rapides en un seul différé. Frappe 5 lettres en 200ms → 1 seule recherche lancée 300ms après la dernière frappe. Implémenté avec <ic>clearTimeout(timer) + timer = setTimeout(fn, 300)</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">URLSearchParams</div>
+      <div class="glos-def">Lit les paramètres d'une URL : <ic>?id=12&cat=apple</ic>. <ic>new URLSearchParams(window.location.search).get('id')</ic> → <ic>'12'</ic>. Utilisé sur la page produit pour lire l'ID du produit à afficher depuis l'URL.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Template literal</div>
+      <div class="glos-def">Chaîne avec backtick <ic>`...`</ic> qui permet d'insérer des expressions avec <ic>${variable}</ic> et des retours à la ligne. Remplace la concaténation de strings. Utilisé massivement pour générer le HTML des cards dynamiquement.</div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

@@ -5,715 +5,339 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — menu_burger.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#a78bfa;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  .sec p b{color:var(--t);}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#c4b5fd;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cp{background:rgba(167,139,250,.11);border:1px solid rgba(167,139,250,.4);color:#c4b5fd;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
-  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-  .fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fc .vn{width:100%;max-width:100%;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
-  .flp{background:rgba(167,139,250,.15);color:#c4b5fd;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;}
-  .box.info{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-  .box b{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#c4b5fd}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
-  .grow:last-child{border-bottom:none;}
-  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── EXTRA SCHEMAS ─── */
-  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
-  .ls-key{font-weight:700;margin-bottom:.25rem;}
-  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
-  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
-  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
-  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
-  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
-  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
-  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
-  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
-  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
-  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
-  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
-  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
-  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
-  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
-  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .cmp-box{border-radius:11px;padding:1rem;}
-  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
-  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .cmp-item:last-child{border-bottom:none;}
-  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#a78bfa;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+.sec p b{color:var(--t);}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#c4b5fd;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cp{background:rgba(167,139,250,.11);border:1px solid rgba(167,139,250,.4);color:#c4b5fd;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
+.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+.fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fc .vn{width:100%;max-width:100%;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.flr{background:rgba(255,107,107,.15);color:#ff9090;}
+.flp{background:rgba(167,139,250,.15);color:#c4b5fd;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;}
+.box.info{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box b{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#c4b5fd}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+.grow:last-child{border-bottom:none;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── EXTRA SCHEMAS ─── */
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+.ls-key{font-weight:700;margin-bottom:.25rem;}
+.ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+.h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+.state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+.state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+.timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+.cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+.cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+.cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.cmp-box{border-radius:11px;padding:1rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+.cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+@media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">menu_burger.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#creation">Création DOM</a>
-  <a href="#open-close">Ouvrir/Fermer</a>
-  <a href="#swipe">Swipe</a>
-  <a href="#resize">Resize</a>
-  <a href="#search">Recherche</a>
-  <a href="#focus">Focus trap</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">menu_burger.js</div> <a href="#intro">Intro</a> <a href="#creation">Création DOM</a> <a href="#open-close">Ouvrir/Fermer</a> <a href="#swipe">Swipe</a> <a href="#resize">Resize</a> <a href="#search">Recherche</a> <a href="#focus">Focus trap</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
 <div class="carte-item"><b>Click burger / croix / overlay</b><br><span style="color:var(--t3);font-size:.71rem;">ouverture / fermeture</span></div>
 <div class="carte-item"><b>Swipe gauche ≥ 60px</b><br><span style="color:var(--t3);font-size:.71rem;">touchstart + touchend</span></div>
 <div class="carte-item"><b>MediaQuery 768px</b><br><span style="color:var(--t3);font-size:.71rem;">ferme en passant au desktop</span></div>
 <div class="carte-item"><b>Escape keydown</b><br><span style="color:var(--t3);font-size:.71rem;">fermeture clavier</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#a78bfa22;color:#a78bfa;border:1px solid #a78bfa44;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#a78bfa22;color:#a78bfa;border:1px solid #a78bfa44;"> TRAITEMENTS</div>
 <div class="carte-item"><b>createBurgerButton()</b><br><span style="color:var(--t3);font-size:.71rem;">injecte le bouton dans la nav</span></div>
 <div class="carte-item"><b>createMobileMenu()</b><br><span style="color:var(--t3);font-size:.71rem;">crée le panneau + overlay DOM</span></div>
 <div class="carte-item"><b>openMobileMenu()</b><br><span style="color:var(--t3);font-size:.71rem;">classList.add + body overflow:hidden</span></div>
 <div class="carte-item"><b>closeMobileMenu()</b><br><span style="color:var(--t3);font-size:.71rem;">classList.remove + focus retour</span></div>
 <div class="carte-item"><b>attachFocusTrap()</b><br><span style="color:var(--t3);font-size:.71rem;">Tab reste dans le menu</span></div>
 <div class="carte-item"><b>attachSwipeToClose()</b><br><span style="color:var(--t3);font-size:.71rem;">touch events passifs</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>DOM</b><br><span style="color:var(--t3);font-size:.71rem;">#mobile-menu + .mobile-overlay créés</span></div>
 <div class="carte-item"><b>body.style.overflow</b><br><span style="color:var(--t3);font-size:.71rem;">hidden ouvert / '' fermé</span></div>
 <div class="carte-item"><b>aria-expanded</b><br><span style="color:var(--t3);font-size:.71rem;">mis à jour à chaque état</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>menu_burger.js</span></h1> <p>Ce fichier gère le menu de navigation mobile sur toutes les pages. Il crée dynamiquement le bouton  et le panneau latéral, gère l'ouverture/fermeture (clic, overlay, touche Échap, swipe), synchronise la recherche mobile avec la recherche principale, et implémente un trap de focus pour l'accessibilité clavier.</p> <div class="fbadge"><div class="dot"></div>menu_burger.js · ~200 lignes · 10 fonctions · toutes les pages · aucune dépendance</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Vue d'ensemble</div> <h2>8 fonctionnalités en un seul fichier</h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> menu_burger.js est comme l'installateur d'une porte coulissante. Il fabrique la porte (DOM), installe les poignées (boutons), pose le rideau derrière (overlay), et ajoute les mécanismes de sécurité — fermeture au glissement, fermeture au clic extérieur, fermeture au clavier, et empêche de "sortir" de la porte au Tab.</div></div> <div class="diag"> <div class="dtitle">Les 8 fonctionnalités de menu_burger.js</div> <div class="fork f2" style="max-width:720px;margin:0 auto;"> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:11px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem;">Création (2)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">createBurgerButton() — insère le bouton  dans la nav<br>createMobileMenu() — construit le panneau + overlay</div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">Ouverture / Fermeture (3)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">openMobileMenu() · closeMobileMenu() · toggleMobileMenu()<br>+ 4 déclencheurs : clic, overlay, Échap, lien nav</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">Gestes & Resize (2)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">attachSwipeToClose() — swipe gauche 60px<br>attachResizeHandler() — MediaQueryList
+<div class="diag"> <div class="dtitle">MediaQueryList vs addEventListener('resize') — pourquoi c'est mieux</div> <div class="two-col"> <div class="mini-box" style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);"> <div class="mini-title" style="color:#fda4af;">window.addEventListener('resize')</div> <div class="mini-item">Déclenché à chaque pixel de redimensionnement</div> <div class="mini-item">Jusqu'à 60 appels/seconde lors du drag de la fenêtre</div> <div class="mini-item">Nécessite un debounce manuel pour les perfs</div> </div> <div class="mini-box" style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);"> <div class="mini-title" style="color:#7ee8b8;">window.matchMedia('(min-width: 768px)').addEventListener('change')</div> <div class="mini-item">Déclenché UNE SEULE FOIS au passage du seuil</div> <div class="mini-item">600px  767px  rien · 767px  768px  déclenche</div> <div class="mini-item">Zéro calcul pendant le drag — natif navigateur</div> </div> </div> <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">e.matches = true  on passe desktop ET menu ouvert  closeMobileMenu() · e.matches = false  on repasse mobile  rien (le menu reste fermé)</div>
+</div> 768px</div> </div> <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">Accessibilité (2)</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">attachMobileSearch() — sync mobile ↔ desktop<br>attachFocusTrap() — boucle Tab dans le menu ouvert</div> </div> </div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>menu_burger.js</span></h1>
-  <p>Ce fichier gère le menu de navigation mobile sur toutes les pages. Il crée dynamiquement le bouton ☰ et le panneau latéral, gère l'ouverture/fermeture (clic, overlay, touche Échap, swipe), synchronise la recherche mobile avec la recherche principale, et implémente un trap de focus pour l'accessibilité clavier.</p>
-  <div class="fbadge"><div class="dot"></div>menu_burger.js · ~200 lignes · 10 fonctions · toutes les pages · aucune dépendance</div>
+<hr> <!-- ══ 01 CRÉATION DOM ══ -->
+<div class="sec" id="creation"> <div class="slabel">01 — Création dynamique du DOM</div> <h2>Construire les éléments HTML par JavaScript</h2>
+<div class="diag"> <div class="dtitle">Éléments créés par JavaScript au chargement</div> <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;"> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.75rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;margin-bottom:.35rem;">#mobile-burger</div> <div style="font-size:.7rem;color:var(--t2);">&lt;button&gt; <br>aria-label="Menu"<br>inséré dans &lt;nav&gt;</div> </div> <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);border-radius:9px;padding:.75rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fdba74;margin-bottom:.35rem;">#mobile-menu</div> <div style="font-size:.7rem;color:var(--t2);">Panneau latéral<br>role="dialog"<br>aria-modal="true"</div> </div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.75rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t2);margin-bottom:.35rem;">#mobile-overlay</div> <div style="font-size:.7rem;color:var(--t2);">Fond semi-transparent<br>aria-hidden="true"<br>clic  ferme le menu</div> </div> </div> <div style="margin-top:.7rem;font-size:.75rem;color:var(--t3);">Ces 3 éléments n'existent pas dans le HTML statique — ils sont créés et insérés dans le DOM par createBurgerButton() + createMobileMenu() au DOMContentLoaded.</div>
+</div> <p>Contrairement à la plupart des éléments de navigation, le bouton burger et le panneau mobile <b>n'existent pas dans le HTML</b> — ils sont créés et injectés par JavaScript au chargement.</p>
+<div class="diag"> <div class="dtitle">Hiérarchie DOM injectée au DOMContentLoaded</div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;max-width:480px;"> <div style="color:var(--t3);">&lt;nav&gt; (existant dans HTML)</div> <div style="padding-left:1.2rem;color:#c4b5fd;">└─ <span style="color:#f0abfc;">#mobile-burger</span> &lt;button&gt;</div> <div style="padding-left:2.4rem;color:var(--t3);">aria-label="Menu" · aria-expanded="false"</div> <div style="color:var(--t3);margin-top:.3rem;">&lt;body&gt; (fin)</div> <div style="padding-left:1.2rem;color:#7dd3fc;">├─ <span style="color:#7ee8b8;">#mobile-menu</span> &lt;div&gt;</div> <div style="padding-left:2.4rem;color:var(--t3);">role="dialog" · aria-modal="true"</div> <div style="padding-left:2.4rem;color:var(--t3);">├─ #mobile-close &lt;button&gt;</div> <div style="padding-left:2.4rem;color:var(--t3);">├─ liens nav copiés depuis &lt;nav&gt;</div> <div style="padding-left:2.4rem;color:var(--t3);">└─ #mobile-search &lt;input&gt;</div> <div style="padding-left:1.2rem;color:#fdba74;">└─ <span style="color:#fdba74;">#mobile-overlay</span> &lt;div&gt;</div> <div style="padding-left:2.4rem;color:var(--t3);">aria-hidden="true"</div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Rien de tout ça n'est dans le HTML statique. Tout est créé par createBurgerButton() + createMobileMenu() et inséré via appendChild(). Le HTML reste propre.</div>
+</div> <div class="cb2"><span class="cbl2">javascript — createBurgerButton()</span><pre><span class="kw">function</span> <span class="fn">createBurgerButton</span>() {
+<span class="kw">if</span> (document.<span class="fn">getElementById</span>(<span class="s">'burger-menu'</span>)) <span class="kw">return</span>; <span class="cm">// Guard idempotent : ne crée qu'une fois</span> <span class="kw">const</span> <span class="vr">burger</span> = document.<span class="fn">createElement</span>(<span class="s">'button'</span>);
+burger.id        = <span class="s">'burger-menu'</span>;
+burger.className = <span class="s">'burger-btn'</span>;
+burger.<span class="fn">setAttribute</span>(<span class="s">'aria-label'</span>, <span class="s">'Ouvrir le menu'</span>);
+burger.<span class="fn">setAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'false'</span>);     <span class="cm">// État initial : fermé</span> burger.<span class="fn">setAttribute</span>(<span class="s">'aria-controls'</span>, <span class="s">'mobile-menu'</span>); <span class="cm">// Lie le bouton à ce qu'il contrôle</span> burger.innerHTML = <span class="s">`&lt;span class="material-symbols-outlined burger-icon"&gt;menu&lt;/span&gt;`</span>;
+<span class="kw">const</span> <span class="vr">nav</span> = document.<span class="fn">querySelector</span>(<span class="s">'nav'</span>);
+<span class="kw">if</span> (nav) nav.<span class="fn">insertBefore</span>(burger, nav.firstChild); <span class="cm">// Premier enfant de la nav</span>
+}</pre></div> <div class="cb2"><span class="cbl2">javascript — createMobileMenu() — structure simplifiée</span><pre><span class="kw">function</span> <span class="fn">createMobileMenu</span>() {
+<span class="kw">if</span> (document.<span class="fn">getElementById</span>(<span class="s">'mobile-menu'</span>)) <span class="kw">return</span>;
+<span class="cm">// Overlay sombre derrière le panneau</span> <span class="kw">const</span> <span class="vr">overlay</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+overlay.className = <span class="s">'mobile-overlay'</span>;
+overlay.<span class="fn">setAttribute</span>(<span class="s">'aria-hidden'</span>, <span class="s">'true'</span>); <span class="cm">// Invisible aux lecteurs d'écran</span> document.body.<span class="fn">appendChild</span>(overlay);
+<span class="cm">// Panneau latéral (rôle ARIA dialog)</span> <span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+menu.id = <span class="s">'mobile-menu'</span>;
+menu.<span class="fn">setAttribute</span>(<span class="s">'role'</span>, <span class="s">'dialog'</span>);
+menu.<span class="fn">setAttribute</span>(<span class="s">'aria-modal'</span>, <span class="s">'true'</span>); <span class="cm">// Signale une boîte de dialogue modale</span> menu.innerHTML = <span class="s">`... header + nav + actions ...`</span>;
+document.body.<span class="fn">appendChild</span>(menu);
+}</pre></div> <div class="glos"> <div class="glos-head"> Attributs ARIA utilisés</div> <div class="grow"><div class="gterm">aria-label</div><div class="gdef">Texte lu par les lecteurs d'écran à la place du contenu visuel. Indispensable pour les boutons icône (sans texte).</div></div> <div class="grow"><div class="gterm">aria-expanded</div><div class="gdef"><ic>"false"</ic> = le bouton contrôle un élément actuellement fermé. <ic>"true"</ic> = actuellement ouvert. Mis à jour dynamiquement à chaque ouverture/fermeture.</div></div> <div class="grow"><div class="gterm">aria-controls</div><div class="gdef">ID de l'élément que ce bouton contrôle. Permet aux lecteurs d'écran de savoir que le bouton  ouvre <ic>#mobile-menu</ic>.</div></div> <div class="grow"><div class="gterm">role="dialog"</div><div class="gdef">Signale que cet élément est une boîte de dialogue. Les lecteurs d'écran annoncent "Boîte de dialogue : Menu de navigation" à l'ouverture.</div></div> <div class="grow"><div class="gterm">aria-modal="true"</div><div class="gdef">Indique que le contenu derrière la modale est temporairement inaccessible. Combiné avec le focus trap, ça garantit une navigation clavier cohérente.</div></div> <div class="grow"><div class="gterm">aria-current="page"</div><div class="gdef">Ajouté au lien de la page courante par highlightActivePage(). Indique aux lecteurs d'écran quelle page est active.</div></div> <div class="grow"><div class="gterm">aria-hidden="true"</div><div class="gdef">Sur l'overlay : l'exclut complètement de l'arbre d'accessibilité. L'overlay est purement décoratif, les lecteurs d'écran l'ignorent.</div></div> </div>
 </div>
+<hr> <!-- ══ 02 OPEN/CLOSE ══ -->
+<div class="sec" id="open-close"> <div class="slabel">02 — Ouverture et fermeture</div> <h2>openMobileMenu / closeMobileMenu / toggleMobileMenu</h2>
 
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Vue d'ensemble</div>
-  <h2>8 fonctionnalités en un seul fichier</h2>
-  <div class="box ana"><span class="bi">☰</span><div><b>Analogie :</b> menu_burger.js est comme l'installateur d'une porte coulissante. Il fabrique la porte (DOM), installe les poignées (boutons), pose le rideau derrière (overlay), et ajoute les mécanismes de sécurité — fermeture au glissement, fermeture au clic extérieur, fermeture au clavier, et empêche de "sortir" de la porte au Tab.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Les 8 fonctionnalités de menu_burger.js</div>
-    <div class="fork f2" style="max-width:720px;margin:0 auto;">
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:11px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#c4b5fd;margin-bottom:.4rem;">Création (2)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">createBurgerButton() — insère le bouton ☰ dans la nav<br>createMobileMenu() — construit le panneau + overlay</div>
-      </div>
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">Ouverture / Fermeture (3)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">openMobileMenu() · closeMobileMenu() · toggleMobileMenu()<br>+ 4 déclencheurs : clic, overlay, Échap, lien nav</div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">Gestes & Resize (2)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">attachSwipeToClose() — swipe gauche 60px<br>attachResizeHandler() — MediaQueryList
 <div class="diag">
-  <div class="dtitle">MediaQueryList vs addEventListener('resize') — pourquoi c'est mieux</div>
-  <div class="two-col">
-    <div class="mini-box" style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);">
-      <div class="mini-title" style="color:#fda4af;">window.addEventListener('resize')</div>
-      <div class="mini-item">Déclenché à chaque pixel de redimensionnement</div>
-      <div class="mini-item">Jusqu'à 60 appels/seconde lors du drag de la fenêtre</div>
-      <div class="mini-item">Nécessite un debounce manuel pour les perfs</div>
-    </div>
-    <div class="mini-box" style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);">
-      <div class="mini-title" style="color:#7ee8b8;">window.matchMedia('(min-width: 768px)').addEventListener('change')</div>
-      <div class="mini-item">Déclenché UNE SEULE FOIS au passage du seuil</div>
-      <div class="mini-item">600px → 767px → rien · 767px → 768px → déclenche</div>
-      <div class="mini-item">Zéro calcul pendant le drag — natif navigateur</div>
-    </div>
-  </div>
-  <div style="margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">e.matches = true → on passe desktop ET menu ouvert → closeMobileMenu() · e.matches = false → on repasse mobile → rien (le menu reste fermé)</div>
-</div>
- 768px</div>
-      </div>
-      <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">Accessibilité (2)</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.8;">attachMobileSearch() — sync mobile ↔ desktop<br>attachFocusTrap() — boucle Tab dans le menu ouvert</div>
-      </div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 CRÉATION DOM ══ -->
-<div class="sec" id="creation">
-  <div class="slabel">01 — Création dynamique du DOM</div>
-  <h2>Construire les éléments HTML par JavaScript</h2>
-<div class="diag">
-  <div class="dtitle">Éléments créés par JavaScript au chargement</div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;">
-    <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:9px;padding:.75rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;margin-bottom:.35rem;">#mobile-burger</div>
-      <div style="font-size:.7rem;color:var(--t2);">&lt;button&gt; ☰<br>aria-label="Menu"<br>inséré dans &lt;nav&gt;</div>
-    </div>
-    <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);border-radius:9px;padding:.75rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fdba74;margin-bottom:.35rem;">#mobile-menu</div>
-      <div style="font-size:.7rem;color:var(--t2);">Panneau latéral<br>role="dialog"<br>aria-modal="true"</div>
-    </div>
-    <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.75rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t2);margin-bottom:.35rem;">#mobile-overlay</div>
-      <div style="font-size:.7rem;color:var(--t2);">Fond semi-transparent<br>aria-hidden="true"<br>clic → ferme le menu</div>
-    </div>
-  </div>
-  <div style="margin-top:.7rem;font-size:.75rem;color:var(--t3);">Ces 3 éléments n'existent pas dans le HTML statique — ils sont créés et insérés dans le DOM par createBurgerButton() + createMobileMenu() au DOMContentLoaded.</div>
-</div>
-
-  <p>Contrairement à la plupart des éléments de navigation, le bouton burger et le panneau mobile <b>n'existent pas dans le HTML</b> — ils sont créés et injectés par JavaScript au chargement.</p>
-<div class="diag">
-  <div class="dtitle">Hiérarchie DOM injectée au DOMContentLoaded</div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;max-width:480px;">
-    <div style="color:var(--t3);">&lt;nav&gt; (existant dans HTML)</div>
-    <div style="padding-left:1.2rem;color:#c4b5fd;">└─ <span style="color:#f0abfc;">#mobile-burger</span> &lt;button&gt;</div>
-    <div style="padding-left:2.4rem;color:var(--t3);">aria-label="Menu" · aria-expanded="false"</div>
-    <div style="color:var(--t3);margin-top:.3rem;">&lt;body&gt; (fin)</div>
-    <div style="padding-left:1.2rem;color:#7dd3fc;">├─ <span style="color:#7ee8b8;">#mobile-menu</span> &lt;div&gt;</div>
-    <div style="padding-left:2.4rem;color:var(--t3);">role="dialog" · aria-modal="true"</div>
-    <div style="padding-left:2.4rem;color:var(--t3);">├─ #mobile-close &lt;button&gt;</div>
-    <div style="padding-left:2.4rem;color:var(--t3);">├─ liens nav copiés depuis &lt;nav&gt;</div>
-    <div style="padding-left:2.4rem;color:var(--t3);">└─ #mobile-search &lt;input&gt;</div>
-    <div style="padding-left:1.2rem;color:#fdba74;">└─ <span style="color:#fdba74;">#mobile-overlay</span> &lt;div&gt;</div>
-    <div style="padding-left:2.4rem;color:var(--t3);">aria-hidden="true"</div>
-  </div>
-  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Rien de tout ça n'est dans le HTML statique. Tout est créé par createBurgerButton() + createMobileMenu() et inséré via appendChild(). Le HTML reste propre.</div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript — createBurgerButton()</span><pre><span class="kw">function</span> <span class="fn">createBurgerButton</span>() {
-    <span class="kw">if</span> (document.<span class="fn">getElementById</span>(<span class="s">'burger-menu'</span>)) <span class="kw">return</span>; <span class="cm">// Guard idempotent : ne crée qu'une fois</span>
-
-    <span class="kw">const</span> <span class="vr">burger</span> = document.<span class="fn">createElement</span>(<span class="s">'button'</span>);
-    burger.id        = <span class="s">'burger-menu'</span>;
-    burger.className = <span class="s">'burger-btn'</span>;
-    burger.<span class="fn">setAttribute</span>(<span class="s">'aria-label'</span>, <span class="s">'Ouvrir le menu'</span>);
-    burger.<span class="fn">setAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'false'</span>);     <span class="cm">// État initial : fermé</span>
-    burger.<span class="fn">setAttribute</span>(<span class="s">'aria-controls'</span>, <span class="s">'mobile-menu'</span>); <span class="cm">// Lie le bouton à ce qu'il contrôle</span>
-    burger.innerHTML = <span class="s">`&lt;span class="material-symbols-outlined burger-icon"&gt;menu&lt;/span&gt;`</span>;
-
-    <span class="kw">const</span> <span class="vr">nav</span> = document.<span class="fn">querySelector</span>(<span class="s">'nav'</span>);
-    <span class="kw">if</span> (nav) nav.<span class="fn">insertBefore</span>(burger, nav.firstChild); <span class="cm">// Premier enfant de la nav</span>
-}</pre></div>
-
-  <div class="cb2"><span class="cbl2">javascript — createMobileMenu() — structure simplifiée</span><pre><span class="kw">function</span> <span class="fn">createMobileMenu</span>() {
-    <span class="kw">if</span> (document.<span class="fn">getElementById</span>(<span class="s">'mobile-menu'</span>)) <span class="kw">return</span>;
-
-    <span class="cm">// Overlay sombre derrière le panneau</span>
-    <span class="kw">const</span> <span class="vr">overlay</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
-    overlay.className = <span class="s">'mobile-overlay'</span>;
-    overlay.<span class="fn">setAttribute</span>(<span class="s">'aria-hidden'</span>, <span class="s">'true'</span>); <span class="cm">// Invisible aux lecteurs d'écran</span>
-    document.body.<span class="fn">appendChild</span>(overlay);
-
-    <span class="cm">// Panneau latéral (rôle ARIA dialog)</span>
-    <span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
-    menu.id = <span class="s">'mobile-menu'</span>;
-    menu.<span class="fn">setAttribute</span>(<span class="s">'role'</span>, <span class="s">'dialog'</span>);
-    menu.<span class="fn">setAttribute</span>(<span class="s">'aria-modal'</span>, <span class="s">'true'</span>); <span class="cm">// Signale une boîte de dialogue modale</span>
-    menu.innerHTML = <span class="s">`... header + nav + actions ...`</span>;
-
-    document.body.<span class="fn">appendChild</span>(menu);
-}</pre></div>
-
-  <div class="glos">
-    <div class="glos-head">📖 Attributs ARIA utilisés</div>
-    <div class="grow"><div class="gterm">aria-label</div><div class="gdef">Texte lu par les lecteurs d'écran à la place du contenu visuel. Indispensable pour les boutons icône (sans texte).</div></div>
-    <div class="grow"><div class="gterm">aria-expanded</div><div class="gdef"><ic>"false"</ic> = le bouton contrôle un élément actuellement fermé. <ic>"true"</ic> = actuellement ouvert. Mis à jour dynamiquement à chaque ouverture/fermeture.</div></div>
-    <div class="grow"><div class="gterm">aria-controls</div><div class="gdef">ID de l'élément que ce bouton contrôle. Permet aux lecteurs d'écran de savoir que le bouton ☰ ouvre <ic>#mobile-menu</ic>.</div></div>
-    <div class="grow"><div class="gterm">role="dialog"</div><div class="gdef">Signale que cet élément est une boîte de dialogue. Les lecteurs d'écran annoncent "Boîte de dialogue : Menu de navigation" à l'ouverture.</div></div>
-    <div class="grow"><div class="gterm">aria-modal="true"</div><div class="gdef">Indique que le contenu derrière la modale est temporairement inaccessible. Combiné avec le focus trap, ça garantit une navigation clavier cohérente.</div></div>
-    <div class="grow"><div class="gterm">aria-current="page"</div><div class="gdef">Ajouté au lien de la page courante par highlightActivePage(). Indique aux lecteurs d'écran quelle page est active.</div></div>
-    <div class="grow"><div class="gterm">aria-hidden="true"</div><div class="gdef">Sur l'overlay : l'exclut complètement de l'arbre d'accessibilité. L'overlay est purement décoratif, les lecteurs d'écran l'ignorent.</div></div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 02 OPEN/CLOSE ══ -->
-<div class="sec" id="open-close">
-  <div class="slabel">02 — Ouverture et fermeture</div>
-  <h2>openMobileMenu / closeMobileMenu / toggleMobileMenu</h2>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">openMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay) {
-    mobileMenu.<span class="fn">classList.add</span>(<span class="s">'active'</span>);        <span class="cm">// CSS translate ou visibility</span>
-    mobileOverlay.<span class="fn">classList.add</span>(<span class="s">'active'</span>);     <span class="cm">// Fond sombre visible</span>
-    burgerBtn.<span class="fn">classList.add</span>(<span class="s">'active'</span>);         <span class="cm">// Style actif du bouton (optionnel)</span>
-    burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'true'</span>);
-    burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-label'</span>, <span class="s">'Fermer le menu'</span>); <span class="cm">// Label mis à jour</span>
-    document.body.style.overflow = <span class="s">'hidden'</span>;  <span class="cm">// Bloque le scroll derrière</span>
-
-    <span class="kw">const</span> <span class="vr">closeBtn</span> = document.<span class="fn">getElementById</span>(<span class="s">'mobile-close'</span>);
-    <span class="kw">if</span> (closeBtn) closeBtn.<span class="fn">focus</span>(); <span class="cm">// Focus immédiat sur la croix (accessibilité)</span>
+  <div class="dtitle">3 états du menu — classes CSS et attributs ARIA correspondants</div>
+  <table class="recap-table" style="font-size:.8rem">
+    <tr><th>État</th><th>mobileMenu</th><th>mobileOverlay</th><th>burgerBtn aria-expanded</th></tr>
+    <tr><td style="color:#7dd3fc">Fermé (défaut)</td><td>—</td><td>—</td><td>"false"</td></tr>
+    <tr><td style="color:#7ee8b8">Ouvert</td><td>.active</td><td>.active</td><td>"true"</td></tr>
+    <tr><td style="color:#f7d97a">Fermeture (Escape / overlay)</td><td>— (retire .active)</td><td>— (retire .active)</td><td>"false"</td></tr>
+  </table>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">openMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay) {
+mobileMenu.<span class="fn">classList.add</span>(<span class="s">'active'</span>);        <span class="cm">// CSS translate ou visibility</span> mobileOverlay.<span class="fn">classList.add</span>(<span class="s">'active'</span>);     <span class="cm">// Fond sombre visible</span> burgerBtn.<span class="fn">classList.add</span>(<span class="s">'active'</span>);         <span class="cm">// Style actif du bouton (optionnel)</span> burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'true'</span>);
+burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-label'</span>, <span class="s">'Fermer le menu'</span>); <span class="cm">// Label mis à jour</span> document.body.style.overflow = <span class="s">'hidden'</span>;  <span class="cm">// Bloque le scroll derrière</span> <span class="kw">const</span> <span class="vr">closeBtn</span> = document.<span class="fn">getElementById</span>(<span class="s">'mobile-close'</span>);
+<span class="kw">if</span> (closeBtn) closeBtn.<span class="fn">focus</span>(); <span class="cm">// Focus immédiat sur la croix (accessibilité)</span>
 }
-
 <span class="kw">function</span> <span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay) {
-    mobileMenu.<span class="fn">classList.remove</span>(<span class="s">'active'</span>);
-    mobileOverlay.<span class="fn">classList.remove</span>(<span class="s">'active'</span>);
-    burgerBtn.<span class="fn">classList.remove</span>(<span class="s">'active'</span>);
-    burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'false'</span>);
-    burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-label'</span>, <span class="s">'Ouvrir le menu'</span>);
-    document.body.style.overflow = <span class="s">''</span>; <span class="cm">// Rétablit le scroll normal</span>
-    burgerBtn.<span class="fn">focus</span>(); <span class="cm">// Retourne le focus au bouton burger</span>
-}</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Les 4 façons de fermer le menu</div>
-    <div class="fork.f2" style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;max-width:700px;margin:0 auto;">
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">☰ Bouton burger / croix</div>
-        Clic sur <ic>#burger-menu</ic> ou <ic>#mobile-close</ic> → toggle / close direct
-      </div>
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">🌑 Clic overlay</div>
-        Clic sur <ic>.mobile-overlay</ic> → closeMobileMenu()
-      </div>
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">⌨️ Touche Échap</div>
-        <ic>keydown</ic> sur document → si Escape && menu.active → close
-      </div>
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">🔗 Clic lien nav</div>
-        <ic>.mobile-nav-item</ic> click → closeMobileMenu() puis navigation
-      </div>
-    </div>
-  </div>
-
-  <div class="box info"><span class="bi">🔒</span><div><b>document.body.style.overflow = 'hidden'</b> empêche la page en arrière-plan de scroller pendant que le menu est ouvert. Sans ça, l'utilisateur pourrait scroller la page tout en voyant le menu, créant un effet visuel confus. La remise à <ic>''</ic> (chaîne vide) restaure la valeur CSS par défaut.</div></div>
+mobileMenu.<span class="fn">classList.remove</span>(<span class="s">'active'</span>);
+mobileOverlay.<span class="fn">classList.remove</span>(<span class="s">'active'</span>);
+burgerBtn.<span class="fn">classList.remove</span>(<span class="s">'active'</span>);
+burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-expanded'</span>, <span class="s">'false'</span>);
+burgerBtn.<span class="fn">setAttribute</span>(<span class="s">'aria-label'</span>, <span class="s">'Ouvrir le menu'</span>);
+document.body.style.overflow = <span class="s">''</span>; <span class="cm">// Rétablit le scroll normal</span> burgerBtn.<span class="fn">focus</span>(); <span class="cm">// Retourne le focus au bouton burger</span>
+}</pre></div> <div class="diag"> <div class="dtitle">Les 4 façons de fermer le menu</div> <div class="fork.f2" style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;max-width:700px;margin:0 auto;"> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;"> Bouton burger / croix</div> Clic sur <ic>#burger-menu</ic> ou <ic>#mobile-close</ic> toggle / close direct
+</div> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;"> Clic overlay</div> Clic sur <ic>.mobile-overlay</ic> closeMobileMenu()
+</div> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;"> Touche Échap</div> <ic>keydown</ic> sur document  si Escape && menu.active  close
+</div> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;font-size:.78rem;color:var(--t2);"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;"> Clic lien nav</div> <ic>.mobile-nav-item</ic> click  closeMobileMenu() puis navigation
+</div> </div> </div> <div class="box info"><span class="bi"></span><div><b>document.body.style.overflow = 'hidden'</b> empêche la page en arrière-plan de scroller pendant que le menu est ouvert. Sans ça, l'utilisateur pourrait scroller la page tout en voyant le menu, créant un effet visuel confus. La remise à <ic>''</ic> (chaîne vide) restaure la valeur CSS par défaut.</div></div>
 </div>
-<hr>
-
-<!-- ══ 03 SWIPE ══ -->
-<div class="sec" id="swipe">
-  <div class="slabel">03 — Geste tactile</div>
-  <h2>attachSwipeToClose() — fermer en glissant vers la gauche</h2>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachSwipeToClose</span>(mobileMenu, burgerBtn, mobileOverlay) {
-    <span class="kw">let</span> <span class="vr">touchStartX</span> = <span class="nm">0</span>; <span class="cm">// Position X mémorisée au début du toucher</span>
-
-    mobileMenu.<span class="fn">addEventListener</span>(<span class="s">'touchstart'</span>, <span class="kw">function</span>(e) {
-        touchStartX = e.touches[<span class="nm">0</span>].clientX; <span class="cm">// Premier point de contact</span>
-    }, { passive: <span class="kw">true</span> }); <span class="cm">// passive: true → n'appelle jamais preventDefault → meilleure perf scroll</span>
-
-    mobileMenu.<span class="fn">addEventListener</span>(<span class="s">'touchend'</span>, <span class="kw">function</span>(e) {
-        <span class="kw">const</span> <span class="vr">touchEndX</span>  = e.changedTouches[<span class="nm">0</span>].clientX;
-        <span class="kw">const</span> <span class="vr">deltaX</span>     = touchEndX - touchStartX; <span class="cm">// Négatif = glissement vers la gauche</span>
-        <span class="kw">const</span> <span class="vr">THRESHOLD</span>  = <span class="nm">60</span>;                   <span class="cm">// Seuil min en pixels</span>
-
-        <span class="kw">if</span> (deltaX < -THRESHOLD) {               <span class="cm">// < -60 = swipe gauche de plus de 60px</span>
-            <span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay);
-        }
-    }, { passive: <span class="kw">true</span> });
-}</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Mécanique du swipe — pourquoi deltaX négatif = vers la gauche</div>
-    <div style="display:flex;flex-direction:column;gap:.5rem;">
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Début (touchstart)</div>
-        <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.35rem .7rem;color:#c4b5fd;">touchStartX = 280px (position X du doigt)</div>
-      </div>
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Glissement ←</div>
-        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;color:var(--t2);">Le doigt se déplace vers la gauche (X diminue)</div>
-      </div>
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Fin (touchend)</div>
-        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;color:#f7d97a;">touchEndX = 180px · deltaX = 180 - 280 = -100px</div>
-      </div>
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Décision</div>
-        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;color:#7ee8b8;">-100 &lt; -60 → closeMobileMenu() ✓</div>
-      </div>
-    </div>
-  </div>
-
-<div class="schema">
-  <div class="schema-title">Seuil 60px — timeline du swipe de fermeture</div>
-  <div class="timing-wrap" style="max-width:520px;">
-    <div class="timing-row">
-      <div class="timing-t">touchstart</div>
-      <div class="timing-bar" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);color:#c4b5fd;">touchStartX = 280px mémorisé</div>
-    </div>
-    <div class="timing-row">
-      <div class="timing-t">glissement</div>
-      <div class="timing-bar" style="background:rgba(139,147,168,.07);border:1px solid var(--border);color:var(--t2);">le doigt glisse vers la gauche (X diminue)</div>
-    </div>
-    <div class="timing-row">
-      <div class="timing-t">touchend</div>
-      <div class="timing-bar" style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);color:#f7d97a;">touchEndX = 180px · deltaX = 180-280 = -100px</div>
-    </div>
-    <div class="timing-row">
-      <div class="timing-t">|delta| &gt; 60</div>
-      <div class="timing-bar" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">✅ closeMobileMenu() — seuil atteint</div>
-    </div>
-    <div class="timing-row">
-      <div class="timing-t">|delta| ≤ 60</div>
-      <div class="timing-bar" style="background:rgba(139,147,168,.06);border:1px solid var(--border);color:var(--t3);">scroll normal, rien ne se passe</div>
-    </div>
-  </div>
-</div>
-</div>
-<hr>
-
-<!-- ══ 04 RESIZE ══ -->
-<div class="sec" id="resize">
-  <div class="slabel">04 — Responsive</div>
-  <h2>attachResizeHandler() — MediaQueryList au lieu de resize</h2>
-  <p>Si l'utilisateur redimensionne la fenêtre de mobile à desktop en laissant le menu ouvert, celui-ci se fermerait automatiquement.</p>
-<div class="diag">
-  <div class="dtitle">resize vs matchMedia — déclenchements comparés</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:520px;margin-bottom:.6rem;">
-    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.4rem;">addEventListener('resize')</div>
-      <div style="font-size:.7rem;color:var(--t2);line-height:1.7;">
-        600px → 601px → 602px...<br>
-        <span style="color:#fda4af;">60 appels/sec pendant le drag</span><br>
-        Nécessite debounce manuel<br>
-        Calcule viewport.width à chaque fois
-      </div>
-    </div>
-    <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">matchMedia('(min-width: 768px)')</div>
-      <div style="font-size:.7rem;color:var(--t2);line-height:1.7;">
-        767px → 768px : <span style="color:#7ee8b8;">1 appel</span><br>
-        768px → 769px : rien<br>
-        Debounce natif du navigateur<br>
-        e.matches = true/false direct
-      </div>
-    </div>
-  </div>
-  <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">if (e.matches) closeMobileMenu() — uniquement si on passe à desktop (matches=true). Pas de menu fantôme laissé ouvert sur grand écran.</div>
-</div>
-
-
-<div class="diag">
-  <div class="dtitle">MediaQueryList vs addEventListener('resize') — pourquoi c'est mieux</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">❌ window.addEventListener('resize')</div>
-      <div style="font-size:.74rem;color:var(--t2);line-height:1.75;">Déclenché à chaque pixel de redimensionnement<br>Jusqu'à 60 appels/seconde lors du drag<br>Nécessite un debounce manuel pour les perfs</div>
-    </div>
-    <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">✅ matchMedia('(min-width: 768px)').addEventListener('change')</div>
-      <div style="font-size:.74rem;color:var(--t2);line-height:1.75;">Déclenché UNE SEULE FOIS au passage du seuil<br>600px→767px : rien · 767px→768px : déclenche<br>Zéro calcul pendant le drag — natif navigateur</div>
-    </div>
-  </div>
-  <div style="margin-top:.7rem;display:flex;flex-direction:column;gap:.3rem;max-width:560px;">
-    <div style="display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">e.matches</div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.3rem .6rem;font-size:.72rem;color:#f7d97a;">true (≥768px) ET menu .active → closeMobileMenu()</div>
-    </div>
-    <div style="display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">e.matches</div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.3rem .6rem;font-size:.72rem;color:var(--t2);">false (&lt;768px) → rien, on revient en mobile</div>
-    </div>
-  </div>
-</div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">desktopBreakpoint</span> = window.<span class="fn">matchMedia</span>(<span class="s">'(min-width: 768px)'</span>);
-
-<span class="kw">function</span> <span class="fn">onBreakpointChange</span>(e) {
-    <span class="kw">if</span> (e.matches && mobileMenu.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) {
-        <span class="cm">// On passe en mode desktop ET le menu est ouvert → fermer</span>
-        <span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay);
-    }
+<hr> <!-- ══ 03 SWIPE ══ -->
+<div class="sec" id="swipe"> <div class="slabel">03 — Geste tactile</div> <h2>attachSwipeToClose() — fermer en glissant vers la gauche</h2> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachSwipeToClose</span>(mobileMenu, burgerBtn, mobileOverlay) {
+<span class="kw">let</span> <span class="vr">touchStartX</span> = <span class="nm">0</span>; <span class="cm">// Position X mémorisée au début du toucher</span> mobileMenu.<span class="fn">addEventListener</span>(<span class="s">'touchstart'</span>, <span class="kw">function</span>(e) {
+touchStartX = e.touches[<span class="nm">0</span>].clientX; <span class="cm">// Premier point de contact</span> }, { passive: <span class="kw">true</span> }); <span class="cm">// passive: true  n'appelle jamais preventDefault  meilleure perf scroll</span> mobileMenu.<span class="fn">addEventListener</span>(<span class="s">'touchend'</span>, <span class="kw">function</span>(e) {
+<span class="kw">const</span> <span class="vr">touchEndX</span> = e.changedTouches[<span class="nm">0</span>].clientX;
+<span class="kw">const</span> <span class="vr">deltaX</span> = touchEndX - touchStartX; <span class="cm">// Négatif = glissement vers la gauche</span> <span class="kw">const</span> <span class="vr">THRESHOLD</span> = <span class="nm">60</span>;                   <span class="cm">// Seuil min en pixels</span> <span class="kw">if</span> (deltaX < -THRESHOLD) {               <span class="cm">// < -60 = swipe gauche de plus de 60px</span> <span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay);
 }
-
+}, { passive: <span class="kw">true</span> });
+}</pre></div> <div class="diag"> <div class="dtitle">Mécanique du swipe — pourquoi deltaX négatif = vers la gauche</div> <div style="display:flex;flex-direction:column;gap:.5rem;"> <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Début (touchstart)</div> <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.35rem .7rem;color:#c4b5fd;">touchStartX = 280px (position X du doigt)</div> </div> <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Glissement </div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;color:var(--t2);">Le doigt se déplace vers la gauche (X diminue)</div> </div> <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Fin (touchend)</div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;color:#f7d97a;">touchEndX = 180px · deltaX = 180 - 280 = -100px</div> </div> <div style="display:grid;grid-template-columns:120px 1fr;gap:.6rem;align-items:center;font-size:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Décision</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;color:#7ee8b8;">-100 &lt; -60  closeMobileMenu() </div> </div> </div> </div> <div class="schema"> <div class="schema-title">Seuil 60px — timeline du swipe de fermeture</div> <div class="timing-wrap" style="max-width:520px;"> <div class="timing-row"> <div class="timing-t">touchstart</div> <div class="timing-bar" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);color:#c4b5fd;">touchStartX = 280px mémorisé</div> </div> <div class="timing-row"> <div class="timing-t">glissement</div> <div class="timing-bar" style="background:rgba(139,147,168,.07);border:1px solid var(--border);color:var(--t2);">le doigt glisse vers la gauche (X diminue)</div> </div> <div class="timing-row"> <div class="timing-t">touchend</div> <div class="timing-bar" style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);color:#f7d97a;">touchEndX = 180px · deltaX = 180-280 = -100px</div> </div> <div class="timing-row"> <div class="timing-t">|delta| &gt; 60</div> <div class="timing-bar" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;"> closeMobileMenu() — seuil atteint</div> </div> <div class="timing-row"> <div class="timing-t">|delta| ≤ 60</div> <div class="timing-bar" style="background:rgba(139,147,168,.06);border:1px solid var(--border);color:var(--t3);">scroll normal, rien ne se passe</div> </div> </div>
+</div>
+</div>
+<hr> <!-- ══ 04 RESIZE ══ -->
+<div class="sec" id="resize"> <div class="slabel">04 — Responsive</div> <h2>attachResizeHandler() — MediaQueryList au lieu de resize</h2> <p>Si l'utilisateur redimensionne la fenêtre de mobile à desktop en laissant le menu ouvert, celui-ci se fermerait automatiquement.</p>
+<div class="diag"> <div class="dtitle">resize vs matchMedia — déclenchements comparés</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:520px;margin-bottom:.6rem;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.4rem;">addEventListener('resize')</div> <div style="font-size:.7rem;color:var(--t2);line-height:1.7;"> 600px  601px  602px...<br> <span style="color:#fda4af;">60 appels/sec pendant le drag</span><br> Nécessite debounce manuel<br> Calcule viewport.width à chaque fois
+</div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">matchMedia('(min-width: 768px)')</div> <div style="font-size:.7rem;color:var(--t2);line-height:1.7;"> 767px  768px : <span style="color:#7ee8b8;">1 appel</span><br> 768px  769px : rien<br> Debounce natif du navigateur<br> e.matches = true/false direct
+</div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">if (e.matches) closeMobileMenu() — uniquement si on passe à desktop (matches=true). Pas de menu fantôme laissé ouvert sur grand écran.</div>
+</div> <div class="diag"> <div class="dtitle">MediaQueryList vs addEventListener('resize') — pourquoi c'est mieux</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;"> window.addEventListener('resize')</div> <div style="font-size:.74rem;color:var(--t2);line-height:1.75;">Déclenché à chaque pixel de redimensionnement<br>Jusqu'à 60 appels/seconde lors du drag<br>Nécessite un debounce manuel pour les perfs</div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;"> matchMedia('(min-width: 768px)').addEventListener('change')</div> <div style="font-size:.74rem;color:var(--t2);line-height:1.75;">Déclenché UNE SEULE FOIS au passage du seuil<br>600px767px : rien · 767px768px : déclenche<br>Zéro calcul pendant le drag — natif navigateur</div> </div> </div> <div style="margin-top:.7rem;display:flex;flex-direction:column;gap:.3rem;max-width:560px;"> <div style="display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">e.matches</div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.3rem .6rem;font-size:.72rem;color:#f7d97a;">true (≥768px) ET menu .active  closeMobileMenu()</div> </div> <div style="display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">e.matches</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.3rem .6rem;font-size:.72rem;color:var(--t2);">false (&lt;768px)  rien, on revient en mobile</div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">desktopBreakpoint</span> = window.<span class="fn">matchMedia</span>(<span class="s">'(min-width: 768px)'</span>);
+<span class="kw">function</span> <span class="fn">onBreakpointChange</span>(e) {
+<span class="kw">if</span> (e.matches && mobileMenu.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) {
+<span class="cm">// On passe en mode desktop ET le menu est ouvert  fermer</span> <span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay);
+}
+}
 <span class="cm">// API moderne : addEventListener sur MediaQueryList</span>
 <span class="kw">if</span> (desktopBreakpoint.<span class="fn">addEventListener</span>) {
-    desktopBreakpoint.<span class="fn">addEventListener</span>(<span class="s">'change'</span>, onBreakpointChange);
+desktopBreakpoint.<span class="fn">addEventListener</span>(<span class="s">'change'</span>, onBreakpointChange);
 } <span class="kw">else</span> {
-    desktopBreakpoint.<span class="fn">addListener</span>(onBreakpointChange); <span class="cm">// Fallback Safari &lt; 14</span>
-}</pre></div>
-
-  <div class="box warn"><span class="bi">⚡</span><div><b>MediaQueryList vs window.resize :</b> Écouter <ic>window.addEventListener('resize', ...)</ic> déclenche un événement à <b>chaque pixel</b> redimensionné (des dizaines de fois par seconde). <ic>matchMedia</ic> ne se déclenche qu'une fois, <b>au moment exact du franchissement</b> du breakpoint 768px. Beaucoup plus performant.</div></div>
+desktopBreakpoint.<span class="fn">addListener</span>(onBreakpointChange); <span class="cm">// Fallback Safari &lt; 14</span>
+}</pre></div> <div class="box warn"><span class="bi"></span><div><b>MediaQueryList vs window.resize :</b> Écouter <ic>window.addEventListener('resize', ...)</ic> déclenche un événement à <b>chaque pixel</b> redimensionné (des dizaines de fois par seconde). <ic>matchMedia</ic> ne se déclenche qu'une fois, <b>au moment exact du franchissement</b> du breakpoint 768px. Beaucoup plus performant.</div></div>
 </div>
-<hr>
-
-<!-- ══ 05 SEARCH ══ -->
-<div class="sec" id="search">
-  <div class="slabel">05 — Recherche mobile</div>
-  <h2>attachMobileSearch() — synchroniser deux champs</h2>
-<div class="diag">
-  <div class="dtitle">Synchronisation recherche mobile ↔ recherche principale</div>
-  <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:.5rem;align-items:center;">
-    <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">#mobile-search</div>
-      <div style="font-size:.72rem;color:var(--t2);">Dans le panneau burger<br>Visible uniquement mobile</div>
-    </div>
-    <div style="text-align:center;font-size:.85rem;color:var(--t3);">⟷</div>
-    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:9px;padding:.8rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">#search-input</div>
-      <div style="font-size:.72rem;color:var(--t2);">Dans le header principal<br>Utilisé par recherche.js</div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Chaque input sur #mobile-search → mainSearchInput.value = mobileInput.value → mainSearchInput.dispatchEvent(new Event('input')) → recherche.js reçoit l'événement comme un vrai input</div>
-</div>
-
-  <p>Le champ de recherche dans le panneau mobile est un doublon du champ principal de la page. Quand on tape dans le champ mobile, la saisie est copiée dans le champ principal et son événement <ic>input</ic> est déclenché artificiellement.</p>
-<div class="diag">
-  <div class="dtitle">Flux de synchronisation — un seul moteur de recherche pour deux champs</div>
-  <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:.5rem;align-items:center;max-width:520px;">
-    <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">#mobile-search</div>
-      <div style="font-size:.7rem;color:var(--t2);">Panneau burger<br>visible en mobile</div>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem;">
-      <div style="font-size:.62rem;color:var(--t3);text-align:center;">input event ↓</div>
-      <div style="font-size:1rem;color:var(--t3);">⟶</div>
-    </div>
-    <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:9px;padding:.8rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">#search-input</div>
-      <div style="font-size:.7rem;color:var(--t2);">Header principal<br>écouté par recherche.js</div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;display:flex;flex-direction:column;gap:.3rem;max-width:520px;">
-    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);">
-      <span style="color:#c4b5fd;">①</span><span>L'utilisateur tape dans #mobile-search</span>
-    </div>
-    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);">
-      <span style="color:#c4b5fd;">②</span><span>mainSearchInput.value = mobileInput.value — copie la valeur</span>
-    </div>
-    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);">
-      <span style="color:#c4b5fd;">③</span><span>mainSearchInput.dispatchEvent(new Event('input')) — simule une vraie frappe</span>
-    </div>
-    <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);">
-      <span style="color:#7ee8b8;">④</span><span>recherche.js reçoit l'événement → debounce → search() → résultats</span>
-    </div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre>mobileSearchInput.<span class="fn">addEventListener</span>(<span class="s">'input'</span>, <span class="kw">function</span>() {
-    mainSearchInput.value = <span class="kw">this</span>.value;
-    <span class="cm">// Déclenche l'événement 'input' comme si l'utilisateur avait tapé directement</span>
-    mainSearchInput.<span class="fn">dispatchEvent</span>(<span class="kw">new</span> Event(<span class="s">'input'</span>, { bubbles: <span class="kw">true</span> }));
+<hr> <!-- ══ 05 SEARCH ══ -->
+<div class="sec" id="search"> <div class="slabel">05 — Recherche mobile</div> <h2>attachMobileSearch() — synchroniser deux champs</h2>
+<div class="diag"> <div class="dtitle">Synchronisation recherche mobile ↔ recherche principale</div> <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:.5rem;align-items:center;"> <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">#mobile-search</div> <div style="font-size:.72rem;color:var(--t2);">Dans le panneau burger<br>Visible uniquement mobile</div> </div> <div style="text-align:center;font-size:.85rem;color:var(--t3);"></div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:9px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">#search-input</div> <div style="font-size:.72rem;color:var(--t2);">Dans le header principal<br>Utilisé par recherche.js</div> </div> </div> <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">Chaque input sur #mobile-search  mainSearchInput.value = mobileInput.value  mainSearchInput.dispatchEvent(new Event('input'))  recherche.js reçoit l'événement comme un vrai input</div>
+</div> <p>Le champ de recherche dans le panneau mobile est un doublon du champ principal de la page. Quand on tape dans le champ mobile, la saisie est copiée dans le champ principal et son événement <ic>input</ic> est déclenché artificiellement.</p>
+<div class="diag"> <div class="dtitle">Flux de synchronisation — un seul moteur de recherche pour deux champs</div> <div style="display:grid;grid-template-columns:1fr 60px 1fr;gap:.5rem;align-items:center;max-width:520px;"> <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:9px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">#mobile-search</div> <div style="font-size:.7rem;color:var(--t2);">Panneau burger<br>visible en mobile</div> </div> <div style="display:flex;flex-direction:column;align-items:center;gap:.2rem;"> <div style="font-size:.62rem;color:var(--t3);text-align:center;">input event </div> <div style="font-size:1rem;color:var(--t3);">⟶</div> </div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:9px;padding:.8rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">#search-input</div> <div style="font-size:.7rem;color:var(--t2);">Header principal<br>écouté par recherche.js</div> </div> </div> <div style="margin-top:.6rem;display:flex;flex-direction:column;gap:.3rem;max-width:520px;"> <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);"> <span style="color:#c4b5fd;">①</span><span>L'utilisateur tape dans #mobile-search</span> </div> <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);"> <span style="color:#c4b5fd;">②</span><span>mainSearchInput.value = mobileInput.value — copie la valeur</span> </div> <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);"> <span style="color:#c4b5fd;">③</span><span>mainSearchInput.dispatchEvent(new Event('input')) — simule une vraie frappe</span> </div> <div style="display:grid;grid-template-columns:20px 1fr;gap:.4rem;align-items:start;font-size:.71rem;color:var(--t2);"> <span style="color:#7ee8b8;">④</span><span>recherche.js reçoit l'événement  debounce  search()  résultats</span> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre>mobileSearchInput.<span class="fn">addEventListener</span>(<span class="s">'input'</span>, <span class="kw">function</span>() {
+mainSearchInput.value = <span class="kw">this</span>.value;
+<span class="cm">// Déclenche l'événement 'input' comme si l'utilisateur avait tapé directement</span> mainSearchInput.<span class="fn">dispatchEvent</span>(<span class="kw">new</span> Event(<span class="s">'input'</span>, { bubbles: <span class="kw">true</span> }));
 });
-
 mobileSearchInput.<span class="fn">addEventListener</span>(<span class="s">'keydown'</span>, <span class="kw">function</span>(e) {
-    <span class="kw">if</span> (e.key === <span class="s">'Enter'</span>) {
-        e.<span class="fn">preventDefault</span>();
-        <span class="cm">// Déclenche Enter sur le champ principal pour lancer la recherche</span>
-        mainSearchInput.<span class="fn">dispatchEvent</span>(<span class="kw">new</span> KeyboardEvent(<span class="s">'keydown'</span>, { key: <span class="s">'Enter'</span>, bubbles: <span class="kw">true</span> }));
-        <span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay);
-    }
-});</pre></div>
-
-  <div class="sn"><span class="sni">💡</span><span><ic>{ bubbles: true }</ic> est nécessaire pour que l'événement remonte dans le DOM et soit capté par les écouteurs sur les éléments parents. Sans ça, recherche.js qui écoute peut-être sur le document ne recevrait pas l'événement.</span></div>
+<span class="kw">if</span> (e.key === <span class="s">'Enter'</span>) {
+e.<span class="fn">preventDefault</span>();
+<span class="cm">// Déclenche Enter sur le champ principal pour lancer la recherche</span> mainSearchInput.<span class="fn">dispatchEvent</span>(<span class="kw">new</span> KeyboardEvent(<span class="s">'keydown'</span>, { key: <span class="s">'Enter'</span>, bubbles: <span class="kw">true</span> }));
+<span class="fn">closeMobileMenu</span>(burgerBtn, mobileMenu, mobileOverlay);
+}
+});</pre></div> <div class="sn"><span class="sni"></span><span><ic>{ bubbles: true }</ic> est nécessaire pour que l'événement remonte dans le DOM et soit capté par les écouteurs sur les éléments parents. Sans ça, recherche.js qui écoute peut-être sur le document ne recevrait pas l'événement.</span></div>
 </div>
-<hr>
+<hr> <!-- ══ 06 FOCUS TRAP ══ -->
+<div class="sec" id="focus"> <div class="slabel">06 — Accessibilité clavier</div> <h2>attachFocusTrap() — emprisonner le focus dans le menu</h2> <p>Sans focus trap, si l'utilisateur navigue au clavier (Tab) depuis le dernier élément du menu ouvert, le focus passerait aux éléments de la page principale — invisibles derrière l'overlay. Le focus trap crée une boucle fermée.</p>
+<div class="diag"> <div class="dtitle">Focus trap — la boucle clavier dans le menu ouvert</div> <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;"> <div style="display:flex;flex-direction:column;gap:.35rem;min-width:200px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.2rem;">Éléments focusables dans #mobile-menu</div> <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#c4b5fd;">#mobile-close  premier</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">Lien Accueil</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">Lien Catalogue</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">Lien Profil</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">#mobile-search  dernier</div> </div> <div style="display:flex;flex-direction:column;gap:.4rem;padding-top:.5rem;min-width:220px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.2rem;">Règles Tab / Shift+Tab</div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.5rem .7rem;font-size:.73rem;color:var(--t2);"> Tab sur <span style="color:#7ee8b8;">dernier</span> focus ramené sur <span style="color:#c4b5fd;">premier</span> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.5rem .7rem;font-size:.73rem;color:var(--t2);"> Shift+Tab sur <span style="color:#c4b5fd;">premier</span> focus ramené sur <span style="color:#7ee8b8;">dernier</span> </div> <div style="font-size:.7rem;color:var(--t3);">Sans trap : Tab sur le dernier  focus passe aux éléments de la page derrière l'overlay  invisibles et inaccessibles</div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre>mobileMenu.<span class="fn">addEventListener</span>(<span class="s">'keydown'</span>, <span class="kw">function</span>(e) {
+<span class="kw">if</span> (e.key !== <span class="s">'Tab'</span>) <span class="kw">return</span>;
+<span class="cm">// Liste tous les éléments focusables visibles</span> <span class="kw">const</span> <span class="vr">focusable</span> = Array.<span class="fn">from</span>(
+mobileMenu.<span class="fn">querySelectorAll</span>(<span class="s">'a, button, input, [tabindex]:not([tabindex="-1"])'</span>)
+).<span class="fn">filter</span>(el => !el.<span class="fn">hasAttribute</span>(<span class="s">'disabled'</span>) && el.offsetParent !== <span class="kw">null</span>);
+<span class="kw">const</span> <span class="vr">firstEl</span> = focusable[<span class="nm">0</span>];
+<span class="kw">const</span> <span class="vr">lastEl</span> = focusable[focusable.length - <span class="nm">1</span>];
+<span class="kw">if</span> (e.shiftKey && document.activeElement === firstEl) {
+e.<span class="fn">preventDefault</span>();
+lastEl.<span class="fn">focus</span>(); <span class="cm">// Shift+Tab depuis le premier  va au dernier</span> } <span class="kw">else if</span> (!e.shiftKey && document.activeElement === lastEl) {
+e.<span class="fn">preventDefault</span>();
+firstEl.<span class="fn">focus</span>(); <span class="cm">// Tab depuis le dernier  va au premier</span> }
+});</pre></div> <div class="diag"> <div class="dtitle">La boucle du focus trap</div> <div style="display:flex;justify-content:center;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.6rem 0;"> <div style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c4b5fd;">#mobile-close (1er)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab </div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);">#mobile-search-input</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab </div> <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);">liens nav…</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab </div> <div style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c4b5fd;">dernier lien</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab ↩</div> </div> <div style="font-size:.78rem;color:var(--t2);text-align:center;">Au lieu de sortir vers la page principale, Tab depuis "dernier lien" revient à "#mobile-close".</div> <div style="font-size:.78rem;color:var(--t2);text-align:center;margin-top:.3rem;"><ic>el.offsetParent !== null</ic> = l'élément est visible (non hidden). Évite de mettre le focus sur un bouton caché.</div> </div>
+</div>
+<hr> <!-- ══ RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">07 — Récapitulatif</div> <h2>Les 10 fonctions et leurs déclencheurs</h2>
 
-<!-- ══ 06 FOCUS TRAP ══ -->
-<div class="sec" id="focus">
-  <div class="slabel">06 — Accessibilité clavier</div>
-  <h2>attachFocusTrap() — emprisonner le focus dans le menu</h2>
-  <p>Sans focus trap, si l'utilisateur navigue au clavier (Tab) depuis le dernier élément du menu ouvert, le focus passerait aux éléments de la page principale — invisibles derrière l'overlay. Le focus trap crée une boucle fermée.</p>
 <div class="diag">
-  <div class="dtitle">Focus trap — la boucle clavier dans le menu ouvert</div>
-  <div style="display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;">
-    <div style="display:flex;flex-direction:column;gap:.35rem;min-width:200px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.2rem;">Éléments focusables dans #mobile-menu</div>
-      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#c4b5fd;">#mobile-close ← premier</div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">Lien Accueil</div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">Lien Catalogue</div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);">Lien Profil</div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">#mobile-search ← dernier</div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:.4rem;padding-top:.5rem;min-width:220px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.2rem;">Règles Tab / Shift+Tab</div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.5rem .7rem;font-size:.73rem;color:var(--t2);">
-        Tab sur <span style="color:#7ee8b8;">dernier</span> → focus ramené sur <span style="color:#c4b5fd;">premier</span>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.5rem .7rem;font-size:.73rem;color:var(--t2);">
-        Shift+Tab sur <span style="color:#c4b5fd;">premier</span> → focus ramené sur <span style="color:#7ee8b8;">dernier</span>
-      </div>
-      <div style="font-size:.7rem;color:var(--t3);">Sans trap : Tab sur le dernier → focus passe aux éléments de la page derrière l'overlay → invisibles et inaccessibles</div>
-    </div>
+  <div class="dtitle">Dépendances entre les 10 fonctions — ordre d'appel</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem">
+    <div class="flow-row"><span class="chain-title">DOMContentLoaded</span><span style="font-size:.78rem;color:var(--t2)">createBurgerButton() → createMobileMenu() → highlightActivePage() → initMobileSearch() → initFocusTrap()</span></div>
+    <div class="flow-row"><span class="chain-title">Clic burger</span><span style="font-size:.78rem;color:var(--t2)">toggleMobileMenu() → openMobileMenu() ou closeMobileMenu()</span></div>
+    <div class="flow-row"><span class="chain-title">Resize ≥ 768px</span><span style="font-size:.78rem;color:var(--t2)">closeMobileMenu() — ferme automatiquement si on passe en desktop</span></div>
+    <div class="flow-row"><span class="chain-title">Input mobile search</span><span style="font-size:.78rem;color:var(--t2)">syncMobileSearch() → copie la valeur dans #search-input principal</span></div>
   </div>
 </div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre>mobileMenu.<span class="fn">addEventListener</span>(<span class="s">'keydown'</span>, <span class="kw">function</span>(e) {
-    <span class="kw">if</span> (e.key !== <span class="s">'Tab'</span>) <span class="kw">return</span>;
-
-    <span class="cm">// Liste tous les éléments focusables visibles</span>
-    <span class="kw">const</span> <span class="vr">focusable</span> = Array.<span class="fn">from</span>(
-        mobileMenu.<span class="fn">querySelectorAll</span>(<span class="s">'a, button, input, [tabindex]:not([tabindex="-1"])'</span>)
-    ).<span class="fn">filter</span>(el => !el.<span class="fn">hasAttribute</span>(<span class="s">'disabled'</span>) && el.offsetParent !== <span class="kw">null</span>);
-
-    <span class="kw">const</span> <span class="vr">firstEl</span> = focusable[<span class="nm">0</span>];
-    <span class="kw">const</span> <span class="vr">lastEl</span>  = focusable[focusable.length - <span class="nm">1</span>];
-
-    <span class="kw">if</span> (e.shiftKey && document.activeElement === firstEl) {
-        e.<span class="fn">preventDefault</span>();
-        lastEl.<span class="fn">focus</span>(); <span class="cm">// Shift+Tab depuis le premier → va au dernier</span>
-    } <span class="kw">else if</span> (!e.shiftKey && document.activeElement === lastEl) {
-        e.<span class="fn">preventDefault</span>();
-        firstEl.<span class="fn">focus</span>(); <span class="cm">// Tab depuis le dernier → va au premier</span>
-    }
-});</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">La boucle du focus trap</div>
-    <div style="display:flex;justify-content:center;align-items:center;gap:.8rem;flex-wrap:wrap;padding:.6rem 0;">
-      <div style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c4b5fd;">#mobile-close (1er)</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab →</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);">#mobile-search-input</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab →</div>
-      <div style="background:rgba(139,147,168,.07);border:1px solid var(--border);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);">liens nav…</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab →</div>
-      <div style="background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.3);border-radius:8px;padding:.5rem .9rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#c4b5fd;">dernier lien</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Tab ↩</div>
-    </div>
-    <div style="font-size:.78rem;color:var(--t2);text-align:center;">Au lieu de sortir vers la page principale, Tab depuis "dernier lien" revient à "#mobile-close".</div>
-    <div style="font-size:.78rem;color:var(--t2);text-align:center;margin-top:.3rem;"><ic>el.offsetParent !== null</ic> = l'élément est visible (non hidden). Évite de mettre le focus sur un bouton caché.</div>
-  </div>
+<div class="diag"> <div class="dtitle">Les 10 fonctions — rôle et déclencheur</div> <table class="recap-table"> <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Rôle</th></tr></thead> <tbody> <tr><td class="fn-cell">createBurgerButton()</td><td>DOMContentLoaded</td><td>Crée &lt;button&gt;  et l'insère dans &lt;nav&gt;</td></tr> <tr><td class="fn-cell">createMobileMenu()</td><td>DOMContentLoaded</td><td>Crée panneau + overlay + contenu + les insère dans body</td></tr> <tr><td class="fn-cell">highlightActivePage()</td><td>DOMContentLoaded</td><td>Compare window.location.pathname aux href des liens nav</td></tr> <tr><td class="fn-cell">openMobileMenu()</td><td>Clic burger (si fermé)</td><td>add('.active') sur burger + menu + overlay · focus #mobile-close</td></tr> <tr><td class="fn-cell">closeMobileMenu()</td><td>4 déclencheurs</td><td>remove('.active') sur les 3 éléments · restaure focus burger</td></tr> <tr><td class="fn-cell">toggleMobileMenu()</td><td>Clic burger</td><td>Lit état actuel  dispatch open ou close</td></tr> <tr><td class="fn-cell">attachSwipeToClose()</td><td>DOMContentLoaded</td><td>touchstart + touchend · deltaX &lt; -60  close</td></tr> <tr><td class="fn-cell">attachResizeHandler()</td><td>DOMContentLoaded</td><td>matchMedia change 768px  close si desktop + ouvert</td></tr> <tr><td class="fn-cell">attachMobileSearch()</td><td>DOMContentLoaded</td><td>input/keydown  sync avec #search-input + dispatch Event('input')</td></tr> <tr><td class="fn-cell">attachFocusTrap()</td><td>DOMContentLoaded</td><td>keydown Tab/Shift+Tab  boucle entre premier et dernier focusable</td></tr> </tbody> </table>
+</div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);">Tableau des fonctions</div> <div style="display:flex;flex-direction:column;"> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">createBurgerButton()</span><span style="color:var(--t2);">DOMContentLoaded — crée le bouton  dans la nav</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">createMobileMenu()</span><span style="color:var(--t2);">DOMContentLoaded — crée panneau + overlay dans body</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">highlightActivePage()</span><span style="color:var(--t2);">DOMContentLoaded — compare pathname URL aux href des liens</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">openMobileMenu()</span><span style="color:var(--t2);">Clic burger (si fermé) — ajoute .active sur les 3 éléments</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">closeMobileMenu()</span><span style="color:var(--t2);">4 déclencheurs : burger, overlay, Échap, lien nav</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">toggleMobileMenu()</span><span style="color:var(--t2);">Appelée par clic burger — dispatch open ou close selon état</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachSwipeToClose()</span><span style="color:var(--t2);">touchstart + touchend — swipe gauche ≥ 60px  close</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachResizeHandler()</span><span style="color:var(--t2);">matchMedia change  si desktop && ouvert  close</span></div> <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachMobileSearch()</span><span style="color:var(--t2);">input/keydown  sync avec #search-input principal</span></div> <div style="display:grid;grid-template-columns:220px 1fr;padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachFocusTrap()</span><span style="color:var(--t2);">keydown Tab/Shift+Tab  boucle entre premier et dernier focusable</span></div> </div> </div> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;margin-top:1rem;"> <b style="color:#c4b5fd;">Dépendances :</b> aucune. menu_burger.js est entièrement autonome. Il peut optionnellement synchroniser avec <ic>#search-input</ic> si présent (vérifié avec <ic>if (mainSearchInput)</ic>).
 </div>
+</div> </div>
+
 <hr>
-
-<!-- ══ RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">07 — Récapitulatif</div>
-  <h2>Les 10 fonctions et leurs déclencheurs</h2>
-<div class="diag">
-  <div class="dtitle">Les 10 fonctions — rôle et déclencheur</div>
-  <table class="recap-table">
-    <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Rôle</th></tr></thead>
-    <tbody>
-      <tr><td class="fn-cell">createBurgerButton()</td><td>DOMContentLoaded</td><td>Crée &lt;button&gt; ☰ et l'insère dans &lt;nav&gt;</td></tr>
-      <tr><td class="fn-cell">createMobileMenu()</td><td>DOMContentLoaded</td><td>Crée panneau + overlay + contenu + les insère dans body</td></tr>
-      <tr><td class="fn-cell">highlightActivePage()</td><td>DOMContentLoaded</td><td>Compare window.location.pathname aux href des liens nav</td></tr>
-      <tr><td class="fn-cell">openMobileMenu()</td><td>Clic burger (si fermé)</td><td>add('.active') sur burger + menu + overlay · focus #mobile-close</td></tr>
-      <tr><td class="fn-cell">closeMobileMenu()</td><td>4 déclencheurs</td><td>remove('.active') sur les 3 éléments · restaure focus burger</td></tr>
-      <tr><td class="fn-cell">toggleMobileMenu()</td><td>Clic burger</td><td>Lit état actuel → dispatch open ou close</td></tr>
-      <tr><td class="fn-cell">attachSwipeToClose()</td><td>DOMContentLoaded</td><td>touchstart + touchend · deltaX &lt; -60 → close</td></tr>
-      <tr><td class="fn-cell">attachResizeHandler()</td><td>DOMContentLoaded</td><td>matchMedia change 768px → close si desktop + ouvert</td></tr>
-      <tr><td class="fn-cell">attachMobileSearch()</td><td>DOMContentLoaded</td><td>input/keydown → sync avec #search-input + dispatch Event('input')</td></tr>
-      <tr><td class="fn-cell">attachFocusTrap()</td><td>DOMContentLoaded</td><td>keydown Tab/Shift+Tab → boucle entre premier et dernier focusable</td></tr>
-    </tbody>
-  </table>
-</div>
-
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);">Tableau des fonctions</div>
-    <div style="display:flex;flex-direction:column;">
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">createBurgerButton()</span><span style="color:var(--t2);">DOMContentLoaded — crée le bouton ☰ dans la nav</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">createMobileMenu()</span><span style="color:var(--t2);">DOMContentLoaded — crée panneau + overlay dans body</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">highlightActivePage()</span><span style="color:var(--t2);">DOMContentLoaded — compare pathname URL aux href des liens</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">openMobileMenu()</span><span style="color:var(--t2);">Clic burger (si fermé) — ajoute .active sur les 3 éléments</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">closeMobileMenu()</span><span style="color:var(--t2);">4 déclencheurs : burger, overlay, Échap, lien nav</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">toggleMobileMenu()</span><span style="color:var(--t2);">Appelée par clic burger — dispatch open ou close selon état</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachSwipeToClose()</span><span style="color:var(--t2);">touchstart + touchend — swipe gauche ≥ 60px → close</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachResizeHandler()</span><span style="color:var(--t2);">matchMedia change → si desktop && ouvert → close</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachMobileSearch()</span><span style="color:var(--t2);">input/keydown → sync avec #search-input principal</span></div>
-      <div style="display:grid;grid-template-columns:220px 1fr;padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#c4b5fd;">attachFocusTrap()</span><span style="color:var(--t2);">keydown Tab/Shift+Tab → boucle entre premier et dernier focusable</span></div>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">classList</div>
+      <div class="glos-def">Interface de manipulation des classes CSS. <ic>add()</ic>, <ic>remove()</ic>, <ic>toggle()</ic>, <ic>contains()</ic>. Plus fiable que modifier <ic>className</ic> comme une string. <ic>toggle('active', condition)</ic> ajoute ou retire selon un booléen.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">ARIA — Accessible Rich Internet Applications</div>
+      <div class="glos-def">Attributs HTML pour les technologies d'assistance (lecteurs d'écran). <ic>aria-label</ic> décrit une action, <ic>aria-expanded</ic> indique si un menu est ouvert, <ic>aria-pressed</ic> l'état d'un bouton bascule. Sans ARIA, un lecteur d'écran ne sait pas à quoi sert un bouton sans texte visible.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">dataset</div>
+      <div class="glos-def">Interface qui expose les attributs <ic>data-*</ic> d'un élément. <ic>el.dataset.productId</ic> lit <ic>data-product-id</ic>. Permet de stocker des données métier directement dans le HTML sans variables globales. La conversion camelCase est automatique : <ic>data-product-id</ic> → <ic>dataset.productId</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Bubbling — propagation d'événement</div>
+      <div class="glos-def">Un événement sur un élément remonte vers ses parents dans l'arbre DOM. Clic sur un <ic>&lt;button&gt;</ic> dans un <ic>&lt;div&gt;</ic> → les listeners du <ic>&lt;div&gt;</ic> se déclenchent aussi. Utilisé par la délégation d'événements. Stoppable avec <ic>stopPropagation()</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">stopPropagation()</div>
+      <div class="glos-def">Stoppe la remontée (bubbling) d'un événement. Sans ça, un clic sur un bouton qui ouvre un menu déclencherait aussi le listener <ic>document.addEventListener('click', fermerMenu)</ic>. Utilisé pour que le bouton d'ouverture n'annule pas immédiatement l'ouverture.</div>
     </div>
   </div>
-  <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;margin-top:1rem;">
-    <b style="color:#c4b5fd;">Dépendances :</b> aucune. menu_burger.js est entièrement autonome. Il peut optionnellement synchroniser avec <ic>#search-input</ic> si présent (vérifié avec <ic>if (mainSearchInput)</ic>).
-  </div>
-</div>
-
 </div>
 </body>
 </html>

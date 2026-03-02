@@ -5,1120 +5,340 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — product_grid.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#4f8eff;--a2:#ff6b6b;--a3:#56d19e;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  /* HERO */
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a3);flex-shrink:0;}
-  /* SECTION */
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec h4{font-size:.9rem;font-weight:700;color:var(--t2);margin:1.4rem 0 .5rem;}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  .sec p b,.sec p strong{color:var(--t);font-weight:700;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#7eb5ff;white-space:nowrap;}
-  /* DIAGRAMMES */
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cb{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .fork{display:grid;gap:1rem;width:100%;max-width:720px;}
-  .fork.f2{grid-template-columns:1fr 1fr;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
-  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
-  .fc .vn{width:100%;max-width:100%;}
-  .fc .va{width:100%;}
-  /* CALLOUTS */
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
-  .box.info  {background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#aac8ff;}
-  .box.warn  {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ok    {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-  .box.bad   {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
-  .box.def   {background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
-  .box.ana   {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box b,.box strong{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  /* CODE */
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-  .cbl{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#7eb5ff}.s{color:#7ee8b8}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#ffb3a0}
-  /* TERME GLOSSAIRE */
-  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-  .grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
-  .grow:last-child{border-bottom:none;}
-  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-  /* OBJET */
-  .osc{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;margin:1.2rem 0;}
-  .ost{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.9rem;font-weight:600;}
-  .or{display:flex;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;align-items:flex-start;}
-  .or:last-child{border-bottom:none;}
-  .ok2{font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:130px;font-size:.77rem;}
-  .oty{font-family:'JetBrains Mono',monospace;color:var(--a4);min-width:68px;font-size:.69rem;opacity:.85;}
-  .od{color:var(--t2);font-size:.81rem;flex:1;min-width:180px;line-height:1.6;}
-  .oreq{color:var(--a2);font-size:.64rem;min-width:12px;}
-  /* PRIO */
-  .prio{display:flex;flex-direction:column;gap:.4rem;margin:1.2rem 0;}
-  .prow{display:flex;align-items:center;gap:.8rem;padding:.65rem 1rem;border-radius:10px;background:var(--bg2);border:1px solid var(--border);flex-wrap:wrap;}
-  .pnum{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .pcond{font-family:'JetBrains Mono',monospace;font-size:.75rem;flex:1;color:var(--t2);min-width:140px;}
-  .pbadge{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.18rem .6rem;border-radius:6px;font-weight:600;white-space:nowrap;}
-  .pnote{font-size:.74rem;color:var(--t3);}
-  /* ÉTOILES */
-  .sviz{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
-  .sr{display:flex;align-items:center;gap:1rem;padding:.5rem 0;border-bottom:1px solid rgba(35,40,53,.6);flex-wrap:wrap;}
-  .sr:last-child{border-bottom:none;}
-  .srat{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--a4);font-weight:700;min-width:35px;}
-  .scalc{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
-  .sf{background:rgba(245,197,66,.2);color:var(--a4);padding:.15rem .4rem;border-radius:4px;font-weight:600;}
-  .sh{background:rgba(86,209,158,.2);color:var(--a3);padding:.15rem .4rem;border-radius:4px;font-weight:600;}
-  .se{background:rgba(139,147,168,.1);color:var(--t3);padding:.15rem .4rem;border-radius:4px;font-weight:600;}
-  .sout{font-size:1.1rem;}
-  /* TABLE */
-  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
-  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
-  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
-  .tbl tr:last-child td{border-bottom:none;}
-  .tc{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
-  /* TL */
-  .tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
-  .tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
-  .tli{position:relative;margin-bottom:1.8rem;}
-  .tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
-  .tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
-  .tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
-  .tlt{font-size:.95rem;font-weight:700;}
-  .tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
-  .tlb ic{background:var(--bg3);border:1px solid var(--border);}
-  /* SIDE NOTE */
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#4f8eff;--a2:#ff6b6b;--a3:#56d19e;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+/* HERO */
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a3);flex-shrink:0;}
+/* SECTION */
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec h4{font-size:.9rem;font-weight:700;color:var(--t2);margin:1.4rem 0 .5rem;}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+.sec p b,.sec p strong{color:var(--t);font-weight:700;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#7eb5ff;white-space:nowrap;}
+/* DIAGRAMMES */
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cb{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.fork{display:grid;gap:1rem;width:100%;max-width:720px;}
+.fork.f2{grid-template-columns:1fr 1fr;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
+.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.flr{background:rgba(255,107,107,.15);color:#ff9090;}
+.fc .vn{width:100%;max-width:100%;}
+.fc .va{width:100%;}
+/* CALLOUTS */
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
+.box.info  {background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#aac8ff;}
+.box.warn  {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ok    {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.bad   {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.def   {background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.box.ana   {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box b,.box strong{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+/* CODE */
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+.cbl{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#7eb5ff}.s{color:#7ee8b8}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#ffb3a0}
+/* TERME GLOSSAIRE */
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
+.grow:last-child{border-bottom:none;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+/* OBJET */
+.osc{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;margin:1.2rem 0;}
+.ost{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.9rem;font-weight:600;}
+.or{display:flex;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;align-items:flex-start;}
+.or:last-child{border-bottom:none;}
+.ok2{font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:130px;font-size:.77rem;}
+.oty{font-family:'JetBrains Mono',monospace;color:var(--a4);min-width:68px;font-size:.69rem;opacity:.85;}
+.od{color:var(--t2);font-size:.81rem;flex:1;min-width:180px;line-height:1.6;}
+.oreq{color:var(--a2);font-size:.64rem;min-width:12px;}
+/* PRIO */
+.prio{display:flex;flex-direction:column;gap:.4rem;margin:1.2rem 0;}
+.prow{display:flex;align-items:center;gap:.8rem;padding:.65rem 1rem;border-radius:10px;background:var(--bg2);border:1px solid var(--border);flex-wrap:wrap;}
+.pnum{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pcond{font-family:'JetBrains Mono',monospace;font-size:.75rem;flex:1;color:var(--t2);min-width:140px;}
+.pbadge{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:.18rem .6rem;border-radius:6px;font-weight:600;white-space:nowrap;}
+.pnote{font-size:.74rem;color:var(--t3);}
+/* ÉTOILES */
+.sviz{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.sr{display:flex;align-items:center;gap:1rem;padding:.5rem 0;border-bottom:1px solid rgba(35,40,53,.6);flex-wrap:wrap;}
+.sr:last-child{border-bottom:none;}
+.srat{font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--a4);font-weight:700;min-width:35px;}
+.scalc{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+.sf{background:rgba(245,197,66,.2);color:var(--a4);padding:.15rem .4rem;border-radius:4px;font-weight:600;}
+.sh{background:rgba(86,209,158,.2);color:var(--a3);padding:.15rem .4rem;border-radius:4px;font-weight:600;}
+.se{background:rgba(139,147,168,.1);color:var(--t3);padding:.15rem .4rem;border-radius:4px;font-weight:600;}
+.sout{font-size:1.1rem;}
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+.tbl tr:last-child td{border-bottom:none;}
+.tc{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+/* TL */
+.tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+.tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+.tli{position:relative;margin-bottom:1.8rem;}
+.tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+.tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+.tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+.tlt{font-size:.95rem;font-weight:700;}
+.tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
+.tlb ic{background:var(--bg3);border:1px solid var(--border);}
+/* SIDE NOTE */
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">product_grid.js</div>
-  <a href="#intro">Intro</a><a href="#iife">IIFE</a><a href="#images">Images</a>
-  <a href="#render">renderProducts</a><a href="#badge">Badge</a>
-  <a href="#stars">Étoiles</a><a href="#cart">Panier</a>
-  <a href="#init">Init</a><a href="#recap">Récap</a>
+<nav> <div class="nl">product_grid.js</div> <a href="#intro">Intro</a><a href="#iife">IIFE</a><a href="#images">Images</a> <a href="#render">renderProducts</a><a href="#badge">Badge</a> <a href="#stars">Étoiles</a><a href="#cart">Panier</a> <a href="#init">Init</a><a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">source des produits</span></div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#a78bfa22;color:#a78bfa;border:1px solid #a78bfa44;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#a78bfa22;color:#a78bfa;border:1px solid #a78bfa44;"> TRAITEMENTS</div>
 <div class="carte-item"><b>getBestSellers(4)</b><br><span style="color:var(--t3);font-size:.71rem;">récupère les 4 meilleures ventes</span></div>
 <div class="carte-item"><b>getNewProducts(4)</b><br><span style="color:var(--t3);font-size:.71rem;">récupère les 4 nouveautés</span></div>
 <div class="carte-item"><b>renderProduct(p)</b><br><span style="color:var(--t3);font-size:.71rem;">génère le HTML d'une carte</span></div>
 <div class="carte-item"><b>loadProductGrid()</b><br><span style="color:var(--t3);font-size:.71rem;">injecte les cartes dans le DOM</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>CustomEvent categorySelected</b><br><span style="color:var(--t3);font-size:.71rem;">écouté par filtre.js + recherche.js</span></div>
 <div class="carte-item"><b>Cartes HTML</b><br><span style="color:var(--t3);font-size:.71rem;">injectées dans .products-grid</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>product_grid.js</span></h1> <p>Ce fichier fait une seule chose : afficher les cartes produits sur la page d'accueil. Chaque mot de code est expliqué, chaque décision est justifiée. Aucune connaissance préalable requise.</p> <div class="fbadge"><div class="dot"></div>product_grid.js · 4 fonctions · ~220 lignes de code</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Remplissage dynamique de la grille — IIFE et polling</h2> <p>La page d'accueil contient une grille vide <ic>#products-grid</ic>. Ce fichier JavaScript la remplit automatiquement avec les fiches produits en allant chercher les données dans la base de données <ic>PearTechDB</ic>.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> Imaginez un mur d'affichage vide dans un magasin. Ce fichier est l'employé qui arrive chaque matin avec une pile de fiches produits et qui les accroche une à une sur le mur, en suivant toujours le même protocole : photo, prix, badge promotion, stock, étoiles.</div></div> <h3>Vocabulaire essentiel — lisez ça en premier</h3> <p>Ces termes reviennent partout dans le fichier. Si vous les connaissez, le reste devient logique.</p> <div class="glos"> <div class="glos-head"> Glossaire de base</div> <div class="grow"><div class="gterm">Variable</div><div class="gdef">Une boîte avec un nom pour stocker une valeur. <ic>const prix = 999</ic> crée une boîte nommée "prix" contenant 999. <ic>const</ic> = boîte scellée (valeur ne changera plus). <ic>let</ic> = boîte ouverte (valeur peut changer).</div></div> <div class="grow"><div class="gterm">Fonction</div><div class="gdef">Un groupe d'instructions avec un nom. On l'écrit une fois, on l'appelle autant de fois qu'on veut. Comme une recette nommée : "pour faire une crêpe, fais X, Y, Z".</div></div> <div class="grow"><div class="gterm">Tableau (Array)</div><div class="gdef">Une liste ordonnée de valeurs entre crochets : <ic>["iPhone", "Samsung", "Pixel"]</ic>. On accède à un élément par son numéro (qui commence à 0) : <ic>tableau[0]</ic> = "iPhone".</div></div> <div class="grow"><div class="gterm">Objet (Object)</div><div class="gdef">Un ensemble de paires clé/valeur entre accolades : <ic>{ nom: "iPhone", prix: 999 }</ic>. On accède à une valeur par sa clé : <ic>produit.nom</ic> = "iPhone".</div></div> <div class="grow"><div class="gterm">DOM</div><div class="gdef">La représentation de la page HTML en mémoire que JavaScript peut lire et modifier. Changer le DOM = changer ce qu'on voit à l'écran en temps réel, sans recharger la page.</div></div> <div class="grow"><div class="gterm">innerHTML</div><div class="gdef">Le contenu HTML à l'intérieur d'un élément. Écrire <ic>zone.innerHTML = "&lt;p&gt;Bonjour&lt;/p&gt;"</ic> remplace instantanément tout le contenu de la zone par un paragraphe "Bonjour".</div></div> <div class="grow"><div class="gterm">Événement</div><div class="gdef">Une action qui se produit : un clic, une frappe clavier, le chargement d'une image, la fin du chargement de la page. On peut "écouter" ces événements et déclencher une fonction quand ils arrivent.</div></div> <div class="grow"><div class="gterm">window</div><div class="gdef">L'objet racine du navigateur. Tout ce qu'on y met est accessible depuis n'importe quel script de la page. C'est la zone partagée entre tous les fichiers JavaScript.</div></div> <div class="grow"><div class="gterm">console.log/warn</div><div class="gdef">Affiche un message dans l'onglet "Console" des outils développeurs (F12). Invisible pour l'utilisateur normal, très utile pour déboguer.</div></div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>product_grid.js</span></h1>
-  <p>Ce fichier fait une seule chose : afficher les cartes produits sur la page d'accueil. Chaque mot de code est expliqué, chaque décision est justifiée. Aucune connaissance préalable requise.</p>
-  <div class="fbadge"><div class="dot"></div>product_grid.js · 4 fonctions · ~220 lignes de code</div>
+<hr> <!-- ══ 01 IIFE ══ -->
+<div class="sec" id="iife"> <div class="slabel">01 — La coquille protectrice</div> <h2>L'IIFE : une bulle isolée</h2> <p>La toute première et toute dernière ligne du fichier forment une structure spéciale qui entoure tout le reste.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> C'est comme un appartement dans un immeuble. Ce qui se passe chez vous (vos meubles, vos variables) ne déborde pas chez le voisin. Deux appartements peuvent avoir une variable <ic>prix</ic> sans que l'un écrase l'autre. Sans IIFE, ce serait comme vivre dans une maison sans murs séparant les pièces.</div></div> <div class="box def"><span class="bi"></span><div><b>IIFE</b> = Immediately Invoked Function Expression = une fonction qui s'exécute immédiatement à sa définition.<br><br>Syntaxe : <ic>(function(){ /* code */ })()</ic><br>— Les premières parenthèses définissent la fonction.<br>— Les dernières parenthèses <ic>()</ic> la déclenchent instantanément.<br>— Résultat : le code s'exécute, les variables restent enfermées à l'intérieur.</div></div> <div class="box def"><span class="bi"></span><div><b>'use strict'</b> est une déclaration placée en tête de fichier. Elle active le "mode strict" de JavaScript qui :<br>— Interdit d'utiliser une variable sans l'avoir déclarée avec <ic>const</ic> ou <ic>let</ic><br>— Interdit certaines syntaxes ambiguës<br>— Transforme des erreurs silencieuses en erreurs visibles<br><br>Sans lui, JavaScript laisserait passer des erreurs discrètement. Avec lui, les erreurs sont signalées immédiatement dans la console.</div></div> <div class="cb2"><span class="cbl">javascript</span><pre>(<span class="kw">function</span> () {           <span class="cm">//  ouverture de la bulle isolée</span> <span class="s">'use strict'</span>;        <span class="cm">//  mode strict : zéro tolérance pour les erreurs</span> <span class="cm">// Tout le code du fichier est ici, à l'abri</span> <span class="kw">const</span> <span class="vr">PLACEHOLDER</span> = <span class="s">'/asset/image/no-image.png'</span>;
+<span class="cm">// ... fonctions, événements ...</span> })<span class="op">()</span>;                    <span class="cm">//  fermeture + déclenchement immédiat</span>
+</pre></div> <h3>Pourquoi DOMContentLoaded ?</h3> <p>À l'intérieur de l'IIFE, tout le code principal est dans un écouteur d'événement <ic>DOMContentLoaded</ic>. Voici pourquoi c'est obligatoire :</p> <div class="box warn"><span class="bi"></span><div><b>Le problème du timing :</b> Le navigateur lit le fichier HTML de haut en bas. Si JavaScript est chargé avant d'avoir lu la balise <ic>&lt;div id="products-grid"&gt;</ic>, il ne trouvera pas cet élément — il n'existe pas encore en mémoire. Le code planterait silencieusement.<br><br><b>La solution :</b> <ic>DOMContentLoaded</ic> est l'événement qui se déclenche quand le navigateur a fini de lire tout le HTML. En l'attendant, on est certain que tous les éléments de la page existent déjà.</div></div> <div class="diag"> <div class="dtitle">Sans vs Avec DOMContentLoaded — ce qui se passe concrètement</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;text-align:center;"> SANS — code exécuté immédiatement</div> <div style="display:flex;flex-direction:column;gap:.3rem;"> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7eb5ff;"> Navigateur lit &lt;head&gt;</div> <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#d3a8ff;"> Charge product_grid.js</div> <div style="background:rgba(255,107,107,.15);border:2px solid rgba(255,107,107,.6);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#ff9090;"> JS s'exécute maintenant !</div> <div style="background:rgba(255,107,107,.1);border:1px dashed rgba(255,107,107,.4);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#ff9090;">getElementById('products-grid')  null</div> <div style="background:rgba(255,107,107,.08);border:1px dashed rgba(255,107,107,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">... &lt;body&gt; pas encore lu ...</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">&lt;div id="products-grid"&gt;  arrivé trop tard</div> </div> <div style="margin-top:.5rem;background:rgba(255,107,107,.08);border-radius:6px;padding:.5rem .7rem;font-size:.77rem;color:#ff9090;text-align:center;">null.innerHTML = ...   TypeError</div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;text-align:center;"> AVEC DOMContentLoaded</div> <div style="display:flex;flex-direction:column;gap:.3rem;"> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7eb5ff;"> Navigateur lit &lt;head&gt;</div> <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#d3a8ff;"> Charge product_grid.js</div> <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#f7d97a;"> JS enregistre un listener — attend</div> <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">&lt;div id="products-grid"&gt;  lu normalement</div> <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;"> HTML entièrement lu  DOMContentLoaded !</div> <div style="background:rgba(86,209,158,.15);border:2px solid rgba(86,209,158,.5);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;"> init() s'exécute maintenant — grille trouvée</div> </div> <div style="margin-top:.5rem;background:rgba(86,209,158,.08);border-radius:6px;padding:.5rem .7rem;font-size:.77rem;color:#7ee8b8;text-align:center;">getElementById('products-grid')   élément trouvé</div> </div> </div> </div> <div class="diag"> <div class="dtitle">Ordre d'exécution de A à Z</div> <div class="vc"> <div class="vn w cgr"> Le navigateur charge product_grid.js</div> <div class="va"></div> <div class="vn w cb">L'IIFE s'exécute instantanément — crée la bulle isolée</div> <div class="va"></div> <div class="vn w cp">Enregistre un rendez-vous : "quand tout le HTML sera lu, appelle init()"</div> <div class="va"><div class="val">le navigateur finit de lire tout le HTML</div></div> <div class="vn w cy">1⃣ init() — attend PearTechDB, sélectionne les 8 produits à afficher</div> <div class="va"><div class="val">appelle</div></div> <div class="vn w cb">2⃣ renderProducts() — fabrique le HTML de chaque carte</div> <div class="va"><div class="val">quand l'utilisateur clique "Ajouter au panier"</div></div> <div class="vn w cr">3⃣ addToCartFromGrid() — ajoute au panier + animation coche </div> </div> <div class="sn" style="margin-top:1.2rem;"> <span class="sni"></span> <span>Dernière ligne : <ic>window.renderProductGrid = renderProducts</ic>. Cela rend la fonction <ic>renderProducts</ic> accessible depuis d'autres scripts. Quand l'utilisateur filtre par catégorie (filtre.js) ou fait une recherche (recherche.js), ils appellent cette fonction pour rafraîchir la grille.</span> </div> </div> <h3>Comment les 3 fichiers se parlent via window</h3> <p>Les 3 fichiers JavaScript du site ne peuvent pas s'importer directement comme des modules. Ils communiquent via l'objet <ic>window</ic> — la seule "zone commune" accessible par tous.</p> <div class="diag"> <div class="dtitle">Carte des communications inter-fichiers</div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;"> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.4);border-radius:12px;padding:1rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#7eb5ff;margin-bottom:.5rem;">product_grid.js</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);line-height:1.6;">Lit :<br><ic>window.PearTechDB</ic><br><ic>window.PearTechCart</ic><br><br>Publie :<br><ic>window.renderProductGrid</ic></div> </div> <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.4);border-radius:12px;padding:1rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">filtre.js</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);line-height:1.6;">Lit :<br>le DOM (cards)<br><br>Appelle :<br><ic>window.renderProductGrid</ic><br>(si besoin de rafraîchir)</div> </div> <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.4);border-radius:12px;padding:1rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">recherche.js</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);line-height:1.6;">Lit :<br><ic>window.PearTechDB</ic><br><br>Appelle :<br><ic>PearTechDB.search()</ic></div> </div> </div> <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.9rem 1.2rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">data.js</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Publie sur window : <ic>PearTechDB</ic> (base de produits + méthode search) · <ic>PearTechCart</ic> (gestion du panier)</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);text-align:center;margin-top:.8rem;"> Tous lisent depuis window · window est la zone partagée entre tous les fichiers</div> </div>
 </div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Avant de commencer</div>
-  <h2>Remplissage dynamique de la grille — IIFE et polling</h2>
-  <p>La page d'accueil contient une grille vide <ic>#products-grid</ic>. Ce fichier JavaScript la remplit automatiquement avec les fiches produits en allant chercher les données dans la base de données <ic>PearTechDB</ic>.</p>
-
-  <div class="box ana"><span class="bi">🏗️</span><div><b>Analogie :</b> Imaginez un mur d'affichage vide dans un magasin. Ce fichier est l'employé qui arrive chaque matin avec une pile de fiches produits et qui les accroche une à une sur le mur, en suivant toujours le même protocole : photo, prix, badge promotion, stock, étoiles.</div></div>
-
-  <h3>Vocabulaire essentiel — lisez ça en premier</h3>
-  <p>Ces termes reviennent partout dans le fichier. Si vous les connaissez, le reste devient logique.</p>
-
-  <div class="glos">
-    <div class="glos-head">📚 Glossaire de base</div>
-    <div class="grow"><div class="gterm">Variable</div><div class="gdef">Une boîte avec un nom pour stocker une valeur. <ic>const prix = 999</ic> crée une boîte nommée "prix" contenant 999. <ic>const</ic> = boîte scellée (valeur ne changera plus). <ic>let</ic> = boîte ouverte (valeur peut changer).</div></div>
-    <div class="grow"><div class="gterm">Fonction</div><div class="gdef">Un groupe d'instructions avec un nom. On l'écrit une fois, on l'appelle autant de fois qu'on veut. Comme une recette nommée : "pour faire une crêpe, fais X, Y, Z".</div></div>
-    <div class="grow"><div class="gterm">Tableau (Array)</div><div class="gdef">Une liste ordonnée de valeurs entre crochets : <ic>["iPhone", "Samsung", "Pixel"]</ic>. On accède à un élément par son numéro (qui commence à 0) : <ic>tableau[0]</ic> = "iPhone".</div></div>
-    <div class="grow"><div class="gterm">Objet (Object)</div><div class="gdef">Un ensemble de paires clé/valeur entre accolades : <ic>{ nom: "iPhone", prix: 999 }</ic>. On accède à une valeur par sa clé : <ic>produit.nom</ic> = "iPhone".</div></div>
-    <div class="grow"><div class="gterm">DOM</div><div class="gdef">La représentation de la page HTML en mémoire que JavaScript peut lire et modifier. Changer le DOM = changer ce qu'on voit à l'écran en temps réel, sans recharger la page.</div></div>
-    <div class="grow"><div class="gterm">innerHTML</div><div class="gdef">Le contenu HTML à l'intérieur d'un élément. Écrire <ic>zone.innerHTML = "&lt;p&gt;Bonjour&lt;/p&gt;"</ic> remplace instantanément tout le contenu de la zone par un paragraphe "Bonjour".</div></div>
-    <div class="grow"><div class="gterm">Événement</div><div class="gdef">Une action qui se produit : un clic, une frappe clavier, le chargement d'une image, la fin du chargement de la page. On peut "écouter" ces événements et déclencher une fonction quand ils arrivent.</div></div>
-    <div class="grow"><div class="gterm">window</div><div class="gdef">L'objet racine du navigateur. Tout ce qu'on y met est accessible depuis n'importe quel script de la page. C'est la zone partagée entre tous les fichiers JavaScript.</div></div>
-    <div class="grow"><div class="gterm">console.log/warn</div><div class="gdef">Affiche un message dans l'onglet "Console" des outils développeurs (F12). Invisible pour l'utilisateur normal, très utile pour déboguer.</div></div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 IIFE ══ -->
-<div class="sec" id="iife">
-  <div class="slabel">01 — La coquille protectrice</div>
-  <h2>L'IIFE : une bulle isolée</h2>
-  <p>La toute première et toute dernière ligne du fichier forment une structure spéciale qui entoure tout le reste.</p>
-
-  <div class="box ana"><span class="bi">🏠</span><div><b>Analogie :</b> C'est comme un appartement dans un immeuble. Ce qui se passe chez vous (vos meubles, vos variables) ne déborde pas chez le voisin. Deux appartements peuvent avoir une variable <ic>prix</ic> sans que l'un écrase l'autre. Sans IIFE, ce serait comme vivre dans une maison sans murs séparant les pièces.</div></div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>IIFE</b> = Immediately Invoked Function Expression = une fonction qui s'exécute immédiatement à sa définition.<br><br>Syntaxe : <ic>(function(){ /* code */ })()</ic><br>— Les premières parenthèses définissent la fonction.<br>— Les dernières parenthèses <ic>()</ic> la déclenchent instantanément.<br>— Résultat : le code s'exécute, les variables restent enfermées à l'intérieur.</div></div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>'use strict'</b> est une déclaration placée en tête de fichier. Elle active le "mode strict" de JavaScript qui :<br>— Interdit d'utiliser une variable sans l'avoir déclarée avec <ic>const</ic> ou <ic>let</ic><br>— Interdit certaines syntaxes ambiguës<br>— Transforme des erreurs silencieuses en erreurs visibles<br><br>Sans lui, JavaScript laisserait passer des erreurs discrètement. Avec lui, les erreurs sont signalées immédiatement dans la console.</div></div>
-
-  <div class="cb2"><span class="cbl">javascript</span><pre>(<span class="kw">function</span> () {           <span class="cm">// ← ouverture de la bulle isolée</span>
-    <span class="s">'use strict'</span>;        <span class="cm">// ← mode strict : zéro tolérance pour les erreurs</span>
-
-    <span class="cm">// Tout le code du fichier est ici, à l'abri</span>
-    <span class="kw">const</span> <span class="vr">PLACEHOLDER</span> = <span class="s">'/asset/image/no-image.png'</span>;
-    <span class="cm">// ... fonctions, événements ...</span>
-
-})<span class="op">()</span>;                    <span class="cm">// ← fermeture + déclenchement immédiat</span>
-</pre></div>
-
-  <h3>Pourquoi DOMContentLoaded ?</h3>
-  <p>À l'intérieur de l'IIFE, tout le code principal est dans un écouteur d'événement <ic>DOMContentLoaded</ic>. Voici pourquoi c'est obligatoire :</p>
-
-  <div class="box warn"><span class="bi">⚠️</span><div><b>Le problème du timing :</b> Le navigateur lit le fichier HTML de haut en bas. Si JavaScript est chargé avant d'avoir lu la balise <ic>&lt;div id="products-grid"&gt;</ic>, il ne trouvera pas cet élément — il n'existe pas encore en mémoire. Le code planterait silencieusement.<br><br><b>La solution :</b> <ic>DOMContentLoaded</ic> est l'événement qui se déclenche quand le navigateur a fini de lire tout le HTML. En l'attendant, on est certain que tous les éléments de la page existent déjà.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Sans vs Avec DOMContentLoaded — ce qui se passe concrètement</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1rem;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;text-align:center;">❌ SANS — code exécuté immédiatement</div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
-          <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7eb5ff;">🌐 Navigateur lit &lt;head&gt;</div>
-          <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#d3a8ff;">📜 Charge product_grid.js</div>
-          <div style="background:rgba(255,107,107,.15);border:2px solid rgba(255,107,107,.6);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#ff9090;">⚡ JS s'exécute maintenant !</div>
-          <div style="background:rgba(255,107,107,.1);border:1px dashed rgba(255,107,107,.4);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#ff9090;">getElementById('products-grid') → null</div>
-          <div style="background:rgba(255,107,107,.08);border:1px dashed rgba(255,107,107,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">... &lt;body&gt; pas encore lu ...</div>
-          <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t3);">&lt;div id="products-grid"&gt; ← arrivé trop tard</div>
-        </div>
-        <div style="margin-top:.5rem;background:rgba(255,107,107,.08);border-radius:6px;padding:.5rem .7rem;font-size:.77rem;color:#ff9090;text-align:center;">null.innerHTML = ... → 💥 TypeError</div>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;text-align:center;">✅ AVEC DOMContentLoaded</div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
-          <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7eb5ff;">🌐 Navigateur lit &lt;head&gt;</div>
-          <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#d3a8ff;">📜 Charge product_grid.js</div>
-          <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#f7d97a;">⏳ JS enregistre un listener — attend</div>
-          <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">&lt;div id="products-grid"&gt; ← lu normalement</div>
-          <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">✅ HTML entièrement lu → DOMContentLoaded !</div>
-          <div style="background:rgba(86,209,158,.15);border:2px solid rgba(86,209,158,.5);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">⚡ init() s'exécute maintenant — grille trouvée</div>
-        </div>
-        <div style="margin-top:.5rem;background:rgba(86,209,158,.08);border-radius:6px;padding:.5rem .7rem;font-size:.77rem;color:#7ee8b8;text-align:center;">getElementById('products-grid') → ✓ élément trouvé</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="diag">
-    <div class="dtitle">Ordre d'exécution de A à Z</div>
-    <div class="vc">
-      <div class="vn w cgr">📄 Le navigateur charge product_grid.js</div>
-      <div class="va">↓</div>
-      <div class="vn w cb">L'IIFE s'exécute instantanément — crée la bulle isolée</div>
-      <div class="va">↓</div>
-      <div class="vn w cp">Enregistre un rendez-vous : "quand tout le HTML sera lu, appelle init()"</div>
-      <div class="va">↓<div class="val">le navigateur finit de lire tout le HTML</div></div>
-      <div class="vn w cy">1️⃣ init() — attend PearTechDB, sélectionne les 8 produits à afficher</div>
-      <div class="va">↓<div class="val">appelle</div></div>
-      <div class="vn w cb">2️⃣ renderProducts() — fabrique le HTML de chaque carte</div>
-      <div class="va">↓<div class="val">quand l'utilisateur clique "Ajouter au panier"</div></div>
-      <div class="vn w cr">3️⃣ addToCartFromGrid() — ajoute au panier + animation coche ✓</div>
-    </div>
-    <div class="sn" style="margin-top:1.2rem;">
-      <span class="sni">🌐</span>
-      <span>Dernière ligne : <ic>window.renderProductGrid = renderProducts</ic>. Cela rend la fonction <ic>renderProducts</ic> accessible depuis d'autres scripts. Quand l'utilisateur filtre par catégorie (filtre.js) ou fait une recherche (recherche.js), ils appellent cette fonction pour rafraîchir la grille.</span>
-    </div>
-  </div>
-
-  <h3>Comment les 3 fichiers se parlent via window</h3>
-  <p>Les 3 fichiers JavaScript du site ne peuvent pas s'importer directement comme des modules. Ils communiquent via l'objet <ic>window</ic> — la seule "zone commune" accessible par tous.</p>
-  <div class="diag">
-    <div class="dtitle">Carte des communications inter-fichiers</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;">
-      <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.4);border-radius:12px;padding:1rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#7eb5ff;margin-bottom:.5rem;">product_grid.js</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);line-height:1.6;">Lit :<br><ic>window.PearTechDB</ic><br><ic>window.PearTechCart</ic><br><br>Publie :<br><ic>window.renderProductGrid</ic></div>
-      </div>
-      <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.4);border-radius:12px;padding:1rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">filtre.js</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);line-height:1.6;">Lit :<br>le DOM (cards)<br><br>Appelle :<br><ic>window.renderProductGrid</ic><br>(si besoin de rafraîchir)</div>
-      </div>
-      <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.4);border-radius:12px;padding:1rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">recherche.js</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);line-height:1.6;">Lit :<br><ic>window.PearTechDB</ic><br><br>Appelle :<br><ic>PearTechDB.search()</ic></div>
-      </div>
-    </div>
-    <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.9rem 1.2rem;text-align:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">data.js</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Publie sur window : <ic>PearTechDB</ic> (base de produits + méthode search) · <ic>PearTechCart</ic> (gestion du panier)</div>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);text-align:center;margin-top:.8rem;">↑ Tous lisent depuis window · window est la zone partagée entre tous les fichiers</div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 02 IMAGES ══ -->
-<div class="sec" id="images">
-  <div class="slabel">02 — Constantes et images</div>
-  <h2>Le système de fallback d'images</h2>
-  <p>Chaque produit devrait avoir une photo. Mais que se passe-t-il si la photo manque ? Ou si elle est là mais le serveur est en panne et elle ne se charge pas ? Le code prévoit 3 niveaux de secours.</p>
-<div class="diag">
-  <div class="dtitle">3 niveaux de secours — cascade de l'image</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:540px;">
-    <div style="display:grid;grid-template-columns:22px 100px 1fr;gap:.4rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;">1</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">vraie photo</div>
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">product.images[0] — ex: "iphone15.jpg"</div>
-    </div>
-    <div style="padding-left:1.5rem;font-size:.62rem;color:var(--t3);">↓ si null ou erreur de chargement (onerror)</div>
-    <div style="display:grid;grid-template-columns:22px 100px 1fr;gap:.4rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;">2</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">placeholder</div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">PLACEHOLDER — SVG générique intégré en base64</div>
-    </div>
-    <div style="padding-left:1.5rem;font-size:.62rem;color:var(--t3);">↓ si PLACEHOLDER lui-même échoue</div>
-    <div style="display:grid;grid-template-columns:22px 100px 1fr;gap:.4rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;">3</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#fda4af;">img.src = ''</div>
-      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">vide — le navigateur affiche son icône image cassée</div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">img.onerror = () => { img.onerror = null; img.src = PLACEHOLDER; } — le second onerror = null évite une boucle infinie si PLACEHOLDER échoue aussi.</div>
-</div>
-
-
-  <div class="box def"><span class="bi">🔤</span><div><b>const</b> = constante = une variable dont la valeur ne peut plus changer après sa définition. On les écrit en MAJUSCULES par convention pour les distinguer des variables ordinaires. <ic>const PLACEHOLDER = '...'</ic> crée une boîte scellée nommée PLACEHOLDER.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Les 3 niveaux de secours pour les images</div>
-    <div class="vc">
-      <div class="vn w cb">Niveau 1 — La vraie photo du produit : <ic>product.images[0]</ic></div>
-      <div class="va">↓<div class="val">si la photo n'existe pas dans la base de données, ou si le serveur échoue à la charger</div></div>
-      <div class="vn w cy">Niveau 2 — Photo générique de la catégorie : <ic>FALLBACKS["cat_apple"]</ic> → URL Unsplash</div>
-      <div class="va">↓<div class="val">si cette URL Unsplash est aussi introuvable</div></div>
-      <div class="vn w cr">Niveau 3 — Image "pas de photo" locale : <ic>PLACEHOLDER</ic> → /asset/image/no-image.png</div>
-      <div class="va">↑<div class="val">si une image commence à se charger mais échoue en cours de route → onerror remonte ici</div></div>
-      <div class="vn w cp">onerror HTML — se déclenche si l'image plante pendant le chargement</div>
-    </div>
-  </div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>FALLBACKS</b> est un objet JavaScript qui fait correspondre une catégorie à une URL. C'est un dictionnaire :<br><br><ic>{ "cat_apple": "https://unsplash.com/...?w=400&amp;q=80", "cat_android": "https://..." }</ic><br><br>On l'utilise comme ça : <ic>FALLBACKS["cat_apple"]</ic> → on obtient l'URL Unsplash pour Apple.<br><br><ic>?w=400&amp;q=80</ic> à la fin de l'URL n'est pas du JS : c'est une instruction envoyée au serveur Unsplash. Cela lui dit "renvoie l'image en 400px de large et à 80% de qualité" → image 5 fois plus légère qu'en haute résolution.</div></div>
-
-  <h3>Comment fonctionne onerror ?</h3>
-  <div class="cb2"><span class="cbl">HTML généré dans le JS</span><pre>&lt;img
-  src=<span class="s">"https://exemple.com/photo-iphone.jpg"</span>   <span class="cm">← essaie la vraie photo</span>
-  data-fallback=<span class="s">"https://unsplash.com/apple..."</span>   <span class="cm">← plan B stocké en attribut caché</span>
-  onerror=<span class="s">"this.onerror=null; this.src=this.dataset.fallback||'/asset/image/no-image.png'"</span>
+<hr> <!-- ══ 02 IMAGES ══ -->
+<div class="sec" id="images"> <div class="slabel">02 — Constantes et images</div> <h2>Le système de fallback d'images</h2> <p>Chaque produit devrait avoir une photo. Mais que se passe-t-il si la photo manque ? Ou si elle est là mais le serveur est en panne et elle ne se charge pas ? Le code prévoit 3 niveaux de secours.</p>
+<div class="diag"> <div class="dtitle">3 niveaux de secours — cascade de l'image</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:540px;"> <div style="display:grid;grid-template-columns:22px 100px 1fr;gap:.4rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;">1</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">vraie photo</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">product.images[0] — ex: "iphone15.jpg"</div> </div> <div style="padding-left:1.5rem;font-size:.62rem;color:var(--t3);"> si null ou erreur de chargement (onerror)</div> <div style="display:grid;grid-template-columns:22px 100px 1fr;gap:.4rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;">2</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">placeholder</div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">PLACEHOLDER — SVG générique intégré en base64</div> </div> <div style="padding-left:1.5rem;font-size:.62rem;color:var(--t3);"> si PLACEHOLDER lui-même échoue</div> <div style="display:grid;grid-template-columns:22px 100px 1fr;gap:.4rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;">3</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#fda4af;">img.src = ''</div> <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">vide — le navigateur affiche son icône image cassée</div> </div> </div> <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">img.onerror = () => { img.onerror = null; img.src = PLACEHOLDER; } — le second onerror = null évite une boucle infinie si PLACEHOLDER échoue aussi.</div>
+</div> <div class="box def"><span class="bi"></span><div><b>const</b> = constante = une variable dont la valeur ne peut plus changer après sa définition. On les écrit en MAJUSCULES par convention pour les distinguer des variables ordinaires. <ic>const PLACEHOLDER = '...'</ic> crée une boîte scellée nommée PLACEHOLDER.</div></div> <div class="diag"> <div class="dtitle">Les 3 niveaux de secours pour les images</div> <div class="vc"> <div class="vn w cb">Niveau 1 — La vraie photo du produit : <ic>product.images[0]</ic></div> <div class="va"><div class="val">si la photo n'existe pas dans la base de données, ou si le serveur échoue à la charger</div></div> <div class="vn w cy">Niveau 2 — Photo générique de la catégorie : <ic>FALLBACKS["cat_apple"]</ic> URL Unsplash</div> <div class="va"><div class="val">si cette URL Unsplash est aussi introuvable</div></div> <div class="vn w cr">Niveau 3 — Image "pas de photo" locale : <ic>PLACEHOLDER</ic> /asset/image/no-image.png</div> <div class="va"><div class="val">si une image commence à se charger mais échoue en cours de route  onerror remonte ici</div></div> <div class="vn w cp">onerror HTML — se déclenche si l'image plante pendant le chargement</div> </div> </div> <div class="box def"><span class="bi"></span><div><b>FALLBACKS</b> est un objet JavaScript qui fait correspondre une catégorie à une URL. C'est un dictionnaire :<br><br><ic>{ "cat_apple": "https://unsplash.com/...?w=400&amp;q=80", "cat_android": "https://..." }</ic><br><br>On l'utilise comme ça : <ic>FALLBACKS["cat_apple"]</ic> on obtient l'URL Unsplash pour Apple.<br><br><ic>?w=400&amp;q=80</ic> à la fin de l'URL n'est pas du JS : c'est une instruction envoyée au serveur Unsplash. Cela lui dit "renvoie l'image en 400px de large et à 80% de qualité"  image 5 fois plus légère qu'en haute résolution.</div></div> <h3>Comment fonctionne onerror ?</h3> <div class="cb2"><span class="cbl">HTML généré dans le JS</span><pre>&lt;img
+src=<span class="s">"https://exemple.com/photo-iphone.jpg"</span> <span class="cm"> essaie la vraie photo</span> data-fallback=<span class="s">"https://unsplash.com/apple..."</span> <span class="cm"> plan B stocké en attribut caché</span> onerror=<span class="s">"this.onerror=null; this.src=this.dataset.fallback||'/asset/image/no-image.png'"</span>
 &gt;
-
 <span class="cm">Explication ligne par ligne de onerror :
-  this           → "je" = l'élément img lui-même
-  this.onerror = null  → j'éteins mon propre gestionnaire d'erreur
-                         POURQUOI ? Si le plan B aussi échoue, onerror se
-                         déclencherait à nouveau → boucle infinie. null l'arrête.
-  this.src = ...       → je change ma source vers le plan B
-  || '/asset/...'      → si même le plan B est vide, utilise le placeholder local</span>
-</pre></div>
-
-  <div class="box info"><span class="bi">💡</span><div><b>Pourquoi stocker le plan B dans <ic>data-fallback</ic> ?</b> Parce que <ic>onerror</ic> n'a pas accès aux variables JavaScript comme <ic>FALLBACKS</ic>. Mettre le plan B dans un attribut HTML (<ic>data-fallback</ic>) permet à l'attribut <ic>onerror</ic> de le lire directement via <ic>this.dataset.fallback</ic>.</div></div>
+this            "je" = l'élément img lui-même
+this.onerror = null   j'éteins mon propre gestionnaire d'erreur
+POURQUOI ? Si le plan B aussi échoue, onerror se
+déclencherait à nouveau  boucle infinie. null l'arrête.
+this.src = ...        je change ma source vers le plan B
+|| '/asset/...'       si même le plan B est vide, utilise le placeholder local</span>
+</pre></div> <div class="box info"><span class="bi"></span><div><b>Pourquoi stocker le plan B dans <ic>data-fallback</ic> ?</b> Parce que <ic>onerror</ic> n'a pas accès aux variables JavaScript comme <ic>FALLBACKS</ic>. Mettre le plan B dans un attribut HTML (<ic>data-fallback</ic>) permet à l'attribut <ic>onerror</ic> de le lire directement via <ic>this.dataset.fallback</ic>.</div></div>
 </div>
-<hr>
-
-<!-- ══ 03 RENDERPRODUCTS ══ -->
-<div class="sec" id="render">
-  <div class="slabel">03 — La fonction principale</div>
-  <h2>renderProducts( productsToRender )</h2>
-  <p>C'est la fonction la plus importante du fichier. Elle reçoit une liste de produits et transforme chaque produit en une carte HTML visible sur la page.</p>
-
-  <div class="box ana"><span class="bi">🏭</span><div><b>Analogie :</b> Imaginez une usine à cartes postales. On lui envoie une liste d'adresses (les produits). Pour chaque adresse, elle suit toujours 7 étapes dans l'ordre : calculer le prix, choisir le badge, vérifier le stock, écrire les caractéristiques, dessiner les étoiles, vérifier les favoris, imprimer la carte. Toutes les cartes finies sont empilées, agrafées ensemble, puis collées d'un coup sur le mur (injection dans le DOM).</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Flux complet de renderProducts</div>
-    <div class="vc">
-      <div class="vn w cb">Entrée : tableau de produits — ex: [{id:1, name:"iPhone 15"...}, {id:2...}]</div>
-      <div class="va">↓</div>
-      <div class="vn w cgr">Cherche l'élément <ic>#products-grid</ic> dans la page avec getElementById</div>
-      <div class="va">↓</div>
-      <div class="vn w cy">Vérifications : la grille existe ? Le tableau est non-vide ?</div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="fl flr">NON → problème</div>
-        <div class="va">↓</div>
-        <div class="vn cr">Affiche un message d'erreur dans la grille, puis <ic>return</ic> (arrêt immédiat)</div>
-      </div>
-      <div class="fc">
-        <div class="fl flg">OUI → on fabrique les cartes</div>
-        <div class="va">↓</div>
-        <div class="vn cg">.map() : traite chaque produit un par un</div>
-        <div class="va">↓<div class="val">7 calculs pour chaque produit :</div></div>
-        <div class="vn cy">① Prix et réduction  ② Badge  ③ Stock  ④ Specs  ⑤ Étoiles  ⑥ Favoris  ⑦ Balise &lt;article&gt;</div>
-      </div>
-    </div>
-    <div class="vc" style="margin-top:.4rem;">
-      <div class="va">↓<div class="val">tous les produits traités</div></div>
-      <div class="vn w cy">.join('') — colle tous les blocs HTML en une seule grande chaîne</div>
-      <div class="va">↓</div>
-      <div class="vn w cg">grid.innerHTML = résultat — injecte tout d'un coup dans la page</div>
-      <div class="va">↓</div>
-      <div class="vn w cb">forEach sur les boutons panier — attache les événements clic</div>
-    </div>
-  </div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>.map()</b> est une méthode de tableau qui transforme chaque élément. <ic>tableau.map(fn)</ic> crée un nouveau tableau où chaque élément a été transformé par la fonction <ic>fn</ic>.<br><br>Exemple simple : <ic>[1, 2, 3].map(n => n * 2)</ic> → <ic>[2, 4, 6]</ic><br><br>Dans notre code : <ic>products.map(product => "...HTML...")</ic> transforme chaque objet produit en une chaîne de texte HTML. Le tableau original <ic>products</ic> n'est pas modifié.</div></div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>.join('')</b> colle les éléments d'un tableau en une seule chaîne. <ic>["a","b","c"].join('')</ic> → <ic>"abc"</ic>. <ic>["a","b","c"].join('-')</ic> → <ic>"a-b-c"</ic>. Ici on utilise <ic>''</ic> (rien entre les éléments) pour coller les blocs HTML côte à côte.</div></div>
-
-  <h3>Pourquoi injecter d'un seul coup avec innerHTML ?</h3>
-  <div class="box info"><span class="bi">💡</span><div>On aurait pu créer chaque carte et l'ajouter au DOM une par une dans une boucle. Mais chaque modification du DOM force le navigateur à recalculer toute la mise en page. 8 modifications = 8 recalculs. En construisant tout le HTML en mémoire d'abord, puis en l'injectant une seule fois, on ne déclenche qu'un seul recalcul. La page s'affiche instantanément.</div></div>
-
-  <h3>Les propriétés d'un produit dans PearTechDB</h3>
-  <div class="osc">
-    <div class="ost">📦 Chaque objet produit doit avoir ces informations</div>
-    <div class="or"><div class="oreq">✦</div><div class="ok2">id</div><div class="oty">number</div><div class="od">Numéro unique. Ex: 42. Sert à retrouver le produit dans la DB et à construire les URLs.</div></div>
-    <div class="or"><div class="oreq">✦</div><div class="ok2">name</div><div class="oty">string</div><div class="od">Nom affiché sur la carte. Ex: "iPhone 15 Pro".</div></div>
-    <div class="or"><div class="oreq">✦</div><div class="ok2">basePrice</div><div class="oty">number</div><div class="od">Prix de vente actuel en euros. Ex: 1199. Attention : pas de symbole €, juste le nombre.</div></div>
-    <div class="or"><div class="oreq"></div><div class="ok2">oldPrice</div><div class="oty">number?</div><div class="od">Ancien prix avant promotion. Si absent, aucune réduction ne sera calculée. Ex: 1399.</div></div>
-    <div class="or"><div class="oreq"></div><div class="ok2">isNew</div><div class="oty">boolean</div><div class="od"><ic>true</ic> ou <ic>false</ic>. Si true, affiche le badge "Nouveau". Priorité sur tous les autres badges.</div></div>
-    <div class="or"><div class="oreq"></div><div class="ok2">isBestSeller</div><div class="oty">boolean</div><div class="od"><ic>true</ic> ou <ic>false</ic>. Si true, affiche le badge "Meilleure vente".</div></div>
-    <div class="or"><div class="oreq"></div><div class="ok2">stock</div><div class="oty">number</div><div class="od">Quantité disponible en stock. Déclenche des alertes visuelles si faible.</div></div>
-    <div class="or"><div class="oreq">✦</div><div class="ok2">images</div><div class="oty">string[]</div><div class="od">Tableau d'URLs de photos. On utilise seulement la première : <ic>images[0]</ic>.</div></div>
-    <div class="or"><div class="oreq">✦</div><div class="ok2">specs</div><div class="oty">object</div><div class="od">Caractéristiques techniques. Ex: <ic>{ processor: "A17 Pro", ram: "8 Go", storage: "256 Go" }</ic></div></div>
-    <div class="or"><div class="oreq"></div><div class="ok2">rating</div><div class="oty">number</div><div class="od">Note sur 5 avec décimale. Ex: 4.3. Convertie en étoiles visuelles.</div></div>
-    <div class="or"><div class="oreq"></div><div class="ok2">reviews</div><div class="oty">number</div><div class="od">Nombre total d'avis clients. Ex: 128. Affiché entre parenthèses à côté des étoiles.</div></div>
-    <div class="or"><div class="oreq">✦</div><div class="ok2">categoryId</div><div class="oty">string</div><div class="od">Identifiant de catégorie. Ex: "cat_apple". Sert de clé dans FALLBACKS pour l'image de secours.</div></div>
-  </div>
-
-  <h3>Anatomie d'une carte générée — le HTML produit</h3>
-  <p>Voici la structure exacte du bloc HTML que <ic>renderProducts</ic> génère pour <b>chaque produit</b>. C'est ce qui devient visible sous forme de carte dans la grille.</p>
-  <div class="diag">
-    <div class="dtitle">Anatomie d'un &lt;article class="product-card"&gt;</div>
-    <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;align-items:start;">
-      <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);line-height:1.9;">
-        <div style="color:#7eb5ff;font-weight:700;margin-bottom:.6rem;">&lt;article&gt;</div>
-        <div style="padding-left:.8rem;">
-          <div style="color:#f7d97a;">↳ .card-badge-area</div>
-          <div style="padding-left:.8rem;color:var(--t3);">&lt;span&gt; badge (ou vide)</div>
-          <div style="color:#7ee8b8;margin-top:.3rem;">↳ a.card-image-link</div>
-          <div style="padding-left:.8rem;color:var(--t3);">&lt;img&gt; photo</div>
-          <div style="color:#d3a8ff;margin-top:.3rem;">↳ .card-body</div>
-          <div style="padding-left:.8rem;color:var(--t3);">h3 nom du produit</div>
-          <div style="padding-left:.8rem;color:var(--t3);">.card-specs (2 specs)</div>
-          <div style="padding-left:.8rem;color:var(--t3);">.card-rating (étoiles)</div>
-          <div style="padding-left:.8rem;color:var(--t3);">.card-stock (alerte)</div>
-          <div style="color:#ff9090;margin-top:.3rem;">↳ .card-footer</div>
-          <div style="padding-left:.8rem;color:var(--t3);">.card-price</div>
-          <div style="padding-left:.8rem;color:var(--t3);">button.btn-add-cart</div>
-          <div style="padding-left:.8rem;color:var(--t3);">button.btn-wishlist</div>
-        </div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.55rem;">
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#f7d97a;font-family:'JetBrains Mono',monospace;">.card-badge-area</span> — Vide la plupart du temps. Contient un <ic>&lt;span&gt;</ic> de badge seulement si l'une des 3 conditions est vraie (nouveau, promo, bestseller).</div>
-        <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#7ee8b8;font-family:'JetBrains Mono',monospace;">a.card-image-link</span> — Lien vers la fiche produit. L'<ic>&lt;img&gt;</ic> a <ic>src</ic>, <ic>data-fallback</ic> et <ic>onerror</ic> pour la cascade d'images.</div>
-        <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#d3a8ff;font-family:'JetBrains Mono',monospace;">.card-specs</span> — 3 premières propriétés de <ic>product.specs</ic> affichées sous le nom.</div>
-        <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#7eb5ff;font-family:'JetBrains Mono',monospace;">.card-rating</span> — Contient les étoiles Unicode + le score + le nombre d'avis. Attribut <ic>aria-label</ic> pour l'accessibilité.</div>
-        <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#ff9090;font-family:'JetBrains Mono',monospace;">.card-footer</span> — Prix formaté + ancien prix barré (si promo) + bouton panier. Le bouton a <ic>data-id</ic> pour savoir quel produit ajouter.</div>
-      </div>
-    </div>
-    <div class="sn" style="margin-top:1rem;"><span class="sni">🎯</span><span>L'attribut <ic>data-category</ic> sur l'<ic>&lt;article&gt;</ic> est crucial : c'est lui que filtre.js lit pour savoir quelle carte afficher ou cacher. <ic>renderProducts</ic> l'écrit depuis <ic>product.categoryId</ic>.</span></div>
-  </div>
-
-  <h3>Calcul du prix et de la réduction — ligne par ligne</h3>
-  <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// On récupère le prix actuel du produit</span>
-<span class="kw">const</span> <span class="vr">price</span> = product.basePrice;    <span class="cm">// ex: 750</span>
-
-<span class="cm">// On cherche un ancien prix valide.
+<hr> <!-- ══ 03 RENDERPRODUCTS ══ -->
+<div class="sec" id="render"> <div class="slabel">03 — La fonction principale</div> <h2>renderProducts( productsToRender )</h2> <p>C'est la fonction la plus importante du fichier. Elle reçoit une liste de produits et transforme chaque produit en une carte HTML visible sur la page.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> Imaginez une usine à cartes postales. On lui envoie une liste d'adresses (les produits). Pour chaque adresse, elle suit toujours 7 étapes dans l'ordre : calculer le prix, choisir le badge, vérifier le stock, écrire les caractéristiques, dessiner les étoiles, vérifier les favoris, imprimer la carte. Toutes les cartes finies sont empilées, agrafées ensemble, puis collées d'un coup sur le mur (injection dans le DOM).</div></div> <div class="diag"> <div class="dtitle">Flux complet de renderProducts</div> <div class="vc"> <div class="vn w cb">Entrée : tableau de produits — ex: [{id:1, name:"iPhone 15"...}, {id:2...}]</div> <div class="va"></div> <div class="vn w cgr">Cherche l'élément <ic>#products-grid</ic> dans la page avec getElementById</div> <div class="va"></div> <div class="vn w cy">Vérifications : la grille existe ? Le tableau est non-vide ?</div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flr">NON  problème</div> <div class="va"></div> <div class="vn cr">Affiche un message d'erreur dans la grille, puis <ic>return</ic> (arrêt immédiat)</div> </div> <div class="fc"> <div class="fl flg">OUI  on fabrique les cartes</div> <div class="va"></div> <div class="vn cg">.map() : traite chaque produit un par un</div> <div class="va"><div class="val">7 calculs pour chaque produit :</div></div> <div class="vn cy">① Prix et réduction  ② Badge  ③ Stock  ④ Specs  ⑤ Étoiles  ⑥ Favoris  ⑦ Balise &lt;article&gt;</div> </div> </div> <div class="vc" style="margin-top:.4rem;"> <div class="va"><div class="val">tous les produits traités</div></div> <div class="vn w cy">.join('') — colle tous les blocs HTML en une seule grande chaîne</div> <div class="va"></div> <div class="vn w cg">grid.innerHTML = résultat — injecte tout d'un coup dans la page</div> <div class="va"></div> <div class="vn w cb">forEach sur les boutons panier — attache les événements clic</div> </div> </div> <div class="box def"><span class="bi"></span><div><b>.map()</b> est une méthode de tableau qui transforme chaque élément. <ic>tableau.map(fn)</ic> crée un nouveau tableau où chaque élément a été transformé par la fonction <ic>fn</ic>.<br><br>Exemple simple : <ic>[1, 2, 3].map(n => n * 2)</ic> <ic>[2, 4, 6]</ic><br><br>Dans notre code : <ic>products.map(product => "...HTML...")</ic> transforme chaque objet produit en une chaîne de texte HTML. Le tableau original <ic>products</ic> n'est pas modifié.</div></div> <div class="box def"><span class="bi"></span><div><b>.join('')</b> colle les éléments d'un tableau en une seule chaîne. <ic>["a","b","c"].join('')</ic> <ic>"abc"</ic>. <ic>["a","b","c"].join('-')</ic> <ic>"a-b-c"</ic>. Ici on utilise <ic>''</ic> (rien entre les éléments) pour coller les blocs HTML côte à côte.</div></div> <h3>Pourquoi injecter d'un seul coup avec innerHTML ?</h3> <div class="box info"><span class="bi"></span><div>On aurait pu créer chaque carte et l'ajouter au DOM une par une dans une boucle. Mais chaque modification du DOM force le navigateur à recalculer toute la mise en page. 8 modifications = 8 recalculs. En construisant tout le HTML en mémoire d'abord, puis en l'injectant une seule fois, on ne déclenche qu'un seul recalcul. La page s'affiche instantanément.</div></div> <h3>Les propriétés d'un produit dans PearTechDB</h3> <div class="osc"> <div class="ost"> Chaque objet produit doit avoir ces informations</div> <div class="or"><div class="oreq"></div><div class="ok2">id</div><div class="oty">number</div><div class="od">Numéro unique. Ex: 42. Sert à retrouver le produit dans la DB et à construire les URLs.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">name</div><div class="oty">string</div><div class="od">Nom affiché sur la carte. Ex: "iPhone 15 Pro".</div></div> <div class="or"><div class="oreq"></div><div class="ok2">basePrice</div><div class="oty">number</div><div class="od">Prix de vente actuel en euros. Ex: 1199. Attention : pas de symbole €, juste le nombre.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">oldPrice</div><div class="oty">number?</div><div class="od">Ancien prix avant promotion. Si absent, aucune réduction ne sera calculée. Ex: 1399.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">isNew</div><div class="oty">boolean</div><div class="od"><ic>true</ic> ou <ic>false</ic>. Si true, affiche le badge "Nouveau". Priorité sur tous les autres badges.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">isBestSeller</div><div class="oty">boolean</div><div class="od"><ic>true</ic> ou <ic>false</ic>. Si true, affiche le badge "Meilleure vente".</div></div> <div class="or"><div class="oreq"></div><div class="ok2">stock</div><div class="oty">number</div><div class="od">Quantité disponible en stock. Déclenche des alertes visuelles si faible.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">images</div><div class="oty">string[]</div><div class="od">Tableau d'URLs de photos. On utilise seulement la première : <ic>images[0]</ic>.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">specs</div><div class="oty">object</div><div class="od">Caractéristiques techniques. Ex: <ic>{ processor: "A17 Pro", ram: "8 Go", storage: "256 Go" }</ic></div></div> <div class="or"><div class="oreq"></div><div class="ok2">rating</div><div class="oty">number</div><div class="od">Note sur 5 avec décimale. Ex: 4.3. Convertie en étoiles visuelles.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">reviews</div><div class="oty">number</div><div class="od">Nombre total d'avis clients. Ex: 128. Affiché entre parenthèses à côté des étoiles.</div></div> <div class="or"><div class="oreq"></div><div class="ok2">categoryId</div><div class="oty">string</div><div class="od">Identifiant de catégorie. Ex: "cat_apple". Sert de clé dans FALLBACKS pour l'image de secours.</div></div> </div> <h3>Anatomie d'une carte générée — le HTML produit</h3> <p>Voici la structure exacte du bloc HTML que <ic>renderProducts</ic> génère pour <b>chaque produit</b>. C'est ce qui devient visible sous forme de carte dans la grille.</p> <div class="diag"> <div class="dtitle">Anatomie d'un &lt;article class="product-card"&gt;</div> <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;align-items:start;"> <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);line-height:1.9;"> <div style="color:#7eb5ff;font-weight:700;margin-bottom:.6rem;">&lt;article&gt;</div> <div style="padding-left:.8rem;"> <div style="color:#f7d97a;">↳ .card-badge-area</div> <div style="padding-left:.8rem;color:var(--t3);">&lt;span&gt; badge (ou vide)</div> <div style="color:#7ee8b8;margin-top:.3rem;">↳ a.card-image-link</div> <div style="padding-left:.8rem;color:var(--t3);">&lt;img&gt; photo</div> <div style="color:#d3a8ff;margin-top:.3rem;">↳ .card-body</div> <div style="padding-left:.8rem;color:var(--t3);">h3 nom du produit</div> <div style="padding-left:.8rem;color:var(--t3);">.card-specs (2 specs)</div> <div style="padding-left:.8rem;color:var(--t3);">.card-rating (étoiles)</div> <div style="padding-left:.8rem;color:var(--t3);">.card-stock (alerte)</div> <div style="color:#ff9090;margin-top:.3rem;">↳ .card-footer</div> <div style="padding-left:.8rem;color:var(--t3);">.card-price</div> <div style="padding-left:.8rem;color:var(--t3);">button.btn-add-cart</div> <div style="padding-left:.8rem;color:var(--t3);">button.btn-wishlist</div> </div> </div> <div style="display:flex;flex-direction:column;gap:.55rem;"> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#f7d97a;font-family:'JetBrains Mono',monospace;">.card-badge-area</span> — Vide la plupart du temps. Contient un <ic>&lt;span&gt;</ic> de badge seulement si l'une des 3 conditions est vraie (nouveau, promo, bestseller).</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#7ee8b8;font-family:'JetBrains Mono',monospace;">a.card-image-link</span> — Lien vers la fiche produit. L'<ic>&lt;img&gt;</ic> a <ic>src</ic>, <ic>data-fallback</ic> et <ic>onerror</ic> pour la cascade d'images.</div> <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#d3a8ff;font-family:'JetBrains Mono',monospace;">.card-specs</span> — 3 premières propriétés de <ic>product.specs</ic> affichées sous le nom.</div> <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#7eb5ff;font-family:'JetBrains Mono',monospace;">.card-rating</span> — Contient les étoiles Unicode + le score + le nombre d'avis. Attribut <ic>aria-label</ic> pour l'accessibilité.</div> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:8px;padding:.6rem .9rem;font-size:.78rem;"><span style="color:#ff9090;font-family:'JetBrains Mono',monospace;">.card-footer</span> — Prix formaté + ancien prix barré (si promo) + bouton panier. Le bouton a <ic>data-id</ic> pour savoir quel produit ajouter.</div> </div> </div> <div class="sn" style="margin-top:1rem;"><span class="sni"></span><span>L'attribut <ic>data-category</ic> sur l'<ic>&lt;article&gt;</ic> est crucial : c'est lui que filtre.js lit pour savoir quelle carte afficher ou cacher. <ic>renderProducts</ic> l'écrit depuis <ic>product.categoryId</ic>.</span></div> </div> <h3>Calcul du prix et de la réduction — ligne par ligne</h3> <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// On récupère le prix actuel du produit</span>
+<span class="kw">const</span> <span class="vr">price</span> = product.basePrice;    <span class="cm">// ex: 750</span> <span class="cm">// On cherche un ancien prix valide.
 // product.oldPrice && product.oldPrice > price
-// ↑ "oldPrice existe" ET "oldPrice est plus grand que le prix actuel"
+//  "oldPrice existe" ET "oldPrice est plus grand que le prix actuel"
 // Sans la 2e condition, un oldPrice de 100 sur un produit à 999€
-// afficherait une "réduction" de -899% → n'importe quoi</span>
+// afficherait une "réduction" de -899%  n'importe quoi</span>
 <span class="kw">const</span> <span class="vr">oldPrice</span> = (product.oldPrice <span class="op">&amp;&amp;</span> product.oldPrice <span class="op">&gt;</span> price)
-    <span class="op">?</span> product.oldPrice   <span class="cm">// si les deux conditions sont vraies : on garde l'ancien prix</span>
-    <span class="op">:</span> <span class="kw">null</span>;              <span class="cm">// sinon : pas d'ancien prix valide</span>
-
-<span class="cm">// Calcul du pourcentage de réduction.
+<span class="op">?</span> product.oldPrice   <span class="cm">// si les deux conditions sont vraies : on garde l'ancien prix</span> <span class="op">:</span> <span class="kw">null</span>;              <span class="cm">// sinon : pas d'ancien prix valide</span> <span class="cm">// Calcul du pourcentage de réduction.
 // Formule mathématique : (1 - prix_actuel / ancien_prix) × 100
-// Exemple : 1 - (750/999) = 1 - 0.750 = 0.250 → × 100 = 25%
+// Exemple : 1 - (750/999) = 1 - 0.750 = 0.250  × 100 = 25%
 // Math.round() arrondit au nombre entier le plus proche
 // sans ça on obtiendrait "24.9249%" — pas très élégant</span>
 <span class="kw">const</span> <span class="vr">discount</span> = oldPrice
-    <span class="op">?</span> Math.<span class="fn">round</span>((<span class="nm">1</span> <span class="op">-</span> price <span class="op">/</span> oldPrice) <span class="op">*</span> <span class="nm">100</span>)
-    <span class="op">:</span> <span class="nm">0</span>;   <span class="cm">// pas d'ancien prix → 0% de réduction</span>
-
-<span class="cm">// Formater le prix en style français : 1200 → "1 200,00 €"
+<span class="op">?</span> Math.<span class="fn">round</span>((<span class="nm">1</span> <span class="op">-</span> price <span class="op">/</span> oldPrice) <span class="op">*</span> <span class="nm">100</span>)
+<span class="op">:</span> <span class="nm">0</span>;   <span class="cm">// pas d'ancien prix  0% de réduction</span> <span class="cm">// Formater le prix en style français : 1200  "1 200,00 €"
 // toLocaleString('fr-FR') gère automatiquement :
 //   - l'espace comme séparateur de milliers (1 200 au lieu de 1,200)
 //   - la virgule comme séparateur décimal (1 200,00 au lieu de 1,200.00)
 // minimumFractionDigits: 2 force toujours 2 chiffres après la virgule
 // "50" devient "50,00" pas "50"</span>
 <span class="kw">const</span> <span class="vr">priceFmt</span> = price.<span class="fn">toLocaleString</span>(<span class="s">'fr-FR'</span>, { minimumFractionDigits: <span class="nm">2</span> }) <span class="op">+</span> <span class="s">' €'</span>;
-</pre></div>
-
-  <h3>Visualisation — comment la réduction est calculée</h3>
-  <div class="diag">
-    <div class="dtitle">Exemple concret : iPhone à 750 € (était 999 €)</div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.5rem;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;">
-      <div style="background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">prix actuel</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#ff9090;">750 €</div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--t3);text-align:center;">÷</div>
-      <div style="background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">ancien prix</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--t2);">999 €</div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--t3);text-align:center;">=</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">ratio</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#f7d97a;">0.750</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">75% du prix d'avant</div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--t3);text-align:center;">→</div>
-      <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">1 − 0.750 × 100</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#7ee8b8;">-25%</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">Math.round(25.02) = 25</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;">
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:8px;padding:.7rem 1rem;font-size:.8rem;color:#f7d97a;">
-        <b>Pourquoi 1 − ratio ?</b><br>
-        <span style="color:var(--t2);">Si ratio = 0.75 (on paie 75%), alors la réduction = 1 − 0.75 = 0.25 = 25 %. On soustrait de 1 pour avoir la partie "économisée".</span>
-      </div>
-      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.2);border-radius:8px;padding:.7rem 1rem;font-size:.8rem;color:#ff9090;">
-        <b>Sans vérification oldPrice &gt; price</b><br>
-        <span style="color:var(--t2);">Si oldPrice = 100 et price = 999 : 1 − (999/100) = −8.99 → <ic>-899%</ic>. La double vérification évite cet absurde.</span>
-      </div>
-    </div>
-  </div>
+</pre></div> <h3>Visualisation — comment la réduction est calculée</h3> <div class="diag"> <div class="dtitle">Exemple concret : iPhone à 750 € (était 999 €)</div> <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.5rem;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap;"> <div style="background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">prix actuel</div> <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#ff9090;">750 €</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--t3);text-align:center;">÷</div> <div style="background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">ancien prix</div> <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--t2);">999 €</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--t3);text-align:center;">=</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">ratio</div> <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#f7d97a;">0.750</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">75% du prix d'avant</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--t3);text-align:center;"></div> <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.3rem;">1 − 0.750 × 100</div> <div style="font-family:'JetBrains Mono',monospace;font-size:1.2rem;font-weight:700;color:#7ee8b8;">-25%</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">Math.round(25.02) = 25</div> </div> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;"> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:8px;padding:.7rem 1rem;font-size:.8rem;color:#f7d97a;"> <b>Pourquoi 1 − ratio ?</b><br> <span style="color:var(--t2);">Si ratio = 0.75 (on paie 75%), alors la réduction = 1 − 0.75 = 0.25 = 25 %. On soustrait de 1 pour avoir la partie "économisée".</span> </div> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.2);border-radius:8px;padding:.7rem 1rem;font-size:.8rem;color:#ff9090;"> <b>Sans vérification oldPrice &gt; price</b><br> <span style="color:var(--t2);">Si oldPrice = 100 et price = 999 : 1 − (999/100) = −8.99  <ic>-899%</ic>. La double vérification évite cet absurde.</span> </div> </div> </div>
 </div>
-<hr>
-
-<!-- ══ 04 BADGE ══ -->
-<div class="sec" id="badge">
-  <div class="slabel">04 — Badges et alertes stock</div>
-  <h2>Un seul badge à la fois, avec des priorités</h2>
-  <p>Un produit peut théoriquement être <b>nouveau ET en promotion ET meilleure vente</b> en même temps. Mais afficher 3 badges sur une carte serait illisible. Il faut choisir. Le code utilise une règle de priorité stricte.</p>
-<div class="diag">
-  <div class="dtitle">Arbre de décision badge — un seul badge par carte</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:480px;">
-    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div>
-      <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#fda4af;">p.stock === 0 → "Rupture de stock" (priorité max)</div>
-    </div>
-    <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);">↓ sinon</div>
-    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#f7d97a;">p.discount > 0 → "−{discount}%" (promotion)</div>
-    </div>
-    <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);">↓ sinon</div>
-    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div>
-      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#7dd3fc;">p.isNew === true → "Nouveau"</div>
-    </div>
-    <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);">↓ sinon</div>
-    <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#7ee8b8;">p.isBestSeller → "Best-seller"</div>
-    </div>
-    <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);">↓ sinon</div>
-    <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t3);">Aucun badge — carte sans pastille</div>
-  </div>
-  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Implémenté avec un ternaire imbriqué : badgeHtml = stock===0 ? '...' : discount>0 ? '...' : isNew ? '...' : isBestSeller ? '...' : ''</div>
+<hr> <!-- ══ 04 BADGE ══ -->
+<div class="sec" id="badge"> <div class="slabel">04 — Badges et alertes stock</div> <h2>Un seul badge à la fois, avec des priorités</h2> <p>Un produit peut théoriquement être <b>nouveau ET en promotion ET meilleure vente</b> en même temps. Mais afficher 3 badges sur une carte serait illisible. Il faut choisir. Le code utilise une règle de priorité stricte.</p>
+<div class="diag"> <div class="dtitle">Arbre de décision badge — un seul badge par carte</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:480px;"> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div> <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#fda4af;">p.stock === 0  "Rupture de stock" (priorité max)</div> </div> <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);"> sinon</div> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#f7d97a;">p.discount > 0  "−{discount}%" (promotion)</div> </div> <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);"> sinon</div> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#7dd3fc;">p.isNew === true  "Nouveau"</div> </div> <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);"> sinon</div> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">?</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:#7ee8b8;">p.isBestSeller  "Best-seller"</div> </div> <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);"> sinon</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t3);">Aucun badge — carte sans pastille</div> </div> <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">Implémenté avec un ternaire imbriqué : badgeHtml = stock===0 ? '...' : discount>0 ? '...' : isNew ? '...' : isBestSeller ? '...' : ''</div>
+</div> <div class="box def"><span class="bi"></span><div><b>L'opérateur ternaire</b> est un raccourci pour si/sinon : <ic>condition ? valeurSiVrai : valeurSiFaux</ic><br><br>Exemple : <ic>age >= 18 ? "majeur" : "mineur"</ic><br><br>On peut les enchaîner en imbriquant : si la première condition est fausse, on évalue la deuxième, etc. Dès qu'une est vraie, tout s'arrête — les suivantes ne sont même pas évaluées.</div></div> <div class="prio"> <div class="prow"> <div class="pnum" style="background:rgba(86,209,158,.2);color:#7ee8b8;border:1px solid rgba(86,209,158,.4)">1</div> <div class="pcond"><ic>product.isNew === true</ic></div> <div class="pbadge" style="background:rgba(86,209,158,.15);color:#7ee8b8;border:1px solid rgba(86,209,158,.3)"> Nouveau</div> <div class="pnote">Priorité absolue — même si en promo ou bestseller</div> </div> <div class="prow"> <div class="pnum" style="background:rgba(245,197,66,.2);color:#f7d97a;border:1px solid rgba(245,197,66,.4)">2</div> <div class="pcond"><ic>discount &gt; 0</ic></div> <div class="pbadge" style="background:rgba(245,197,66,.15);color:#f7d97a;border:1px solid rgba(245,197,66,.3)"> -X%</div> <div class="pnote">Seulement si le produit n'est pas "nouveau"</div> </div> <div class="prow"> <div class="pnum" style="background:rgba(79,142,255,.2);color:#7eb5ff;border:1px solid rgba(79,142,255,.4)">3</div> <div class="pcond"><ic>product.isBestSeller === true</ic></div> <div class="pbadge" style="background:rgba(79,142,255,.15);color:#7eb5ff;border:1px solid rgba(79,142,255,.3)"> Meilleure vente</div> <div class="pnote">Seulement si les deux précédentes sont fausses</div> </div> <div class="prow"> <div class="pnum" style="background:var(--bg3);color:var(--t3);border:1px solid var(--border)">4</div> <div class="pcond">aucune condition n'est vraie</div> <div class="pbadge" style="background:var(--bg3);color:var(--t3);border:1px solid var(--border)">— rien —</div> <div class="pnote">Pas de badge sur la carte</div> </div> </div> <div class="cb2"><span class="cbl">javascript — lecture de l'opérateur ternaire imbriqué</span><pre><span class="kw">const</span> <span class="vr">badge</span> = product.isNew           <span class="cm">// Question 1 : est-ce un nouveau produit ?</span> <span class="op">?</span> <span class="s">'&lt;span class="badge-new"&gt;Nouveau&lt;/span&gt;'</span> <span class="cm">// OUI  badge Nouveau, on s'arrête</span> <span class="op">:</span> discount <span class="op">&gt;</span> <span class="nm">0</span> <span class="cm">// NON  Question 2 : y a-t-il une réduction ?</span> <span class="op">?</span> <span class="s">`&lt;span class="badge-promo"&gt;-${discount}%&lt;/span&gt;`</span> <span class="cm">// OUI  badge promo</span> <span class="op">:</span> product.isBestSeller      <span class="cm">// NON  Question 3 : meilleure vente ?</span> <span class="op">?</span> <span class="s">'&lt;span class="badge-bs"&gt;Meilleure vente&lt;/span&gt;'</span> <span class="cm">// OUI</span> <span class="op">:</span> <span class="s">''</span>;                   <span class="cm">// NON  chaîne vide = pas de badge</span>
+</pre></div> <div class="diag"> <div class="dtitle">4 produits concrets — quel badge reçoit chacun ?</div> <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;"> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.7rem;">Produit A</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#7ee8b8;">true</span><br>discount: 15<br>isBestSeller: <span style="color:#7ee8b8;">true</span></div> <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;"> <div style="color:#7ee8b8;">Q1 isNew?  OUI</div> <div style="color:var(--t3);"> court-circuit</div> </div> <div style="margin-top:.6rem;background:rgba(86,209,158,.2);border:1px solid rgba(86,209,158,.4);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;font-weight:700;color:#7ee8b8;"> Nouveau</div> </div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:12px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.7rem;">Produit B</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#ff9090;">false</span><br>discount: 20<br>isBestSeller: <span style="color:#7ee8b8;">true</span></div> <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;"> <div style="color:#ff9090;">Q1 isNew?  NON</div> <div style="color:#f7d97a;">Q2 discount>0?  OUI</div> <div style="color:var(--t3);"> court-circuit</div> </div> <div style="margin-top:.6rem;background:rgba(245,197,66,.2);border:1px solid rgba(245,197,66,.4);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;font-weight:700;color:#f7d97a;"> -20%</div> </div> <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.7rem;">Produit C</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#ff9090;">false</span><br>discount: 0<br>isBestSeller: <span style="color:#7ee8b8;">true</span></div> <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;"> <div style="color:#ff9090;">Q1 isNew?  NON</div> <div style="color:#ff9090;">Q2 discount>0?  NON</div> <div style="color:#7eb5ff;">Q3 isBestSeller?  OUI</div> </div> <div style="margin-top:.6rem;background:rgba(79,142,255,.2);border:1px solid rgba(79,142,255,.4);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;font-weight:700;color:#7eb5ff;"> Meilleure vente</div> </div> <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:12px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t2);margin-bottom:.7rem;">Produit D</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#ff9090;">false</span><br>discount: 0<br>isBestSeller: <span style="color:#ff9090;">false</span></div> <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;"> <div style="color:#ff9090;">Q1 isNew?  NON</div> <div style="color:#ff9090;">Q2 discount>0?  NON</div> <div style="color:#ff9090;">Q3 isBestSeller?  NON</div> </div> <div style="margin-top:.6rem;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;color:var(--t3);">— aucun badge —</div> </div> </div> </div> — l'ordre des conditions est crucial</h3> <div class="box warn"><span class="bi"></span><div><b>Le piège de l'ordre :</b> Si on vérifiait <ic>stock ≤ 10</ic> en premier, un produit avec stock = 2 afficherait "Stock limité". Or stock = 2 est encore plus urgent — on devrait afficher "Plus que 2 en stock !". En vérifiant le cas le plus strict d'abord (<ic>≤ 3</ic>), on garantit le bon message.</div></div> <div class="tbl"> <thead><tr><th>Condition vérifiée</th><th>Message affiché</th><th>Exemple</th></tr></thead> <tbody> <tr><td class="tc">stock ≤ 3 <em>(vérifié en 1er)</em></td><td style="color:#ff9090"> "Plus que 2 en stock !"</td><td style="color:var(--t2)">stock = 2  message d'urgence avec le nombre exact</td></tr> <tr><td class="tc">stock ≤ 10 <em>(vérifié en 2e)</em></td><td style="color:#f7d97a"> "Stock limité"</td><td style="color:var(--t2)">stock = 7  alerte générale sans chiffre</td></tr> <tr><td class="tc">stock &gt; 10</td><td style="color:var(--t3)">— rien —</td><td style="color:var(--t2)">stock = 50  pas d'alerte, stock confortable</td></tr> </tbody> </div>
 </div>
-
-
-  <div class="box def"><span class="bi">🔤</span><div><b>L'opérateur ternaire</b> est un raccourci pour si/sinon : <ic>condition ? valeurSiVrai : valeurSiFaux</ic><br><br>Exemple : <ic>age >= 18 ? "majeur" : "mineur"</ic><br><br>On peut les enchaîner en imbriquant : si la première condition est fausse, on évalue la deuxième, etc. Dès qu'une est vraie, tout s'arrête — les suivantes ne sont même pas évaluées.</div></div>
-
-  <div class="prio">
-    <div class="prow">
-      <div class="pnum" style="background:rgba(86,209,158,.2);color:#7ee8b8;border:1px solid rgba(86,209,158,.4)">1</div>
-      <div class="pcond"><ic>product.isNew === true</ic></div>
-      <div class="pbadge" style="background:rgba(86,209,158,.15);color:#7ee8b8;border:1px solid rgba(86,209,158,.3)">🆕 Nouveau</div>
-      <div class="pnote">Priorité absolue — même si en promo ou bestseller</div>
-    </div>
-    <div class="prow">
-      <div class="pnum" style="background:rgba(245,197,66,.2);color:#f7d97a;border:1px solid rgba(245,197,66,.4)">2</div>
-      <div class="pcond"><ic>discount &gt; 0</ic></div>
-      <div class="pbadge" style="background:rgba(245,197,66,.15);color:#f7d97a;border:1px solid rgba(245,197,66,.3)">💰 -X%</div>
-      <div class="pnote">Seulement si le produit n'est pas "nouveau"</div>
-    </div>
-    <div class="prow">
-      <div class="pnum" style="background:rgba(79,142,255,.2);color:#7eb5ff;border:1px solid rgba(79,142,255,.4)">3</div>
-      <div class="pcond"><ic>product.isBestSeller === true</ic></div>
-      <div class="pbadge" style="background:rgba(79,142,255,.15);color:#7eb5ff;border:1px solid rgba(79,142,255,.3)">🏆 Meilleure vente</div>
-      <div class="pnote">Seulement si les deux précédentes sont fausses</div>
-    </div>
-    <div class="prow">
-      <div class="pnum" style="background:var(--bg3);color:var(--t3);border:1px solid var(--border)">4</div>
-      <div class="pcond">aucune condition n'est vraie</div>
-      <div class="pbadge" style="background:var(--bg3);color:var(--t3);border:1px solid var(--border)">— rien —</div>
-      <div class="pnote">Pas de badge sur la carte</div>
-    </div>
-  </div>
-
-  <div class="cb2"><span class="cbl">javascript — lecture de l'opérateur ternaire imbriqué</span><pre><span class="kw">const</span> <span class="vr">badge</span> = product.isNew           <span class="cm">// Question 1 : est-ce un nouveau produit ?</span>
-    <span class="op">?</span> <span class="s">'&lt;span class="badge-new"&gt;Nouveau&lt;/span&gt;'</span>  <span class="cm">// OUI → badge Nouveau, on s'arrête</span>
-    <span class="op">:</span> discount <span class="op">&gt;</span> <span class="nm">0</span>               <span class="cm">// NON → Question 2 : y a-t-il une réduction ?</span>
-        <span class="op">?</span> <span class="s">`&lt;span class="badge-promo"&gt;-${discount}%&lt;/span&gt;`</span>  <span class="cm">// OUI → badge promo</span>
-        <span class="op">:</span> product.isBestSeller      <span class="cm">// NON → Question 3 : meilleure vente ?</span>
-            <span class="op">?</span> <span class="s">'&lt;span class="badge-bs"&gt;Meilleure vente&lt;/span&gt;'</span>  <span class="cm">// OUI</span>
-            <span class="op">:</span> <span class="s">''</span>;                   <span class="cm">// NON → chaîne vide = pas de badge</span>
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">4 produits concrets — quel badge reçoit chacun ?</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;">
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.7rem;">Produit A</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#7ee8b8;">true</span><br>discount: 15<br>isBestSeller: <span style="color:#7ee8b8;">true</span></div>
-        <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;">
-          <div style="color:#7ee8b8;">Q1 isNew? ✓ OUI</div>
-          <div style="color:var(--t3);">⚡ court-circuit</div>
-        </div>
-        <div style="margin-top:.6rem;background:rgba(86,209,158,.2);border:1px solid rgba(86,209,158,.4);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;font-weight:700;color:#7ee8b8;">🆕 Nouveau</div>
-      </div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:12px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.7rem;">Produit B</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#ff9090;">false</span><br>discount: 20<br>isBestSeller: <span style="color:#7ee8b8;">true</span></div>
-        <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;">
-          <div style="color:#ff9090;">Q1 isNew? ✗ NON</div>
-          <div style="color:#f7d97a;">Q2 discount>0? ✓ OUI</div>
-          <div style="color:var(--t3);">⚡ court-circuit</div>
-        </div>
-        <div style="margin-top:.6rem;background:rgba(245,197,66,.2);border:1px solid rgba(245,197,66,.4);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;font-weight:700;color:#f7d97a;">💰 -20%</div>
-      </div>
-      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:12px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.7rem;">Produit C</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#ff9090;">false</span><br>discount: 0<br>isBestSeller: <span style="color:#7ee8b8;">true</span></div>
-        <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;">
-          <div style="color:#ff9090;">Q1 isNew? ✗ NON</div>
-          <div style="color:#ff9090;">Q2 discount>0? ✗ NON</div>
-          <div style="color:#7eb5ff;">Q3 isBestSeller? ✓ OUI</div>
-        </div>
-        <div style="margin-top:.6rem;background:rgba(79,142,255,.2);border:1px solid rgba(79,142,255,.4);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;font-weight:700;color:#7eb5ff;">🏆 Meilleure vente</div>
-      </div>
-      <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:12px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t2);margin-bottom:.7rem;">Produit D</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);line-height:1.7;margin-bottom:.6rem;">isNew: <span style="color:#ff9090;">false</span><br>discount: 0<br>isBestSeller: <span style="color:#ff9090;">false</span></div>
-        <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;text-align:left;">
-          <div style="color:#ff9090;">Q1 isNew? ✗ NON</div>
-          <div style="color:#ff9090;">Q2 discount>0? ✗ NON</div>
-          <div style="color:#ff9090;">Q3 isBestSeller? ✗ NON</div>
-        </div>
-        <div style="margin-top:.6rem;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.3rem .5rem;font-size:.72rem;color:var(--t3);">— aucun badge —</div>
-      </div>
-    </div>
-  </div> — l'ordre des conditions est crucial</h3>
-
-  <div class="box warn"><span class="bi">⚠️</span><div><b>Le piège de l'ordre :</b> Si on vérifiait <ic>stock ≤ 10</ic> en premier, un produit avec stock = 2 afficherait "Stock limité". Or stock = 2 est encore plus urgent — on devrait afficher "Plus que 2 en stock !". En vérifiant le cas le plus strict d'abord (<ic>≤ 3</ic>), on garantit le bon message.</div></div>
-
-  <div class="tbl">
-    <thead><tr><th>Condition vérifiée</th><th>Message affiché</th><th>Exemple</th></tr></thead>
-    <tbody>
-      <tr><td class="tc">stock ≤ 3 <em>(vérifié en 1er)</em></td><td style="color:#ff9090">⚠️ "Plus que 2 en stock !"</td><td style="color:var(--t2)">stock = 2 → message d'urgence avec le nombre exact</td></tr>
-      <tr><td class="tc">stock ≤ 10 <em>(vérifié en 2e)</em></td><td style="color:#f7d97a">⚡ "Stock limité"</td><td style="color:var(--t2)">stock = 7 → alerte générale sans chiffre</td></tr>
-      <tr><td class="tc">stock &gt; 10</td><td style="color:var(--t3)">— rien —</td><td style="color:var(--t2)">stock = 50 → pas d'alerte, stock confortable</td></tr>
-    </tbody>
-  </div>
+<hr> <!-- ══ 05 ÉTOILES ══ -->
+<div class="sec" id="stars"> <div class="slabel">05 — Notation par étoiles</div> <h2>De 4.7 à ½</h2> <p>La note est un nombre décimal comme 4.7. Il faut le décomposer en <b>étoiles pleines + demi-étoile éventuelle + étoiles vides</b> pour toujours obtenir 5 au total.</p>
+<div class="diag"> <div class="dtitle">Décomposition de la note 4.7 en étoiles HTML</div> <div style="display:flex;flex-direction:column;gap:.35rem;max-width:500px;"> <div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">Math.floor(4.7)</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">= 4  étoiles pleines : </div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#c4b5fd;">4.7 % 1 >= 0.5</div> <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">= 0.7 ≥ 0.5  1 demi-étoile : ½</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">5 - 4 - 1</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">= 0 étoiles vides : (aucune)</div> </div> <div style="border-top:1px solid var(--border);padding-top:.4rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7ee8b8;">Résultat : ½ (toujours 5 symboles au total)</div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Pour rating = 3.2 : 3 pleines + 0 demi (0.2 &lt; 0.5) + 2 vides. Pour rating = 5.0 : 5 pleines + 0 demi + 0 vides.</div>
+</div> <div class="box def"><span class="bi"></span><div><b>Math.floor()</b> = arrondir vers le bas, toujours. <ic>Math.floor(4.9)</ic> = 4. <ic>Math.floor(4.1)</ic> = 4. Jamais 5, même à 4.99.<br><br><b>L'opérateur % (modulo)</b> = le reste d'une division. <ic>7 % 2</ic> = 1 (7 = 3×2 + 1). <ic>4.7 % 1</ic> = 0.7 (la partie après la virgule). C'est la façon de dire "donne-moi uniquement la partie décimale".<br><br><b>'.repeat(n)'</b> = répète une chaîne n fois. <ic>''.repeat(4)</ic> = ''.</div></div> <div class="diag"> <div class="dtitle">Calcul étape par étape pour rating = 4.7</div> <div class="vc"> <div class="vn w cy">Départ : rating = 4.7</div> <div class="va"><div class="val">Math.floor(4.7) = on garde uniquement la partie entière</div></div> <div class="vn w cb">fullStars = 4  on affichera 4 étoiles pleines : </div> <div class="va"><div class="val">4.7 % 1 = 0.7  est-ce que 0.7 est ≥ à 0.5 ?</div></div> <div class="vn w cg">hasHalf = true  on affichera une demi-étoile : ½</div> <div class="va"><div class="val">5 (total) - 4 (pleines) - 1 (demi vaut 1) = 0</div></div> <div class="vn w cgr">emptyStars = 0  aucune étoile vide nécessaire</div> <div class="va"><div class="val">''.repeat(4) + '½' + ''.repeat(0)</div></div> <div class="vn w cp">Résultat affiché : ½</div> </div> </div> <div class="sviz"> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;"> Exemples pour différentes notes</div> <div class="sr"> <div class="srat">4.7</div> <div class="scalc"><span class="sf">4 pleines</span><span style="color:var(--t3)">+</span><span class="sh">½ (0.7 ≥ 0.5 )</span><span style="color:var(--t3)">+</span><span class="se">0 vide</span></div> <div class="sout">½</div> </div> <div class="sr"> <div class="srat">4.3</div> <div class="scalc"><span class="sf">4 pleines</span><span style="color:var(--t3)">+</span><span class="se">pas de ½ (0.3 &lt; 0.5 )</span><span style="color:var(--t3)">+</span><span class="se">1 vide</span></div> <div class="sout"><span style="opacity:.25"></span></div> </div> <div class="sr"> <div class="srat">3.5</div> <div class="scalc"><span class="sf">3 pleines</span><span style="color:var(--t3)">+</span><span class="sh">½ (0.5 ≥ 0.5 )</span><span style="color:var(--t3)">+</span><span class="se">1 vide</span></div> <div class="sout">½<span style="opacity:.25"></span></div> </div> <div class="sr"> <div class="srat">2.3</div> <div class="scalc"><span class="sf">2 pleines</span><span style="color:var(--t3)">+</span><span class="se">pas de ½ (0.3 &lt; 0.5 )</span><span style="color:var(--t3)">+</span><span class="se">3 vides</span></div> <div class="sout"><span style="opacity:.25"></span></div> </div> </div> <div class="box info"><span class="bi"></span><div><b>Accessibilité :</b> Les étoiles sont des caractères () que les lecteurs d'écran pour malvoyants liraient "étoile étoile étoile étoile demi-étoile" — pas très utile. Pour résoudre ça : les étoiles ont l'attribut <ic>aria-hidden="true"</ic> (les lecteurs d'écran les ignorent complètement). La vraie information est dans un <ic>aria-label="Note 4.7 sur 5, 128 avis"</ic> sur le conteneur parent — le lecteur d'écran lit ça à la place.</div></div>
 </div>
-<hr>
-
-<!-- ══ 05 ÉTOILES ══ -->
-<div class="sec" id="stars">
-  <div class="slabel">05 — Notation par étoiles</div>
-  <h2>De 4.7 à ½</h2>
-  <p>La note est un nombre décimal comme 4.7. Il faut le décomposer en <b>étoiles pleines + demi-étoile éventuelle + étoiles vides</b> pour toujours obtenir 5 au total.</p>
-<div class="diag">
-  <div class="dtitle">Décomposition de la note 4.7 en étoiles HTML</div>
-  <div style="display:flex;flex-direction:column;gap:.35rem;max-width:500px;">
-    <div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#f7d97a;">Math.floor(4.7)</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">= 4 → étoiles pleines : ★★★★</div>
-    </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#c4b5fd;">4.7 % 1 >= 0.5</div>
-      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">= 0.7 ≥ 0.5 → 1 demi-étoile : ½</div>
-    </div>
-    <div style="display:grid;grid-template-columns:160px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">5 - 4 - 1</div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">= 0 étoiles vides : (aucune)</div>
-    </div>
-    <div style="border-top:1px solid var(--border);padding-top:.4rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7ee8b8;">Résultat : ★★★★½ (toujours 5 symboles au total)</div>
-  </div>
-  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Pour rating = 3.2 : 3 pleines + 0 demi (0.2 &lt; 0.5) + 2 vides. Pour rating = 5.0 : 5 pleines + 0 demi + 0 vides.</div>
-</div>
-
-
-  <div class="box def"><span class="bi">🔤</span><div><b>Math.floor()</b> = arrondir vers le bas, toujours. <ic>Math.floor(4.9)</ic> = 4. <ic>Math.floor(4.1)</ic> = 4. Jamais 5, même à 4.99.<br><br><b>L'opérateur % (modulo)</b> = le reste d'une division. <ic>7 % 2</ic> = 1 (7 = 3×2 + 1). <ic>4.7 % 1</ic> = 0.7 (la partie après la virgule). C'est la façon de dire "donne-moi uniquement la partie décimale".<br><br><b>'.repeat(n)'</b> = répète une chaîne n fois. <ic>'★'.repeat(4)</ic> = '★★★★'.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Calcul étape par étape pour rating = 4.7</div>
-    <div class="vc">
-      <div class="vn w cy">Départ : rating = 4.7</div>
-      <div class="va">↓<div class="val">Math.floor(4.7) = on garde uniquement la partie entière</div></div>
-      <div class="vn w cb">fullStars = 4 → on affichera 4 étoiles pleines : ★★★★</div>
-      <div class="va">↓<div class="val">4.7 % 1 = 0.7 → est-ce que 0.7 est ≥ à 0.5 ?</div></div>
-      <div class="vn w cg">hasHalf = true → on affichera une demi-étoile : ½</div>
-      <div class="va">↓<div class="val">5 (total) - 4 (pleines) - 1 (demi vaut 1) = 0</div></div>
-      <div class="vn w cgr">emptyStars = 0 → aucune étoile vide nécessaire</div>
-      <div class="va">↓<div class="val">'★'.repeat(4) + '½' + '☆'.repeat(0)</div></div>
-      <div class="vn w cp">Résultat affiché : ★★★★½</div>
-    </div>
-  </div>
-
-  <div class="sviz">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;">🔢 Exemples pour différentes notes</div>
-    <div class="sr">
-      <div class="srat">4.7</div>
-      <div class="scalc"><span class="sf">4 pleines</span><span style="color:var(--t3)">+</span><span class="sh">½ (0.7 ≥ 0.5 ✓)</span><span style="color:var(--t3)">+</span><span class="se">0 vide</span></div>
-      <div class="sout">★★★★½</div>
-    </div>
-    <div class="sr">
-      <div class="srat">4.3</div>
-      <div class="scalc"><span class="sf">4 pleines</span><span style="color:var(--t3)">+</span><span class="se">pas de ½ (0.3 &lt; 0.5 ✗)</span><span style="color:var(--t3)">+</span><span class="se">1 vide</span></div>
-      <div class="sout">★★★★<span style="opacity:.25">★</span></div>
-    </div>
-    <div class="sr">
-      <div class="srat">3.5</div>
-      <div class="scalc"><span class="sf">3 pleines</span><span style="color:var(--t3)">+</span><span class="sh">½ (0.5 ≥ 0.5 ✓)</span><span style="color:var(--t3)">+</span><span class="se">1 vide</span></div>
-      <div class="sout">★★★½<span style="opacity:.25">★</span></div>
-    </div>
-    <div class="sr">
-      <div class="srat">2.3</div>
-      <div class="scalc"><span class="sf">2 pleines</span><span style="color:var(--t3)">+</span><span class="se">pas de ½ (0.3 &lt; 0.5 ✗)</span><span style="color:var(--t3)">+</span><span class="se">3 vides</span></div>
-      <div class="sout">★★<span style="opacity:.25">★★★</span></div>
-    </div>
-  </div>
-
-  <div class="box info"><span class="bi">♿</span><div><b>Accessibilité :</b> Les étoiles sont des caractères (★) que les lecteurs d'écran pour malvoyants liraient "étoile étoile étoile étoile demi-étoile" — pas très utile. Pour résoudre ça : les étoiles ont l'attribut <ic>aria-hidden="true"</ic> (les lecteurs d'écran les ignorent complètement). La vraie information est dans un <ic>aria-label="Note 4.7 sur 5, 128 avis"</ic> sur le conteneur parent — le lecteur d'écran lit ça à la place.</div></div>
-</div>
-<hr>
-
-<!-- ══ 06 PANIER ══ -->
-<div class="sec" id="cart">
-  <div class="slabel">06 — Ajout au panier</div>
-  <h2>addToCartFromGrid( productId, btn )</h2>
-  <p>Appelée quand l'utilisateur clique sur "Ajouter au panier". Elle reçoit deux informations : l'<b>identifiant du produit</b> (pour le retrouver dans la DB) et le <b>bouton</b> cliqué (pour l'animer).</p>
-
-  <div class="box ana"><span class="bi">🏪</span><div><b>Analogie :</b> Imaginez deux scénarios dans un magasin. Normalement, vous donnez votre commande au caissier officiel (<ic>PearTechCart</ic>) qui gère tout le registre central. Mais si le caissier est absent, le vendeur prend lui-même note dans son carnet personnel (<ic>localStorage</ic>). Dans les deux cas, vous recevez un reçu de confirmation (l'animation ✓).</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Flux complet de l'ajout au panier</div>
-    <div class="vc">
-      <div class="vn w cb">Reçoit : productId = 42, btn = le bouton HTML cliqué</div>
-      <div class="va">↓</div>
-      <div class="vn w cgr">Cherche le produit n°42 dans PearTechDB.products avec .find()</div>
-      <div class="va">↓</div>
-      <div class="vn w cy">Produit trouvé dans la base de données ?</div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="fl flr">NON — introuvable</div>
-        <div class="va">↓</div>
-        <div class="vn cr">console.warn() — alerte dans la console développeur, puis <ic>return</ic> (arrêt)</div>
-      </div>
-      <div class="fc">
-        <div class="fl flg">OUI — produit trouvé</div>
-        <div class="va">↓</div>
-        <div class="vn cy">Construit l'objet cartItem avec toutes les infos nécessaires</div>
-        <div class="va">↓</div>
-        <div class="vn cb">window.PearTechCart est-il disponible ?</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;width:100%;margin-top:.3rem;">
-          <div class="fc">
-            <div class="fl flg" style="font-size:.6rem;">OUI — chemin normal</div>
-            <div class="va">↓</div>
-            <div class="vn cg" style="font-size:.72rem;">PearTechCart.add(cartItem) — panier.js gère tout</div>
-          </div>
-          <div class="fc">
-            <div class="fl flr" style="font-size:.6rem;">NON — plan B</div>
-            <div class="va">↓</div>
-            <div class="vn cr" style="font-size:.72rem;">Écrit directement dans localStorage</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="vc" style="margin-top:.5rem;">
-      <div class="va">↓<div class="val">dans tous les cas, même si l'ajout a échoué</div></div>
-      <div class="vn w cp">Animation : icône caddie → coche ✓ pendant 1,6 secondes</div>
-    </div>
-  </div>
-
-  <h3>Qu'est-ce que localStorage ?</h3>
-  <div class="box def"><span class="bi">🔤</span><div><b>localStorage</b> est un mini-espace de stockage dans le navigateur. Il persiste même quand on ferme l'onglet ou le navigateur. C'est comme une clé USB intégrée à Chrome/Firefox.<br><br>— <ic>localStorage.setItem('cle', 'valeur')</ic> → enregistre<br>— <ic>localStorage.getItem('cle')</ic> → récupère (ou <ic>null</ic> si absent)<br><br>Contrainte : il ne stocke que du texte. Pas d'objets, pas de tableaux. C'est pour ça qu'on utilise <ic>JSON.stringify(objet)</ic> pour convertir en texte avant de stocker, et <ic>JSON.parse(texte)</ic> pour reconvertir en objet au moment de récupérer.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Le cycle aller-retour JSON — objet → texte → stockage → objet</div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.4rem;align-items:center;flex-wrap:wrap;gap:.5rem;">
-      <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">objet JS (en mémoire)</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7eb5ff;line-height:1.6;">[{<br>&nbsp;id: 42,<br>&nbsp;name: "iPhone",<br>&nbsp;quantity: 1<br>}]</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#f7d97a;">JSON<br>.stringify()</div>
-        <div style="font-size:1.1rem;color:var(--t3);">→</div>
-      </div>
-      <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.35);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">texte (chaîne JSON)</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;line-height:1.5;word-break:break-all;">'[{"id":42,"name":"iPhone","quantity":1}]'</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#56d19e;">localStorage<br>.setItem()</div>
-        <div style="font-size:1.1rem;color:var(--t3);">→</div>
-      </div>
-      <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.35);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">localStorage (disque)</div>
-        <div style="font-size:1.3rem;margin:.3rem 0;">💾</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">clé: "peartech-cart"<br>valeur: la chaîne</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#c084fc;">JSON<br>.parse()</div>
-        <div style="font-size:1.1rem;color:var(--t3);">←</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">.getItem()</div>
-      </div>
-      <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.35);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">objet JS (reconstitué)</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#d3a8ff;line-height:1.6;">[{<br>&nbsp;id: 42,<br>&nbsp;name: "iPhone",<br>&nbsp;quantity: 1<br>}]</div>
-      </div>
-    </div>
-    <div class="sn" style="margin-top:1rem;"><span class="sni">⚠️</span><span>Le texte stocké dans localStorage est exactement la même chaîne que ce que <ic>JSON.stringify</ic> a produit. Ce n'est pas "magiquement" un objet — c'est du texte. Sans <ic>JSON.parse()</ic> au moment de le relire, on obtiendrait une chaîne de caractères brute, et <ic>cart.find(...)</ic> échouerait immédiatement.</span></div>
-  </div> — chaque ligne expliquée</h3>
-  <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// Étape 1 : Lire le panier existant dans localStorage
+<hr> <!-- ══ 06 PANIER ══ -->
+<div class="sec" id="cart"> <div class="slabel">06 — Ajout au panier</div> <h2>addToCartFromGrid( productId, btn )</h2> <p>Appelée quand l'utilisateur clique sur "Ajouter au panier". Elle reçoit deux informations : l'<b>identifiant du produit</b> (pour le retrouver dans la DB) et le <b>bouton</b> cliqué (pour l'animer).</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> Imaginez deux scénarios dans un magasin. Normalement, vous donnez votre commande au caissier officiel (<ic>PearTechCart</ic>) qui gère tout le registre central. Mais si le caissier est absent, le vendeur prend lui-même note dans son carnet personnel (<ic>localStorage</ic>). Dans les deux cas, vous recevez un reçu de confirmation (l'animation ).</div></div> <div class="diag"> <div class="dtitle">Flux complet de l'ajout au panier</div> <div class="vc"> <div class="vn w cb">Reçoit : productId = 42, btn = le bouton HTML cliqué</div> <div class="va"></div> <div class="vn w cgr">Cherche le produit n°42 dans PearTechDB.products avec .find()</div> <div class="va"></div> <div class="vn w cy">Produit trouvé dans la base de données ?</div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flr">NON — introuvable</div> <div class="va"></div> <div class="vn cr">console.warn() — alerte dans la console développeur, puis <ic>return</ic> (arrêt)</div> </div> <div class="fc"> <div class="fl flg">OUI — produit trouvé</div> <div class="va"></div> <div class="vn cy">Construit l'objet cartItem avec toutes les infos nécessaires</div> <div class="va"></div> <div class="vn cb">window.PearTechCart est-il disponible ?</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;width:100%;margin-top:.3rem;"> <div class="fc"> <div class="fl flg" style="font-size:.6rem;">OUI — chemin normal</div> <div class="va"></div> <div class="vn cg" style="font-size:.72rem;">PearTechCart.add(cartItem) — panier.js gère tout</div> </div> <div class="fc"> <div class="fl flr" style="font-size:.6rem;">NON — plan B</div> <div class="va"></div> <div class="vn cr" style="font-size:.72rem;">Écrit directement dans localStorage</div> </div> </div> </div> </div> <div class="vc" style="margin-top:.5rem;"> <div class="va"><div class="val">dans tous les cas, même si l'ajout a échoué</div></div> <div class="vn w cp">Animation : icône caddie  coche  pendant 1,6 secondes</div> </div> </div> <h3>Qu'est-ce que localStorage ?</h3> <div class="box def"><span class="bi"></span><div><b>localStorage</b> est un mini-espace de stockage dans le navigateur. Il persiste même quand on ferme l'onglet ou le navigateur. C'est comme une clé USB intégrée à Chrome/Firefox.<br><br>— <ic>localStorage.setItem('cle', 'valeur')</ic> enregistre<br>— <ic>localStorage.getItem('cle')</ic> récupère (ou <ic>null</ic> si absent)<br><br>Contrainte : il ne stocke que du texte. Pas d'objets, pas de tableaux. C'est pour ça qu'on utilise <ic>JSON.stringify(objet)</ic> pour convertir en texte avant de stocker, et <ic>JSON.parse(texte)</ic> pour reconvertir en objet au moment de récupérer.</div></div> <div class="diag"> <div class="dtitle">Le cycle aller-retour JSON — objet  texte  stockage  objet</div> <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.4rem;align-items:center;flex-wrap:wrap;gap:.5rem;"> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">objet JS (en mémoire)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7eb5ff;line-height:1.6;">[{<br>&nbsp;id: 42,<br>&nbsp;name: "iPhone",<br>&nbsp;quantity: 1<br>}]</div> </div> <div style="text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#f7d97a;">JSON<br>.stringify()</div> <div style="font-size:1.1rem;color:var(--t3);"></div> </div> <div style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.35);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">texte (chaîne JSON)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;line-height:1.5;word-break:break-all;">'[{"id":42,"name":"iPhone","quantity":1}]'</div> </div> <div style="text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#56d19e;">localStorage<br>.setItem()</div> <div style="font-size:1.1rem;color:var(--t3);"></div> </div> <div style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.35);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">localStorage (disque)</div> <div style="font-size:1.3rem;margin:.3rem 0;"></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">clé: "peartech-cart"<br>valeur: la chaîne</div> </div> <div style="text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#c084fc;">JSON<br>.parse()</div> <div style="font-size:1.1rem;color:var(--t3);"></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">.getItem()</div> </div> <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.35);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">objet JS (reconstitué)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#d3a8ff;line-height:1.6;">[{<br>&nbsp;id: 42,<br>&nbsp;name: "iPhone",<br>&nbsp;quantity: 1<br>}]</div> </div> </div> <div class="sn" style="margin-top:1rem;"><span class="sni"></span><span>Le texte stocké dans localStorage est exactement la même chaîne que ce que <ic>JSON.stringify</ic> a produit. Ce n'est pas "magiquement" un objet — c'est du texte. Sans <ic>JSON.parse()</ic> au moment de le relire, on obtiendrait une chaîne de caractères brute, et <ic>cart.find(...)</ic> échouerait immédiatement.</span></div> </div> — chaque ligne expliquée</h3> <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// Étape 1 : Lire le panier existant dans localStorage
 // localStorage.getItem('peartech-cart') retourne :
 //   - null si rien n'a encore été stocké (premier achat)
 //   - une chaîne JSON comme '[{"id":1,"name":"iPhone","quantity":1}]'
 // JSON.parse() convertit cette chaîne en vrai tableau JavaScript
 // || [] = "si le résultat est null/undefined, utilise un tableau vide"</span>
 <span class="kw">const</span> <span class="vr">cart</span> = JSON.<span class="fn">parse</span>(localStorage.<span class="fn">getItem</span>(<span class="s">'peartech-cart'</span>)) <span class="op">||</span> [];
-
 <span class="cm">// Étape 2 : Vérifier si ce produit est déjà dans le panier
 // .find() parcourt le tableau et retourne le premier élément
 // pour lequel la condition (i.id === productId) est vraie
 // Retourne undefined si aucun élément ne correspond</span>
 <span class="kw">const</span> <span class="vr">existing</span> = cart.<span class="fn">find</span>(i <span class="op">=&gt;</span> i.id <span class="op">===</span> productId);
-
 <span class="kw">if</span> (existing) {
-    existing.quantity<span class="op">++</span>;    <span class="cm">// Produit déjà là → +1 à la quantité (1 → 2 → 3...)</span>
+existing.quantity<span class="op">++</span>;    <span class="cm">// Produit déjà là  +1 à la quantité (1  2  3...)</span>
 } <span class="kw">else</span> {
-    cart.<span class="fn">push</span>(cartItem);    <span class="cm">// Nouveau produit → on l'ajoute à la fin du tableau</span>
+cart.<span class="fn">push</span>(cartItem);    <span class="cm">// Nouveau produit  on l'ajoute à la fin du tableau</span>
 }
-
 <span class="cm">// Étape 3 : Sauvegarder le panier mis à jour
 // JSON.stringify() reconvertit le tableau en texte pour localStorage</span>
 localStorage.<span class="fn">setItem</span>(<span class="s">'peartech-cart'</span>, JSON.<span class="fn">stringify</span>(cart));
-
 <span class="cm">// Étape 4 : Calculer le total d'articles pour le badge du panier
 // .reduce() parcourt le tableau en accumulant une valeur
 // Démarre à 0, ajoute la quantité de chaque article
-// Exemple : [{qty:2}, {qty:3}, {qty:1}] → 0 + 2 + 3 + 1 = 6</span>
+// Exemple : [{qty:2}, {qty:3}, {qty:1}]  0 + 2 + 3 + 1 = 6</span>
 <span class="kw">const</span> <span class="vr">total</span> = cart.<span class="fn">reduce</span>((acc, i) <span class="op">=&gt;</span> acc <span class="op">+</span> i.quantity, <span class="nm">0</span>);
-
 <span class="cm">// Étape 5 : Mettre à jour le badge visuel "3" sur l'icône panier</span>
 <span class="kw">const</span> <span class="vr">badge</span> = document.<span class="fn">getElementById</span>(<span class="s">'cart-count'</span>);
 <span class="kw">if</span> (badge) badge.textContent = total <span class="op">||</span> <span class="s">''</span>;
 <span class="cm">// total || '' = si total = 0, affiche rien (on cache le badge vide)</span>
-</pre></div>
-
-  <h3>Comprendre .reduce() en image</h3>
-  <div class="diag">
-    <div class="dtitle">Comment .reduce() calcule le total d'articles dans le panier</div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-bottom:1rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);margin-bottom:.4rem;">Panier : [{qty:2}, {qty:3}, {qty:1}] · départ acc=0</div>
-      <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;justify-content:center;">
-        <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.5rem .9rem;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">tour 1</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;color:#7eb5ff;">acc=0 + qty=2</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;">→ 2</div>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);">→</div>
-        <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.5rem .9rem;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">tour 2</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;color:#7eb5ff;">acc=2 + qty=3</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;">→ 5</div>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);">→</div>
-        <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.5rem .9rem;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">tour 3</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;color:#7eb5ff;">acc=5 + qty=1</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;">→ 6</div>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);">→</div>
-        <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:8px;padding:.5rem .9rem;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">résultat</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:#7ee8b8;">total = 6</div>
-        </div>
-      </div>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;">Le badge "6" s'affiche sur l'icône panier dans la navbar</div>
-  </div> — ce qui voyage vers le panier</h3>
-  <p>Avant d'appeler <ic>PearTechCart.add()</ic> ou localStorage, le code fabrique un objet <ic>cartItem</ic> standardisé. Voici sa structure exacte et pourquoi chaque champ est là.</p>
-  <div class="diag">
-    <div class="dtitle">Anatomie de l'objet cartItem</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.73rem;line-height:1.9;color:var(--t2);">
-        {<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">id</span>: <span style="color:#f7d97a;">42</span>,<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">name</span>: <span style="color:#7ee8b8;">"iPhone 15 Pro"</span>,<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">price</span>: <span style="color:#f7d97a;">1199</span>,<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">image</span>: <span style="color:#7ee8b8;">"https://..."</span>,<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">specs</span>: { processor: <span style="color:#7ee8b8;">"A17"</span>, … },<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">categoryId</span>: <span style="color:#7ee8b8;">"cat_apple"</span>,<br>
-        &nbsp;&nbsp;<span style="color:#7eb5ff;">quantity</span>: <span style="color:#f7d97a;">1</span><br>
-        }
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.5rem;">
-        <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>id</ic> — clé pour retrouver l'article dans le panier existant et détecter les doublons</div>
-        <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>name + image</ic> — pour l'affichage dans la page panier sans avoir à re-interroger la DB</div>
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>price</ic> — capturé au moment du clic. Si le prix change sur le site, le panier garde l'ancien prix</div>
-        <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>quantity: 1</ic> — toujours 1 à la création. Si le même produit est ajouté à nouveau, c'est <ic>existing.quantity++</ic> qui incrémente</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>L'animation du bouton — pas à pas</h3>
-  <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// Sauvegarde le contenu original du bouton (l'icône SVG caddie)
+</pre></div> <h3>Comprendre .reduce() en image</h3> <div class="diag"> <div class="dtitle">Comment .reduce() calcule le total d'articles dans le panier</div> <div style="display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-bottom:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);margin-bottom:.4rem;">Panier : [{qty:2}, {qty:3}, {qty:1}] · départ acc=0</div> <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;justify-content:center;"> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.5rem .9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">tour 1</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;color:#7eb5ff;">acc=0 + qty=2</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;"> 2</div> </div> <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);"></div> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.5rem .9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">tour 2</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;color:#7eb5ff;">acc=2 + qty=3</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;"> 5</div> </div> <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);"></div> <div style="background:rgba(79,142,255,.1);border:1px solid rgba(79,142,255,.35);border-radius:8px;padding:.5rem .9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">tour 3</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;color:#7eb5ff;">acc=5 + qty=1</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;"> 6</div> </div> <div style="font-family:'JetBrains Mono',monospace;color:var(--t3);"></div> <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:8px;padding:.5rem .9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">résultat</div> <div style="font-family:'JetBrains Mono',monospace;font-size:1.1rem;font-weight:700;color:#7ee8b8;">total = 6</div> </div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;">Le badge "6" s'affiche sur l'icône panier dans la navbar</div> </div> — ce qui voyage vers le panier</h3> <p>Avant d'appeler <ic>PearTechCart.add()</ic> ou localStorage, le code fabrique un objet <ic>cartItem</ic> standardisé. Voici sa structure exacte et pourquoi chaque champ est là.</p> <div class="diag"> <div class="dtitle">Anatomie de l'objet cartItem</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.73rem;line-height:1.9;color:var(--t2);"> {<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">id</span>: <span style="color:#f7d97a;">42</span>,<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">name</span>: <span style="color:#7ee8b8;">"iPhone 15 Pro"</span>,<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">price</span>: <span style="color:#f7d97a;">1199</span>,<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">image</span>: <span style="color:#7ee8b8;">"https://..."</span>,<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">specs</span>: { processor: <span style="color:#7ee8b8;">"A17"</span>, … },<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">categoryId</span>: <span style="color:#7ee8b8;">"cat_apple"</span>,<br> &nbsp;&nbsp;<span style="color:#7eb5ff;">quantity</span>: <span style="color:#f7d97a;">1</span><br> }
+</div> <div style="display:flex;flex-direction:column;gap:.5rem;"> <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>id</ic> — clé pour retrouver l'article dans le panier existant et détecter les doublons</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>name + image</ic> — pour l'affichage dans la page panier sans avoir à re-interroger la DB</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>price</ic> — capturé au moment du clic. Si le prix change sur le site, le panier garde l'ancien prix</div> <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.55rem .8rem;font-size:.78rem;"><ic>quantity: 1</ic> — toujours 1 à la création. Si le même produit est ajouté à nouveau, c'est <ic>existing.quantity++</ic> qui incrémente</div> </div> </div> </div> <h3>L'animation du bouton — pas à pas</h3> <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// Sauvegarde le contenu original du bouton (l'icône SVG caddie)
 // POURQUOI ? Pour pouvoir le restaurer 1.6s plus tard</span>
 <span class="kw">const</span> <span class="vr">orig</span> = btn.innerHTML;
-
-<span class="cm">// Remplace l'icône par une coche ✓ dessinée en SVG</span>
+<span class="cm">// Remplace l'icône par une coche  dessinée en SVG</span>
 btn.innerHTML = <span class="s">'&lt;svg viewBox="0 0 24 24"&gt;&lt;polyline points="20 6 9 17 4 12"/&gt;&lt;/svg&gt;'</span>;
-
 <span class="cm">// Désactive le bouton pour empêcher un double-clic accidentel
 // POURQUOI ? Sans ça, l'utilisateur pourrait cliquer 5 fois pendant l'animation
 // et ajouter 5 fois le même produit sans le vouloir</span>
 btn.disabled = <span class="kw">true</span>;
-
 <span class="cm">// setTimeout(fonction, délai_en_ms) = "dans X ms, exécute cette fonction"
 // 1600 ms = 1,6 secondes = durée pendant laquelle la coche est visible</span>
 <span class="fn">setTimeout</span>(() <span class="op">=&gt;</span> {
-    btn.innerHTML = orig;    <span class="cm">// Remet l'icône caddie</span>
-    btn.disabled  = <span class="kw">false</span>;  <span class="cm">// Réactive le bouton</span>
+btn.innerHTML = orig;    <span class="cm">// Remet l'icône caddie</span> btn.disabled  = <span class="kw">false</span>;  <span class="cm">// Réactive le bouton</span>
 }, <span class="nm">1600</span>);
 </pre></div>
 </div>
-<hr>
-
-<!-- ══ 07 INIT ══ -->
-<div class="sec" id="init">
-  <div class="slabel">07 — Initialisation</div>
-  <h2>init( attempts ) — Attendre sans bloquer</h2>
-  <p><ic>product_grid.js</ic> se charge vite, mais <ic>data.js</ic> (qui contient PearTechDB) peut prendre du temps à cause du réseau. On ne peut pas juste "attendre" — le navigateur se figerait. La solution : vérifier régulièrement, jusqu'à 50 fois.</p>
-
-  <div class="box ana"><span class="bi">📞</span><div><b>Analogie :</b> C'est comme appeler un collègue qui n'est peut-être pas encore arrivé au bureau. Plutôt que de rester scotché au téléphone (ce qui bloquerait tout), vous laissez un message qui dit "rappelle dans 100ms". S'il n'est toujours pas là, vous relaissez le même message. Après 50 tentatives sans réponse (5 secondes), vous laissez un message d'erreur sur sa boîte vocale.</div></div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>Récursion</b> = une fonction qui s'appelle elle-même. Ici <ic>init()</ic> appelle <ic>init(attempts + 1)</ic>. Sans le compteur <ic>attempts</ic> et la condition <ic>&lt; 50</ic>, ça tournerait indéfiniment — comme deux miroirs se faisant face.<br><br><b>setTimeout(fn, 100)</b> = "dans 100 millisecondes, exécute fn". 100 ms = 0.1 seconde. 50 × 100 ms = 5 000 ms = 5 secondes. Si PearTechDB n'est toujours pas là en 5s, il y a un vrai problème réseau.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Flux de init() — le système de réessai</div>
-    <div class="vc">
-      <div class="vn w cgr">DOMContentLoaded → init() lancée pour la première fois (attempts = 0)</div>
-      <div class="va">↓</div>
-      <div class="vn w cy">window.PearTechDB existe-t-il déjà en mémoire ?</div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="fl flg">OUI — DB prête</div>
-        <div class="va">↓</div>
-        <div class="vn cg">Compose la liste des 8 produits (bestsellers + nouveautés)</div>
-        <div class="va">↓</div>
-        <div class="vn cb">Appelle renderProducts() → la grille s'affiche</div>
-      </div>
-      <div class="fc">
-        <div class="fl flr">NON — pas encore là</div>
-        <div class="va">↓</div>
-        <div class="vn cy">attempts &lt; 50 ? (moins de 5 secondes écoulées ?)</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;width:100%;margin-top:.3rem;">
-          <div class="fc">
-            <div class="fl flg" style="font-size:.62rem;">OUI — on réessaie</div>
-            <div class="va">↓</div>
-            <div class="vn cb" style="font-size:.72rem;">setTimeout 100ms → init(attempts+1)</div>
-          </div>
-          <div class="fc">
-            <div class="fl flr" style="font-size:.62rem;">NON — timeout</div>
-            <div class="va">↓</div>
-            <div class="vn cr" style="font-size:.72rem;">Message d'erreur + bouton "Réessayer" affiché dans la grille</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <h3>Sélection intelligente des 8 produits à afficher</h3>
-  <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// On compose une liste en deux étapes :
+<hr> <!-- ══ 07 INIT ══ -->
+<div class="sec" id="init"> <div class="slabel">07 — Initialisation</div> <h2>init( attempts ) — Attendre sans bloquer</h2> <p><ic>product_grid.js</ic> se charge vite, mais <ic>data.js</ic> (qui contient PearTechDB) peut prendre du temps à cause du réseau. On ne peut pas juste "attendre" — le navigateur se figerait. La solution : vérifier régulièrement, jusqu'à 50 fois.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> C'est comme appeler un collègue qui n'est peut-être pas encore arrivé au bureau. Plutôt que de rester scotché au téléphone (ce qui bloquerait tout), vous laissez un message qui dit "rappelle dans 100ms". S'il n'est toujours pas là, vous relaissez le même message. Après 50 tentatives sans réponse (5 secondes), vous laissez un message d'erreur sur sa boîte vocale.</div></div> <div class="box def"><span class="bi"></span><div><b>Récursion</b> = une fonction qui s'appelle elle-même. Ici <ic>init()</ic> appelle <ic>init(attempts + 1)</ic>. Sans le compteur <ic>attempts</ic> et la condition <ic>&lt; 50</ic>, ça tournerait indéfiniment — comme deux miroirs se faisant face.<br><br><b>setTimeout(fn, 100)</b> = "dans 100 millisecondes, exécute fn". 100 ms = 0.1 seconde. 50 × 100 ms = 5 000 ms = 5 secondes. Si PearTechDB n'est toujours pas là en 5s, il y a un vrai problème réseau.</div></div> <div class="diag"> <div class="dtitle">Flux de init() — le système de réessai</div> <div class="vc"> <div class="vn w cgr">DOMContentLoaded  init() lancée pour la première fois (attempts = 0)</div> <div class="va"></div> <div class="vn w cy">window.PearTechDB existe-t-il déjà en mémoire ?</div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flg">OUI — DB prête</div> <div class="va"></div> <div class="vn cg">Compose la liste des 8 produits (bestsellers + nouveautés)</div> <div class="va"></div> <div class="vn cb">Appelle renderProducts()  la grille s'affiche</div> </div> <div class="fc"> <div class="fl flr">NON — pas encore là</div> <div class="va"></div> <div class="vn cy">attempts &lt; 50 ? (moins de 5 secondes écoulées ?)</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;width:100%;margin-top:.3rem;"> <div class="fc"> <div class="fl flg" style="font-size:.62rem;">OUI — on réessaie</div> <div class="va"></div> <div class="vn cb" style="font-size:.72rem;">setTimeout 100ms  init(attempts+1)</div> </div> <div class="fc"> <div class="fl flr" style="font-size:.62rem;">NON — timeout</div> <div class="va"></div> <div class="vn cr" style="font-size:.72rem;">Message d'erreur + bouton "Réessayer" affiché dans la grille</div> </div> </div> </div> </div> </div> <h3>Sélection intelligente des 8 produits à afficher</h3> <div class="cb2"><span class="cbl">javascript</span><pre><span class="cm">// On compose une liste en deux étapes :
 // 1. Tous les bestsellers (isBestSeller = true)
 // 2. Les nouveautés qui ne sont PAS déjà dans les bestsellers
 //    (pour éviter les doublons si un produit est à la fois new et bestseller)
-// Ensuite .slice(0, 8) prend au maximum les 8 premiers</span>
-
-<span class="kw">const</span> <span class="vr">featured</span> = [
-    ...db.products.<span class="fn">filter</span>(p <span class="op">=&gt;</span> p.isBestSeller),          <span class="cm">// bestsellers</span>
-    ...db.products.<span class="fn">filter</span>(p <span class="op">=&gt;</span> p.isNew <span class="op">&amp;&amp;</span> <span class="op">!</span>p.isBestSeller) <span class="cm">// nouveautés non-bestseller</span>
+// Ensuite .slice(0, 8) prend au maximum les 8 premiers</span> <span class="kw">const</span> <span class="vr">featured</span> = [
+...db.products.<span class="fn">filter</span>(p <span class="op">=&gt;</span> p.isBestSeller),          <span class="cm">// bestsellers</span> ...db.products.<span class="fn">filter</span>(p <span class="op">=&gt;</span> p.isNew <span class="op">&amp;&amp;</span> <span class="op">!</span>p.isBestSeller) <span class="cm">// nouveautés non-bestseller</span>
 ].<span class="fn">slice</span>(<span class="nm">0</span>, <span class="nm">8</span>);
-
 <span class="cm">// Si aucun produit n'est ni bestseller ni nouveau,
 // on affiche simplement les 8 premiers de la base
 // featured.length ? featured : ... = "si featured est non-vide, utilise-le, sinon utilise..."</span>
 <span class="fn">renderProducts</span>(featured.length <span class="op">?</span> featured <span class="op">:</span> db.products.<span class="fn">slice</span>(<span class="nm">0</span>, <span class="nm">8</span>));
-</pre></div>
+</pre></div> <div class="box def"><span class="bi"></span><div><b>Spread operator (...)</b> : les trois points "déversent" un tableau dans un autre. <ic>[...A, ...B]</ic> crée un nouveau tableau avec les éléments de A, puis ceux de B. Ni A ni B ne sont modifiés.<br><br>Exemple : <ic>[...[1,2], ...[3,4]]</ic> <ic>[1, 2, 3, 4]</ic><br><br><b>.filter(condition)</b> : crée un nouveau tableau ne gardant que les éléments pour lesquels la condition est vraie.<br><br><b>.slice(0, 8)</b> : crée un nouveau tableau avec les éléments de l'index 0 à 7 (8 non inclus). Les index commencent à 0 en JavaScript.</div></div> <h3>Visualisation — comment les 8 produits sont choisis</h3> <div class="diag"> <div class="dtitle">Sélection des produits à afficher — sur 12 produits en DB</div> <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.2rem;"> <div style="background:rgba(245,197,66,.13);border:1px solid rgba(245,197,66,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#f7d97a;"> Bestseller<br><span style="font-size:.58rem;opacity:.8">isNew: false</span></div> <div style="background:rgba(86,209,158,.13);border:1px solid rgba(86,209,158,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;"> Nouveau<br><span style="font-size:.58rem;opacity:.8">isBestSeller: false</span></div> <div style="background:rgba(245,197,66,.13);border:1px solid rgba(245,197,66,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#f7d97a;"> Bestseller<br><span style="font-size:.58rem;opacity:.8">isNew: false</span></div> <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.35);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#d3a8ff;"> Les deux<br><span style="font-size:.58rem;opacity:.8">ignoré en étape 2</span></div> <div style="background:rgba(86,209,158,.13);border:1px solid rgba(86,209,158,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;"> Nouveau<br><span style="font-size:.58rem;opacity:.8">isBestSeller: false</span></div> <div style="background:rgba(139,147,168,.06);border:1px dashed rgba(139,147,168,.25);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Produit normal<br><span style="font-size:.58rem;">non sélectionné</span></div> <div style="background:rgba(139,147,168,.06);border:1px dashed rgba(139,147,168,.25);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Produit normal<br><span style="font-size:.58rem;">non sélectionné</span></div> <div style="background:rgba(139,147,168,.06);border:1px dashed rgba(139,147,168,.25);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Produit normal<br><span style="font-size:.58rem;">non sélectionné</span></div> </div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;font-size:.78rem;"> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.7rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.35rem;">Étape 1 — bestsellers</div> <div style="color:var(--t2);">filter(isBestSeller)  produits 1, 3, 4 (le double-casquette compte comme bestseller)</div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:8px;padding:.7rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.35rem;">Étape 2 — nouveaux non-BS</div> <div style="color:var(--t2);">filter(isNew && !isBestSeller)  produits 2 et 5 (le 4 est exclu : déjà dans l'étape 1)</div> </div> <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.7rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.35rem;">.slice(0, 8)</div> <div style="color:var(--t2);">Résultat combiné : [1, 3, 4, 2, 5]  5 produits, pas besoin de couper ici</div> </div> </div> </div> <!-- ══ 08 RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">08 — Récapitulatif</div> <h2>Le film complet, de A à Z</h2>
+<div class="diag"> <div class="dtitle">Le film complet de A à Z — page d'accueil</div> <div style="display:flex;flex-direction:column;gap:.25rem;max-width:640px;"> <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded  init(0)</div></div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> window.PearTechDB ? Non  setTimeout(init, 100) · attempts &lt; 50</div> <div class="flow-row"><div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">PearTechDB disponible</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">[...bestsellers, ...nouveautés non-bestseller].slice(0, 8)</div></div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> renderProducts(featured)</div> <div class="flow-row"><div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">.map(p => buildCardHTML(p))</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">prix formaté · badge prioritaire · stars · 2 specs</div></div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> innerHTML d'un seul coup dans #products-grid</div> <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Clic .btn-add-cart</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">addToCartFromGrid(id, btn)  PearTechCart.add() · icône  1.6s</div></div> <div class="flow-row"><div class="flow-box" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;">MutationObserver actif</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">nouvelles cartes injectées  IntersectionObserver relancé  animation reveal</div></div> </div>
+</div> <div class="tl"> <div class="tli"><div class="tld" style="background:var(--a)"></div> <div class="tlh"><div class="tls">Étape 1</div><div class="tlt">Le fichier se charge</div></div> <div class="tlb">L'IIFE s'exécute. <ic>PLACEHOLDER</ic> et <ic>FALLBACKS</ic> sont créés. Les 3 fonctions sont définies (mais pas encore exécutées — définir ≠ exécuter). Le rendez-vous DOMContentLoaded est enregistré.</div> </div> <div class="tli"><div class="tld" style="background:var(--a4)"></div> <div class="tlh"><div class="tls">Étape 2</div><div class="tlt">Le HTML de la page est entièrement chargé</div></div> <div class="tlb">L'événement <ic>DOMContentLoaded</ic> se déclenche. <ic>init()</ic> est appelée pour la première fois, avec <ic>attempts = 0</ic>.</div> </div> <div class="tli"><div class="tld" style="background:var(--a5)"></div> <div class="tlh"><div class="tls">Étape 3</div><div class="tlt">Attente de PearTechDB</div></div> <div class="tlb"><ic>init()</ic> vérifie si <ic>window.PearTechDB</ic> existe. Si non, elle programme un nouvel essai dans 100ms (et passe à <ic>attempts = 1</ic>, puis 2, etc.). Maximum 50 tentatives.</div> </div> <div class="tli"><div class="tld" style="background:var(--a3)"></div> <div class="tlh"><div class="tls">Étape 4</div><div class="tlt">PearTechDB est disponible</div></div> <div class="tlb">La liste des 8 produits est composée (bestsellers en priorité, puis nouveautés, maximum 8). <ic>renderProducts()</ic> est appelée.</div> </div> <div class="tli"><div class="tld" style="background:var(--a2)"></div> <div class="tlh"><div class="tls">Étape 5</div><div class="tlt">Fabrication et injection des cartes</div></div> <div class="tlb"><ic>.map()</ic> transforme chaque produit en HTML. Pour chaque carte : prix formaté en français, badge prioritaire, alerte stock si nécessaire, 2 specs en résumé, étoiles calculées. Tout est injecté d'un seul coup dans <ic>#products-grid</ic>.</div> </div> <div class="tli"><div class="tld" style="background:var(--a3)"></div> <div class="tlh"><div class="tls">Étape 6</div><div class="tlt">Boutons "Ajouter au panier" activés</div></div> <div class="tlb">Chaque bouton <ic>.btn-add-cart</ic> reçoit un écouteur de clic. La grille est maintenant interactive.</div> </div> <div class="tli" style="margin-bottom:0"><div class="tld" style="background:var(--a4)"></div> <div class="tlh"><div class="tls">Étape 7</div><div class="tlt">L'utilisateur clique "Ajouter"</div></div> <div class="tlb">Le produit est retrouvé dans PearTechDB, construit en <ic>cartItem</ic>, envoyé à <ic>PearTechCart.add()</ic> (ou localStorage en fallback). L'icône caddie devient une coche  pendant 1,6 secondes, puis revient à l'état initial.</div> </div> </div>
+</div> </div>
 
-  <div class="box def"><span class="bi">🔤</span><div><b>Spread operator (...)</b> : les trois points "déversent" un tableau dans un autre. <ic>[...A, ...B]</ic> crée un nouveau tableau avec les éléments de A, puis ceux de B. Ni A ni B ne sont modifiés.<br><br>Exemple : <ic>[...[1,2], ...[3,4]]</ic> → <ic>[1, 2, 3, 4]</ic><br><br><b>.filter(condition)</b> : crée un nouveau tableau ne gardant que les éléments pour lesquels la condition est vraie.<br><br><b>.slice(0, 8)</b> : crée un nouveau tableau avec les éléments de l'index 0 à 7 (8 non inclus). Les index commencent à 0 en JavaScript.</div></div>
-
-  <h3>Visualisation — comment les 8 produits sont choisis</h3>
-  <div class="diag">
-    <div class="dtitle">Sélection des produits à afficher — sur 12 produits en DB</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.2rem;">
-      <div style="background:rgba(245,197,66,.13);border:1px solid rgba(245,197,66,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#f7d97a;">🏆 Bestseller<br><span style="font-size:.58rem;opacity:.8">isNew: false</span></div>
-      <div style="background:rgba(86,209,158,.13);border:1px solid rgba(86,209,158,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;">🆕 Nouveau<br><span style="font-size:.58rem;opacity:.8">isBestSeller: false</span></div>
-      <div style="background:rgba(245,197,66,.13);border:1px solid rgba(245,197,66,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#f7d97a;">🏆 Bestseller<br><span style="font-size:.58rem;opacity:.8">isNew: false</span></div>
-      <div style="background:rgba(192,132,252,.1);border:1px solid rgba(192,132,252,.35);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#d3a8ff;">🏆🆕 Les deux<br><span style="font-size:.58rem;opacity:.8">ignoré en étape 2</span></div>
-      <div style="background:rgba(86,209,158,.13);border:1px solid rgba(86,209,158,.45);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#7ee8b8;">🆕 Nouveau<br><span style="font-size:.58rem;opacity:.8">isBestSeller: false</span></div>
-      <div style="background:rgba(139,147,168,.06);border:1px dashed rgba(139,147,168,.25);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Produit normal<br><span style="font-size:.58rem;">non sélectionné</span></div>
-      <div style="background:rgba(139,147,168,.06);border:1px dashed rgba(139,147,168,.25);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Produit normal<br><span style="font-size:.58rem;">non sélectionné</span></div>
-      <div style="background:rgba(139,147,168,.06);border:1px dashed rgba(139,147,168,.25);border-radius:8px;padding:.55rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">Produit normal<br><span style="font-size:.58rem;">non sélectionné</span></div>
+<hr>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;font-size:.78rem;">
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.7rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.35rem;">Étape 1 — bestsellers</div>
-        <div style="color:var(--t2);">filter(isBestSeller) → produits 1, 3, 4 (le double-casquette compte comme bestseller)</div>
-      </div>
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:8px;padding:.7rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.35rem;">Étape 2 — nouveaux non-BS</div>
-        <div style="color:var(--t2);">filter(isNew && !isBestSeller) → produits 2 et 5 (le 4 est exclu : déjà dans l'étape 1)</div>
-      </div>
-      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:8px;padding:.7rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.35rem;">.slice(0, 8)</div>
-        <div style="color:var(--t2);">Résultat combiné : [1, 3, 4, 2, 5] → 5 produits, pas besoin de couper ici</div>
-      </div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Template literal</div>
+      <div class="glos-def">Chaîne avec backtick <ic>`...`</ic> qui permet d'insérer des expressions avec <ic>${variable}</ic> et des retours à la ligne. Remplace la concaténation de strings. Utilisé massivement pour générer le HTML des cards dynamiquement.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">dataset</div>
+      <div class="glos-def">Interface qui expose les attributs <ic>data-*</ic> d'un élément. <ic>el.dataset.productId</ic> lit <ic>data-product-id</ic>. Permet de stocker des données métier directement dans le HTML sans variables globales. La conversion camelCase est automatique : <ic>data-product-id</ic> → <ic>dataset.productId</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Opérateur spread <ic>[...]</ic></div>
+      <div class="glos-def">Étale les éléments d'un itérable. <ic>[...arr]</ic> crée une copie superficielle. <ic>[...a, ...b]</ic> fusionne. Utilisé pour copier un tableau avant de le trier sans modifier l'original.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">classList</div>
+      <div class="glos-def">Interface de manipulation des classes CSS. <ic>add()</ic>, <ic>remove()</ic>, <ic>toggle()</ic>, <ic>contains()</ic>. Plus fiable que modifier <ic>className</ic> comme une string. <ic>toggle('active', condition)</ic> ajoute ou retire selon un booléen.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">MutationObserver</div>
+      <div class="glos-def">API qui observe les modifications du DOM en temps réel et appelle un callback quand des nœuds sont ajoutés ou supprimés. Plus efficace que poller le DOM avec <ic>setInterval</ic>. Utilisé pour détecter les cards produit injectées dynamiquement.</div>
     </div>
   </div>
-
-<!-- ══ 08 RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">08 — Récapitulatif</div>
-  <h2>Le film complet, de A à Z</h2>
-<div class="diag">
-  <div class="dtitle">Le film complet de A à Z — page d'accueil</div>
-  <div style="display:flex;flex-direction:column;gap:.25rem;max-width:640px;">
-    <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded → init(0)</div></div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ window.PearTechDB ? Non → setTimeout(init, 100) · attempts &lt; 50</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">PearTechDB disponible</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">[...bestsellers, ...nouveautés non-bestseller].slice(0, 8)</div></div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ renderProducts(featured)</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">.map(p => buildCardHTML(p))</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">prix formaté · badge prioritaire · stars · 2 specs</div></div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ innerHTML d'un seul coup dans #products-grid</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Clic .btn-add-cart</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">addToCartFromGrid(id, btn) → PearTechCart.add() · icône ✓ 1.6s</div></div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;">MutationObserver actif</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">nouvelles cartes injectées → IntersectionObserver relancé → animation reveal</div></div>
-  </div>
-</div>
-
-  <div class="tl">
-    <div class="tli"><div class="tld" style="background:var(--a)"></div>
-      <div class="tlh"><div class="tls">Étape 1</div><div class="tlt">Le fichier se charge</div></div>
-      <div class="tlb">L'IIFE s'exécute. <ic>PLACEHOLDER</ic> et <ic>FALLBACKS</ic> sont créés. Les 3 fonctions sont définies (mais pas encore exécutées — définir ≠ exécuter). Le rendez-vous DOMContentLoaded est enregistré.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a4)"></div>
-      <div class="tlh"><div class="tls">Étape 2</div><div class="tlt">Le HTML de la page est entièrement chargé</div></div>
-      <div class="tlb">L'événement <ic>DOMContentLoaded</ic> se déclenche. <ic>init()</ic> est appelée pour la première fois, avec <ic>attempts = 0</ic>.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a5)"></div>
-      <div class="tlh"><div class="tls">Étape 3</div><div class="tlt">Attente de PearTechDB</div></div>
-      <div class="tlb"><ic>init()</ic> vérifie si <ic>window.PearTechDB</ic> existe. Si non, elle programme un nouvel essai dans 100ms (et passe à <ic>attempts = 1</ic>, puis 2, etc.). Maximum 50 tentatives.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a3)"></div>
-      <div class="tlh"><div class="tls">Étape 4</div><div class="tlt">PearTechDB est disponible</div></div>
-      <div class="tlb">La liste des 8 produits est composée (bestsellers en priorité, puis nouveautés, maximum 8). <ic>renderProducts()</ic> est appelée.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a2)"></div>
-      <div class="tlh"><div class="tls">Étape 5</div><div class="tlt">Fabrication et injection des cartes</div></div>
-      <div class="tlb"><ic>.map()</ic> transforme chaque produit en HTML. Pour chaque carte : prix formaté en français, badge prioritaire, alerte stock si nécessaire, 2 specs en résumé, étoiles calculées. Tout est injecté d'un seul coup dans <ic>#products-grid</ic>.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a3)"></div>
-      <div class="tlh"><div class="tls">Étape 6</div><div class="tlt">Boutons "Ajouter au panier" activés</div></div>
-      <div class="tlb">Chaque bouton <ic>.btn-add-cart</ic> reçoit un écouteur de clic. La grille est maintenant interactive.</div>
-    </div>
-    <div class="tli" style="margin-bottom:0"><div class="tld" style="background:var(--a4)"></div>
-      <div class="tlh"><div class="tls">Étape 7</div><div class="tlt">L'utilisateur clique "Ajouter"</div></div>
-      <div class="tlb">Le produit est retrouvé dans PearTechDB, construit en <ic>cartItem</ic>, envoyé à <ic>PearTechCart.add()</ic> (ou localStorage en fallback). L'icône caddie devient une coche ✓ pendant 1,6 secondes, puis revient à l'état initial.</div>
-    </div>
-  </div>
-</div>
-
 </div>
 </body>
 </html>

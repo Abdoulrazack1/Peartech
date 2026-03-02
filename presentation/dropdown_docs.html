@@ -5,819 +5,342 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — dropdown.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#f97316;--a2:#ff6b6b;--a3:#56d19e;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;flex-wrap:wrap;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a3);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  .sec p b,.sec p strong{color:var(--t);font-weight:700;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#ffb380;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cb{background:rgba(249,115,22,.11);border:1px solid rgba(249,115,22,.4);color:#ffb380;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .cbl{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
-  .fork{display:grid;gap:1rem;width:100%;max-width:720px;}
-  .fork.f2{grid-template-columns:1fr 1fr;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
-  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
-  .fc .vn{width:100%;max-width:100%;}
-  .fc .va{width:100%;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
-  .box.info{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);color:#ffb380;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-  .box.bad {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
-  .box.def {background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
-  .box.ana {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box b,.box strong{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#ffb380}.s{color:#7ee8b8}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#ffb3a0}
-  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-  .grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
-  .grow:last-child{border-bottom:none;}
-  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
-  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
-  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
-  .tbl tr:last-child td{border-bottom:none;}
-  .tc{font-family:'JetBrains Mono',monospace;color:#ffb380;font-size:.76rem;}
-  .tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
-  .tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
-  .tli{position:relative;margin-bottom:1.8rem;}
-  .tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
-  .tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
-  .tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
-  .tlt{font-size:.95rem;font-weight:700;}
-  .tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
-  .tlb ic{background:var(--bg3);border:1px solid var(--border);}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── SCHEMAS PASS 2 ─── */
-  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
-  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
-  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
-  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-  .kbox{border-radius:11px;padding:.9rem 1rem;}
-  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .kbox-item:last-child{border-bottom:none;}
-  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
-  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-  .seq{display:flex;flex-direction:column;gap:.3rem;}
-  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-  .trans-line{width:28px;height:1px;background:var(--t3);}
-  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#f97316;--a2:#ff6b6b;--a3:#56d19e;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;flex-wrap:wrap;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a3);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+.sec p b,.sec p strong{color:var(--t);font-weight:700;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#ffb380;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cb{background:rgba(249,115,22,.11);border:1px solid rgba(249,115,22,.4);color:#ffb380;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.cbl{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.fork{display:grid;gap:1rem;width:100%;max-width:720px;}
+.fork.f2{grid-template-columns:1fr 1fr;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
+.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.flr{background:rgba(255,107,107,.15);color:#ff9090;}
+.fc .vn{width:100%;max-width:100%;}
+.fc .va{width:100%;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
+.box.info{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);color:#ffb380;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.bad {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.def {background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.box.ana {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box b,.box strong{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#ffb380}.s{color:#7ee8b8}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#ffb3a0}
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
+.grow:last-child{border-bottom:none;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+.tbl tr:last-child td{border-bottom:none;}
+.tc{font-family:'JetBrains Mono',monospace;color:#ffb380;font-size:.76rem;}
+.tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+.tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+.tli{position:relative;margin-bottom:1.8rem;}
+.tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+.tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+.tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+.tlt{font-size:.95rem;font-weight:700;}
+.tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
+.tlb ic{background:var(--bg3);border:1px solid var(--border);}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── SCHEMAS PASS 2 ─── */
+.schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+.pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+.pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+.row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+.sp-row{display:flex;flex-direction:column;gap:.3rem;}
+.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+.trans-line{width:28px;height:1px;background:var(--t3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">dropdown.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#structure">Structure</a>
-  <a href="#attente">Attente DB</a>
-  <a href="#creation">Création menu</a>
-  <a href="#events">Événements</a>
-  <a href="#toggle">Toggle</a>
-  <a href="#customevent">CustomEvent</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">dropdown.js</div> <a href="#intro">Intro</a> <a href="#structure">Structure</a> <a href="#attente">Attente DB</a> <a href="#creation">Création menu</a> <a href="#events">Événements</a> <a href="#toggle">Toggle</a> <a href="#customevent">CustomEvent</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>window.PearTechDB</b><br><span style="color:var(--t3);font-size:.71rem;">PearTechDB.categories</span></div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#fb923c22;color:#fb923c;border:1px solid #fb923c44;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#fb923c22;color:#fb923c;border:1px solid #fb923c44;"> TRAITEMENTS</div>
 <div class="carte-item"><b>createDropdownMenu(cats)</b><br><span style="color:var(--t3);font-size:.71rem;">génère les items du menu nav</span></div>
 <div class="carte-item"><b>handleHover()</b><br><span style="color:var(--t3);font-size:.71rem;">ouverture au survol</span></div>
-<div class="carte-item"><b>handleClick(cat)</b><br><span style="color:var(--t3);font-size:.71rem;">clic → dispatch événement</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+<div class="carte-item"><b>handleClick(cat)</b><br><span style="color:var(--t3);font-size:.71rem;">clic  dispatch événement</span></div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>CustomEvent categorySelected</b><br><span style="color:var(--t3);font-size:.71rem;">detail: {category, link}</span></div>
 <div class="carte-item"><b>Menu HTML</b><br><span style="color:var(--t3);font-size:.71rem;">injecté dans la nav</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>dropdown.js</span></h1> <p>Ce fichier crée le menu déroulant des catégories dans la navigation. Il génère son HTML dynamiquement depuis la base de données, gère l'ouverture/fermeture, et communique les clics aux autres scripts via des événements personnalisés.</p> <div class="fbadge"><div class="dot"></div>dropdown.js · 6 fonctions · ~170 lignes de code</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Menu de navigation généré entièrement en JavaScript</h2>
+<div class="diag"> <div class="dtitle">dropdown.js — le seul composant de navigation généré à 100% en JS</div> <div class="two-col"> <div class="mini-box" style="background:rgba(139,147,168,.06);border:1px solid var(--border);"> <div class="mini-title" style="color:var(--t3);">Contrairement aux menus HTML statiques</div> <div class="mini-item"> Pas de &lt;ul&gt;&lt;li&gt; dans le HTML</div> <div class="mini-item"> Pas de données hardcodées</div> <div class="mini-item"> Dépend de PearTechDB (attente async)</div> </div> <div class="mini-box" style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);"> <div class="mini-title" style="color:#fdba74;">Avantages du menu dynamique</div> <div class="mini-item"> Catégories lues depuis data.js</div> <div class="mini-item"> Ajouter une catégorie = juste data.js</div> <div class="mini-item"> Émet categorySelected  filtre catalogue</div> </div> </div>
+</div> <p>dropdown.js construit le menu des catégories au moment où la page se charge, l'insère dans la navigation, puis gère tous ses comportements : ouvrir au clic, fermer en cliquant ailleurs ou avec Échap, et notifier les autres scripts quand une catégorie est choisie.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> C'est comme un régisseur de théâtre. Au lever du rideau, il construit le décor (génère le menu). Il installe les mécanismes d'ouverture/fermeture (les événements). Et quand un acteur entre en scène (clic sur une catégorie), il crie l'info en coulisses (CustomEvent) pour que les autres régisseurs réagissent.</div></div> <h3>Vocabulaire essentiel — lisez ça en premier</h3> <div class="glos"> <div class="glos-head"> Termes utilisés dans ce fichier</div> <div class="grow"><div class="gterm">CustomEvent</div><div class="gdef">Un événement inventé par le développeur — pas un clic ou un keydown standard. <ic>new CustomEvent('nom', {detail: données})</ic> crée un événement sur mesure qu'on peut envoyer à qui on veut et qui transporte des données.</div></div> <div class="grow"><div class="gterm">dispatchEvent</div><div class="gdef">La méthode qui "lance" un événement. <ic>document.dispatchEvent(event)</ic> envoie l'événement sur tout le document. Tous les scripts qui écoutent ce nom d'événement le reçoivent.</div></div> <div class="grow"><div class="gterm">createElement</div><div class="gdef"><ic>document.createElement('div')</ic> crée un élément HTML en mémoire — il n'est pas encore visible dans la page. On le configure, puis on l'insère avec <ic>appendChild</ic> ou <ic>insertBefore</ic>.</div></div> <div class="grow"><div class="gterm">insertBefore</div><div class="gdef"><ic>parent.insertBefore(nouveau, reference)</ic> insère <ic>nouveau</ic> juste AVANT l'élément <ic>reference</ic> dans le parent. Permet de positionner précisément un élément.</div></div> <div class="grow"><div class="gterm">e.stopPropagation()</div><div class="gdef">Arrête la propagation d'un événement. Sans ça, un clic sur le bouton dropdown remonterait jusqu'au document — qui fermerait immédiatement le menu qu'on vient d'ouvrir.</div></div> <div class="grow"><div class="gterm">PearTechDBReady</div><div class="gdef">Événement personnalisé émis par data.js quand la base de données finit de se charger. Permet à dropdown.js d'attendre la DB sans boucle de réessai (contrairement à init() dans product_grid.js).</div></div> <div class="grow"><div class="gterm">classList.contains</div><div class="gdef"><ic>element.classList.contains('active')</ic> retourne <ic>true</ic> si l'élément a la classe "active", <ic>false</ic> sinon. Utilisé pour savoir si le menu est ouvert ou fermé sans regarder le CSS.</div></div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>dropdown.js</span></h1>
-  <p>Ce fichier crée le menu déroulant des catégories dans la navigation. Il génère son HTML dynamiquement depuis la base de données, gère l'ouverture/fermeture, et communique les clics aux autres scripts via des événements personnalisés.</p>
-  <div class="fbadge"><div class="dot"></div>dropdown.js · 6 fonctions · ~170 lignes de code</div>
-</div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Avant de commencer</div>
-  <h2>Menu de navigation généré entièrement en JavaScript</h2>
-<div class="diag">
-  <div class="dtitle">dropdown.js — le seul composant de navigation généré à 100% en JS</div>
-  <div class="two-col">
-    <div class="mini-box" style="background:rgba(139,147,168,.06);border:1px solid var(--border);">
-      <div class="mini-title" style="color:var(--t3);">Contrairement aux menus HTML statiques</div>
-      <div class="mini-item">❌ Pas de &lt;ul&gt;&lt;li&gt; dans le HTML</div>
-      <div class="mini-item">❌ Pas de données hardcodées</div>
-      <div class="mini-item">❌ Dépend de PearTechDB (attente async)</div>
-    </div>
-    <div class="mini-box" style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);">
-      <div class="mini-title" style="color:#fdba74;">Avantages du menu dynamique</div>
-      <div class="mini-item">✅ Catégories lues depuis data.js</div>
-      <div class="mini-item">✅ Ajouter une catégorie = juste data.js</div>
-      <div class="mini-item">✅ Émet categorySelected → filtre catalogue</div>
-    </div>
-  </div>
-</div>
-
-  <p>dropdown.js construit le menu des catégories au moment où la page se charge, l'insère dans la navigation, puis gère tous ses comportements : ouvrir au clic, fermer en cliquant ailleurs ou avec Échap, et notifier les autres scripts quand une catégorie est choisie.</p>
-
-  <div class="box ana"><span class="bi">🎭</span><div><b>Analogie :</b> C'est comme un régisseur de théâtre. Au lever du rideau, il construit le décor (génère le menu). Il installe les mécanismes d'ouverture/fermeture (les événements). Et quand un acteur entre en scène (clic sur une catégorie), il crie l'info en coulisses (CustomEvent) pour que les autres régisseurs réagissent.</div></div>
-
-  <h3>Vocabulaire essentiel — lisez ça en premier</h3>
-  <div class="glos">
-    <div class="glos-head">📖 Termes utilisés dans ce fichier</div>
-    <div class="grow"><div class="gterm">CustomEvent</div><div class="gdef">Un événement inventé par le développeur — pas un clic ou un keydown standard. <ic>new CustomEvent('nom', {detail: données})</ic> crée un événement sur mesure qu'on peut envoyer à qui on veut et qui transporte des données.</div></div>
-    <div class="grow"><div class="gterm">dispatchEvent</div><div class="gdef">La méthode qui "lance" un événement. <ic>document.dispatchEvent(event)</ic> envoie l'événement sur tout le document. Tous les scripts qui écoutent ce nom d'événement le reçoivent.</div></div>
-    <div class="grow"><div class="gterm">createElement</div><div class="gdef"><ic>document.createElement('div')</ic> crée un élément HTML en mémoire — il n'est pas encore visible dans la page. On le configure, puis on l'insère avec <ic>appendChild</ic> ou <ic>insertBefore</ic>.</div></div>
-    <div class="grow"><div class="gterm">insertBefore</div><div class="gdef"><ic>parent.insertBefore(nouveau, reference)</ic> insère <ic>nouveau</ic> juste AVANT l'élément <ic>reference</ic> dans le parent. Permet de positionner précisément un élément.</div></div>
-    <div class="grow"><div class="gterm">e.stopPropagation()</div><div class="gdef">Arrête la propagation d'un événement. Sans ça, un clic sur le bouton dropdown remonterait jusqu'au document — qui fermerait immédiatement le menu qu'on vient d'ouvrir.</div></div>
-    <div class="grow"><div class="gterm">PearTechDBReady</div><div class="gdef">Événement personnalisé émis par data.js quand la base de données finit de se charger. Permet à dropdown.js d'attendre la DB sans boucle de réessai (contrairement à init() dans product_grid.js).</div></div>
-    <div class="grow"><div class="gterm">classList.contains</div><div class="gdef"><ic>element.classList.contains('active')</ic> retourne <ic>true</ic> si l'élément a la classe "active", <ic>false</ic> sinon. Utilisé pour savoir si le menu est ouvert ou fermé sans regarder le CSS.</div></div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 STRUCTURE ══ -->
-<div class="sec" id="structure">
-  <div class="slabel">01 — Vue d'ensemble</div>
-  <h2>La structure globale du fichier</h2>
-  <p>Comme les autres fichiers, tout est dans une IIFE avec DOMContentLoaded. La première décision est : est-ce que PearTechDB est déjà disponible ?</p>
-
-  <div class="diag">
-    <div class="dtitle">Ordre d'exécution complet</div>
-    <div class="vc">
-      <div class="vn w cgr">📄 dropdown.js est chargé par le navigateur</div>
-      <div class="va">↓</div>
-      <div class="vn w cb">L'IIFE s'exécute — bulle isolée créée</div>
-      <div class="va">↓</div>
-      <div class="vn w cp">DOMContentLoaded — le HTML est prêt</div>
-      <div class="va">↓</div>
-      <div class="vn w cgr">Cherche le bouton <ic>.nav-dropdown</ic></div>
-      <div class="va">↓</div>
-      <div class="vn w cy">Bouton trouvé ?</div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="fl flr">NON</div>
-        <div class="va">↓</div>
-        <div class="vn cr">console.warn + return. Fin silencieuse.</div>
-      </div>
-      <div class="fc">
-        <div class="fl flg">OUI</div>
-        <div class="va">↓</div>
-        <div class="vn cy">window.PearTechDB est-il déjà là ?</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%;margin-top:.3rem;">
-          <div class="fc">
-            <div class="fl flg" style="font-size:.62rem;">OUI — DB prête</div>
-            <div class="va">↓</div>
-            <div class="vn cg" style="font-size:.72rem;">createDropdownMenu() + attachDropdownEvents()</div>
-          </div>
-          <div class="fc">
-            <div class="fl" style="background:rgba(249,115,22,.15);color:#ffb380;font-size:.62rem;">NON — attendre</div>
-            <div class="va">↓</div>
-            <div class="vn cb" style="font-size:.72rem;">Écoute l'événement 'PearTechDBReady'</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="diag">
-    <div class="dtitle">Carte des 6 fonctions et leurs relations</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem;">
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.85rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">createDropdownMenu()</div>
-        <div style="font-size:.76rem;color:var(--t2);">Génère le HTML du menu depuis PearTechDB ou les données statiques. Crée le wrapper. Une seule fois.</div>
-      </div>
-      <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:.85rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ffb380;margin-bottom:.4rem;">attachDropdownEvents()</div>
-        <div style="font-size:.76rem;color:var(--t2);">Installe les 3 écouteurs globaux : bouton, document, Échap.</div>
-      </div>
-      <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.85rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">attachDropdownItemEvents()</div>
-        <div style="font-size:.76rem;color:var(--t2);">Installe un écouteur sur chaque .dropdown-item pour émettre categorySelected.</div>
-      </div>
-      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.85rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.4rem;">toggleDropdown()</div>
-        <div style="font-size:.76rem;color:var(--t2);">Lit l'état du menu et appelle open ou close selon.</div>
-      </div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.85rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">openDropdown()</div>
-        <div style="font-size:.76rem;color:var(--t2);">Ajoute .active sur menu + bouton, tourne la flèche ↑.</div>
-      </div>
-      <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.85rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.4rem;">closeDropdown()</div>
-        <div style="font-size:.76rem;color:var(--t2);">Retire .active sur menu + bouton, remet la flèche ↓.</div>
-      </div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:2;">
-      DOMContentLoaded → <span style="color:#f7d97a;">createDropdownMenu()</span> → <span style="color:#ffb380;">attachDropdownEvents()</span> → <span style="color:#d3a8ff;">attachDropdownItemEvents()</span><br>
-      clic bouton → <span style="color:#7eb5ff;">toggleDropdown()</span> → <span style="color:#7ee8b8;">openDropdown()</span> ou <span style="color:#ff9090;">closeDropdown()</span><br>
-      clic item → <span style="color:#d3a8ff;">attachDropdownItemEvents()</span> émet CustomEvent + <span style="color:#ff9090;">closeDropdown()</span>
-    </div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre>(<span class="kw">function</span>() {
-    <span class="s">'use strict'</span>;
-
-    document.<span class="fn">addEventListener</span>(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
-
-        <span class="kw">const</span> <span class="vr">dropdownButton</span> = document.<span class="fn">querySelector</span>(<span class="s">'.nav-dropdown'</span>);
-
-        <span class="kw">if</span> (!dropdownButton) {
-            console.<span class="fn">warn</span>(<span class="s">'Bouton dropdown introuvable'</span>);
-            <span class="kw">return</span>;   <span class="cm">// Sortie propre si la page n'a pas de dropdown</span>
-        }
-
-        <span class="kw">if</span> (window.PearTechDB) {
-            <span class="fn">createDropdownMenu</span>();
-            <span class="fn">attachDropdownEvents</span>();
-        } <span class="kw">else</span> {
-            document.<span class="fn">addEventListener</span>(<span class="s">'PearTechDBReady'</span>, <span class="kw">function</span>() {
-                <span class="fn">createDropdownMenu</span>();
-                <span class="fn">attachDropdownEvents</span>();
-            });
-        }
-    });
+<hr> <!-- ══ 01 STRUCTURE ══ -->
+<div class="sec" id="structure"> <div class="slabel">01 — Vue d'ensemble</div> <h2>La structure globale du fichier</h2> <p>Comme les autres fichiers, tout est dans une IIFE avec DOMContentLoaded. La première décision est : est-ce que PearTechDB est déjà disponible ?</p> <div class="diag"> <div class="dtitle">Ordre d'exécution complet</div> <div class="vc"> <div class="vn w cgr"> dropdown.js est chargé par le navigateur</div> <div class="va"></div> <div class="vn w cb">L'IIFE s'exécute — bulle isolée créée</div> <div class="va"></div> <div class="vn w cp">DOMContentLoaded — le HTML est prêt</div> <div class="va"></div> <div class="vn w cgr">Cherche le bouton <ic>.nav-dropdown</ic></div> <div class="va"></div> <div class="vn w cy">Bouton trouvé ?</div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flr">NON</div> <div class="va"></div> <div class="vn cr">console.warn + return. Fin silencieuse.</div> </div> <div class="fc"> <div class="fl flg">OUI</div> <div class="va"></div> <div class="vn cy">window.PearTechDB est-il déjà là ?</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;width:100%;margin-top:.3rem;"> <div class="fc"> <div class="fl flg" style="font-size:.62rem;">OUI — DB prête</div> <div class="va"></div> <div class="vn cg" style="font-size:.72rem;">createDropdownMenu() + attachDropdownEvents()</div> </div> <div class="fc"> <div class="fl" style="background:rgba(249,115,22,.15);color:#ffb380;font-size:.62rem;">NON — attendre</div> <div class="va"></div> <div class="vn cb" style="font-size:.72rem;">Écoute l'événement 'PearTechDBReady'</div> </div> </div> </div> </div> </div> <div class="diag"> <div class="dtitle">Carte des 6 fonctions et leurs relations</div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;margin-bottom:.8rem;"> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.85rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">createDropdownMenu()</div> <div style="font-size:.76rem;color:var(--t2);">Génère le HTML du menu depuis PearTechDB ou les données statiques. Crée le wrapper. Une seule fois.</div> </div> <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:.85rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ffb380;margin-bottom:.4rem;">attachDropdownEvents()</div> <div style="font-size:.76rem;color:var(--t2);">Installe les 3 écouteurs globaux : bouton, document, Échap.</div> </div> <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:.85rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">attachDropdownItemEvents()</div> <div style="font-size:.76rem;color:var(--t2);">Installe un écouteur sur chaque .dropdown-item pour émettre categorySelected.</div> </div> <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.85rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.4rem;">toggleDropdown()</div> <div style="font-size:.76rem;color:var(--t2);">Lit l'état du menu et appelle open ou close selon.</div> </div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.85rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">openDropdown()</div> <div style="font-size:.76rem;color:var(--t2);">Ajoute .active sur menu + bouton, tourne la flèche .</div> </div> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.85rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.4rem;">closeDropdown()</div> <div style="font-size:.76rem;color:var(--t2);">Retire .active sur menu + bouton, remet la flèche .</div> </div> </div> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:2;"> DOMContentLoaded  <span style="color:#f7d97a;">createDropdownMenu()</span> <span style="color:#ffb380;">attachDropdownEvents()</span> <span style="color:#d3a8ff;">attachDropdownItemEvents()</span><br> clic bouton  <span style="color:#7eb5ff;">toggleDropdown()</span> <span style="color:#7ee8b8;">openDropdown()</span> ou <span style="color:#ff9090;">closeDropdown()</span><br> clic item  <span style="color:#d3a8ff;">attachDropdownItemEvents()</span> émet CustomEvent + <span style="color:#ff9090;">closeDropdown()</span> </div> </div> <div class="cb2"><span class="cbl2">javascript</span><pre>(<span class="kw">function</span>() {
+<span class="s">'use strict'</span>;
+document.<span class="fn">addEventListener</span>(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
+<span class="kw">const</span> <span class="vr">dropdownButton</span> = document.<span class="fn">querySelector</span>(<span class="s">'.nav-dropdown'</span>);
+<span class="kw">if</span> (!dropdownButton) {
+console.<span class="fn">warn</span>(<span class="s">'Bouton dropdown introuvable'</span>);
+<span class="kw">return</span>;   <span class="cm">// Sortie propre si la page n'a pas de dropdown</span> }
+<span class="kw">if</span> (window.PearTechDB) {
+<span class="fn">createDropdownMenu</span>();
+<span class="fn">attachDropdownEvents</span>();
+} <span class="kw">else</span> {
+document.<span class="fn">addEventListener</span>(<span class="s">'PearTechDBReady'</span>, <span class="kw">function</span>() {
+<span class="fn">createDropdownMenu</span>();
+<span class="fn">attachDropdownEvents</span>();
+});
+}
+});
 })();
 </pre></div>
 </div>
-<hr>
-
-<!-- ══ 02 ATTENTE ══ -->
-<div class="sec" id="attente">
-  <div class="slabel">02 — Attendre la base de données</div>
-  <h2>Deux stratégies d'attente : réessai vs événement</h2>
-  <p>product_grid.js et dropdown.js doivent tous deux attendre PearTechDB, mais ils utilisent <b>deux approches différentes</b>. Comprendre pourquoi éclaire beaucoup sur la communication entre scripts.</p>
-<div class="diag">
-  <div class="dtitle">Deux stratégies d'attente — polling vs événement</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-    <div style="background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">Stratégie A — polling (setInterval)</div>
-      <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">
-        <div>attempts = 0</div>
-        <div>setInterval(100ms) →</div>
-        <div style="padding-left:.7rem;">window.PearTechDB ?</div>
-        <div style="padding-left:1.4rem;color:#7ee8b8;">oui → clearInterval → init()</div>
-        <div style="padding-left:1.4rem;color:var(--t3);">non → attempts++</div>
-        <div style="padding-left:1.4rem;color:#fda4af;">attempts > 50 → abandon (5s)</div>
-      </div>
-      <div style="margin-top:.5rem;font-size:.68rem;color:var(--t3);">Fonctionne même si data.js n'émet pas d'événement</div>
-    </div>
-    <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.5rem;">Stratégie B — événement dataReady</div>
-      <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">
-        <div>document.addEventListener(</div>
-        <div style="padding-left:.7rem;">'dataReady', () => {</div>
-        <div style="padding-left:1.4rem;color:#7ee8b8;">clearInterval(poller)</div>
-        <div style="padding-left:1.4rem;color:#7ee8b8;">init()</div>
-        <div style="padding-left:.7rem;">})</div>
-      </div>
-      <div style="margin-top:.5rem;font-size:.68rem;color:var(--t3);">Réaction immédiate si data.js émet l'événement</div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Les deux écouteurs coexistent. Qui déclenche init() en premier → l'autre ne fait rien (clearInterval déjà appelé).</div>
-</div>
-
-
-  <div class="diag">
-    <div class="dtitle">Réessai (product_grid) vs Événement (dropdown) — comparaison</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;margin-bottom:.8rem;">product_grid.js — Polling (réessai)</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;margin-bottom:.6rem;color:var(--t2);">
-          <span style="color:#c084fc;">function</span> <span style="color:#f7d97a;">init</span>(attempts) {<br>
-          &nbsp;&nbsp;<span style="color:#c084fc;">if</span> (!PearTechDB) {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc;">if</span> (attempts &lt; 50) {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">setTimeout</span>(() =&gt; <span style="color:#f7d97a;">init</span>(attempts+1), 100);<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;}<br>
-          &nbsp;&nbsp;}<br>
-          }
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);">✓ Fonctionne sans coopération de data.js<br>✗ Vérifie jusqu'à 50 fois même si la DB est rapide</div>
-      </div>
-      <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ffb380;margin-bottom:.8rem;">dropdown.js — Événement personnalisé</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;margin-bottom:.6rem;color:var(--t2);">
-          document.<span style="color:#ffb380;">addEventListener</span>(<br>
-          &nbsp;&nbsp;<span style="color:#7ee8b8;">'PearTechDBReady'</span>, <span style="color:#c084fc;">function</span>() {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffb380;">createDropdownMenu</span>();<br>
-          &nbsp;&nbsp;}<br>
-          );<br>
-          <span style="color:#555e74;font-style:italic;">// data.js fait : document.dispatchEvent(new CustomEvent('PearTechDBReady'))</span>
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);">✓ Réagit exactement quand la DB est prête, zéro délai<br>✗ Nécessite que data.js émette l'événement</div>
-      </div>
-    </div>
-    <div class="sn" style="margin-top:1rem;"><span class="sni">💡</span><span>Les deux approches sont valides. Le polling est plus autonome mais moins élégant. L'événement est plus précis et coopératif. En pratique, dropdown.js vérifie d'abord si la DB est déjà là (<ic>if (window.PearTechDB)</ic>) — si oui, pas besoin d'attendre.</span></div>
-  </div>
-
-  <h3>Comment data.js émet l'événement</h3>
-  <div class="cb2"><span class="cbl2">javascript — dans data.js (fichier non documenté ici)</span><pre><span class="cm">// data.js, après avoir initialisé PearTechDB :</span>
+<hr> <!-- ══ 02 ATTENTE ══ -->
+<div class="sec" id="attente"> <div class="slabel">02 — Attendre la base de données</div> <h2>Deux stratégies d'attente : réessai vs événement</h2> <p>product_grid.js et dropdown.js doivent tous deux attendre PearTechDB, mais ils utilisent <b>deux approches différentes</b>. Comprendre pourquoi éclaire beaucoup sur la communication entre scripts.</p>
+<div class="diag"> <div class="dtitle">Deux stratégies d'attente — polling vs événement</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">Stratégie A — polling (setInterval)</div> <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);"> <div>attempts = 0</div> <div>setInterval(100ms) </div> <div style="padding-left:.7rem;">window.PearTechDB ?</div> <div style="padding-left:1.4rem;color:#7ee8b8;">oui  clearInterval  init()</div> <div style="padding-left:1.4rem;color:var(--t3);">non  attempts++</div> <div style="padding-left:1.4rem;color:#fda4af;">attempts > 50  abandon (5s)</div> </div> <div style="margin-top:.5rem;font-size:.68rem;color:var(--t3);">Fonctionne même si data.js n'émet pas d'événement</div> </div> <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.5rem;">Stratégie B — événement dataReady</div> <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);"> <div>document.addEventListener(</div> <div style="padding-left:.7rem;">'dataReady', () => {</div> <div style="padding-left:1.4rem;color:#7ee8b8;">clearInterval(poller)</div> <div style="padding-left:1.4rem;color:#7ee8b8;">init()</div> <div style="padding-left:.7rem;">})</div> </div> <div style="margin-top:.5rem;font-size:.68rem;color:var(--t3);">Réaction immédiate si data.js émet l'événement</div> </div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">Les deux écouteurs coexistent. Qui déclenche init() en premier  l'autre ne fait rien (clearInterval déjà appelé).</div>
+</div> <div class="diag"> <div class="dtitle">Réessai (product_grid) vs Événement (dropdown) — comparaison</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;"> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#f7d97a;margin-bottom:.8rem;">product_grid.js — Polling (réessai)</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;margin-bottom:.6rem;color:var(--t2);"> <span style="color:#c084fc;">function</span> <span style="color:#f7d97a;">init</span>(attempts) {<br> &nbsp;&nbsp;<span style="color:#c084fc;">if</span> (!PearTechDB) {<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc;">if</span> (attempts &lt; 50) {<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">setTimeout</span>(() =&gt; <span style="color:#f7d97a;">init</span>(attempts+1), 100);<br> &nbsp;&nbsp;&nbsp;&nbsp;}<br> &nbsp;&nbsp;}<br> }
+</div> <div style="font-size:.78rem;color:var(--t2);"> Fonctionne sans coopération de data.js<br> Vérifie jusqu'à 50 fois même si la DB est rapide</div> </div> <div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ffb380;margin-bottom:.8rem;">dropdown.js — Événement personnalisé</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;margin-bottom:.6rem;color:var(--t2);"> document.<span style="color:#ffb380;">addEventListener</span>(<br> &nbsp;&nbsp;<span style="color:#7ee8b8;">'PearTechDBReady'</span>, <span style="color:#c084fc;">function</span>() {<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffb380;">createDropdownMenu</span>();<br> &nbsp;&nbsp;}<br> );<br> <span style="color:#555e74;font-style:italic;">// data.js fait : document.dispatchEvent(new CustomEvent('PearTechDBReady'))</span> </div> <div style="font-size:.78rem;color:var(--t2);"> Réagit exactement quand la DB est prête, zéro délai<br> Nécessite que data.js émette l'événement</div> </div> </div> <div class="sn" style="margin-top:1rem;"><span class="sni"></span><span>Les deux approches sont valides. Le polling est plus autonome mais moins élégant. L'événement est plus précis et coopératif. En pratique, dropdown.js vérifie d'abord si la DB est déjà là (<ic>if (window.PearTechDB)</ic>) — si oui, pas besoin d'attendre.</span></div> </div> <h3>Comment data.js émet l'événement</h3> <div class="cb2"><span class="cbl2">javascript — dans data.js (fichier non documenté ici)</span><pre><span class="cm">// data.js, après avoir initialisé PearTechDB :</span>
 <span class="kw">const</span> <span class="vr">event</span> = <span class="kw">new</span> CustomEvent(<span class="s">'PearTechDBReady'</span>);
 document.<span class="fn">dispatchEvent</span>(event);
-
 <span class="cm">// Tout script qui fait document.addEventListener('PearTechDBReady', fn)
 // reçoit cet événement à ce moment précis</span>
-</pre></div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>CustomEvent vs Event :</b> <ic>new Event('nom')</ic> crée un événement simple sans données. <ic>new CustomEvent('nom', {detail: {...}})</ic> crée un événement qui transporte des données dans sa propriété <ic>.detail</ic>. Pour 'PearTechDBReady', pas besoin de données — on veut juste signaler que la DB est prête. Pour 'categorySelected' (plus loin), on transporte la catégorie choisie.</div></div>
+</pre></div> <div class="box def"><span class="bi"></span><div><b>CustomEvent vs Event :</b> <ic>new Event('nom')</ic> crée un événement simple sans données. <ic>new CustomEvent('nom', {detail: {...}})</ic> crée un événement qui transporte des données dans sa propriété <ic>.detail</ic>. Pour 'PearTechDBReady', pas besoin de données — on veut juste signaler que la DB est prête. Pour 'categorySelected' (plus loin), on transporte la catégorie choisie.</div></div>
 </div>
-<hr>
-
-<!-- ══ 03 CREATION ══ -->
-<div class="sec" id="creation">
-  <div class="slabel">03 — Génération du menu</div>
-  <h2>createDropdownMenu() — construire le HTML dynamiquement</h2>
-  <p>Au lieu d'un menu écrit en dur dans le HTML, dropdown.js le <b>fabrique à la volée</b> depuis les données de PearTechDB. Si la DB est indisponible, il utilise des données statiques de secours.</p>
-
-  <div class="box ana"><span class="bi">🏗️</span><div><b>Analogie :</b> C'est comme un menuisier qui reçoit un plan (les catégories de la DB) et fabrique une armoire sur mesure. Si le plan est perdu, il utilise un modèle standard qu'il connaît de mémoire (les catégories statiques). Dans tous les cas, le résultat est une armoire fonctionnelle.</div></div>
-
-  <h3>Protection contre la double création</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">createDropdownMenu</span>() {
-    <span class="kw">if</span> (document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>)) <span class="kw">return</span>;
-    <span class="cm">// Si le menu existe déjà → on sort immédiatement
-    // Pourquoi ? L'événement PearTechDBReady pourrait être reçu plusieurs fois
-    // (ou createDropdownMenu appelée deux fois par accident).
-    // Sans cette garde, on créerait deux menus empilés.</span>
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Structure HTML générée par createDropdownMenu</div>
-    <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;color:var(--t2);">
-      <div style="color:#ffb380;">.dropdown-wrapper &nbsp;<span style="color:var(--t3);font-size:.6rem;">← créé si inexistant, contient le bouton + menu</span></div>
-      <div style="padding-left:1.2rem;color:var(--t2);">├─ .nav-dropdown &nbsp;<span style="color:var(--t3);font-size:.6rem;">← bouton déplacé ici</span></div>
-      <div style="padding-left:1.2rem;color:#ffb380;">└─ .dropdown-menu</div>
-      <div style="padding-left:2.4rem;color:var(--t2);">├─ .dropdown-header &nbsp;<span style="color:var(--t3);font-size:.6rem;">"Toutes les catégories"</span></div>
-      <div style="padding-left:2.4rem;color:#7eb5ff;">├─ .dropdown-grid</div>
-      <div style="padding-left:3.6rem;color:#7ee8b8;">│ ├─ a.dropdown-item[data-category="Apple"]</div>
-      <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ ├─ .dropdown-icon (SVG)</div>
-      <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ └─ .dropdown-content</div>
-      <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ &nbsp;&nbsp;&nbsp;├─ .dropdown-title</div>
-      <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ &nbsp;&nbsp;&nbsp;├─ .dropdown-description</div>
-      <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ &nbsp;&nbsp;&nbsp;└─ .dropdown-subcategories (tags)</div>
-      <div style="padding-left:3.6rem;color:var(--t3);">│ └─ … autres catégories</div>
-      <div style="padding-left:2.4rem;color:#f7d97a;">└─ .dropdown-footer &nbsp;<span style="color:var(--t3);font-size:.6rem;">"Voir tout le catalogue →"</span></div>
-    </div>
-  </div>
-
-  <h3>PearTechDB disponible vs mode statique</h3>
-  <div class="diag">
-    <div class="dtitle">Les deux sources de données pour les catégories</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.7rem;">✅ DB disponible — données dynamiques</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);">
-          <span style="color:#c084fc;">if</span> (PearTechDB.categories) {<br>
-          &nbsp;&nbsp;categories = PearTechDB.categories<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;.<span style="color:#ffb380;">map</span>(cat =&gt; ({<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon: cat.icon,<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: cat.name,<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slug: cat.slug<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;}));<br>
-          }
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);margin-top:.5rem;">Les catégories viennent de PearTechDB — si on en ajoute une nouvelle dans data.js, elle apparaît automatiquement dans le menu.</div>
-      </div>
-      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.7rem;">⚠️ DB absente — données statiques</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);">
-          } <span style="color:#c084fc;">else</span> {<br>
-          &nbsp;&nbsp;console.<span style="color:#ffb380;">warn</span>('mode statique');<br>
-          &nbsp;&nbsp;categories = [<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;{ icon: 'apple', title: 'Apple', … },<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;{ icon: 'android', … },<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;…<br>
-          &nbsp;&nbsp;];<br>
-          }
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);margin-top:.5rem;">Fallback codé en dur. Le menu fonctionne, mais sans les données à jour de la DB. Un avertissement console prévient les développeurs.</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>Pourquoi créer un wrapper autour du bouton ?</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// On cherche si un wrapper existe déjà</span>
+<hr> <!-- ══ 03 CREATION ══ -->
+<div class="sec" id="creation"> <div class="slabel">03 — Génération du menu</div> <h2>createDropdownMenu() — construire le HTML dynamiquement</h2> <p>Au lieu d'un menu écrit en dur dans le HTML, dropdown.js le <b>fabrique à la volée</b> depuis les données de PearTechDB. Si la DB est indisponible, il utilise des données statiques de secours.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> C'est comme un menuisier qui reçoit un plan (les catégories de la DB) et fabrique une armoire sur mesure. Si le plan est perdu, il utilise un modèle standard qu'il connaît de mémoire (les catégories statiques). Dans tous les cas, le résultat est une armoire fonctionnelle.</div></div> <h3>Protection contre la double création</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">createDropdownMenu</span>() {
+<span class="kw">if</span> (document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>)) <span class="kw">return</span>;
+<span class="cm">// Si le menu existe déjà  on sort immédiatement
+// Pourquoi ? L'événement PearTechDBReady pourrait être reçu plusieurs fois
+// (ou createDropdownMenu appelée deux fois par accident).
+// Sans cette garde, on créerait deux menus empilés.</span>
+</pre></div> <div class="diag"> <div class="dtitle">Structure HTML générée par createDropdownMenu</div> <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;color:var(--t2);"> <div style="color:#ffb380;">.dropdown-wrapper &nbsp;<span style="color:var(--t3);font-size:.6rem;"> créé si inexistant, contient le bouton + menu</span></div> <div style="padding-left:1.2rem;color:var(--t2);">├─ .nav-dropdown &nbsp;<span style="color:var(--t3);font-size:.6rem;"> bouton déplacé ici</span></div> <div style="padding-left:1.2rem;color:#ffb380;">└─ .dropdown-menu</div> <div style="padding-left:2.4rem;color:var(--t2);">├─ .dropdown-header &nbsp;<span style="color:var(--t3);font-size:.6rem;">"Toutes les catégories"</span></div> <div style="padding-left:2.4rem;color:#7eb5ff;">├─ .dropdown-grid</div> <div style="padding-left:3.6rem;color:#7ee8b8;">│ ├─ a.dropdown-item[data-category="Apple"]</div> <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ ├─ .dropdown-icon (SVG)</div> <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ └─ .dropdown-content</div> <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ &nbsp;&nbsp;&nbsp;├─ .dropdown-title</div> <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ &nbsp;&nbsp;&nbsp;├─ .dropdown-description</div> <div style="padding-left:3.6rem;color:#7ee8b8;">│ │ &nbsp;&nbsp;&nbsp;└─ .dropdown-subcategories (tags)</div> <div style="padding-left:3.6rem;color:var(--t3);">│ └─ … autres catégories</div> <div style="padding-left:2.4rem;color:#f7d97a;">└─ .dropdown-footer &nbsp;<span style="color:var(--t3);font-size:.6rem;">"Voir tout le catalogue "</span></div> </div> </div> <h3>PearTechDB disponible vs mode statique</h3> <div class="diag"> <div class="dtitle">Les deux sources de données pour les catégories</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;"> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.7rem;"> DB disponible — données dynamiques</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);"> <span style="color:#c084fc;">if</span> (PearTechDB.categories) {<br> &nbsp;&nbsp;categories = PearTechDB.categories<br> &nbsp;&nbsp;&nbsp;&nbsp;.<span style="color:#ffb380;">map</span>(cat =&gt; ({<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;icon: cat.icon,<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title: cat.name,<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;slug: cat.slug<br> &nbsp;&nbsp;&nbsp;&nbsp;}));<br> }
+</div> <div style="font-size:.78rem;color:var(--t2);margin-top:.5rem;">Les catégories viennent de PearTechDB — si on en ajoute une nouvelle dans data.js, elle apparaît automatiquement dans le menu.</div> </div> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.7rem;"> DB absente — données statiques</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);"> } <span style="color:#c084fc;">else</span> {<br> &nbsp;&nbsp;console.<span style="color:#ffb380;">warn</span>('mode statique');<br> &nbsp;&nbsp;categories = [<br> &nbsp;&nbsp;&nbsp;&nbsp;{ icon: 'apple', title: 'Apple', … },<br> &nbsp;&nbsp;&nbsp;&nbsp;{ icon: 'android', … },<br> &nbsp;&nbsp;&nbsp;&nbsp;…<br> &nbsp;&nbsp;];<br> }
+</div> <div style="font-size:.78rem;color:var(--t2);margin-top:.5rem;">Fallback codé en dur. Le menu fonctionne, mais sans les données à jour de la DB. Un avertissement console prévient les développeurs.</div> </div> </div> </div> <h3>Pourquoi créer un wrapper autour du bouton ?</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// On cherche si un wrapper existe déjà</span>
 <span class="kw">let</span> <span class="vr">dropdownWrapper</span> = dropdownButton.parentElement.<span class="fn">querySelector</span>(<span class="s">'.dropdown-wrapper'</span>);
-
 <span class="kw">if</span> (!dropdownWrapper) {
-    <span class="cm">// Crée le wrapper</span>
-    <span class="vr">dropdownWrapper</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
-    <span class="vr">dropdownWrapper</span>.className = <span class="s">'dropdown-wrapper'</span>;
-    <span class="vr">dropdownWrapper</span>.style.position = <span class="s">'relative'</span>;
-    <span class="cm">// Insère le wrapper AVANT le bouton dans le parent</span>
-    dropdownButton.parentElement.<span class="fn">insertBefore</span>(<span class="vr">dropdownWrapper</span>, dropdownButton);
-    <span class="cm">// Déplace le bouton DANS le wrapper</span>
-    <span class="vr">dropdownWrapper</span>.<span class="fn">appendChild</span>(dropdownButton);
+<span class="cm">// Crée le wrapper</span> <span class="vr">dropdownWrapper</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+<span class="vr">dropdownWrapper</span>.className = <span class="s">'dropdown-wrapper'</span>;
+<span class="vr">dropdownWrapper</span>.style.position = <span class="s">'relative'</span>;
+<span class="cm">// Insère le wrapper AVANT le bouton dans le parent</span> dropdownButton.parentElement.<span class="fn">insertBefore</span>(<span class="vr">dropdownWrapper</span>, dropdownButton);
+<span class="cm">// Déplace le bouton DANS le wrapper</span> <span class="vr">dropdownWrapper</span>.<span class="fn">appendChild</span>(dropdownButton);
 }
 <span class="cm">// Ajoute le menu dans le wrapper (après le bouton)</span>
 <span class="vr">dropdownWrapper</span>.<span class="fn">appendChild</span>(menu);
-</pre></div>
-  <div class="box info"><span class="bi">💡</span><div><b>Pourquoi un wrapper ?</b> Le menu déroulant a besoin d'être positionné <b>relativement au bouton</b> avec du CSS (<ic>position: absolute</ic> sur le menu, <ic>position: relative</ic> sur le wrapper). Sans ce conteneur, le menu serait positionné par rapport à la page entière et apparaîtrait au mauvais endroit.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">insertBefore — comment le wrapper est inséré</div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.6rem;align-items:center;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;margin-bottom:.5rem;">Avant</div>
-        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:1.8;color:var(--t2);">
-          &lt;nav&gt;<br>&nbsp;&nbsp;&lt;a&gt;Accueil&lt;/a&gt;<br>&nbsp;&nbsp;<span style="color:#ffb380;">&lt;button.nav-dropdown&gt;</span><br>&lt;/nav&gt;
-        </div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-align:center;">→</div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;margin-bottom:.5rem;">insertBefore crée le wrapper</div>
-        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:1.8;color:var(--t2);">
-          &lt;nav&gt;<br>&nbsp;&nbsp;&lt;a&gt;Accueil&lt;/a&gt;<br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;div.dropdown-wrapper&gt;</span><br>&nbsp;&nbsp;<span style="color:#ffb380;">&nbsp;&nbsp;&lt;button.nav-dropdown&gt;</span><br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;/div&gt;</span><br>&lt;/nav&gt;
-        </div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-align:center;">→</div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;margin-bottom:.5rem;">appendChild ajoute le menu</div>
-        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:1.8;color:var(--t2);">
-          &lt;nav&gt;<br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;div.dropdown-wrapper&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffb380;">&lt;button&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">&lt;div.dropdown-menu&gt;</span><br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;/div&gt;</span><br>&lt;/nav&gt;
-        </div>
-      </div>
-    </div>
-  </div>
+</pre></div> <div class="box info"><span class="bi"></span><div><b>Pourquoi un wrapper ?</b> Le menu déroulant a besoin d'être positionné <b>relativement au bouton</b> avec du CSS (<ic>position: absolute</ic> sur le menu, <ic>position: relative</ic> sur le wrapper). Sans ce conteneur, le menu serait positionné par rapport à la page entière et apparaîtrait au mauvais endroit.</div></div> <div class="diag"> <div class="dtitle">insertBefore — comment le wrapper est inséré</div> <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.6rem;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;margin-bottom:.5rem;">Avant</div> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:1.8;color:var(--t2);"> &lt;nav&gt;<br>&nbsp;&nbsp;&lt;a&gt;Accueil&lt;/a&gt;<br>&nbsp;&nbsp;<span style="color:#ffb380;">&lt;button.nav-dropdown&gt;</span><br>&lt;/nav&gt;
+</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-align:center;"></div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;margin-bottom:.5rem;">insertBefore crée le wrapper</div> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:1.8;color:var(--t2);"> &lt;nav&gt;<br>&nbsp;&nbsp;&lt;a&gt;Accueil&lt;/a&gt;<br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;div.dropdown-wrapper&gt;</span><br>&nbsp;&nbsp;<span style="color:#ffb380;">&nbsp;&nbsp;&lt;button.nav-dropdown&gt;</span><br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;/div&gt;</span><br>&lt;/nav&gt;
+</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t3);text-align:center;"></div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);text-align:center;margin-bottom:.5rem;">appendChild ajoute le menu</div> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.7rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;line-height:1.8;color:var(--t2);"> &lt;nav&gt;<br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;div.dropdown-wrapper&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffb380;">&lt;button&gt;</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">&lt;div.dropdown-menu&gt;</span><br>&nbsp;&nbsp;<span style="color:#7ee8b8;">&lt;/div&gt;</span><br>&lt;/nav&gt;
+</div> </div> </div> </div>
 </div>
-<hr>
-
-<!-- ══ 04 EVENTS ══ -->
-<div class="sec" id="events">
-  <div class="slabel">04 — Gestion des événements</div>
-  <h2>attachDropdownEvents() — trois façons de fermer le menu</h2>
-  <p>Trois comportements sont nécessaires pour un menu déroulant accessible : <b>clic sur le bouton</b>, <b>clic en dehors</b>, et <b>touche Échap</b>.</p>
-
-  <div class="diag">
-    <div class="dtitle">Les 3 événements installés</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;">
-      <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:1.4rem;margin-bottom:.4rem;">👆</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ffb380;margin-bottom:.4rem;">Clic sur .nav-dropdown</div>
-        <div style="font-size:.78rem;color:var(--t2);">Toggle — ouvre si fermé, ferme si ouvert. <ic>e.stopPropagation()</ic> pour ne pas propager au document.</div>
-      </div>
-      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:1.4rem;margin-bottom:.4rem;">🖱</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7eb5ff;margin-bottom:.4rem;">Clic sur document</div>
-        <div style="font-size:.78rem;color:var(--t2);">Si le clic est hors du menu ET hors du bouton → ferme. Même logique que recherche.js avec <ic>.contains()</ic>.</div>
-      </div>
-      <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:1rem;text-align:center;">
-        <div style="font-size:1.4rem;margin-bottom:.4rem;">⌨️</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">Touche Échap</div>
-        <div style="font-size:.78rem;color:var(--t2);">Ferme seulement si le menu est <ic>.active</ic>. La vérification évite d'appeler closeDropdown() inutilement.</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>Le problème de propagation — pourquoi stopPropagation ?</h3>
-  <div class="diag">
-    <div class="dtitle">Ce qui se passe SANS stopPropagation lors d'un clic sur le bouton</div>
-    <div class="vc">
-      <div class="vn w cb">Clic sur .nav-dropdown</div>
-      <div class="va">↓<div class="val">l'événement remonte (propagation)</div></div>
-      <div class="vn w cy">Handler du bouton : toggleDropdown() → OUVRE le menu</div>
-      <div class="va">↓<div class="val">le même clic continue de remonter jusqu'au document</div></div>
-      <div class="vn w cr">Handler du document : menu.contains(e.target)? NON (e.target = le bouton, pas le menu) → FERME</div>
-      <div class="va">↓</div>
-      <div class="vn w cgr">Résultat : menu ouvert puis immédiatement fermé → INVISIBLE</div>
-    </div>
-    <div class="sn" style="margin-top:1rem;"><span class="sni">✅</span><span>Avec <ic>e.stopPropagation()</ic> dans le handler du bouton, le clic s'arrête là. Le handler document ne le reçoit jamais. Le menu s'ouvre et reste ouvert.</span></div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachDropdownEvents</span>() {
-    <span class="kw">const</span> <span class="vr">dropdownMenu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
-    <span class="kw">if</span> (!dropdownMenu) <span class="kw">return</span>;
-
-    dropdownButton.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
-        e.<span class="fn">stopPropagation</span>();   <span class="cm">// ← CRUCIAL : bloque la propagation vers document</span>
-        <span class="fn">toggleDropdown</span>();
-    });
-
-    document.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
-        <span class="kw">if</span> (!dropdownMenu.<span class="fn">contains</span>(e.target) && !dropdownButton.<span class="fn">contains</span>(e.target)) {
-            <span class="fn">closeDropdown</span>();
-        }
-    });
-
-    document.<span class="fn">addEventListener</span>(<span class="s">'keydown'</span>, <span class="kw">function</span>(e) {
-        <span class="kw">if</span> (e.key === <span class="s">'Escape'</span> && dropdownMenu.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) {
-            <span class="fn">closeDropdown</span>();
-        }
-    });
+<hr> <!-- ══ 04 EVENTS ══ -->
+<div class="sec" id="events"> <div class="slabel">04 — Gestion des événements</div> <h2>attachDropdownEvents() — trois façons de fermer le menu</h2> <p>Trois comportements sont nécessaires pour un menu déroulant accessible : <b>clic sur le bouton</b>, <b>clic en dehors</b>, et <b>touche Échap</b>.</p> <div class="diag"> <div class="dtitle">Les 3 événements installés</div> <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;"> <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:10px;padding:1rem;text-align:center;"> <div style="font-size:1.4rem;margin-bottom:.4rem;"></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ffb380;margin-bottom:.4rem;">Clic sur .nav-dropdown</div> <div style="font-size:.78rem;color:var(--t2);">Toggle — ouvre si fermé, ferme si ouvert. <ic>e.stopPropagation()</ic> pour ne pas propager au document.</div> </div> <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:1rem;text-align:center;"> <div style="font-size:1.4rem;margin-bottom:.4rem;"></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7eb5ff;margin-bottom:.4rem;">Clic sur document</div> <div style="font-size:.78rem;color:var(--t2);">Si le clic est hors du menu ET hors du bouton  ferme. Même logique que recherche.js avec <ic>.contains()</ic>.</div> </div> <div style="background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.3);border-radius:10px;padding:1rem;text-align:center;"> <div style="font-size:1.4rem;margin-bottom:.4rem;"></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#d3a8ff;margin-bottom:.4rem;">Touche Échap</div> <div style="font-size:.78rem;color:var(--t2);">Ferme seulement si le menu est <ic>.active</ic>. La vérification évite d'appeler closeDropdown() inutilement.</div> </div> </div> </div> <h3>Le problème de propagation — pourquoi stopPropagation ?</h3> <div class="diag"> <div class="dtitle">Ce qui se passe SANS stopPropagation lors d'un clic sur le bouton</div> <div class="vc"> <div class="vn w cb">Clic sur .nav-dropdown</div> <div class="va"><div class="val">l'événement remonte (propagation)</div></div> <div class="vn w cy">Handler du bouton : toggleDropdown()  OUVRE le menu</div> <div class="va"><div class="val">le même clic continue de remonter jusqu'au document</div></div> <div class="vn w cr">Handler du document : menu.contains(e.target)? NON (e.target = le bouton, pas le menu)  FERME</div> <div class="va"></div> <div class="vn w cgr">Résultat : menu ouvert puis immédiatement fermé  INVISIBLE</div> </div> <div class="sn" style="margin-top:1rem;"><span class="sni"></span><span>Avec <ic>e.stopPropagation()</ic> dans le handler du bouton, le clic s'arrête là. Le handler document ne le reçoit jamais. Le menu s'ouvre et reste ouvert.</span></div> </div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachDropdownEvents</span>() {
+<span class="kw">const</span> <span class="vr">dropdownMenu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
+<span class="kw">if</span> (!dropdownMenu) <span class="kw">return</span>;
+dropdownButton.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
+e.<span class="fn">stopPropagation</span>();   <span class="cm">//  CRUCIAL : bloque la propagation vers document</span> <span class="fn">toggleDropdown</span>();
+});
+document.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
+<span class="kw">if</span> (!dropdownMenu.<span class="fn">contains</span>(e.target) && !dropdownButton.<span class="fn">contains</span>(e.target)) {
+<span class="fn">closeDropdown</span>();
+}
+});
+document.<span class="fn">addEventListener</span>(<span class="s">'keydown'</span>, <span class="kw">function</span>(e) {
+<span class="kw">if</span> (e.key === <span class="s">'Escape'</span> && dropdownMenu.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) {
+<span class="fn">closeDropdown</span>();
+}
+});
 }
 </pre></div>
 </div>
-<hr>
-
-<!-- ══ 05 TOGGLE ══ -->
-<div class="sec" id="toggle">
-  <div class="slabel">05 — Ouverture et fermeture</div>
-  <h2>toggleDropdown, openDropdown, closeDropdown</h2>
-<div class="schema2">
-  <div class="s2t">Machine à états du dropdown — open / close / toggle</div>
-  <div class="state-machine">
-    <div style="text-align:center;">
-      <div class="state" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">FERMÉ<br><span style="font-weight:400;font-size:.6rem;">aria-expanded=false<br>menu caché</span></div>
-    </div>
-    <div class="trans">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#7ee8b8;text-align:center;margin-bottom:.1rem;">click / Enter / Space</div>
-      <div style="display:flex;align-items:center;"><div class="trans-line" style="width:45px;"></div><div style="color:var(--t3);">▶</div></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#fda4af;text-align:center;margin-top:.1rem;">Escape / clic hors zone / clic catégorie</div>
-      <div style="display:flex;align-items:center;flex-direction:row-reverse;"><div class="trans-line" style="width:45px;"></div><div style="color:var(--t3);transform:scaleX(-1);">▶</div></div>
-    </div>
-    <div style="text-align:center;">
-      <div class="state" style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.35);color:#fdba74;">OUVERT<br><span style="font-weight:400;font-size:.6rem;">aria-expanded=true<br>menu visible</span></div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem;">
-    <div style="background:var(--bg3);border-radius:9px;padding:.7rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;">openDropdown()</div>
-      <div style="font-size:.72rem;color:var(--t2);line-height:1.75;">classList.add('open')<br>setAttribute('aria-expanded','true')<br>Focus sur premier item</div>
-    </div>
-    <div style="background:var(--bg3);border-radius:9px;padding:.7rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">closeDropdown()</div>
-      <div style="font-size:.72rem;color:var(--t2);line-height:1.75;">classList.remove('open')<br>setAttribute('aria-expanded','false')<br>Pas de reset focus</div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">3 façons de fermer : touche Escape · clic en dehors (document click) · clic sur une catégorie → closeDropdown() + emit categorySelected</div>
-</div>
-
-  <p>Trois fonctions séparées — chacune avec une seule responsabilité. <ic>toggle</ic> décide laquelle appeler. <ic>open</ic> et <ic>close</ic> effectuent le changement visuel.</p>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">toggleDropdown</span>() {
-    <span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
-    <span class="kw">if</span> (!menu) <span class="kw">return</span>;
-    <span class="cm">// classList.contains('active') = le menu est-il ouvert ?</span>
-    menu.classList.<span class="fn">contains</span>(<span class="s">'active'</span>) ? <span class="fn">closeDropdown</span>() : <span class="fn">openDropdown</span>();
-    <span class="cm">// Ternaire : si actif → ferme. Sinon → ouvre.</span>
+<hr> <!-- ══ 05 TOGGLE ══ -->
+<div class="sec" id="toggle"> <div class="slabel">05 — Ouverture et fermeture</div> <h2>toggleDropdown, openDropdown, closeDropdown</h2>
+<div class="schema2"> <div class="s2t">Machine à états du dropdown — open / close / toggle</div> <div class="state-machine"> <div style="text-align:center;"> <div class="state" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">FERMÉ<br><span style="font-weight:400;font-size:.6rem;">aria-expanded=false<br>menu caché</span></div> </div> <div class="trans"> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#7ee8b8;text-align:center;margin-bottom:.1rem;">click / Enter / Space</div> <div style="display:flex;align-items:center;"><div class="trans-line" style="width:45px;"></div><div style="color:var(--t3);"></div></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:#fda4af;text-align:center;margin-top:.1rem;">Escape / clic hors zone / clic catégorie</div> <div style="display:flex;align-items:center;flex-direction:row-reverse;"><div class="trans-line" style="width:45px;"></div><div style="color:var(--t3);transform:scaleX(-1);"></div></div> </div> <div style="text-align:center;"> <div class="state" style="background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.35);color:#fdba74;">OUVERT<br><span style="font-weight:400;font-size:.6rem;">aria-expanded=true<br>menu visible</span></div> </div> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem;"> <div style="background:var(--bg3);border-radius:9px;padding:.7rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;">openDropdown()</div> <div style="font-size:.72rem;color:var(--t2);line-height:1.75;">classList.add('open')<br>setAttribute('aria-expanded','true')<br>Focus sur premier item</div> </div> <div style="background:var(--bg3);border-radius:9px;padding:.7rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">closeDropdown()</div> <div style="font-size:.72rem;color:var(--t2);line-height:1.75;">classList.remove('open')<br>setAttribute('aria-expanded','false')<br>Pas de reset focus</div> </div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">3 façons de fermer : touche Escape · clic en dehors (document click) · clic sur une catégorie  closeDropdown() + emit categorySelected</div>
+</div> <p>Trois fonctions séparées — chacune avec une seule responsabilité. <ic>toggle</ic> décide laquelle appeler. <ic>open</ic> et <ic>close</ic> effectuent le changement visuel.</p> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">toggleDropdown</span>() {
+<span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
+<span class="kw">if</span> (!menu) <span class="kw">return</span>;
+<span class="cm">// classList.contains('active') = le menu est-il ouvert ?</span> menu.classList.<span class="fn">contains</span>(<span class="s">'active'</span>) ? <span class="fn">closeDropdown</span>() : <span class="fn">openDropdown</span>();
+<span class="cm">// Ternaire : si actif  ferme. Sinon  ouvre.</span>
 }
-
 <span class="kw">function</span> <span class="fn">openDropdown</span>() {
-    <span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
-    <span class="kw">const</span> <span class="vr">icon</span> = dropdownButton.<span class="fn">querySelector</span>(<span class="s">'.material-symbols-outlined'</span>);
-    <span class="kw">if</span> (!menu) <span class="kw">return</span>;
-
-    menu.classList.<span class="fn">add</span>(<span class="s">'active'</span>);              <span class="cm">// Rend visible (via CSS)</span>
-    dropdownButton.classList.<span class="fn">add</span>(<span class="s">'active'</span>);     <span class="cm">// Style actif sur le bouton</span>
-    <span class="kw">if</span> (icon) icon.style.transform = <span class="s">'rotate(180deg)'</span>; <span class="cm">// Flèche ↓ → ↑</span>
+<span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
+<span class="kw">const</span> <span class="vr">icon</span> = dropdownButton.<span class="fn">querySelector</span>(<span class="s">'.material-symbols-outlined'</span>);
+<span class="kw">if</span> (!menu) <span class="kw">return</span>;
+menu.classList.<span class="fn">add</span>(<span class="s">'active'</span>);              <span class="cm">// Rend visible (via CSS)</span> dropdownButton.classList.<span class="fn">add</span>(<span class="s">'active'</span>);     <span class="cm">// Style actif sur le bouton</span> <span class="kw">if</span> (icon) icon.style.transform = <span class="s">'rotate(180deg)'</span>; <span class="cm">// Flèche   </span>
 }
-
 <span class="kw">function</span> <span class="fn">closeDropdown</span>() {
-    <span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
-    <span class="kw">const</span> <span class="vr">icon</span> = dropdownButton.<span class="fn">querySelector</span>(<span class="s">'.material-symbols-outlined'</span>);
-    <span class="kw">if</span> (!menu) <span class="kw">return</span>;
-
-    menu.classList.<span class="fn">remove</span>(<span class="s">'active'</span>);
-    dropdownButton.classList.<span class="fn">remove</span>(<span class="s">'active'</span>);
-    <span class="kw">if</span> (icon) icon.style.transform = <span class="s">'rotate(0deg)'</span>; <span class="cm">// Flèche ↑ → ↓</span>
+<span class="kw">const</span> <span class="vr">menu</span> = document.<span class="fn">querySelector</span>(<span class="s">'.dropdown-menu'</span>);
+<span class="kw">const</span> <span class="vr">icon</span> = dropdownButton.<span class="fn">querySelector</span>(<span class="s">'.material-symbols-outlined'</span>);
+<span class="kw">if</span> (!menu) <span class="kw">return</span>;
+menu.classList.<span class="fn">remove</span>(<span class="s">'active'</span>);
+dropdownButton.classList.<span class="fn">remove</span>(<span class="s">'active'</span>);
+<span class="kw">if</span> (icon) icon.style.transform = <span class="s">'rotate(0deg)'</span>; <span class="cm">// Flèche   </span>
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Ce qui change dans le DOM à l'ouverture</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-align:center;margin-bottom:.6rem;">État FERMÉ</div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">&lt;button class="nav-dropdown"&gt; ← pas de .active</div>
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">&lt;div class="dropdown-menu"&gt; ← pas de .active</div>
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">&lt;span style="transform:rotate(0deg)"&gt;↓</div>
-        </div>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ffb380;text-align:center;margin-bottom:.6rem;">État OUVERT</div>
-        <div style="display:flex;flex-direction:column;gap:.3rem;">
-          <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.35);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ffb380;">&lt;button class="nav-dropdown <b>active</b>"&gt;</div>
-          <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.35);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ffb380;">&lt;div class="dropdown-menu <b>active</b>"&gt; ← visible</div>
-          <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.35);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ffb380;">&lt;span style="transform:rotate(<b>180deg</b>)"&gt;↑</div>
-        </div>
-      </div>
-    </div>
-    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span>Le CSS gère l'affichage réel : <ic>.dropdown-menu { display: none }</ic> et <ic>.dropdown-menu.active { display: block }</ic>. Le JavaScript ne fait que ajouter/retirer des classes — le CSS fait le reste.</span></div>
-  </div>
+</pre></div> <div class="diag"> <div class="dtitle">Ce qui change dans le DOM à l'ouverture</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-align:center;margin-bottom:.6rem;">État FERMÉ</div> <div style="display:flex;flex-direction:column;gap:.3rem;"> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">&lt;button class="nav-dropdown"&gt;  pas de .active</div> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">&lt;div class="dropdown-menu"&gt;  pas de .active</div> <div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">&lt;span style="transform:rotate(0deg)"&gt;</div> </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#ffb380;text-align:center;margin-bottom:.6rem;">État OUVERT</div> <div style="display:flex;flex-direction:column;gap:.3rem;"> <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.35);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ffb380;">&lt;button class="nav-dropdown <b>active</b>"&gt;</div> <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.35);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ffb380;">&lt;div class="dropdown-menu <b>active</b>"&gt;  visible</div> <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.35);border-radius:7px;padding:.45rem .8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#ffb380;">&lt;span style="transform:rotate(<b>180deg</b>)"&gt;</div> </div> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span>Le CSS gère l'affichage réel : <ic>.dropdown-menu { display: none }</ic> et <ic>.dropdown-menu.active { display: block }</ic>. Le JavaScript ne fait que ajouter/retirer des classes — le CSS fait le reste.</span></div> </div>
 </div>
-<hr>
-
-<!-- ══ 06 CUSTOMEVENT ══ -->
-<div class="sec" id="customevent">
-  <div class="slabel">06 — Communication via CustomEvent</div>
-  <h2>categorySelected — notifier les autres scripts</h2>
-  <p>Quand l'utilisateur clique sur une catégorie du menu, dropdown.js <b>émet un événement personnalisé</b> contenant les données de la catégorie. D'autres scripts peuvent l'écouter et réagir — sans couplage direct entre eux.</p>
-
-  <div class="box ana"><span class="bi">📻</span><div><b>Analogie :</b> C'est comme une radio. dropdown.js est la station émettrice : quand quelqu'un choisit une catégorie, il diffuse l'info sur le canal "categorySelected". D'autres scripts (par exemple un script de filtrage) sont des récepteurs branchés sur ce canal. Ils réagissent sans que dropdown.js sache qu'ils existent.</div></div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachDropdownItemEvents</span>() {
-    document.<span class="fn">querySelectorAll</span>(<span class="s">'.dropdown-item'</span>).<span class="fn">forEach</span>(<span class="kw">function</span>(item) {
-        item.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
-
-            <span class="kw">const</span> <span class="vr">category</span> = <span class="kw">this</span>.<span class="fn">getAttribute</span>(<span class="s">'data-category'</span>);
-            <span class="cm">// this.getAttribute() = lit un attribut HTML
-            // this.dataset.category aurait aussi fonctionné</span>
-
-            <span class="kw">const</span> <span class="vr">event</span> = <span class="kw">new</span> CustomEvent(<span class="s">'categorySelected'</span>, {
-                detail: {
-                    category: <span class="vr">category</span>,  <span class="cm">// ex: "Apple"</span>
-                    link:     <span class="kw">this</span>.href    <span class="cm">// ex: "page_catalogue.html?categorie=apple"</span>
-                }
-            });
-
-            document.<span class="fn">dispatchEvent</span>(event);
-            <span class="cm">// Envoie l'événement sur tout le document.
-            // N'importe quel script faisant document.addEventListener('categorySelected', fn)
-            // recevra cet événement avec les données dans event.detail</span>
-
-            <span class="fn">closeDropdown</span>();
-            <span class="cm">// Ferme le menu après le clic.
-            // La navigation se fait via le href du lien (comportement natif du &lt;a&gt;).
-            // Pas besoin de window.location.href ici — le navigateur le fait seul.</span>
-        });
-    });
+<hr> <!-- ══ 06 CUSTOMEVENT ══ -->
+<div class="sec" id="customevent"> <div class="slabel">06 — Communication via CustomEvent</div> <h2>categorySelected — notifier les autres scripts</h2> <p>Quand l'utilisateur clique sur une catégorie du menu, dropdown.js <b>émet un événement personnalisé</b> contenant les données de la catégorie. D'autres scripts peuvent l'écouter et réagir — sans couplage direct entre eux.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> C'est comme une radio. dropdown.js est la station émettrice : quand quelqu'un choisit une catégorie, il diffuse l'info sur le canal "categorySelected". D'autres scripts (par exemple un script de filtrage) sont des récepteurs branchés sur ce canal. Ils réagissent sans que dropdown.js sache qu'ils existent.</div></div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">attachDropdownItemEvents</span>() {
+document.<span class="fn">querySelectorAll</span>(<span class="s">'.dropdown-item'</span>).<span class="fn">forEach</span>(<span class="kw">function</span>(item) {
+item.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>(e) {
+<span class="kw">const</span> <span class="vr">category</span> = <span class="kw">this</span>.<span class="fn">getAttribute</span>(<span class="s">'data-category'</span>);
+<span class="cm">// this.getAttribute() = lit un attribut HTML
+// this.dataset.category aurait aussi fonctionné</span> <span class="kw">const</span> <span class="vr">event</span> = <span class="kw">new</span> CustomEvent(<span class="s">'categorySelected'</span>, {
+detail: {
+category: <span class="vr">category</span>,  <span class="cm">// ex: "Apple"</span> link:     <span class="kw">this</span>.href    <span class="cm">// ex: "page_catalogue.html?categorie=apple"</span> }
+});
+document.<span class="fn">dispatchEvent</span>(event);
+<span class="cm">// Envoie l'événement sur tout le document.
+// N'importe quel script faisant document.addEventListener('categorySelected', fn)
+// recevra cet événement avec les données dans event.detail</span> <span class="fn">closeDropdown</span>();
+<span class="cm">// Ferme le menu après le clic.
+// La navigation se fait via le href du lien (comportement natif du &lt;a&gt;).
+// Pas besoin de window.location.href ici — le navigateur le fait seul.</span> });
+});
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Flux de communication entre scripts via categorySelected</div>
-    <div class="vc">
-      <div class="vn w cgr">Utilisateur clique sur "Apple" dans le menu</div>
-      <div class="va">↓<div class="val">handler de click sur .dropdown-item</div></div>
-      <div class="vn w cb">dropdown.js crée : new CustomEvent('categorySelected', {detail: {category:"Apple", link:"..."}})</div>
-      <div class="va">↓</div>
-      <div class="vn w cy">document.dispatchEvent(event) — diffuse sur document</div>
-      <div class="va">↓<div class="val">tous les scripts à l'écoute reçoivent l'événement</div></div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="vn cg" style="font-size:.74rem;">Script A (si présent) reçoit<br>event.detail.category = "Apple"<br>Peut filtrer, logger, analyser…</div>
-      </div>
-      <div class="fc">
-        <div class="vn cp" style="font-size:.74rem;">Script B (si présent) reçoit<br>event.detail.link = "...?categorie=apple"<br>Peut pré-charger la page…</div>
-      </div>
-    </div>
-    <div class="vc" style="margin-top:.4rem;">
-      <div class="vn w cgr">Navigation normale : le &lt;a href&gt; charge la page catalogue</div>
-    </div>
-  </div>
-
-  <div class="tbl">
-    <thead><tr><th>Propriété dans event.detail</th><th>Valeur exemple</th><th>Usage possible</th></tr></thead>
-    <tbody>
-      <tr><td class="tc">category</td><td style="color:var(--t2)">"Apple"</td><td style="color:var(--t2)">Afficher un message "Catégorie Apple sélectionnée", envoyer à Analytics</td></tr>
-      <tr><td class="tc">link</td><td style="color:var(--t2)">"page_catalogue.html?categorie=apple"</td><td style="color:var(--t2)">Pré-charger la page, journaliser l'URL visitée</td></tr>
-    </tbody>
-  </div>
+</pre></div> <div class="diag"> <div class="dtitle">Flux de communication entre scripts via categorySelected</div> <div class="vc"> <div class="vn w cgr">Utilisateur clique sur "Apple" dans le menu</div> <div class="va"><div class="val">handler de click sur .dropdown-item</div></div> <div class="vn w cb">dropdown.js crée : new CustomEvent('categorySelected', {detail: {category:"Apple", link:"..."}})</div> <div class="va"></div> <div class="vn w cy">document.dispatchEvent(event) — diffuse sur document</div> <div class="va"><div class="val">tous les scripts à l'écoute reçoivent l'événement</div></div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="vn cg" style="font-size:.74rem;">Script A (si présent) reçoit<br>event.detail.category = "Apple"<br>Peut filtrer, logger, analyser…</div> </div> <div class="fc"> <div class="vn cp" style="font-size:.74rem;">Script B (si présent) reçoit<br>event.detail.link = "...?categorie=apple"<br>Peut pré-charger la page…</div> </div> </div> <div class="vc" style="margin-top:.4rem;"> <div class="vn w cgr">Navigation normale : le &lt;a href&gt; charge la page catalogue</div> </div> </div> <div class="tbl"> <thead><tr><th>Propriété dans event.detail</th><th>Valeur exemple</th><th>Usage possible</th></tr></thead> <tbody> <tr><td class="tc">category</td><td style="color:var(--t2)">"Apple"</td><td style="color:var(--t2)">Afficher un message "Catégorie Apple sélectionnée", envoyer à Analytics</td></tr> <tr><td class="tc">link</td><td style="color:var(--t2)">"page_catalogue.html?categorie=apple"</td><td style="color:var(--t2)">Pré-charger la page, journaliser l'URL visitée</td></tr> </tbody> </div>
 </div>
+<hr> <!-- ══ 07 RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">07 — Récapitulatif</div> <h2>Le film complet de A à Z</h2>
+<div class="diag"> <div class="dtitle">Le film complet de A à Z</div> <div style="display:flex;flex-direction:column;gap:.25rem;max-width:640px;"> <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">initDropdown()  attente PearTechDB</div></div> <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);"> polling 50×100ms ou événement dataReady</div> <div class="flow-row"><div class="flow-box" style="background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.25);color:#fdba74;">createDropdownMenu()</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">HTML généré depuis categories[] + injecté dans nav</div></div> <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);"></div> <div class="flow-row"><div class="flow-box" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;">attachDropdownEvents()</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">click · Escape · document click · item click</div></div> <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);"> utilisateur clique sur le bouton Catégories</div> <div class="flow-row"><div class="flow-box" style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);color:#f7d97a;">toggleDropdown()</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">FERMÉ ? openDropdown() · OUVERT ? closeDropdown()</div></div> <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);"> utilisateur clique une catégorie</div> <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">dispatch categorySelected</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">closeDropdown() + document.dispatchEvent(categorySelected)  filtre.js + catalogue.js écoutent</div></div> </div>
+</div> <div class="tl"> <div class="tli"><div class="tld" style="background:var(--a4)"></div> <div class="tlh"><div class="tls">Étape 1</div><div class="tlt">Chargement et vérification</div></div> <div class="tlb">dropdown.js s'exécute dans son IIFE. DOMContentLoaded attend que le HTML soit prêt. Le bouton <ic>.nav-dropdown</ic> est cherché. Si absent, arrêt propre.</div> </div> <div class="tli"><div class="tld" style="background:var(--a)"></div> <div class="tlh"><div class="tls">Étape 2</div><div class="tlt">Attente de PearTechDB</div></div> <div class="tlb">Si PearTechDB existe déjà : <ic>createDropdownMenu()</ic> immédiatement. Sinon : écoute <ic>'PearTechDBReady'</ic> et attend que data.js l'émette.</div> </div> <div class="tli"><div class="tld" style="background:var(--a3)"></div> <div class="tlh"><div class="tls">Étape 3</div><div class="tlt">Construction du menu</div></div> <div class="tlb"><ic>createDropdownMenu()</ic> génère le HTML complet avec les catégories de la DB (ou les données statiques). Crée le <ic>.dropdown-wrapper</ic> si nécessaire. Insère le menu dans le DOM. Attache les événements de clic sur les items.</div> </div> <div class="tli"><div class="tld" style="background:var(--a5)"></div> <div class="tlh"><div class="tls">Étape 4</div><div class="tlt">Installation des événements globaux</div></div> <div class="tlb"><ic>attachDropdownEvents()</ic> installe 3 écouteurs : clic bouton (avec <ic>stopPropagation</ic>), clic document (fermeture externe), Échap (fermeture clavier).</div> </div> <div class="tli"><div class="tld" style="background:var(--a2)"></div> <div class="tlh"><div class="tls">Étape 5</div><div class="tlt">Interaction utilisateur</div></div> <div class="tlb">Clic bouton  <ic>toggleDropdown()</ic> <ic>openDropdown()</ic> ou <ic>closeDropdown()</ic>. Clic item  <ic>CustomEvent('categorySelected')</ic> diffusé + fermeture menu + navigation vers la page catalogue.</div> </div> </div>
+</div> </div>
+
 <hr>
-
-<!-- ══ 07 RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">07 — Récapitulatif</div>
-  <h2>Le film complet de A à Z</h2>
-<div class="diag">
-  <div class="dtitle">Le film complet de A à Z</div>
-  <div style="display:flex;flex-direction:column;gap:.25rem;max-width:640px;">
-    <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">initDropdown() → attente PearTechDB</div></div>
-    <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);">↓ polling 50×100ms ou événement dataReady</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.25);color:#fdba74;">createDropdownMenu()</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">HTML généré depuis categories[] + injecté dans nav</div></div>
-    <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);">↓</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.25);color:#c4b5fd;">attachDropdownEvents()</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">click · Escape · document click · item click</div></div>
-    <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);">↓ utilisateur clique sur le bouton Catégories</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);color:#f7d97a;">toggleDropdown()</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">FERMÉ ? openDropdown() · OUVERT ? closeDropdown()</div></div>
-    <div style="padding-left:1.5rem;font-size:.67rem;color:var(--t3);">↓ utilisateur clique une catégorie</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">dispatch categorySelected</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">closeDropdown() + document.dispatchEvent(categorySelected) → filtre.js + catalogue.js écoutent</div></div>
-  </div>
-</div>
-
-  <div class="tl">
-    <div class="tli"><div class="tld" style="background:var(--a4)"></div>
-      <div class="tlh"><div class="tls">Étape 1</div><div class="tlt">Chargement et vérification</div></div>
-      <div class="tlb">dropdown.js s'exécute dans son IIFE. DOMContentLoaded attend que le HTML soit prêt. Le bouton <ic>.nav-dropdown</ic> est cherché. Si absent, arrêt propre.</div>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
     </div>
-    <div class="tli"><div class="tld" style="background:var(--a)"></div>
-      <div class="tlh"><div class="tls">Étape 2</div><div class="tlt">Attente de PearTechDB</div></div>
-      <div class="tlb">Si PearTechDB existe déjà : <ic>createDropdownMenu()</ic> immédiatement. Sinon : écoute <ic>'PearTechDBReady'</ic> et attend que data.js l'émette.</div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
     </div>
-    <div class="tli"><div class="tld" style="background:var(--a3)"></div>
-      <div class="tlh"><div class="tls">Étape 3</div><div class="tlt">Construction du menu</div></div>
-      <div class="tlb"><ic>createDropdownMenu()</ic> génère le HTML complet avec les catégories de la DB (ou les données statiques). Crée le <ic>.dropdown-wrapper</ic> si nécessaire. Insère le menu dans le DOM. Attache les événements de clic sur les items.</div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
     </div>
-    <div class="tli"><div class="tld" style="background:var(--a5)"></div>
-      <div class="tlh"><div class="tls">Étape 4</div><div class="tlt">Installation des événements globaux</div></div>
-      <div class="tlb"><ic>attachDropdownEvents()</ic> installe 3 écouteurs : clic bouton (avec <ic>stopPropagation</ic>), clic document (fermeture externe), Échap (fermeture clavier).</div>
+    <div class="glos-item">
+      <div class="glos-term">CustomEvent</div>
+      <div class="glos-def">Événement personnalisé émis par le code : <ic>document.dispatchEvent(new CustomEvent('nom', {detail: données}))</ic>. Permet à des modules de communiquer sans se connaître — couplage zéro. L'abonné écoute via <ic>document.addEventListener('nom', fn)</ic>.</div>
     </div>
-    <div class="tli"><div class="tld" style="background:var(--a2)"></div>
-      <div class="tlh"><div class="tls">Étape 5</div><div class="tlt">Interaction utilisateur</div></div>
-      <div class="tlb">Clic bouton → <ic>toggleDropdown()</ic> → <ic>openDropdown()</ic> ou <ic>closeDropdown()</ic>. Clic item → <ic>CustomEvent('categorySelected')</ic> diffusé + fermeture menu + navigation vers la page catalogue.</div>
+    <div class="glos-item">
+      <div class="glos-term">classList</div>
+      <div class="glos-def">Interface de manipulation des classes CSS. <ic>add()</ic>, <ic>remove()</ic>, <ic>toggle()</ic>, <ic>contains()</ic>. Plus fiable que modifier <ic>className</ic> comme une string. <ic>toggle('active', condition)</ic> ajoute ou retire selon un booléen.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">stopPropagation()</div>
+      <div class="glos-def">Stoppe la remontée (bubbling) d'un événement. Sans ça, un clic sur un bouton qui ouvre un menu déclencherait aussi le listener <ic>document.addEventListener('click', fermerMenu)</ic>. Utilisé pour que le bouton d'ouverture n'annule pas immédiatement l'ouverture.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Délégation d'événements</div>
+      <div class="glos-def">Un seul listener sur un parent au lieu d'un listener par enfant. L'événement remonte (bubble) de l'enfant vers le parent. <ic>e.target.closest('.btn')</ic> identifie l'élément source. Avantage : fonctionne pour les éléments ajoutés dynamiquement après l'initialisation.</div>
     </div>
   </div>
-</div>
-
 </div>
 </body>
 </html>

@@ -5,438 +5,244 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — contact.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#38bdf8;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#7dd3fc;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-  .fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fc .vn{width:100%;max-width:100%;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
-  .fli{background:rgba(56,189,248,.15);color:#7dd3fc;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;}
-  .box.info{background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box b{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#7dd3fc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#38bdf8;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#7dd3fc;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+.fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fc .vn{width:100%;max-width:100%;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.flr{background:rgba(255,107,107,.15);color:#ff9090;}
+.fli{background:rgba(56,189,248,.15);color:#7dd3fc;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;}
+.box.info{background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box b{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#7dd3fc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── SCHEMAS PASS 2 ─── */
+.schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+.pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+.pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+.row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+.sp-row{display:flex;flex-direction:column;gap:.3rem;}
+.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+.trans-line{width:28px;height:1px;background:var(--t3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
 
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── SCHEMAS PASS 2 ─── */
-  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
-  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
-  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
-  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-  .kbox{border-radius:11px;padding:.9rem 1rem;}
-  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .kbox-item:last-child{border-bottom:none;}
-  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
-  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-  .seq{display:flex;flex-direction:column;gap:.3rem;}
-  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-  .trans-line{width:28px;height:1px;background:var(--t3);}
-  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
-</style>
+  .glos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.75rem;margin-top:.8rem}
+  .glos-item{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--a);border-radius:6px;padding:.75rem 1rem}
+  .glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--a);margin-bottom:.35rem}
+  .glos-def{font-size:.78rem;color:var(--t2);line-height:1.65}
+  .glos-def ic{font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--bg3);border:1px solid var(--border);padding:.02rem .3rem;border-radius:3px;color:#bef264}
+  </style>
 </head>
 <body>
-<nav>
-  <div class="nl">contact.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#validation">Validation</a>
-  <a href="#envoi">Envoi simulé</a>
-  <a href="#messages">Messages</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">contact.js</div> <a href="#intro">Intro</a> <a href="#validation">Validation</a> <a href="#envoi">Envoi simulé</a> <a href="#messages">Messages</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>Submit du formulaire</b><br><span style="color:var(--t3);font-size:.71rem;">preventDefault()</span></div>
 <div class="carte-item"><b>Input events</b><br><span style="color:var(--t3);font-size:.71rem;">validation temps réel</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#38bdf822;color:#38bdf8;border:1px solid #38bdf844;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#38bdf822;color:#38bdf8;border:1px solid #38bdf844;"> TRAITEMENTS</div>
 <div class="carte-item"><b>validateField(field)</b><br><span style="color:var(--t3);font-size:.71rem;">regex email, longueur, requis</span></div>
 <div class="carte-item"><b>validateForm()</b><br><span style="color:var(--t3);font-size:.71rem;">tous les champs valides ?</span></div>
 <div class="carte-item"><b>sendMessage()</b><br><span style="color:var(--t3);font-size:.71rem;">setTimeout 1.5s — simulation serveur</span></div>
 <div class="carte-item"><b>showSuccess()</b><br><span style="color:var(--t3);font-size:.71rem;">affiche le message de confirmation</span></div>
 <div class="carte-item"><b>resetForm()</b><br><span style="color:var(--t3);font-size:.71rem;">vide les champs</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>Aucune écriture</b><br><span style="color:var(--t3);font-size:.71rem;">pas de localStorage ni sessionStorage</span></div>
 <div class="carte-item"><b>DOM</b><br><span style="color:var(--t3);font-size:.71rem;">messages d'erreur / succès affichés</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>contact.js</span></h1> <p>Ce fichier gère le formulaire de contact de <ic>page_contact.html</ic>. Il intercepte la soumission, valide tous les champs (y compris la checkbox RGPD et le format email), simule un envoi avec un délai d'une seconde, puis affiche un message de retour coloré selon le résultat.</p> <div class="fbadge"><div class="dot"></div>contact.js · ~70 lignes · 3 fonctions · page_contact.html · aucune dépendance</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Validation, simulation réseau et feedback visuel</h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> contact.js est comme un employé de guichet : il vérifie d'abord que tous les documents sont présents et correctement remplis, affiche un panneau "traitement en cours", puis confirme que le message est bien parti (en réalité, rien n'est envoyé côté serveur — c'est une simulation).</div></div> <div class="diag"> <div class="dtitle">Structure du fichier — 3 blocs</div> <div class="fork f3"> <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">1 — Écoute</div> <div style="font-size:.77rem;color:var(--t2);">addEventListener('submit') intercepte le formulaire avant son envoi natif</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">2 — Validation</div> <div style="font-size:.77rem;color:var(--t2);">Vérifie champs vides + checkbox + format email. Arrête si erreur.</div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">3 — Feedback</div> <div style="font-size:.77rem;color:var(--t2);">Affiche "envoi…" puis "envoyé !" après 1s. Reset du formulaire.</div> </div> </div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>contact.js</span></h1>
-  <p>Ce fichier gère le formulaire de contact de <ic>page_contact.html</ic>. Il intercepte la soumission, valide tous les champs (y compris la checkbox RGPD et le format email), simule un envoi avec un délai d'une seconde, puis affiche un message de retour coloré selon le résultat.</p>
-  <div class="fbadge"><div class="dot"></div>contact.js · ~70 lignes · 3 fonctions · page_contact.html · aucune dépendance</div>
-</div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Avant de commencer</div>
-  <h2>Validation, simulation réseau et feedback visuel</h2>
-  <div class="box ana"><span class="bi">📬</span><div><b>Analogie :</b> contact.js est comme un employé de guichet : il vérifie d'abord que tous les documents sont présents et correctement remplis, affiche un panneau "traitement en cours", puis confirme que le message est bien parti (en réalité, rien n'est envoyé côté serveur — c'est une simulation).</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Structure du fichier — 3 blocs</div>
-    <div class="fork f3">
-      <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">1 — Écoute</div>
-        <div style="font-size:.77rem;color:var(--t2);">addEventListener('submit') intercepte le formulaire avant son envoi natif</div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">2 — Validation</div>
-        <div style="font-size:.77rem;color:var(--t2);">Vérifie champs vides + checkbox + format email. Arrête si erreur.</div>
-      </div>
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">3 — Feedback</div>
-        <div style="font-size:.77rem;color:var(--t2);">Affiche "envoi…" puis "envoyé !" après 1s. Reset du formulaire.</div>
-      </div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 VALIDATION ══ -->
-<div class="sec" id="validation">
-  <div class="slabel">01 — Validation des champs</div>
-  <h2>Deux niveaux de vérification</h2>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre>contactForm.<span class="fn">addEventListener</span>(<span class="s">'submit'</span>, <span class="kw">function</span>(e) {
-    e.<span class="fn">preventDefault</span>(); <span class="cm">// Bloque le rechargement de page</span>
-
-    <span class="kw">const</span> <span class="vr">name</span>    = document.<span class="fn">getElementById</span>(<span class="s">'name'</span>).value.<span class="fn">trim</span>();
-    <span class="kw">const</span> <span class="vr">email</span>   = document.<span class="fn">getElementById</span>(<span class="s">'email'</span>).value.<span class="fn">trim</span>();
-    <span class="kw">const</span> <span class="vr">subject</span> = document.<span class="fn">getElementById</span>(<span class="s">'subject'</span>).value.<span class="fn">trim</span>();
-    <span class="kw">const</span> <span class="vr">message</span> = document.<span class="fn">getElementById</span>(<span class="s">'message'</span>).value.<span class="fn">trim</span>();
-    <span class="kw">const</span> <span class="vr">consent</span> = document.<span class="fn">getElementById</span>(<span class="s">'consent'</span>).checked; <span class="cm">// Boolean</span>
-
-    <span class="cm">// Niveau 1 : tous les champs présents + checkbox cochée</span>
-    <span class="kw">if</span> (!name || !email || !subject || !message || !consent) {
-        <span class="fn">showMessage</span>(<span class="s">'Veuillez remplir tous les champs...'</span>, <span class="s">'error'</span>);
-        <span class="kw">return</span>; <span class="cm">// Arrêt immédiat</span>
-    }
-
-    <span class="cm">// Niveau 2 : format email valide</span>
-    <span class="kw">if</span> (!<span class="fn">validateEmail</span>(email)) {
-        <span class="fn">showMessage</span>(<span class="s">'Veuillez saisir une adresse email valide.'</span>, <span class="s">'error'</span>);
-        <span class="kw">return</span>;
-    }
-
-    <span class="cm">// ▶ Si on arrive ici, tout est valide → envoi simulé</span>
-});</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Arbre de validation — chemins possibles</div>
-    <div class="vc">
-      <div class="vn w cgr">Soumission du formulaire</div>
-      <div class="va">↓<div class="val">e.preventDefault()</div></div>
-      <div class="vn w cb">Lecture des 5 champs : name, email, subject, message, consent</div>
-      <div class="va">↓<div class="val">Champs vides ou checkbox décochée ?</div></div>
-    </div>
-    <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="fl flr">OUI</div>
-        <div class="vn cr" style="font-size:.72rem;">showMessage(…, 'error')<br>return — arrêt</div>
-      </div>
-      <div class="fc">
-        <div class="fl flg">NON</div>
-        <div class="vn cgr" style="font-size:.72rem;">validateEmail(email) ?</div>
-        <div class="fork f2" style="margin:.3rem 0;">
-          <div class="fc">
-            <div class="fl flr" style="font-size:.58rem;">Format invalide</div>
-            <div class="vn cr" style="font-size:.68rem;">showMessage error<br>return</div>
-          </div>
-          <div class="fc">
-            <div class="fl flg" style="font-size:.58rem;">Format valide</div>
-            <div class="vn cg" style="font-size:.68rem;">→ Envoi simulé</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <h3>validateEmail() — la regex expliquée caractère par caractère</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">validateEmail</span>(email) {
-    <span class="kw">const</span> <span class="vr">re</span> = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    <span class="kw">return</span> re.<span class="fn">test</span>(email); <span class="cm">// true si valide</span>
+<hr> <!-- ══ 01 VALIDATION ══ -->
+<div class="sec" id="validation"> <div class="slabel">01 — Validation des champs</div> <h2>Deux niveaux de vérification</h2> <div class="cb2"><span class="cbl2">javascript</span><pre>contactForm.<span class="fn">addEventListener</span>(<span class="s">'submit'</span>, <span class="kw">function</span>(e) {
+e.<span class="fn">preventDefault</span>(); <span class="cm">// Bloque le rechargement de page</span> <span class="kw">const</span> <span class="vr">name</span> = document.<span class="fn">getElementById</span>(<span class="s">'name'</span>).value.<span class="fn">trim</span>();
+<span class="kw">const</span> <span class="vr">email</span> = document.<span class="fn">getElementById</span>(<span class="s">'email'</span>).value.<span class="fn">trim</span>();
+<span class="kw">const</span> <span class="vr">subject</span> = document.<span class="fn">getElementById</span>(<span class="s">'subject'</span>).value.<span class="fn">trim</span>();
+<span class="kw">const</span> <span class="vr">message</span> = document.<span class="fn">getElementById</span>(<span class="s">'message'</span>).value.<span class="fn">trim</span>();
+<span class="kw">const</span> <span class="vr">consent</span> = document.<span class="fn">getElementById</span>(<span class="s">'consent'</span>).checked; <span class="cm">// Boolean</span> <span class="cm">// Niveau 1 : tous les champs présents + checkbox cochée</span> <span class="kw">if</span> (!name || !email || !subject || !message || !consent) {
+<span class="fn">showMessage</span>(<span class="s">'Veuillez remplir tous les champs...'</span>, <span class="s">'error'</span>);
+<span class="kw">return</span>; <span class="cm">// Arrêt immédiat</span> }
+<span class="cm">// Niveau 2 : format email valide</span> <span class="kw">if</span> (!<span class="fn">validateEmail</span>(email)) {
+<span class="fn">showMessage</span>(<span class="s">'Veuillez saisir une adresse email valide.'</span>, <span class="s">'error'</span>);
+<span class="kw">return</span>;
 }
-<span class="cm">// ^           → début de la chaîne
-// [^\s@]+     → 1+ caractères qui ne sont ni espace ni @   (la partie avant @)
-// @           → le caractère @ obligatoire
-// [^\s@]+     → 1+ caractères (le domaine)
-// \.          → un point littéral (échappé avec \ car . seul = "n'importe quel char")
-// [^\s@]+     → 1+ caractères (l'extension : fr, com, org…)
-// $           → fin de la chaîne</span></pre></div>
-
-  <div class="diag">
-    <div class="dtitle">/ Tests de la regex</div>
-    <div style="display:flex;flex-direction:column;gap:.4rem;">
-      <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;">
-        <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd97989c93bd99888d929389d39b8f">[email&#160;protected]</a></span><span style="color:#7ee8b8;">✓</span><span style="color:var(--t3);">Format correct</span>
-      </div>
-      <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;">
-        <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4237312730023137206c262d2f232b2c6c212d2f">[email&#160;protected]</a></span><span style="color:#7ee8b8;">✓</span><span style="color:var(--t3);">Sous-domaine autorisé</span>
-      </div>
-      <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;">
-        <span style="color:#ff9090;">jean <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f09485809f9e84b0959d91999cde9682">[email&#160;protected]</a></span><span style="color:#ff6b6b;">✗</span><span style="color:var(--t3);">Espace interdit avant @</span>
-      </div>
-      <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;">
-        <span style="color:#ff9090;">jeanATdupont.fr</span><span style="color:#ff6b6b;">✗</span><span style="color:var(--t3);">Pas de @</span>
-      </div>
-      <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75sym;">
-        <span style="color:#ff9090;">jean@dupont</span><span style="color:#ff6b6b;">✗</span><span style="color:var(--t3);">Pas de point dans le domaine</span>
-      </div>
-    </div>
-    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span>Cette regex est une validation de <b>format</b>, pas d'existence. <ic><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2c2b3f320a2c2b3f32642c2b3f32">[email&#160;protected]</a></ic> passerait la validation. En production, une vérification côté serveur (ou un envoi de confirmation) est nécessaire pour valider l'existence réelle.</span></div>
-  </div>
+<span class="cm">//  Si on arrive ici, tout est valide  envoi simulé</span>
+});</pre></div> <div class="diag"> <div class="dtitle">Arbre de validation — chemins possibles</div> <div class="vc"> <div class="vn w cgr">Soumission du formulaire</div> <div class="va"><div class="val">e.preventDefault()</div></div> <div class="vn w cb">Lecture des 5 champs : name, email, subject, message, consent</div> <div class="va"><div class="val">Champs vides ou checkbox décochée ?</div></div> </div> <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flr">OUI</div> <div class="vn cr" style="font-size:.72rem;">showMessage(…, 'error')<br>return — arrêt</div> </div> <div class="fc"> <div class="fl flg">NON</div> <div class="vn cgr" style="font-size:.72rem;">validateEmail(email) ?</div> <div class="fork f2" style="margin:.3rem 0;"> <div class="fc"> <div class="fl flr" style="font-size:.58rem;">Format invalide</div> <div class="vn cr" style="font-size:.68rem;">showMessage error<br>return</div> </div> <div class="fc"> <div class="fl flg" style="font-size:.58rem;">Format valide</div> <div class="vn cg" style="font-size:.68rem;"> Envoi simulé</div> </div> </div> </div> </div> </div> <h3>validateEmail() — la regex expliquée caractère par caractère</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">validateEmail</span>(email) {
+<span class="kw">const</span> <span class="vr">re</span> = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+<span class="kw">return</span> re.<span class="fn">test</span>(email); <span class="cm">// true si valide</span>
+}
+<span class="cm">// ^            début de la chaîne
+// [^\s@]+      1+ caractères qui ne sont ni espace ni @   (la partie avant @)
+// @            le caractère @ obligatoire
+// [^\s@]+      1+ caractères (le domaine)
+// \.           un point littéral (échappé avec \ car . seul = "n'importe quel char")
+// [^\s@]+      1+ caractères (l'extension : fr, com, org…)
+// $            fin de la chaîne</span></pre></div> <div class="diag"> <div class="dtitle">/ Tests de la regex</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd97989c93bd99888d929389d39b8f">[email&#160;protected]</a></span><span style="color:#7ee8b8;"></span><span style="color:var(--t3);">Format correct</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4237312730023137206c262d2f232b2c6c212d2f">[email&#160;protected]</a></span><span style="color:#7ee8b8;"></span><span style="color:var(--t3);">Sous-domaine autorisé</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#ff9090;">jean <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f09485809f9e84b0959d91999cde9682">[email&#160;protected]</a></span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Espace interdit avant @</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#ff9090;">jeanATdupont.fr</span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Pas de @</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75sym;"> <span style="color:#ff9090;">jean@dupont</span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Pas de point dans le domaine</span> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span>Cette regex est une validation de <b>format</b>, pas d'existence. <ic><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2c2b3f320a2c2b3f32642c2b3f32">[email&#160;protected]</a></ic> passerait la validation. En production, une vérification côté serveur (ou un envoi de confirmation) est nécessaire pour valider l'existence réelle.</span></div> </div>
 </div>
-<hr>
-
-<div class="schema2">
-  <div class="s2t">validateEmail() — anatomie de la regex</div>
-  <div style="display:flex;flex-direction:column;gap:.6rem;max-width:580px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.74rem;background:var(--bg3);border-radius:8px;padding:.6rem .9rem;line-height:2;word-break:break-all;">
-      <span style="color:#f9a8d4;">/^</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#7dd3fc;">@</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#7dd3fc;">\.</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#f9a8d4;">$/</span>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;text-align:center;font-size:.69rem;">
-      <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#f9a8d4;margin-bottom:.3rem;">^</div><div style="color:var(--t2);">début de chaîne</div></div>
-      <div style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#fde68a;margin-bottom:.3rem;">[^\s@]+</div><div style="color:var(--t2);">1+ chars<br>ni espace ni @</div></div>
-      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#7dd3fc;margin-bottom:.3rem;">@[^\s@]+\.</div><div style="color:var(--t2);">@ · domaine · point</div></div>
-      <div style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#fde68a;margin-bottom:.3rem;">[^\s@]+</div><div style="color:var(--t2);">extension<br>(fr, com…)</div></div>
-      <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#f9a8d4;margin-bottom:.3rem;">$</div><div style="color:var(--t2);">fin de chaîne</div></div>
-    </div>
-  </div>
+<hr> <div class="schema2"> <div class="s2t">validateEmail() — anatomie de la regex</div> <div style="display:flex;flex-direction:column;gap:.6rem;max-width:580px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.74rem;background:var(--bg3);border-radius:8px;padding:.6rem .9rem;line-height:2;word-break:break-all;"> <span style="color:#f9a8d4;">/^</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#7dd3fc;">@</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#7dd3fc;">\.</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#f9a8d4;">$/</span> </div> <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;text-align:center;font-size:.69rem;"> <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#f9a8d4;margin-bottom:.3rem;">^</div><div style="color:var(--t2);">début de chaîne</div></div> <div style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#fde68a;margin-bottom:.3rem;">[^\s@]+</div><div style="color:var(--t2);">1+ chars<br>ni espace ni @</div></div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#7dd3fc;margin-bottom:.3rem;">@[^\s@]+\.</div><div style="color:var(--t2);">@ · domaine · point</div></div> <div style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#fde68a;margin-bottom:.3rem;">[^\s@]+</div><div style="color:var(--t2);">extension<br>(fr, com…)</div></div> <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#f9a8d4;margin-bottom:.3rem;">$</div><div style="color:var(--t2);">fin de chaîne</div></div> </div> </div>
 </div>
-<hr>
+<hr> <!-- ══ 02 ENVOI SIMULÉ ══ -->
+<div class="sec" id="envoi"> <div class="slabel">02 — Envoi simulé</div> <h2>setTimeout — simuler un délai réseau</h2>
+<div class="diag"> <div class="dtitle">Simulation vs production — ce qui change</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:var(--t3);margin-bottom:.6rem;">Version simulée (actuelle)</div> <div style="display:flex;flex-direction:column;gap:.25rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">showMessage('Envoi...', 'info')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);"> setTimeout 1000ms</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">showMessage('Envoyé', 'success')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7dd3fc;">contactForm.reset()</div> </div> </div> <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.6rem;">Version production</div> <div style="display:flex;flex-direction:column;gap:.25rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">showMessage('Envoi...', 'info')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);"> fetch('/api/contact', {method:'POST',...})</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">.then(r => r.ok ?</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;padding-left:.8rem;color:#7ee8b8;">showMessage('Envoyé', 'success')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;padding-left:.8rem;color:#fda4af;">: showMessage('Erreur', 'error')</div> </div> </div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">La structure showMessage  action asynchrone  showMessage(résultat) est identique dans les deux cas. Seul le mécanisme d'attente change : setTimeout remplacé par fetch().then().</div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="fn">showMessage</span>(<span class="s">'Envoi en cours...'</span>, <span class="s">'info'</span>); <span class="cm">// Feedback immédiat</span> <span class="fn">setTimeout</span>(() => {
+<span class="fn">showMessage</span>(
+<span class="s">'Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.'</span>,
+<span class="s">'success'</span> );
+contactForm.<span class="fn">reset</span>(); <span class="cm">// Vide tous les champs d'un coup</span>
+}, <span class="nm">1000</span>); <span class="cm">// 1000ms = 1 seconde</span></pre></div> <div class="box warn"><span class="bi"></span><div><b>En production :</b> Le <ic>setTimeout</ic> serait remplacé par un <ic>fetch()</ic> vers une API backend. Le <ic>showMessage</ic> "Envoi en cours..." resterait, et le message "succès" ou "erreur" serait affiché selon la réponse du serveur. La structure resterait identique — seule la partie "simulation" change.</div></div> <div class="diag"> <div class="dtitle">Ligne de temps de la soumission</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7dd3fc;">showMessage('Envoi en cours...', 'info') — zone de message passe en bleu</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1000ms</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">showMessage('Votre message a bien été envoyé.', 'success') — zone passe en vert</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1000ms</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:var(--t2);">contactForm.reset() — tous les champs vidés automatiquement</div> </div> </div> </div>
+</div>
+<hr> <!-- ══ 03 MESSAGES ══ -->
+<div class="sec" id="messages"> <div class="slabel">03 — Affichage des messages</div> <h2>showMessage() — 3 types de feedback</h2>
+<div class="diag"> <div class="dtitle">Les 3 états visuels de formMessage</div> <div style="display:flex;flex-direction:column;gap:.5rem;max-width:480px;"> <div style="background:rgba(56,189,248,.08);border-left:3px solid #7dd3fc;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7dd3fc;margin-bottom:.2rem;">type = 'info'</div> <div style="font-size:.73rem;color:var(--t2);">Envoi en cours...</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">transitoire</div> </div> <div style="background:rgba(244,63,94,.08);border-left:3px solid #fda4af;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;margin-bottom:.2rem;">type = 'error'</div> <div style="font-size:.73rem;color:var(--t2);">Champ requis manquant ou email invalide</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">persistant</div> </div> <div style="background:rgba(86,209,158,.08);border-left:3px solid #7ee8b8;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;margin-bottom:.2rem;">type = 'success'</div> <div style="font-size:.73rem;color:var(--t2);">Message envoyé. Nous vous répondrons.</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">persistant</div> </div> </div> <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">formMessage.className = "form-message " + type  une seule ligne écrase la classe précédente. Pas de classList.add/remove à gérer.</div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">showMessage</span>(text, type) {
+<span class="kw">if</span> (!formMessage) <span class="kw">return</span>; <span class="cm">// Sécurité si élément absent</span> formMessage.textContent = text;
+formMessage.className   = <span class="s">`form-message ${type}`</span>; <span class="cm">// 'success', 'error', ou 'info'</span> formMessage.<span class="fn">scrollIntoView</span>({ behavior: <span class="s">'smooth'</span>, block: <span class="s">'nearest'</span> });
+}</pre></div> <div class="diag"> <div class="dtitle">Les 3 types de messages et leurs classes CSS</div> <div class="fork f3"> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.3rem;">'error'</div> <div style="font-size:.77rem;color:var(--t2);">Champ manquant ou email invalide. Fond rouge atténué.</div> </div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">'info'</div> <div style="font-size:.77rem;color:var(--t2);">"Envoi en cours..." Fond bleu atténué. Transitoire.</div> </div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">'success'</div> <div style="font-size:.77rem;color:var(--t2);">Message envoyé avec succès. Fond vert atténué.</div> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span><ic>formMessage.className = `form-message ${type}`</ic> <b>remplace</b> toute la classe à chaque appel. Cela évite d'accumuler les classes <ic>error info success</ic> après plusieurs soumissions. À chaque call, l'état visuel est proprement réinitialisé.</span></div> </div>
+</div>
+<hr> <!-- ══ RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">04 — Récapitulatif</div> <h2>Vue d'ensemble — tout le fichier en un schéma</h2>
 
-<!-- ══ 02 ENVOI SIMULÉ ══ -->
-<div class="sec" id="envoi">
-  <div class="slabel">02 — Envoi simulé</div>
-  <h2>setTimeout — simuler un délai réseau</h2>
 <div class="diag">
-  <div class="dtitle">Simulation vs production — ce qui change</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-    <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:var(--t3);margin-bottom:.6rem;">Version simulée (actuelle)</div>
-      <div style="display:flex;flex-direction:column;gap:.25rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">showMessage('Envoi...', 'info')</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">↓ setTimeout 1000ms</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">showMessage('Envoyé', 'success')</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7dd3fc;">contactForm.reset()</div>
-      </div>
-    </div>
-    <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.6rem;">Version production</div>
-      <div style="display:flex;flex-direction:column;gap:.25rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">showMessage('Envoi...', 'info')</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">↓ fetch('/api/contact', {method:'POST',...})</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">.then(r => r.ok ?</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;padding-left:.8rem;color:#7ee8b8;">showMessage('Envoyé', 'success')</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;padding-left:.8rem;color:#fda4af;">: showMessage('Erreur', 'error')</div>
-      </div>
-    </div>
-  </div>
-  <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">La structure showMessage → action asynchrone → showMessage(résultat) est identique dans les deux cas. Seul le mécanisme d'attente change : setTimeout remplacé par fetch().then().</div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="fn">showMessage</span>(<span class="s">'Envoi en cours...'</span>, <span class="s">'info'</span>); <span class="cm">// Feedback immédiat</span>
-
-<span class="fn">setTimeout</span>(() => {
-    <span class="fn">showMessage</span>(
-        <span class="s">'Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.'</span>,
-        <span class="s">'success'</span>
-    );
-    contactForm.<span class="fn">reset</span>(); <span class="cm">// Vide tous les champs d'un coup</span>
-}, <span class="nm">1000</span>); <span class="cm">// 1000ms = 1 seconde</span></pre></div>
-
-  <div class="box warn"><span class="bi">💡</span><div><b>En production :</b> Le <ic>setTimeout</ic> serait remplacé par un <ic>fetch()</ic> vers une API backend. Le <ic>showMessage</ic> "Envoi en cours..." resterait, et le message "succès" ou "erreur" serait affiché selon la réponse du serveur. La structure resterait identique — seule la partie "simulation" change.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Ligne de temps de la soumission</div>
-    <div style="display:flex;flex-direction:column;gap:.4rem;">
-      <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 0ms</div>
-        <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7dd3fc;">showMessage('Envoi en cours...', 'info') — zone de message passe en bleu</div>
-      </div>
-      <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1000ms</div>
-        <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">showMessage('Votre message a bien été envoyé.', 'success') — zone passe en vert</div>
-      </div>
-      <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1000ms</div>
-        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:var(--t2);">contactForm.reset() — tous les champs vidés automatiquement</div>
-      </div>
-    </div>
+  <div class="dtitle">Séquence complète d'une soumission réussie</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem">
+    <div class="flow-row"><span class="chain-title">1</span><span style="font-size:.78rem;color:var(--t2)">Clic "Envoyer" → <code>e.preventDefault()</code> — stop rechargement page</span></div>
+    <div class="flow-row"><span class="chain-title">2</span><span style="font-size:.78rem;color:var(--t2)">Lecture des 5 champs : name · email · subject · message · consent</span></div>
+    <div class="flow-row"><span class="chain-title">3</span><span style="font-size:.78rem;color:var(--t2)">Validation présence → si un champ vide : <code>showMessage('erreur', 'error')</code> + return</span></div>
+    <div class="flow-row"><span class="chain-title">4</span><span style="font-size:.78rem;color:var(--t2)">Validation email → <code>validateEmail()</code> → si invalide : erreur + return</span></div>
+    <div class="flow-row"><span class="chain-title">5</span><span style="font-size:.78rem;color:var(--t2)"><code>showMessage('Envoi en cours...', 'info')</code></span></div>
+    <div class="flow-row"><span class="chain-title">6</span><span style="font-size:.78rem;color:var(--t2)"><code>setTimeout(1000ms)</code> → <code>showMessage('succès', 'success')</code> + <code>form.reset()</code></span></div>
   </div>
 </div>
-<hr>
 
-<!-- ══ 03 MESSAGES ══ -->
-<div class="sec" id="messages">
-  <div class="slabel">03 — Affichage des messages</div>
-  <h2>showMessage() — 3 types de feedback</h2>
 <div class="diag">
-  <div class="dtitle">Les 3 états visuels de formMessage</div>
-  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:480px;">
-    <div style="background:rgba(56,189,248,.08);border-left:3px solid #7dd3fc;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7dd3fc;margin-bottom:.2rem;">type = 'info'</div>
-        <div style="font-size:.73rem;color:var(--t2);">Envoi en cours...</div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">transitoire</div>
+  <div class="dtitle">Les 3 états de showMessage()</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;font-size:.79rem;text-align:center">
+    <div style="background:var(--bg);border:1px solid #fda4af;border-radius:8px;padding:.7rem .9rem;border-left:4px solid #fda4af">
+      <div style="color:#fda4af;font-weight:600;margin-bottom:.3rem">error</div>
+      <div style="color:var(--t3);font-size:.75rem">Champ vide<br>Email invalide<br>Consent manquant</div>
     </div>
-    <div style="background:rgba(244,63,94,.08);border-left:3px solid #fda4af;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;margin-bottom:.2rem;">type = 'error'</div>
-        <div style="font-size:.73rem;color:var(--t2);">Champ requis manquant ou email invalide</div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">persistant</div>
+    <div style="background:var(--bg);border:1px solid #7dd3fc;border-radius:8px;padding:.7rem .9rem;border-left:4px solid #7dd3fc">
+      <div style="color:#7dd3fc;font-weight:600;margin-bottom:.3rem">info</div>
+      <div style="color:var(--t3);font-size:.75rem">Envoi en cours...<br>setTimeout actif<br>Spinner implicite</div>
     </div>
-    <div style="background:rgba(86,209,158,.08);border-left:3px solid #7ee8b8;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;margin-bottom:.2rem;">type = 'success'</div>
-        <div style="font-size:.73rem;color:var(--t2);">Message envoyé. Nous vous répondrons.</div>
-      </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">persistant</div>
+    <div style="background:var(--bg);border:1px solid #7ee8b8;border-radius:8px;padding:.7rem .9rem;border-left:4px solid #7ee8b8">
+      <div style="color:#7ee8b8;font-weight:600;margin-bottom:.3rem">success</div>
+      <div style="color:var(--t3);font-size:.75rem">Message envoyé<br>form.reset() appelé<br>Champs vidés</div>
     </div>
   </div>
-  <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">formMessage.className = "form-message " + type → une seule ligne écrase la classe précédente. Pas de classList.add/remove à gérer.</div>
 </div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">showMessage</span>(text, type) {
-    <span class="kw">if</span> (!formMessage) <span class="kw">return</span>; <span class="cm">// Sécurité si élément absent</span>
-    formMessage.textContent = text;
-    formMessage.className   = <span class="s">`form-message ${type}`</span>; <span class="cm">// 'success', 'error', ou 'info'</span>
-    formMessage.<span class="fn">scrollIntoView</span>({ behavior: <span class="s">'smooth'</span>, block: <span class="s">'nearest'</span> });
-}</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Les 3 types de messages et leurs classes CSS</div>
-    <div class="fork f3">
-      <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.3rem;">'error'</div>
-        <div style="font-size:.77rem;color:var(--t2);">Champ manquant ou email invalide. Fond rouge atténué.</div>
-      </div>
-      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">'info'</div>
-        <div style="font-size:.77rem;color:var(--t2);">"Envoi en cours..." Fond bleu atténué. Transitoire.</div>
-      </div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">'success'</div>
-        <div style="font-size:.77rem;color:var(--t2);">Message envoyé avec succès. Fond vert atténué.</div>
-      </div>
+<div class="diag" style="margin-top:.8rem">
+  <div class="dtitle">Validation en 2 passes — ordre important</div>
+  <div style="font-size:.8rem;display:flex;flex-direction:column;gap:.4rem">
+    <div style="display:flex;gap:.7rem;align-items:center">
+      <div style="min-width:22px;height:22px;border-radius:50%;background:#f7d97a;color:#0a0b0e;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700">1</div>
+      <div style="color:var(--t2)">Champs vides + checkbox → si invalide : <span style="color:#fda4af">return</span> (arrêt immédiat)</div>
     </div>
-    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span><ic>formMessage.className = `form-message ${type}`</ic> <b>remplace</b> toute la classe à chaque appel. Cela évite d'accumuler les classes <ic>error info success</ic> après plusieurs soumissions. À chaque call, l'état visuel est proprement réinitialisé.</span></div>
+    <div style="display:flex;gap:.7rem;align-items:center">
+      <div style="min-width:22px;height:22px;border-radius:50%;background:#7dd3fc;color:#0a0b0e;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700">2</div>
+      <div style="color:var(--t2)">Format email regex → si invalide : <span style="color:#fda4af">return</span></div>
+    </div>
+    <div style="display:flex;gap:.7rem;align-items:center">
+      <div style="min-width:22px;height:22px;border-radius:50%;background:#7ee8b8;color:#0a0b0e;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700">3</div>
+      <div style="color:var(--t2)">Tout valide → showMessage info + setTimeout 1000ms → success + form.reset()</div>
+    </div>
   </div>
 </div>
+ <div class="diag"> <div class="dtitle">Flux complet de contact.js</div> <div class="vc"> <div class="vn w cgr">DOMContentLoaded  getElementById('contact-form')</div> <div class="va"><div class="val">si absent  return (page sans formulaire)</div></div> <div class="vn w cb">addEventListener('submit') installé — attente</div> <div class="va"><div class="val">Utilisateur clique "Envoyer"</div></div> <div class="vn w cgr">e.preventDefault() + lecture des 5 valeurs</div> <div class="va"><div class="val">Validation niveau 1 : vide + consent</div></div> <div class="vn w cr">Si invalide  showMessage error  return</div> <div class="va"><div class="val">Validation niveau 2 : regex email</div></div> <div class="vn w cr">Si invalide  showMessage error  return</div> <div class="va"><div class="val">Tout valide</div></div> <div class="vn w cb">showMessage('Envoi en cours...', 'info')</div> <div class="va"><div class="val">setTimeout 1000ms</div></div> <div class="vn w cg">showMessage('Envoyé !', 'success') + form.reset()</div> </div> 
 <hr>
-
-<!-- ══ RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">04 — Récapitulatif</div>
-  <h2>Vue d'ensemble — tout le fichier en un schéma</h2>
-  <div class="diag">
-    <div class="dtitle">Flux complet de contact.js</div>
-    <div class="vc">
-      <div class="vn w cgr">DOMContentLoaded → getElementById('contact-form')</div>
-      <div class="va">↓<div class="val">si absent → return (page sans formulaire)</div></div>
-      <div class="vn w cb">addEventListener('submit') installé — attente</div>
-      <div class="va">↓<div class="val">Utilisateur clique "Envoyer"</div></div>
-      <div class="vn w cgr">e.preventDefault() + lecture des 5 valeurs</div>
-      <div class="va">↓<div class="val">Validation niveau 1 : vide + consent</div></div>
-      <div class="vn w cr">Si invalide → showMessage error → return</div>
-      <div class="va">↓<div class="val">Validation niveau 2 : regex email</div></div>
-      <div class="vn w cr">Si invalide → showMessage error → return</div>
-      <div class="va">↓<div class="val">Tout valide</div></div>
-      <div class="vn w cb">showMessage('Envoi en cours...', 'info')</div>
-      <div class="va">↓<div class="val">setTimeout 1000ms</div></div>
-      <div class="vn w cg">showMessage('Envoyé !', 'success') + form.reset()</div>
-    </div>
- 
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item"><div class="glos-term">Document Object Model</div><div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div></div>
+    <div class="glos-item"><div class="glos-term">Immediately Invoked Function Expression</div><div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div></div>
+    <div class="glos-item"><div class="glos-term">DOMContentLoaded</div><div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div></div>
+    <div class="glos-item"><div class="glos-term">Expression régulière (regex)</div><div class="glos-def">Pattern de correspondance de texte. Syntaxe : <ic>/pattern/</ic>. <ic>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str)</ic> valide un email. <ic>replace(/pattern/g, '')</ic> remplace toutes les occurrences. Utilisées ici pour validation email et nettoyage de chaînes.</div></div>
+    <div class="glos-item"><div class="glos-term">preventDefault()</div><div class="glos-def">Annule le comportement natif du navigateur. <ic>e.preventDefault()</ic> sur un <ic>submit</ic> empêche le rechargement de page. Sur un lien <ic>#</ic> empêche le saut brutal. N'arrête pas la remontée de l'événement aux parents.</div></div>
+    <div class="glos-item"><div class="glos-term">Callback</div><div class="glos-def">Fonction passée comme argument pour être appelée plus tard. <ic>addEventListener('click', callback)</ic> — le callback est invoqué lors du clic. Mécanisme de base de l'asynchronisme JS — le code continue, le callback est exécuté quand l'événement se produit.</div></div>
+  </div>
+</div>

@@ -5,702 +5,376 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — carousel.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#e879f9;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(232,121,249,.1);border:1px solid rgba(232,121,249,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  .sec p b{color:var(--t);font-weight:700;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#f0abfc;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cpi{background:rgba(232,121,249,.11);border:1px solid rgba(232,121,249,.4);color:#f0abfc;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
-  .fc .vn{width:100%;max-width:100%;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;}
-  .box.info{background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);color:#f0abfc;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box b{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#f0abfc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-  .grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
-  .grow:last-child{border-bottom:none;}
-  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── SCHEMAS PASS 2 ─── */
-  .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
-  .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
-  .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
-  .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-  .arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-  .arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-  .kbox{border-radius:11px;padding:.9rem 1rem;}
-  .kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .kbox-item:last-child{border-bottom:none;}
-  .sp-row{display:flex;flex-direction:column;gap:.3rem;}
-  .sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-  .sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-  .seq{display:flex;flex-direction:column;gap:.3rem;}
-  .seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-  .seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-  .seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-  .seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-  .state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-  .state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-  .trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-  .trans-line{width:28px;height:1px;background:var(--t3);}
-  .trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#e879f9;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(232,121,249,.1);border:1px solid rgba(232,121,249,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+.sec p b{color:var(--t);font-weight:700;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#f0abfc;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cpi{background:rgba(232,121,249,.11);border:1px solid rgba(232,121,249,.4);color:#f0abfc;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
+.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.flr{background:rgba(255,107,107,.15);color:#ff9090;}
+.fc .vn{width:100%;max-width:100%;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;}
+.box.info{background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);color:#f0abfc;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box b{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#f0abfc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
+.grow:last-child{border-bottom:none;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2{grid-template-columns:1fr;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── SCHEMAS PASS 2 ─── */
+.schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+.pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+.pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+.row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+.sp-row{display:flex;flex-direction:column;gap:.3rem;}
+.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
+.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
+.trans-line{width:28px;height:1px;background:var(--t3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">carousel.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#technique">La technique radio</a>
-  <a href="#intervalle">setInterval</a>
-  <a href="#modulo">Modulo</a>
-  <a href="#pause">Pause au survol</a>
-  <a href="#reset">Reset au clic</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">carousel.js</div> <a href="#intro">Intro</a> <a href="#technique">La technique radio</a> <a href="#intervalle">setInterval</a> <a href="#modulo">Modulo</a> <a href="#pause">Pause au survol</a> <a href="#reset">Reset au clic</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
 <div class="carte-item"><b>input[type=radio]</b><br><span style="color:var(--t3);font-size:.71rem;">coches de navigation</span></div>
 <div class="carte-item"><b>mouseenter / mouseleave</b><br><span style="color:var(--t3);font-size:.71rem;">pause au survol</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;"> TRAITEMENTS</div>
 <div class="carte-item"><b>startAutoplay()</b><br><span style="color:var(--t3);font-size:.71rem;">setInterval toutes les 5s</span></div>
 <div class="carte-item"><b>nextSlide()</b><br><span style="color:var(--t3);font-size:.71rem;">coche radio suivante</span></div>
 <div class="carte-item"><b>pauseOnHover()</b><br><span style="color:var(--t3);font-size:.71rem;">clearInterval au survol</span></div>
 <div class="carte-item"><b>resumeOnLeave()</b><br><span style="color:var(--t3);font-size:.71rem;">relance l'interval</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>radio.checked = true</b><br><span style="color:var(--t3);font-size:.71rem;">CSS :checked gère le visuel</span></div>
 <div class="carte-item"><b>Aucune dépendance</b><br><span style="color:var(--t3);font-size:.71rem;">module 100% autonome</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>carousel.js</span></h1> <p>Ce fichier gère le <b>défilement automatique</b> du carrousel de la page d'accueil. Il change de slide toutes les 5 secondes en cochant des <ic>input[type="radio"]</ic> HTML — une approche CSS-first où c'est le CSS qui anime les slides, et le JS qui pilote simplement les cases à cocher.</p> <div class="fbadge"><div class="dot"></div>carousel.js · 55 lignes · 1 intervalle · 3 slides · page_accueil.html uniquement</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Le principe : JS pilote, CSS anime</h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> Le carrousel fonctionne comme un juke-box à boutons. Chaque slide correspond à un bouton radio. Appuyer sur un bouton (cocher le radio) change la chanson (affiche la slide). carousel.js est le mécanisme automatique qui appuie sur le bouton suivant toutes les 5 secondes — mais si quelqu'un appuie manuellement, le chronomètre repart de zéro.</div></div> <div class="diag"> <div class="dtitle">Répartition des responsabilités CSS vs JS</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:11px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">CSS — tout ce qui est visuel</div> <div style="font-size:.8rem;color:var(--t2);line-height:1.85;"> Positionnement des slides<br> Transition de glissement<br> <ic>#slide1:checked ~ .slide-1 { opacity:1 }</ic><br> Points indicateurs actifs<br> Durée de la transition
+</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">JS — uniquement la logique</div> <div style="font-size:.8rem;color:var(--t2);line-height:1.85;"> Avancer au slide suivant (modulo)<br> Démarrer/arrêter l'intervalle<br> Pause au survol de la souris<br> Réinitialiser au clic manuel<br> Sync de <ic>currentIndex</ic> </div> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span><b>Avantage de cette approche :</b> Le carrousel fonctionne même sans JavaScript (CSS pur). Si JS est désactivé ou plante, les slides restent visibles et navigables manuellement via les labels liés aux radios.</span></div> </div> <div class="glos"> <div class="glos-head"> Termes essentiels</div> <div class="grow"><div class="gterm">setInterval</div><div class="gdef">Exécute une fonction de façon répétée à un intervalle fixe (en millisecondes). <ic>setInterval(fn, 5000)</ic> appelle <ic>fn</ic> toutes les 5 secondes. Retourne un identifiant numérique utilisé par <ic>clearInterval</ic> pour arrêter.</div></div> <div class="grow"><div class="gterm">clearInterval</div><div class="gdef">Annule l'intervalle dont l'identifiant est passé en paramètre. Sans ça, l'intervalle continue indéfiniment même après avoir appelé <ic>startAutoSlide()</ic> une deuxième fois — ce qui doublerait la vitesse.</div></div>
+<div class="schema2"> <div class="s2t">Sans clearInterval — l'empilement des intervalles</div> <div class="grid2"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;"> startAutoSlide() appelé 3 fois sans clearInterval</div> <div class="sp-row"> <div class="sp-step"><div class="sp-t">Appel 1</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #1  tick toutes les 5s</div></div> <div class="sp-step"><div class="sp-t">Appel 2</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #2  tick toutes les 5s (2e)</div></div> <div class="sp-step"><div class="sp-t">Appel 3</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #3  tick toutes les 5s (3e)</div></div> <div class="sp-step"><div class="sp-t">Résultat</div><div class="sp-bar" style="background:rgba(244,63,94,.18);border:1px solid rgba(244,63,94,.4);color:#fda4af;font-weight:700;">3 nextSlide()/5s = 1 slide/1.67s </div></div> </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;"> Avec clearInterval avant chaque setInterval</div> <div class="sp-row"> <div class="sp-step"><div class="sp-t">Appel 1</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(undefined)  rien · Intervalle #1</div></div> <div class="sp-step"><div class="sp-t">Appel 2</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(#1)  tué · Intervalle #2</div></div> <div class="sp-step"><div class="sp-t">Appel 3</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(#2)  tué · Intervalle #3</div></div> <div class="sp-step"><div class="sp-t">Résultat</div><div class="sp-bar" style="background:rgba(86,209,158,.15);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;font-weight:700;">1 seul intervalle actif — 1 slide/5s </div></div> </div> </div> </div>
+</div> <div class="grow"><div class="gterm">opérateur modulo %</div><div class="gdef"><ic>n % m</ic> retourne le reste de la division. <ic>2 % 3 = 2</ic>, <ic>3 % 3 = 0</ic>. Utilisé ici pour revenir au début : quand on atteint le dernier slide, le slide suivant est le premier (<ic>(2+1) % 3 = 0</ic>).</div></div> <div class="grow"><div class="gterm">radio.checked = true</div><div class="gdef">Cocher programmatiquement un <ic>input[type="radio"]</ic>. Le CSS qui surveille <ic>:checked</ic> réagit instantanément comme si l'utilisateur avait cliqué — déclenchant la transition CSS vers ce slide.</div></div> <div class="grow"><div class="gterm">mouseenter / mouseleave</div><div class="gdef">Deux événements de survol. <ic>mouseenter</ic> se déclenche quand la souris entre dans l'élément, <ic>mouseleave</ic> quand elle sort. Contrairement à <ic>mouseover/mouseout</ic>, ils ne se propagent pas aux éléments enfants.</div></div> <div class="grow"><div class="gterm">.filter(r => r !== null)</div><div class="gdef">Crée un nouveau tableau en excluant les valeurs <ic>null</ic>. Nécessaire car <ic>getElementById</ic> retourne <ic>null</ic> si l'élément n'existe pas. Sans ce filtre, un <ic>null</ic> dans le tableau ferait planter <ic>radio.checked = true</ic>.</div></div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>carousel.js</span></h1>
-  <p>Ce fichier gère le <b>défilement automatique</b> du carrousel de la page d'accueil. Il change de slide toutes les 5 secondes en cochant des <ic>input[type="radio"]</ic> HTML — une approche CSS-first où c'est le CSS qui anime les slides, et le JS qui pilote simplement les cases à cocher.</p>
-  <div class="fbadge"><div class="dot"></div>carousel.js · 55 lignes · 1 intervalle · 3 slides · page_accueil.html uniquement</div>
-</div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Avant de commencer</div>
-  <h2>Le principe : JS pilote, CSS anime</h2>
-
-  <div class="box ana"><span class="bi">📻</span><div><b>Analogie :</b> Le carrousel fonctionne comme un juke-box à boutons. Chaque slide correspond à un bouton radio. Appuyer sur un bouton (cocher le radio) change la chanson (affiche la slide). carousel.js est le mécanisme automatique qui appuie sur le bouton suivant toutes les 5 secondes — mais si quelqu'un appuie manuellement, le chronomètre repart de zéro.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Répartition des responsabilités CSS vs JS</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:11px;padding:1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">CSS — tout ce qui est visuel</div>
-        <div style="font-size:.8rem;color:var(--t2);line-height:1.85;">
-          ✓ Positionnement des slides<br>
-          ✓ Transition de glissement<br>
-          ✓ <ic>#slide1:checked ~ .slide-1 { opacity:1 }</ic><br>
-          ✓ Points indicateurs actifs<br>
-          ✓ Durée de la transition
-        </div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">JS — uniquement la logique</div>
-        <div style="font-size:.8rem;color:var(--t2);line-height:1.85;">
-          ✓ Avancer au slide suivant (modulo)<br>
-          ✓ Démarrer/arrêter l'intervalle<br>
-          ✓ Pause au survol de la souris<br>
-          ✓ Réinitialiser au clic manuel<br>
-          ✓ Sync de <ic>currentIndex</ic>
-        </div>
-      </div>
-    </div>
-    <div class="sn" style="margin-top:.8rem;"><span class="sni">💡</span><span><b>Avantage de cette approche :</b> Le carrousel fonctionne même sans JavaScript (CSS pur). Si JS est désactivé ou plante, les slides restent visibles et navigables manuellement via les labels liés aux radios.</span></div>
-  </div>
-
-  <div class="glos">
-    <div class="glos-head">📖 Termes essentiels</div>
-    <div class="grow"><div class="gterm">setInterval</div><div class="gdef">Exécute une fonction de façon répétée à un intervalle fixe (en millisecondes). <ic>setInterval(fn, 5000)</ic> appelle <ic>fn</ic> toutes les 5 secondes. Retourne un identifiant numérique utilisé par <ic>clearInterval</ic> pour arrêter.</div></div>
-    <div class="grow"><div class="gterm">clearInterval</div><div class="gdef">Annule l'intervalle dont l'identifiant est passé en paramètre. Sans ça, l'intervalle continue indéfiniment même après avoir appelé <ic>startAutoSlide()</ic> une deuxième fois — ce qui doublerait la vitesse.</div></div>
-<div class="schema2">
-  <div class="s2t">Sans clearInterval — l'empilement des intervalles</div>
-  <div class="grid2">
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">❌ startAutoSlide() appelé 3 fois sans clearInterval</div>
-      <div class="sp-row">
-        <div class="sp-step"><div class="sp-t">Appel 1</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #1 → tick toutes les 5s</div></div>
-        <div class="sp-step"><div class="sp-t">Appel 2</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #2 → tick toutes les 5s (2e)</div></div>
-        <div class="sp-step"><div class="sp-t">Appel 3</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #3 → tick toutes les 5s (3e)</div></div>
-        <div class="sp-step"><div class="sp-t">Résultat</div><div class="sp-bar" style="background:rgba(244,63,94,.18);border:1px solid rgba(244,63,94,.4);color:#fda4af;font-weight:700;">3 nextSlide()/5s = 1 slide/1.67s 🤪</div></div>
-      </div>
-    </div>
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">✅ Avec clearInterval avant chaque setInterval</div>
-      <div class="sp-row">
-        <div class="sp-step"><div class="sp-t">Appel 1</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(undefined) → rien · Intervalle #1</div></div>
-        <div class="sp-step"><div class="sp-t">Appel 2</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(#1) → tué · Intervalle #2</div></div>
-        <div class="sp-step"><div class="sp-t">Appel 3</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(#2) → tué · Intervalle #3</div></div>
-        <div class="sp-step"><div class="sp-t">Résultat</div><div class="sp-bar" style="background:rgba(86,209,158,.15);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;font-weight:700;">1 seul intervalle actif — 1 slide/5s ✓</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    <div class="grow"><div class="gterm">opérateur modulo %</div><div class="gdef"><ic>n % m</ic> retourne le reste de la division. <ic>2 % 3 = 2</ic>, <ic>3 % 3 = 0</ic>. Utilisé ici pour revenir au début : quand on atteint le dernier slide, le slide suivant est le premier (<ic>(2+1) % 3 = 0</ic>).</div></div>
-    <div class="grow"><div class="gterm">radio.checked = true</div><div class="gdef">Cocher programmatiquement un <ic>input[type="radio"]</ic>. Le CSS qui surveille <ic>:checked</ic> réagit instantanément comme si l'utilisateur avait cliqué — déclenchant la transition CSS vers ce slide.</div></div>
-    <div class="grow"><div class="gterm">mouseenter / mouseleave</div><div class="gdef">Deux événements de survol. <ic>mouseenter</ic> se déclenche quand la souris entre dans l'élément, <ic>mouseleave</ic> quand elle sort. Contrairement à <ic>mouseover/mouseout</ic>, ils ne se propagent pas aux éléments enfants.</div></div>
-    <div class="grow"><div class="gterm">.filter(r => r !== null)</div><div class="gdef">Crée un nouveau tableau en excluant les valeurs <ic>null</ic>. Nécessaire car <ic>getElementById</ic> retourne <ic>null</ic> si l'élément n'existe pas. Sans ce filtre, un <ic>null</ic> dans le tableau ferait planter <ic>radio.checked = true</ic>.</div></div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 TECHNIQUE RADIO ══ -->
-<div class="sec" id="technique">
-  <div class="slabel">01 — La technique "radio as state"</div>
-  <h2>Pourquoi utiliser des inputs radio pour un carrousel</h2>
-  <p>C'est une technique CSS classique : les boutons radio stockent l'état actif du carrousel. Le sélecteur CSS <ic>:checked</ic> permet d'appliquer des styles conditionnels en fonction du radio sélectionné — sans JavaScript, ni variable, ni classe.</p>
-<div class="diag">
-  <div class="dtitle">Mécanisme CSS :checked — pas de JavaScript pour la visibilité</div>
-  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:560px;">
-    <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">HTML — 3 radios + 3 slides</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.9;">
-        &lt;input type="radio" id="slide1" checked&gt;<br>
-        &lt;input type="radio" id="slide2"&gt;<br>
-        &lt;div class="slide"&gt;Slide 1&lt;/div&gt;<br>
-        &lt;div class="slide"&gt;Slide 2&lt;/div&gt;
-      </div>
-    </div>
-    <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">CSS — sélecteur :checked + sibling ~</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.9;">
-        <span style="color:#fda4af;">#slide1:checked</span> ~ .slides .slide:nth-child(1) {<br>
-        <span style="padding-left:1rem;"></span>opacity: 1; transform: translateX(0);<br>
-        }<br>
-        <span style="color:#fda4af;">#slide2:checked</span> ~ .slides .slide:nth-child(2) {<br>
-        <span style="padding-left:1rem;"></span>opacity: 1; transform: translateX(0);<br>
-        }
-      </div>
-    </div>
-    <div style="font-size:.73rem;color:var(--t3);">JS fait uniquement : <code style="font-family:'JetBrains Mono',monospace;font-size:.67rem;">radios[1].checked = true</code> — le CSS prend le relais pour masquer/afficher les slides via la transition.</div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">HTML — structure invisible dans le DOM</span><pre><span class="cm">&lt;!-- Les radios sont cachés visuellement mais fonctionnels --&gt;</span>
+<hr> <!-- ══ 01 TECHNIQUE RADIO ══ -->
+<div class="sec" id="technique"> <div class="slabel">01 — La technique "radio as state"</div> <h2>Pourquoi utiliser des inputs radio pour un carrousel</h2> <p>C'est une technique CSS classique : les boutons radio stockent l'état actif du carrousel. Le sélecteur CSS <ic>:checked</ic> permet d'appliquer des styles conditionnels en fonction du radio sélectionné — sans JavaScript, ni variable, ni classe.</p>
+<div class="diag"> <div class="dtitle">Mécanisme CSS :checked — pas de JavaScript pour la visibilité</div> <div style="display:flex;flex-direction:column;gap:.5rem;max-width:560px;"> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">HTML — 3 radios + 3 slides</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.9;"> &lt;input type="radio" id="slide1" checked&gt;<br> &lt;input type="radio" id="slide2"&gt;<br> &lt;div class="slide"&gt;Slide 1&lt;/div&gt;<br> &lt;div class="slide"&gt;Slide 2&lt;/div&gt;
+</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">CSS — sélecteur :checked + sibling ~</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.9;"> <span style="color:#fda4af;">#slide1:checked</span> ~ .slides .slide:nth-child(1) {<br> <span style="padding-left:1rem;"></span>opacity: 1; transform: translateX(0);<br> }<br> <span style="color:#fda4af;">#slide2:checked</span> ~ .slides .slide:nth-child(2) {<br> <span style="padding-left:1rem;"></span>opacity: 1; transform: translateX(0);<br> }
+</div> </div> <div style="font-size:.73rem;color:var(--t3);">JS fait uniquement : <code style="font-family:'JetBrains Mono',monospace;font-size:.67rem;">radios[1].checked = true</code> — le CSS prend le relais pour masquer/afficher les slides via la transition.</div> </div>
+</div> <div class="cb2"><span class="cbl2">HTML — structure invisible dans le DOM</span><pre><span class="cm">&lt;!-- Les radios sont cachés visuellement mais fonctionnels --&gt;</span>
 &lt;input type=<span class="s">"radio"</span> name=<span class="s">"carousel"</span> id=<span class="s">"slide1"</span> checked&gt;
 &lt;input type=<span class="s">"radio"</span> name=<span class="s">"carousel"</span> id=<span class="s">"slide2"</span>&gt;
 &lt;input type=<span class="s">"radio"</span> name=<span class="s">"carousel"</span> id=<span class="s">"slide3"</span>&gt;
-
 <span class="cm">&lt;!-- Les labels (points indicateurs) cochent les radios correspondants --&gt;</span>
 &lt;label for=<span class="s">"slide1"</span> class=<span class="s">"indicator"</span>&gt;&lt;/label&gt;
 &lt;label for=<span class="s">"slide2"</span> class=<span class="s">"indicator"</span>&gt;&lt;/label&gt;
 &lt;label for=<span class="s">"slide3"</span> class=<span class="s">"indicator"</span>&gt;&lt;/label&gt;
-</pre></div>
-
-  <div class="cb2"><span class="cbl2">CSS — le sélecteur :checked pilote l'affichage</span><pre><span class="cm">/* Quand slide1 est coché → affiche .slide-1 */</span>
+</pre></div> <div class="cb2"><span class="cbl2">CSS — le sélecteur :checked pilote l'affichage</span><pre><span class="cm">/* Quand slide1 est coché  affiche .slide-1 */</span>
 #slide1:checked ~ .carousel-wrapper .slide-1 { opacity: 1; transform: translateX(0); }
 #slide2:checked ~ .carousel-wrapper .slide-2 { opacity: 1; transform: translateX(0); }
 #slide3:checked ~ .carousel-wrapper .slide-3 { opacity: 1; transform: translateX(0); }
-
 <span class="cm">/* Le point indicateur devient actif */</span>
 #slide2:checked ~ .indicators .indicator:nth-child(2) { background: white; }
-</pre></div>
-
-  <div class="cb2"><span class="cbl2">javascript — carousel.js coche simplement le bon radio</span><pre><span class="kw">const</span> <span class="vr">radios</span> = [
-    document.<span class="fn">getElementById</span>(<span class="s">'slide1'</span>), <span class="cm">// → &lt;input id="slide1"&gt;</span>
-    document.<span class="fn">getElementById</span>(<span class="s">'slide2'</span>),
-    document.<span class="fn">getElementById</span>(<span class="s">'slide3'</span>)
-].<span class="fn">filter</span>(r => r !== <span class="kw">null</span>); <span class="cm">// Retire les null si un radio est absent</span>
-
-<span class="cm">// Pour passer au slide 2 :</span>
-radios[<span class="nm">1</span>].checked = <span class="kw">true</span>; <span class="cm">// Coche #slide2 → CSS affiche .slide-2 instantanément</span>
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Chaîne causale — une seule ligne déclenche tout</div>
-    <div class="vc">
-      <div class="vn w cpi">radios[1].checked = true</div>
-      <div class="va">↓<div class="val">le navigateur met à jour l'état de l'input radio</div></div>
-      <div class="vn w cy">#slide2:checked devient vrai dans le CSS</div>
-      <div class="va">↓<div class="val">le moteur CSS réévalue les sélecteurs :checked</div></div>
-      <div class="vn w cg">La slide 2 devient opacity:1 + translateX(0)</div>
-      <div class="va">↓<div class="val">transition CSS 0.5s</div></div>
-      <div class="vn w cgr">L'utilisateur voit l'animation de glissement — sans une seule ligne de JS supplémentaire</div>
-    </div>
-  </div>
+</pre></div> <div class="cb2"><span class="cbl2">javascript — carousel.js coche simplement le bon radio</span><pre><span class="kw">const</span> <span class="vr">radios</span> = [
+document.<span class="fn">getElementById</span>(<span class="s">'slide1'</span>), <span class="cm">//  &lt;input id="slide1"&gt;</span> document.<span class="fn">getElementById</span>(<span class="s">'slide2'</span>),
+document.<span class="fn">getElementById</span>(<span class="s">'slide3'</span>)
+].<span class="fn">filter</span>(r => r !== <span class="kw">null</span>); <span class="cm">// Retire les null si un radio est absent</span> <span class="cm">// Pour passer au slide 2 :</span>
+radios[<span class="nm">1</span>].checked = <span class="kw">true</span>; <span class="cm">// Coche #slide2  CSS affiche .slide-2 instantanément</span>
+</pre></div> <div class="diag"> <div class="dtitle">Chaîne causale — une seule ligne déclenche tout</div> <div class="vc"> <div class="vn w cpi">radios[1].checked = true</div> <div class="va"><div class="val">le navigateur met à jour l'état de l'input radio</div></div> <div class="vn w cy">#slide2:checked devient vrai dans le CSS</div> <div class="va"><div class="val">le moteur CSS réévalue les sélecteurs :checked</div></div> <div class="vn w cg">La slide 2 devient opacity:1 + translateX(0)</div> <div class="va"><div class="val">transition CSS 0.5s</div></div> <div class="vn w cgr">L'utilisateur voit l'animation de glissement — sans une seule ligne de JS supplémentaire</div> </div> </div>
 </div>
-<hr>
+<hr> <!-- ══ 02 SETINTERVAL ══ -->
+<div class="sec" id="intervalle"> <div class="slabel">02 — Défilement automatique</div> <h2>setInterval — le moteur de l'automatisme</h2>
 
-<!-- ══ 02 SETINTERVAL ══ -->
-<div class="sec" id="intervalle">
-  <div class="slabel">02 — Défilement automatique</div>
-  <h2>setInterval — le moteur de l'automatisme</h2>
 <div class="diag">
-  <div class="dtitle">Cycle de vie de l'intervalle — de l'init au premier changement</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;">
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#7ee8b8;">startAutoSlide() → interval = setInterval(nextSlide, 5000)</div>
+  <div class="dtitle">stopAutoSlide + startAutoSlide — reset complet de l'intervalle</div>
+  <div class="two-col">
+    <div class="pcard" style="border-left:3px solid #fda4af">
+      <div style="font-size:.72rem;font-weight:700;color:#fda4af;margin-bottom:.4rem">Sans clearInterval avant re-start</div>
+      <div style="font-size:.73rem;color:var(--t2);font-family:monospace;line-height:1.8">
+        Clic user → startAutoSlide()<br>
+        interval #1 actif (5s)<br>
+        Clic user → startAutoSlide()<br>
+        interval #2 actif (5s)<br>
+        interval #1 toujours actif<br>
+        <span style="color:#fda4af">= 2 slides par cycle</span>
+      </div>
     </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 5000ms</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide() → currentIndex = (0+1)%3 = 1 → radios[1].checked = true</div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 10000ms</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide() → currentIndex = (1+1)%3 = 2 → radios[2].checked = true</div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 15000ms</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide() → currentIndex = (2+1)%3 = 0 → retour slide 1</div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">mouseenter</div>
-      <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#fda4af;">stopAutoSlide() → clearInterval(interval) · interval = null</div>
+    <div class="pcard" style="border-left:3px solid #7ee8b8">
+      <div style="font-size:.72rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem">Avec clearInterval avant re-start</div>
+      <div style="font-size:.73rem;color:var(--t2);font-family:monospace;line-height:1.8">
+        Clic user → stopAutoSlide()<br>
+        <span style="color:#7ee8b8">clearInterval(interval)</span><br>
+        → startAutoSlide()<br>
+        interval #2 actif (5s)<br>
+        interval #1 supprimé<br>
+        <span style="color:#7ee8b8">= 1 slide par cycle</span>
+      </div>
     </div>
   </div>
 </div>
 
+<div class="diag">
+  <div class="dtitle">Pourquoi clearInterval avant setInterval ?</div>
+  <div class="two-col" style="margin:0">
+    <div class="tc-card">
+      <div class="tc-title" style="color:#fda4af">Sans clearInterval — accumulation</div>
+      <div style="font-size:.78rem;color:var(--t2);line-height:1.8">
+        <div>1er mouseenter → stopAutoSlide()</div>
+        <div>1er mouseleave → interval #1 créé</div>
+        <div>2e mouseenter → stopAutoSlide()</div>
+        <div>2e mouseleave → interval #1 + <span style="color:#fda4af">#2 créé</span></div>
+        <div>3e cycle → <span style="color:#fda4af">3 intervals simultanés</span></div>
+        <div style="color:#fda4af;margin-top:.3rem">Slide change 3× trop vite</div>
+      </div>
+    </div>
+    <div class="tc-card">
+      <div class="tc-title" style="color:#7ee8b8">Avec clearInterval — propre</div>
+      <div style="font-size:.78rem;color:var(--t2);line-height:1.8">
+        <div>startAutoSlide() appelée</div>
+        <div style="color:#7ee8b8">if (interval) clearInterval(interval)</div>
+        <div>interval = setInterval(nextSlide, 5000)</div>
+        <div style="margin-top:.4rem">Toujours 1 seul interval actif</div>
+        <div>Peu importe combien de fois</div>
+        <div>startAutoSlide() est appelée</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">currentIndex</span> = <span class="nm">0</span>;  <span class="cm">// 0 = slide 1, 1 = slide 2, 2 = slide 3</span>
+<div class="diag"> <div class="dtitle">Cycle de vie de l'intervalle — de l'init au premier changement</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;"> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#7ee8b8;">startAutoSlide()  interval = setInterval(nextSlide, 5000)</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 5000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide()  currentIndex = (0+1)%3 = 1  radios[1].checked = true</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 10000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide()  currentIndex = (1+1)%3 = 2  radios[2].checked = true</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 15000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide()  currentIndex = (2+1)%3 = 0  retour slide 1</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">mouseenter</div> <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#fda4af;">stopAutoSlide()  clearInterval(interval) · interval = null</div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">currentIndex</span> = <span class="nm">0</span>;  <span class="cm">// 0 = slide 1, 1 = slide 2, 2 = slide 3</span>
 <span class="kw">let</span> <span class="vr">interval</span>;          <span class="cm">// Stocke l'identifiant de l'intervalle actif (ou undefined)</span>
-<span class="kw">const</span> <span class="vr">intervalTime</span> = <span class="nm">5000</span>; <span class="cm">// 5 000 ms = 5 secondes</span>
-
-<span class="kw">function</span> <span class="fn">nextSlide</span>() {
-    currentIndex = (currentIndex + <span class="nm">1</span>) % radios.length; <span class="cm">// Avance avec retour au début (modulo)</span>
-    radios[currentIndex].checked = <span class="kw">true</span>;              <span class="cm">// Coche le radio → CSS change la slide</span>
+<span class="kw">const</span> <span class="vr">intervalTime</span> = <span class="nm">5000</span>; <span class="cm">// 5 000 ms = 5 secondes</span> <span class="kw">function</span> <span class="fn">nextSlide</span>() {
+currentIndex = (currentIndex + <span class="nm">1</span>) % radios.length; <span class="cm">// Avance avec retour au début (modulo)</span> radios[currentIndex].checked = <span class="kw">true</span>;              <span class="cm">// Coche le radio  CSS change la slide</span>
 }
-
 <span class="kw">function</span> <span class="fn">startAutoSlide</span>() {
-    <span class="kw">if</span> (interval) <span class="fn">clearInterval</span>(interval); <span class="cm">// ← Crucial : évite d'empiler les intervalles</span>
-    interval = <span class="fn">setInterval</span>(<span class="fn">nextSlide</span>, intervalTime);
+<span class="kw">if</span> (interval) <span class="fn">clearInterval</span>(interval); <span class="cm">//  Crucial : évite d'empiler les intervalles</span> interval = <span class="fn">setInterval</span>(<span class="fn">nextSlide</span>, intervalTime);
 }
-
 <span class="kw">function</span> <span class="fn">stopAutoSlide</span>() {
-    <span class="kw">if</span> (interval) {
-        <span class="fn">clearInterval</span>(interval);
-        interval = <span class="kw">null</span>; <span class="cm">// Remet à null pour que les vérifications if(interval) fonctionnent</span>
-    }
+<span class="kw">if</span> (interval) {
+<span class="fn">clearInterval</span>(interval);
+interval = <span class="kw">null</span>; <span class="cm">// Remet à null pour que les vérifications if(interval) fonctionnent</span> }
 }
-
 <span class="fn">startAutoSlide</span>(); <span class="cm">// Lance dès le chargement</span>
-</pre></div>
-
-  <div class="box warn"><span class="bi">⚠️</span><div><b>Pourquoi le <ic>clearInterval</ic> dans startAutoSlide ?</b> Sans lui, appeler <ic>startAutoSlide()</ic> deux fois créerait deux intervalles parallèles qui se chevauchent. Le carrousel s'emballerait — changer de slide toutes les 2.5s, puis 1.67s, etc. Le <ic>clearInterval(interval)</ic> garantit qu'il n'existe jamais plus d'un intervalle actif.</div></div>
+</pre></div> <div class="box warn"><span class="bi"></span><div><b>Pourquoi le <ic>clearInterval</ic> dans startAutoSlide ?</b> Sans lui, appeler <ic>startAutoSlide()</ic> deux fois créerait deux intervalles parallèles qui se chevauchent. Le carrousel s'emballerait — changer de slide toutes les 2.5s, puis 1.67s, etc. Le <ic>clearInterval(interval)</ic> garantit qu'il n'existe jamais plus d'un intervalle actif.</div></div>
 </div>
-<hr>
-
-<!-- ══ 03 MODULO ══ -->
-<div class="sec" id="modulo">
-  <div class="slabel">03 — La rotation circulaire</div>
-  <h2>L'opérateur % (modulo) — revenir au début</h2>
-
-  <div class="cb2"><span class="cbl2">javascript — pourquoi (currentIndex + 1) % radios.length</span><pre><span class="cm">// radios.length = 3 (slides 0, 1, 2)</span>
-
-<span class="cm">// Sans modulo — l'index dépasse le tableau :</span>
-<span class="cm">// 0 → 1 → 2 → 3 → 4 → 5 → ... → tableau[3] = undefined → plantage</span>
-
-<span class="cm">// Avec modulo :</span>
-<span class="cm">// (0 + 1) % 3 = 1 ✓</span>
-<span class="cm">// (1 + 1) % 3 = 2 ✓</span>
-<span class="cm">// (2 + 1) % 3 = 0 ← retour au début automatiquement ✓</span>
-
-<span class="kw">function</span> <span class="fn">nextSlide</span>() {
-    currentIndex = (currentIndex + <span class="nm">1</span>) % radios.length; <span class="cm">// Jamais > 2</span>
-    radios[currentIndex].checked = <span class="kw">true</span>;
-}
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Cycle circulaire avec 3 slides</div>
-    <div style="display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;padding:.8rem 0;">
-      <div style="background:rgba(232,121,249,.12);border:1px solid rgba(232,121,249,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#f0abfc;text-align:center;">slide<br>0</div>
-      <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(0+1)%3<br>=1 →</div>
-      <div style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#f7d97a;text-align:center;">slide<br>1</div>
-      <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(1+1)%3<br>=2 →</div>
-      <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7ee8b8;text-align:center;">slide<br>2</div>
-      <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(2+1)%3<br>=0 ↩</div>
-    </div>
-    <div style="font-size:.8rem;color:var(--t2);text-align:center;">Le modulo crée une boucle infinie sans condition <ic>if</ic>. Élégant et extensible à N slides.</div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 04 PAUSE SURVOL ══ -->
-<div class="sec" id="pause">
-  <div class="slabel">04 — Pause au survol</div>
-  <h2>mouseenter / mouseleave — UX de courtoisie</h2>
-  <p>Arrêter le défilement quand la souris survole le carrousel est une convention UX : l'utilisateur qui s'attarde sur une slide ne veut pas qu'elle change subitement sous son regard.</p>
-<div class="diag">
-  <div class="dtitle">Danger de setInterval sans clearInterval — pourquoi interval est vérifié</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:520px;">
-    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">Sans vérification</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;">
-        startAutoSlide() x3<br>
-        <span style="color:#fda4af;">→ 3 intervalles actifs</span><br>
-        nextSlide() appelé<br>
-        <span style="color:#fda4af;">3× par tick de 5s</span><br>
-        <span style="color:#fda4af;">slide change 3× trop vite</span>
-      </div>
-    </div>
-    <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">Avec vérification</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;">
-        if (interval)<br>
-        <span style="padding-left:.7rem;">clearInterval(interval)</span><br>
-        interval = setInterval(...)<br>
-        <span style="color:#7ee8b8;">→ 1 seul actif à la fois</span><br>
-        <span style="color:#7ee8b8;">comportement stable</span>
-      </div>
-    </div>
-  </div>
-</div>
+<hr> <!-- ══ 03 MODULO ══ -->
+<div class="sec" id="modulo"> <div class="slabel">03 — La rotation circulaire</div> <h2>L'opérateur % (modulo) — revenir au début</h2>
 
 <div class="diag">
-  <div class="dtitle">Cycle circulaire — (index + 1) % 3</div>
-  <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;">
-    <div style="display:flex;flex-direction:column;gap:.3rem;min-width:220px;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.2rem;">Calcul étape par étape</div>
-      <div style="display:grid;grid-template-columns:110px 80px 1fr;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;align-items:center;">
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(0 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">1</div>
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(1 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">2</div>
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(2 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">0 ← retour début</div>
-      </div>
-    </div>
-    <div style="position:relative;width:130px;height:130px;flex-shrink:0;">
-      <svg viewBox="0 0 130 130" style="width:130px;height:130px;overflow:visible;">
-        <circle cx="65" cy="65" r="50" fill="none" stroke="rgba(245,197,66,.2)" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <text x="65" y="20" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">0</text>
-        <text x="113" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">1</text>
-        <text x="17" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">2</text>
-        <path d="M72 22 Q108 22 110 72" fill="none" stroke="rgba(245,197,66,.5)" stroke-width="1.5" marker-end="url(#arr)"/>
-        <path d="M108 80 Q108 112 65 112" fill="none" stroke="rgba(245,197,66,.5)" stroke-width="1.5" marker-end="url(#arr)"/>
-        <path d="M55 112 Q18 112 22 65" fill="none" stroke="rgba(86,209,158,.6)" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#arr2)"/>
-        <text x="65" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="var(--t3)">% 3</text>
-        <defs>
-          <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(245,197,66,.7)"/></marker>
-          <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(86,209,158,.7)"/></marker>
-        </defs>
-      </svg>
-      <div style="position:absolute;bottom:-22px;width:100%;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#7ee8b8;">2→0 = retour au début</div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (carouselContainer) {
-    carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseenter'</span>, <span class="fn">stopAutoSlide</span>);
-    carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseleave'</span>, <span class="fn">startAutoSlide</span>);
-}
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Ligne de temps — interaction souris</div>
-    <div style="display:flex;flex-direction:column;gap:.4rem;">
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=0s</div>
-        <div style="background:rgba(232,121,249,.08);border:1px solid rgba(232,121,249,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f0abfc;">startAutoSlide() — intervalle de 5s actif</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=5s</div>
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f7d97a;">nextSlide() → slide 2</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=7s</div>
-        <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#ff9090;">mouseenter → stopAutoSlide() — défilement figé</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=9s</div>
-        <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#ff9090;">toujours stoppé — l'utilisateur lit la slide</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=11s</div>
-        <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">mouseleave → startAutoSlide() — repart de 0</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=16s</div>
-        <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f7d97a;">nextSlide() → slide 3 (5s après le mouseleave)</div>
-      </div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 05 RESET CLIC ══ -->
-<div class="sec" id="reset">
-  <div class="slabel">05 — Reset au clic manuel</div>
-  <h2>Réinitialiser l'intervalle après une action utilisateur</h2>
-  <p>Quand l'utilisateur clique sur un point indicateur ou une flèche, le chronomètre repart de zéro. Sans ça, la prochaine transition automatique pourrait arriver une fraction de seconde après le clic — une expérience désagréable.</p>
-<div class="diag">
-  <div class="dtitle">Pourquoi clearInterval avant setInterval — le problème de l'accumulation</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem;">
-    <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.6rem;">Sans clearInterval — accumulation</div>
-      <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;">
-        <div style="color:var(--t3);">t=0 : startAutoSlide() → intervalle #1</div>
-        <div style="color:var(--t3);">t=2 : clic manuel → startAutoSlide()</div>
-        <div style="color:#fda4af;">→ intervalle #2 créé, #1 toujours actif</div>
-        <div style="color:var(--t3);">t=3 : clic → intervalle #3...</div>
-        <div style="color:#fda4af;margin-top:.3rem;">Résultat : slides changent 3× plus vite</div>
-      </div>
-    </div>
-    <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.6rem;">Avec clearInterval — un seul intervalle</div>
-      <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;">
-        <div style="color:var(--t3);">t=0 : startAutoSlide() → intervalle #1</div>
-        <div style="color:var(--t3);">t=2 : clic → clearInterval(#1) d'abord</div>
-        <div style="color:#7ee8b8;">→ puis startAutoSlide() → intervalle #2</div>
-        <div style="color:var(--t3);">Un seul actif à tout moment</div>
-        <div style="color:#7ee8b8;margin-top:.3rem;">Résultat : 5s exactes depuis le dernier clic</div>
-      </div>
-    </div>
-  </div>
-  <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">if (interval) clearInterval(interval); · interval = setInterval(nextSlide, 5000);</div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">controls</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.indicator, .carousel-prev, .carousel-next'</span>);
-controls.<span class="fn">forEach</span>(control => {
-    control.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
-        <span class="fn">stopAutoSlide</span>();  <span class="cm">// Annule l'intervalle en cours</span>
-        <span class="fn">startAutoSlide</span>(); <span class="cm">// En recrée un nouveau (repart de 5s)</span>
-    });
-});
-
-<span class="cm">// Synchronisation de currentIndex quand l'utilisateur clique manuellement un radio</span>
-radios.<span class="fn">forEach</span>((radio, index) => {
-    radio.<span class="fn">addEventListener</span>(<span class="s">'change'</span>, <span class="kw">function</span>() {
-        <span class="kw">if</span> (<span class="kw">this</span>.checked) {
-            currentIndex = index; <span class="cm">// Met à jour l'index pour que nextSlide() parte du bon endroit</span>
-        }
-    });
-});
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Sans synchronisation de currentIndex — le bug</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;">❌ Sans addEventListener 'change'</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);">
-          état actif CSS : slide 3<br>
-          currentIndex : <span style="color:#f7d97a;">0</span> (pas mis à jour)<br>
-          nextSlide() : (0+1)%3 = 1<br>
-          → <span style="color:#ff9090;">passe à la slide 2, pas à la 1</span><br>
-          → comportement imprévisible
-        </div>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.4rem;">✅ Avec addEventListener 'change'</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);">
-          état actif CSS : slide 3<br>
-          currentIndex : <span style="color:#7ee8b8;">2</span> (mis à jour)<br>
-          nextSlide() : (2+1)%3 = 0<br>
-          → passe à la slide 1<br>
-          → séquence correcte ✓
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">06 — Récapitulatif</div>
-  <h2>Le film complet — variables et fonctions</h2>
-<div class="diag" style="margin-top:.8rem;">
-  <div class="dtitle">Les 3 variables d'état — valeurs selon le contexte</div>
-  <table style="width:100%;border-collapse:collapse;font-size:.75rem;">
-    <thead><tr>
-      <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);text-align:left;">Variable</th>
-      <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Au chargement</th>
-      <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Après nextSlide()</th>
-      <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Pendant hover</th>
-    </tr></thead>
-    <tbody>
-      <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#f0abfc;">radios</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">NodeList[3], inchangé</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé (lecture seule)</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé</td></tr>
-      <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fde68a;">currentIndex</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">0</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:#7ee8b8;">(prev+1) % 3</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Gelé (stopAutoSlide)</td></tr>
-      <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7dd3fc;">interval</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">ID setInterval</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:#fda4af;">null (clearInterval)</td></tr>
-    </tbody>
+  <div class="dtitle">currentIndex sans modulo vs avec — ce qui se passe à la slide 3</div>
+  <table class="recap-table" style="font-size:.8rem">
+    <tr><th>Appel</th><th>Sans %</th><th>Avec % 3</th></tr>
+    <tr><td>nextSlide() ×1</td><td>index = 1</td><td style="color:#7ee8b8">index = 1</td></tr>
+    <tr><td>nextSlide() ×2</td><td>index = 2</td><td style="color:#7ee8b8">index = 2</td></tr>
+    <tr><td>nextSlide() ×3</td><td style="color:#fda4af">index = 3 — radios[3] undefined</td><td style="color:#7ee8b8">index = 0 — retour slide 1</td></tr>
+    <tr><td>nextSlide() ×4</td><td style="color:#fda4af">index = 4 — crash</td><td style="color:#7ee8b8">index = 1</td></tr>
   </table>
 </div>
 
-
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.08em;margin-bottom:1rem;">Variables d'état</div>
-    <div style="display:flex;flex-direction:column;gap:.5rem;">
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;">
-        <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">radios</div>
-        <div style="color:var(--t2);">Tableau des 3 inputs radio. Jamais modifié. Sert d'index à <ic>radios[currentIndex].checked</ic>.</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;">
-        <div style="font-family:'JetBrains Mono',monospace;color:#f7d97a;">currentIndex</div>
-        <div style="color:var(--t2);">Index 0-2 du slide actif. Mis à jour par <ic>nextSlide()</ic> et par le listener <ic>change</ic> des radios manuels.</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;">
-        <div style="font-family:'JetBrains Mono',monospace;color:#7ee8b8;">interval</div>
-        <div style="color:var(--t2);">Identifiant retourné par <ic>setInterval</ic>. <ic>null</ic> si arrêté. Vérifié avant chaque <ic>clearInterval</ic>.</div>
+<div class="diag">
+  <div class="dtitle">Comparaison — avec et sans modulo</div>
+  <div class="two-col" style="margin:0">
+    <div class="tc-card">
+      <div class="tc-title" style="color:#fda4af">Sans modulo — plantage</div>
+      <div style="font-family:monospace;font-size:.78rem;line-height:1.8;color:var(--t2)">
+        currentIndex + 1 = 0<br>
+        currentIndex + 1 = 1<br>
+        currentIndex + 1 = 2<br>
+        <span style="color:#fda4af">currentIndex + 1 = 3 → undefined</span><br>
+        <span style="color:#fda4af">currentIndex + 1 = 4 → undefined</span>
       </div>
     </div>
-  </div>
-
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.08em;margin-bottom:1rem;">Fonctions</div>
-    <div style="display:flex;flex-direction:column;gap:.7rem;">
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;">
-        <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">nextSlide()</div>
-        <div style="color:var(--t2);">Incrémente <ic>currentIndex</ic> avec modulo, coche le radio. Appelée par l'intervalle toutes les 5s.</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;">
-        <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">startAutoSlide()</div>
-        <div style="color:var(--t2);">Annule l'intervalle existant (si présent) puis en crée un nouveau. Garantit un seul intervalle actif.</div>
-      </div>
-      <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;">
-        <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">stopAutoSlide()</div>
-        <div style="color:var(--t2);"><ic>clearInterval</ic> + <ic>interval = null</ic>. Appelée au mouseenter et au clic manuel (avant reset).</div>
+    <div class="tc-card">
+      <div class="tc-title" style="color:#7ee8b8">Avec % 3 — boucle infinie</div>
+      <div style="font-family:monospace;font-size:.78rem;line-height:1.8;color:var(--t2)">
+        (0+1) % 3 = <span style="color:#7ee8b8">1</span><br>
+        (1+1) % 3 = <span style="color:#7ee8b8">2</span><br>
+        (2+1) % 3 = <span style="color:#7ee8b8">0</span> ← retour au début<br>
+        (0+1) % 3 = <span style="color:#7ee8b8">1</span><br>
+        (1+1) % 3 = <span style="color:#7ee8b8">2</span> ...
       </div>
     </div>
-  </div>
-
-  <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;">
-    <b style="color:#f0abfc;">Dépendances :</b>
-<div class="schema2" style="margin-top:1.2rem;">
-  <div class="s2t">Machine à états — les 3 états possibles du carrousel</div>
-  <div class="state-machine">
-    <div style="text-align:center;">
-      <div class="state" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.35);color:#7ee8b8;">RUNNING<br><span style="font-weight:400;font-size:.6rem;">interval actif</span></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">état initial</div>
-    </div>
-    <div class="trans" style="flex-direction:column;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-bottom:.1rem;">mouseenter</div>
-      <div style="display:flex;align-items:center;gap:0;"><div class="trans-line"></div><div style="color:var(--t3);">▶</div></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-top:.1rem;">mouseleave</div>
-      <div style="display:flex;align-items:center;gap:0;flex-direction:row-reverse;"><div class="trans-line"></div><div style="color:var(--t3);transform:scaleX(-1);">▶</div></div>
-    </div>
-    <div style="text-align:center;">
-      <div class="state" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.35);color:#fda4af;">PAUSED<br><span style="font-weight:400;font-size:.6rem;">interval=null</span></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">survol souris</div>
-    </div>
-    <div class="trans" style="flex-direction:column;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-bottom:.1rem;">clic manuel</div>
-      <div style="display:flex;align-items:center;gap:0;"><div class="trans-line"></div><div style="color:var(--t3);">▶</div></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-top:.1rem;">reset complet</div>
-      <div style="display:flex;align-items:center;gap:0;flex-direction:row-reverse;"><div class="trans-line"></div><div style="color:var(--t3);transform:scaleX(-1);">▶</div></div>
-    </div>
-    <div style="text-align:center;">
-      <div class="state" style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.35);color:#f7d97a;">RESET<br><span style="font-weight:400;font-size:.6rem;">stop + start</span></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">après clic indicateur</div>
-    </div>
-  </div>
-  <div style="text-align:center;font-size:.74rem;color:var(--t2);margin-top:.5rem;">RESET revient à RUNNING immédiatement — c'est stop() suivi de start() en une seule opération</div>
-</div>
- aucune. carousel.js est <b>entièrement autonome</b> — pas de PearTechDB, pas de localStorage, pas d'événement personnalisé. Il interagit uniquement avec le DOM HTML de la page d'accueil via des IDs et classes CSS.
   </div>
 </div>
+ <div class="cb2"><span class="cbl2">javascript — pourquoi (currentIndex + 1) % radios.length</span><pre><span class="cm">// radios.length = 3 (slides 0, 1, 2)</span> <span class="cm">// Sans modulo — l'index dépasse le tableau :</span>
+<span class="cm">// 0  1  2  3  4  5  ...  tableau[3] = undefined  plantage</span> <span class="cm">// Avec modulo :</span>
+<span class="cm">// (0 + 1) % 3 = 1 </span>
+<span class="cm">// (1 + 1) % 3 = 2 </span>
+<span class="cm">// (2 + 1) % 3 = 0  retour au début automatiquement </span> <span class="kw">function</span> <span class="fn">nextSlide</span>() {
+currentIndex = (currentIndex + <span class="nm">1</span>) % radios.length; <span class="cm">// Jamais > 2</span> radios[currentIndex].checked = <span class="kw">true</span>;
+}
+</pre></div> <div class="diag"> <div class="dtitle">Cycle circulaire avec 3 slides</div> <div style="display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;padding:.8rem 0;"> <div style="background:rgba(232,121,249,.12);border:1px solid rgba(232,121,249,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#f0abfc;text-align:center;">slide<br>0</div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(0+1)%3<br>=1 </div> <div style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#f7d97a;text-align:center;">slide<br>1</div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(1+1)%3<br>=2 </div> <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7ee8b8;text-align:center;">slide<br>2</div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(2+1)%3<br>=0 ↩</div> </div> <div style="font-size:.8rem;color:var(--t2);text-align:center;">Le modulo crée une boucle infinie sans condition <ic>if</ic>. Élégant et extensible à N slides.</div> </div>
+</div>
+<hr> <!-- ══ 04 PAUSE SURVOL ══ -->
+<div class="sec" id="pause"> <div class="slabel">04 — Pause au survol</div> <h2>mouseenter / mouseleave — UX de courtoisie</h2> <p>Arrêter le défilement quand la souris survole le carrousel est une convention UX : l'utilisateur qui s'attarde sur une slide ne veut pas qu'elle change subitement sous son regard.</p>
+<div class="diag"> <div class="dtitle">Danger de setInterval sans clearInterval — pourquoi interval est vérifié</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:520px;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">Sans vérification</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;"> startAutoSlide() x3<br> <span style="color:#fda4af;"> 3 intervalles actifs</span><br> nextSlide() appelé<br> <span style="color:#fda4af;">3× par tick de 5s</span><br> <span style="color:#fda4af;">slide change 3× trop vite</span> </div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">Avec vérification</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;"> if (interval)<br> <span style="padding-left:.7rem;">clearInterval(interval)</span><br> interval = setInterval(...)<br> <span style="color:#7ee8b8;"> 1 seul actif à la fois</span><br> <span style="color:#7ee8b8;">comportement stable</span> </div> </div> </div>
+</div> <div class="diag"> <div class="dtitle">Cycle circulaire — (index + 1) % 3</div> <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;"> <div style="display:flex;flex-direction:column;gap:.3rem;min-width:220px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.2rem;">Calcul étape par étape</div> <div style="display:grid;grid-template-columns:110px 80px 1fr;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;align-items:center;"> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(0 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">1</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(1 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">2</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(2 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">0  retour début</div> </div> </div> <div style="position:relative;width:130px;height:130px;flex-shrink:0;"> <svg viewBox="0 0 130 130" style="width:130px;height:130px;overflow:visible;"> <circle cx="65" cy="65" r="50" fill="none" stroke="rgba(245,197,66,.2)" stroke-width="1.5" stroke-dasharray="4 3"/> <text x="65" y="20" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">0</text> <text x="113" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">1</text> <text x="17" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">2</text> <path d="M72 22 Q108 22 110 72" fill="none" stroke="rgba(245,197,66,.5)" stroke-width="1.5" marker-end="url(#arr)"/> <path d="M108 80 Q108 112 65 112" fill="none" stroke="rgba(245,197,66,.5)" stroke-width="1.5" marker-end="url(#arr)"/> <path d="M55 112 Q18 112 22 65" fill="none" stroke="rgba(86,209,158,.6)" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#arr2)"/> <text x="65" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="var(--t3)">% 3</text> <defs> <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(245,197,66,.7)"/></marker> <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(86,209,158,.7)"/></marker> </defs> </svg> <div style="position:absolute;bottom:-22px;width:100%;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#7ee8b8;">20 = retour au début</div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (carouselContainer) {
+carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseenter'</span>, <span class="fn">stopAutoSlide</span>);
+carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseleave'</span>, <span class="fn">startAutoSlide</span>);
+}
+</pre></div> <div class="diag"> <div class="dtitle">Ligne de temps — interaction souris</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=0s</div> <div style="background:rgba(232,121,249,.08);border:1px solid rgba(232,121,249,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f0abfc;">startAutoSlide() — intervalle de 5s actif</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=5s</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f7d97a;">nextSlide()  slide 2</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=7s</div> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#ff9090;">mouseenter  stopAutoSlide() — défilement figé</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=9s</div> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#ff9090;">toujours stoppé — l'utilisateur lit la slide</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=11s</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">mouseleave  startAutoSlide() — repart de 0</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=16s</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f7d97a;">nextSlide()  slide 3 (5s après le mouseleave)</div> </div> </div> </div>
+</div>
+<hr> <!-- ══ 05 RESET CLIC ══ -->
+<div class="sec" id="reset"> <div class="slabel">05 — Reset au clic manuel</div> <h2>Réinitialiser l'intervalle après une action utilisateur</h2> <p>Quand l'utilisateur clique sur un point indicateur ou une flèche, le chronomètre repart de zéro. Sans ça, la prochaine transition automatique pourrait arriver une fraction de seconde après le clic — une expérience désagréable.</p>
+<div class="diag"> <div class="dtitle">Pourquoi clearInterval avant setInterval — le problème de l'accumulation</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.6rem;">Sans clearInterval — accumulation</div> <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;"> <div style="color:var(--t3);">t=0 : startAutoSlide()  intervalle #1</div> <div style="color:var(--t3);">t=2 : clic manuel  startAutoSlide()</div> <div style="color:#fda4af;"> intervalle #2 créé, #1 toujours actif</div> <div style="color:var(--t3);">t=3 : clic  intervalle #3...</div> <div style="color:#fda4af;margin-top:.3rem;">Résultat : slides changent 3× plus vite</div> </div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.6rem;">Avec clearInterval — un seul intervalle</div> <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;"> <div style="color:var(--t3);">t=0 : startAutoSlide()  intervalle #1</div> <div style="color:var(--t3);">t=2 : clic  clearInterval(#1) d'abord</div> <div style="color:#7ee8b8;"> puis startAutoSlide()  intervalle #2</div> <div style="color:var(--t3);">Un seul actif à tout moment</div> <div style="color:#7ee8b8;margin-top:.3rem;">Résultat : 5s exactes depuis le dernier clic</div> </div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">if (interval) clearInterval(interval); · interval = setInterval(nextSlide, 5000);</div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">controls</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.indicator, .carousel-prev, .carousel-next'</span>);
+controls.<span class="fn">forEach</span>(control => {
+control.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
+<span class="fn">stopAutoSlide</span>();  <span class="cm">// Annule l'intervalle en cours</span> <span class="fn">startAutoSlide</span>(); <span class="cm">// En recrée un nouveau (repart de 5s)</span> });
+});
+<span class="cm">// Synchronisation de currentIndex quand l'utilisateur clique manuellement un radio</span>
+radios.<span class="fn">forEach</span>((radio, index) => {
+radio.<span class="fn">addEventListener</span>(<span class="s">'change'</span>, <span class="kw">function</span>() {
+<span class="kw">if</span> (<span class="kw">this</span>.checked) {
+currentIndex = index; <span class="cm">// Met à jour l'index pour que nextSlide() parte du bon endroit</span> }
+});
+});
+</pre></div> <div class="diag"> <div class="dtitle">Sans synchronisation de currentIndex — le bug</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;"> Sans addEventListener 'change'</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);"> état actif CSS : slide 3<br> currentIndex : <span style="color:#f7d97a;">0</span> (pas mis à jour)<br> nextSlide() : (0+1)%3 = 1<br> <span style="color:#ff9090;">passe à la slide 2, pas à la 1</span><br> comportement imprévisible
+</div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.4rem;"> Avec addEventListener 'change'</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);"> état actif CSS : slide 3<br> currentIndex : <span style="color:#7ee8b8;">2</span> (mis à jour)<br> nextSlide() : (2+1)%3 = 0<br> passe à la slide 1<br> séquence correcte 
+</div> </div> </div> </div>
+</div>
+<hr> <!-- ══ RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">06 — Récapitulatif</div> <h2>Le film complet — variables et fonctions</h2>
+<div class="diag" style="margin-top:.8rem;"> <div class="dtitle">Les 3 variables d'état — valeurs selon le contexte</div> <table style="width:100%;border-collapse:collapse;font-size:.75rem;"> <thead><tr> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);text-align:left;">Variable</th> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Au chargement</th> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Après nextSlide()</th> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Pendant hover</th> </tr></thead> <tbody> <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#f0abfc;">radios</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">NodeList[3], inchangé</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé (lecture seule)</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé</td></tr> <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fde68a;">currentIndex</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">0</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:#7ee8b8;">(prev+1) % 3</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Gelé (stopAutoSlide)</td></tr> <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7dd3fc;">interval</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">ID setInterval</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:#fda4af;">null (clearInterval)</td></tr> </tbody> </table>
+</div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.08em;margin-bottom:1rem;">Variables d'état</div> <div style="display:flex;flex-direction:column;gap:.5rem;"> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">radios</div> <div style="color:var(--t2);">Tableau des 3 inputs radio. Jamais modifié. Sert d'index à <ic>radios[currentIndex].checked</ic>.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f7d97a;">currentIndex</div> <div style="color:var(--t2);">Index 0-2 du slide actif. Mis à jour par <ic>nextSlide()</ic> et par le listener <ic>change</ic> des radios manuels.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#7ee8b8;">interval</div> <div style="color:var(--t2);">Identifiant retourné par <ic>setInterval</ic>. <ic>null</ic> si arrêté. Vérifié avant chaque <ic>clearInterval</ic>.</div> </div> </div> </div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.08em;margin-bottom:1rem;">Fonctions</div> <div style="display:flex;flex-direction:column;gap:.7rem;"> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">nextSlide()</div> <div style="color:var(--t2);">Incrémente <ic>currentIndex</ic> avec modulo, coche le radio. Appelée par l'intervalle toutes les 5s.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">startAutoSlide()</div> <div style="color:var(--t2);">Annule l'intervalle existant (si présent) puis en crée un nouveau. Garantit un seul intervalle actif.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">stopAutoSlide()</div> <div style="color:var(--t2);"><ic>clearInterval</ic> + <ic>interval = null</ic>. Appelée au mouseenter et au clic manuel (avant reset).</div> </div> </div> </div> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;"> <b style="color:#f0abfc;">Dépendances :</b>
+<div class="schema2" style="margin-top:1.2rem;"> <div class="s2t">Machine à états — les 3 états possibles du carrousel</div> <div class="state-machine"> <div style="text-align:center;"> <div class="state" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.35);color:#7ee8b8;">RUNNING<br><span style="font-weight:400;font-size:.6rem;">interval actif</span></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">état initial</div> </div> <div class="trans" style="flex-direction:column;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-bottom:.1rem;">mouseenter</div> <div style="display:flex;align-items:center;gap:0;"><div class="trans-line"></div><div style="color:var(--t3);"></div></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-top:.1rem;">mouseleave</div> <div style="display:flex;align-items:center;gap:0;flex-direction:row-reverse;"><div class="trans-line"></div><div style="color:var(--t3);transform:scaleX(-1);"></div></div> </div> <div style="text-align:center;"> <div class="state" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.35);color:#fda4af;">PAUSED<br><span style="font-weight:400;font-size:.6rem;">interval=null</span></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">survol souris</div> </div> <div class="trans" style="flex-direction:column;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-bottom:.1rem;">clic manuel</div> <div style="display:flex;align-items:center;gap:0;"><div class="trans-line"></div><div style="color:var(--t3);"></div></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-top:.1rem;">reset complet</div> <div style="display:flex;align-items:center;gap:0;flex-direction:row-reverse;"><div class="trans-line"></div><div style="color:var(--t3);transform:scaleX(-1);"></div></div> </div> <div style="text-align:center;"> <div class="state" style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.35);color:#f7d97a;">RESET<br><span style="font-weight:400;font-size:.6rem;">stop + start</span></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">après clic indicateur</div> </div> </div> <div style="text-align:center;font-size:.74rem;color:var(--t2);margin-top:.5rem;">RESET revient à RUNNING immédiatement — c'est stop() suivi de start() en une seule opération</div>
+</div> aucune. carousel.js est <b>entièrement autonome</b> — pas de PearTechDB, pas de localStorage, pas d'événement personnalisé. Il interagit uniquement avec le DOM HTML de la page d'accueil via des IDs et classes CSS.
+</div>
+</div> </div>
 
+<hr>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">setInterval / clearInterval</div>
+      <div class="glos-def"><ic>setInterval(fn, ms)</ic> répète une fonction toutes les <ic>ms</ic> ms. Retourne un ID. <ic>clearInterval(id)</ic> stoppe les répétitions. Sans clearInterval avant un re-start, les intervalles s'accumulent en doublon.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">dataset</div>
+      <div class="glos-def">Interface qui expose les attributs <ic>data-*</ic> d'un élément. <ic>el.dataset.productId</ic> lit <ic>data-product-id</ic>. Permet de stocker des données métier directement dans le HTML sans variables globales. La conversion camelCase est automatique : <ic>data-product-id</ic> → <ic>dataset.productId</ic>.</div>
+    </div>
+  </div>
 </div>
 </body>
 </html>

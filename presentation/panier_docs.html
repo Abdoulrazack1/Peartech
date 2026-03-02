@@ -5,886 +5,374 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — panier.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#10b981;--a2:#ff6b6b;--a3:#7eb5ff;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;flex-wrap:wrap;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  .sec p b,.sec p strong{color:var(--t);font-weight:700;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#6ee7b7;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .cb{background:rgba(16,185,129,.11);border:1px solid rgba(16,185,129,.4);color:#6ee7b7;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .cbl{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
-  .fork{display:grid;gap:1rem;width:100%;max-width:720px;}
-  .fork.f2{grid-template-columns:1fr 1fr;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
-  .flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-  .flr{background:rgba(255,107,107,.15);color:#ff9090;}
-  .fc .vn{width:100%;max-width:100%;}
-  .fc .va{width:100%;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
-  .box.info{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);color:#6ee7b7;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-  .box.bad {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
-  .box.def {background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
-  .box.ana {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-  .box b,.box strong{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#6ee7b7}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#a5f3d5}
-  .glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-  .glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-  .grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
-  .grow:last-child{border-bottom:none;}
-  .gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-  .gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-  .tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
-  .tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
-  .tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
-  .tbl tr:last-child td{border-bottom:none;}
-  .tc{font-family:'JetBrains Mono',monospace;color:#6ee7b7;font-size:.76rem;}
-  .tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
-  .tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
-  .tli{position:relative;margin-bottom:1.8rem;}
-  .tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
-  .tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
-  .tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
-  .tlt{font-size:.95rem;font-weight:700;}
-  .tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
-  .tlb ic{background:var(--bg3);border:1px solid var(--border);}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── EXTRA SCHEMAS ─── */
-  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
-  .ls-key{font-weight:700;margin-bottom:.25rem;}
-  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
-  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
-  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
-  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
-  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
-  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
-  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
-  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
-  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
-  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
-  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
-  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
-  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
-  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
-  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .cmp-box{border-radius:11px;padding:1rem;}
-  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
-  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .cmp-item:last-child{border-bottom:none;}
-  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#10b981;--a2:#ff6b6b;--a3:#7eb5ff;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;flex-wrap:wrap;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--t2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+.sec p b,.sec p strong{color:var(--t);font-weight:700;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#6ee7b7;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.cb{background:rgba(16,185,129,.11);border:1px solid rgba(16,185,129,.4);color:#6ee7b7;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.cbl{background:rgba(79,142,255,.11);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.fork{display:grid;gap:1rem;width:100%;max-width:720px;}
+.fork.f2{grid-template-columns:1fr 1fr;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;white-space:nowrap;}
+.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.flr{background:rgba(255,107,107,.15);color:#ff9090;}
+.fc .vn{width:100%;max-width:100%;}
+.fc .va{width:100%;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;margin-top:.05rem;}
+.box.info{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);color:#6ee7b7;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.bad {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.def {background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.box.ana {background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
+.box b,.box strong{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#6ee7b7}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.vr{color:#a5f3d5}
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.grow{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(35,40,53,.7);}
+.grow:last-child{border-bottom:none;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
+.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
+.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
+.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
+.tbl tr:last-child td{border-bottom:none;}
+.tc{font-family:'JetBrains Mono',monospace;color:#6ee7b7;font-size:.76rem;}
+.tl{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+.tl::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+.tli{position:relative;margin-bottom:1.8rem;}
+.tld{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+.tlh{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem;}
+.tls{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);}
+.tlt{font-size:.95rem;font-weight:700;}
+.tlb{font-size:.86rem;color:var(--t2);line-height:1.8;}
+.tlb ic{background:var(--bg3);border:1px solid var(--border);}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2{grid-template-columns:1fr;}nav{padding:0 1rem;flex-wrap:wrap;height:auto;padding-top:.5rem;padding-bottom:.5rem;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── EXTRA SCHEMAS ─── */
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+.ls-key{font-weight:700;margin-bottom:.25rem;}
+.ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+.h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+.state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+.state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+.timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+.cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+.cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+.cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.cmp-box{border-radius:11px;padding:1rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+.cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+@media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">panier.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#storage">localStorage</a>
-  <a href="#cart">Le panier</a>
-  <a href="#add">Ajout</a>
-  <a href="#delegation">Délégation</a>
-  <a href="#cas">Cas 1 vs 2</a>
-  <a href="#toast">Notification</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">panier.js</div> <a href="#intro">Intro</a> <a href="#storage">localStorage</a> <a href="#cart">Le panier</a> <a href="#add">Ajout</a> <a href="#delegation">Délégation</a> <a href="#cas">Cas 1 vs 2</a> <a href="#toast">Notification</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>Clic .btn-add-cart</b><br><span style="color:var(--t3);font-size:.71rem;">délégation globale sur document</span></div>
 <div class="carte-item"><b>localStorage peartech-cart</b><br><span style="color:var(--t3);font-size:.71rem;">lecture au démarrage</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#6ee7b722;color:#6ee7b7;border:1px solid #6ee7b744;">⚙️ TRAITEMENTS</div>
-<div class="carte-item"><b>addToCart(product)</b><br><span style="color:var(--t3);font-size:.71rem;">doublon → quantity++ ou push()</span></div>
-<div class="carte-item"><b>saveCart()</b><br><span style="color:var(--t3);font-size:.71rem;">JSON.stringify → localStorage</span></div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#6ee7b722;color:#6ee7b7;border:1px solid #6ee7b744;"> TRAITEMENTS</div>
+<div class="carte-item"><b>addToCart(product)</b><br><span style="color:var(--t3);font-size:.71rem;">doublon  quantity++ ou push()</span></div>
+<div class="carte-item"><b>saveCart()</b><br><span style="color:var(--t3);font-size:.71rem;">JSON.stringify  localStorage</span></div>
 <div class="carte-item"><b>updateBadge()</b><br><span style="color:var(--t3);font-size:.71rem;">compteur dans le header</span></div>
 <div class="carte-item"><b>showCartToast()</b><br><span style="color:var(--t3);font-size:.71rem;">notification visuelle</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>window.PearTechCart</b><br><span style="color:var(--t3);font-size:.71rem;">API: add, remove, clear, get</span></div>
 <div class="carte-item"><b>localStorage peartech-cart</b><br><span style="color:var(--t3);font-size:.71rem;">cart sérialisé</span></div>
 <div class="carte-item"><b>localStorage peartech-cart-count</b><br><span style="color:var(--t3);font-size:.71rem;">badge</span></div>
 <div class="carte-item"><b>CustomEvent productAddedToCart</b><br><span style="color:var(--t3);font-size:.71rem;">écouté par main.js</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>panier.js</span></h1> <p>Ce fichier gère tout ce qui touche au panier sur toutes les pages du site : stockage dans le navigateur, badge de compteur dans la navigation, et ajout de produits depuis une carte ou depuis une fiche produit. Un seul script, plusieurs pages couvertes.</p> <div class="fbadge"><div class="dot"></div>panier.js · 8 fonctions · ~252 lignes · actif sur toutes les pages</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Délégation globale et API window.PearTechCart</h2> <p>panier.js s'exécute sur chaque page du site. Il lit le panier sauvegardé dans le navigateur, affiche le bon nombre sur le badge du header, et intercepte tous les clics "Ajouter au panier" — qu'ils viennent d'une page d'accueil, d'un catalogue, ou d'une fiche produit.</p> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> C'est la caisse centrale d'un supermarché. Peu importe dans quel rayon un client ajoute un article à son caddie (accueil, catalogue, fiche produit), c'est toujours la même caisse qui enregistre l'ajout, met à jour le total affiché au-dessus de l'entrée, et stocke le contenu du caddie dans un casier numéroté du magasin (localStorage).</div></div> <h3>Vocabulaire essentiel — lisez ça en premier</h3> <div class="glos"> <div class="glos-head"> Termes utilisés dans ce fichier</div> <div class="grow"><div class="gterm">try / catch</div><div class="gdef">Structure de protection contre les erreurs. Le code dans <ic>try</ic> est exécuté. Si une erreur survient, le code dans <ic>catch</ic> prend le relais — sans faire planter toute la page. Indispensable pour localStorage qui peut être bloqué.</div></div> <div class="grow"><div class="gterm">QuotaExceededError</div><div class="gdef">Erreur lancée par le navigateur quand localStorage est plein. Fréquent en navigation privée où le quota est très limité. Sans try/catch, cette erreur ferait planter le script.</div></div> <div class="grow"><div class="gterm">e.target.closest()</div><div class="gdef"><ic>element.closest('.classe')</ic> remonte l'arbre HTML depuis l'élément cliqué jusqu'à trouver un ancêtre avec la classe donnée. Si aucun ancêtre ne correspond, retourne <ic>null</ic>. Utilisé pour la délégation d'événements.</div></div> <div class="grow"><div class="gterm">Délégation d'événements</div><div class="gdef">Au lieu d'installer un écouteur sur chaque bouton "Ajouter au panier" (qui peuvent être nombreux et injectés dynamiquement), on en installe UN SEUL sur <ic>document</ic>. Tous les clics remontent jusqu'à lui. Il vérifie si le clic a touché un bouton intéressant.</div></div> <div class="grow"><div class="gterm">JSON.stringify / JSON.parse</div><div class="gdef">localStorage ne peut stocker que du texte. <ic>JSON.stringify(tableau)</ic> convertit le tableau panier en texte. <ic>JSON.parse(texte)</ic> reconvertit ce texte en tableau au moment de le relire. Sans ça, on stockerait "[object Object]".</div></div> <div class="grow"><div class="gterm">parseFloat</div><div class="gdef"><ic>parseFloat("1 299,00 €")</ic> extrait le nombre décimal d'une chaîne. Ici on nettoie d'abord la chaîne avec <ic>.replace(/[^\d,]/g, '')</ic> pour retirer tout ce qui n'est pas chiffre ou virgule, puis on remplace la virgule par un point.</div></div> <div class="grow"><div class="gterm">window.PearTechCart</div><div class="gdef">L'API publique exportée par panier.js. En exposant <ic>{ add, getCart, clear }</ic> sur window, n'importe quel autre script peut appeler <ic>window.PearTechCart.add(produit)</ic> pour ajouter un article au panier.</div></div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>panier.js</span></h1>
-  <p>Ce fichier gère tout ce qui touche au panier sur toutes les pages du site : stockage dans le navigateur, badge de compteur dans la navigation, et ajout de produits depuis une carte ou depuis une fiche produit. Un seul script, plusieurs pages couvertes.</p>
-  <div class="fbadge"><div class="dot"></div>panier.js · 8 fonctions · ~252 lignes · actif sur toutes les pages</div>
-</div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Avant de commencer</div>
-  <h2>Délégation globale et API window.PearTechCart</h2>
-  <p>panier.js s'exécute sur chaque page du site. Il lit le panier sauvegardé dans le navigateur, affiche le bon nombre sur le badge du header, et intercepte tous les clics "Ajouter au panier" — qu'ils viennent d'une page d'accueil, d'un catalogue, ou d'une fiche produit.</p>
-
-  <div class="box ana"><span class="bi">🏬</span><div><b>Analogie :</b> C'est la caisse centrale d'un supermarché. Peu importe dans quel rayon un client ajoute un article à son caddie (accueil, catalogue, fiche produit), c'est toujours la même caisse qui enregistre l'ajout, met à jour le total affiché au-dessus de l'entrée, et stocke le contenu du caddie dans un casier numéroté du magasin (localStorage).</div></div>
-
-  <h3>Vocabulaire essentiel — lisez ça en premier</h3>
-  <div class="glos">
-    <div class="glos-head">📖 Termes utilisés dans ce fichier</div>
-    <div class="grow"><div class="gterm">try / catch</div><div class="gdef">Structure de protection contre les erreurs. Le code dans <ic>try</ic> est exécuté. Si une erreur survient, le code dans <ic>catch</ic> prend le relais — sans faire planter toute la page. Indispensable pour localStorage qui peut être bloqué.</div></div>
-    <div class="grow"><div class="gterm">QuotaExceededError</div><div class="gdef">Erreur lancée par le navigateur quand localStorage est plein. Fréquent en navigation privée où le quota est très limité. Sans try/catch, cette erreur ferait planter le script.</div></div>
-    <div class="grow"><div class="gterm">e.target.closest()</div><div class="gdef"><ic>element.closest('.classe')</ic> remonte l'arbre HTML depuis l'élément cliqué jusqu'à trouver un ancêtre avec la classe donnée. Si aucun ancêtre ne correspond, retourne <ic>null</ic>. Utilisé pour la délégation d'événements.</div></div>
-    <div class="grow"><div class="gterm">Délégation d'événements</div><div class="gdef">Au lieu d'installer un écouteur sur chaque bouton "Ajouter au panier" (qui peuvent être nombreux et injectés dynamiquement), on en installe UN SEUL sur <ic>document</ic>. Tous les clics remontent jusqu'à lui. Il vérifie si le clic a touché un bouton intéressant.</div></div>
-    <div class="grow"><div class="gterm">JSON.stringify / JSON.parse</div><div class="gdef">localStorage ne peut stocker que du texte. <ic>JSON.stringify(tableau)</ic> convertit le tableau panier en texte. <ic>JSON.parse(texte)</ic> reconvertit ce texte en tableau au moment de le relire. Sans ça, on stockerait "[object Object]".</div></div>
-    <div class="grow"><div class="gterm">parseFloat</div><div class="gdef"><ic>parseFloat("1 299,00 €")</ic> extrait le nombre décimal d'une chaîne. Ici on nettoie d'abord la chaîne avec <ic>.replace(/[^\d,]/g, '')</ic> pour retirer tout ce qui n'est pas chiffre ou virgule, puis on remplace la virgule par un point.</div></div>
-    <div class="grow"><div class="gterm">window.PearTechCart</div><div class="gdef">L'API publique exportée par panier.js. En exposant <ic>{ add, getCart, clear }</ic> sur window, n'importe quel autre script peut appeler <ic>window.PearTechCart.add(produit)</ic> pour ajouter un article au panier.</div></div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 LOCALSTORAGE ══ -->
-<div class="sec" id="storage">
-  <div class="slabel">01 — Stockage sécurisé</div>
-  <h2>storageGet et storageSet — accès localStorage blindé</h2>
-  <p>localStorage peut tomber en panne pour trois raisons : navigation privée (quota très faible), cookies bloqués par l'utilisateur, ou stockage plein. Sans protection, le site planterait silencieusement. Ces deux fonctions encapsulent tous les accès.</p>
-
-  <div class="diag">
-    <div class="dtitle">Ce que try/catch protège concrètement</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
-      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;">❌ Sans try/catch</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;">
-          <span style="color:#c084fc;">function</span> <span style="color:#6ee7b7;">storageGet</span>(key) {<br>
-          &nbsp;&nbsp;<span style="color:#c084fc;">return</span> localStorage.<span style="color:#6ee7b7;">getItem</span>(key);<br>
-          &nbsp;&nbsp;<span style="color:#555e74;font-style:italic;">// Si localStorage bloqué :</span><br>
-          &nbsp;&nbsp;<span style="color:#ff9090;">// → SecurityError non attrapée</span><br>
-          &nbsp;&nbsp;<span style="color:#ff9090;">// → tout le script s'arrête</span><br>
-          }
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);">Une erreur ici ferait planter l'ensemble de panier.js. Le badge ne s'afficherait pas, aucun ajout ne fonctionnerait.</div>
-      </div>
-      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#6ee7b7;margin-bottom:.8rem;">✅ Avec try/catch</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;">
-          <span style="color:#c084fc;">function</span> <span style="color:#6ee7b7;">storageGet</span>(key) {<br>
-          &nbsp;&nbsp;<span style="color:#c084fc;">try</span> {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc;">return</span> localStorage.<span style="color:#6ee7b7;">getItem</span>(key);<br>
-          &nbsp;&nbsp;} <span style="color:#c084fc;">catch</span> (e) {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;console.<span style="color:#6ee7b7;">warn</span>('échoué :', e);<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc;">return</span> <span style="color:#c084fc;">null</span>;<br>
-          &nbsp;&nbsp;}<br>
-          }
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);">Si localStorage est bloqué, on renvoie <ic>null</ic>. Le reste du code gère ce cas (<ic>|| []</ic> donne un panier vide). Le site fonctionne en mode dégradé.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">storageGet</span>(key) {
-    <span class="kw">try</span> {
-        <span class="kw">return</span> localStorage.<span class="fn">getItem</span>(key);
-    } <span class="kw">catch</span> (e) {
-        console.<span class="fn">warn</span>(<span class="s">'localStorage.getItem échoué :'</span>, e);
-        <span class="kw">return</span> <span class="kw">null</span>;
-    }
-}
-
-<span class="kw">function</span> <span class="fn">storageSet</span>(key, value) {
-    <span class="kw">try</span> {
-        localStorage.<span class="fn">setItem</span>(key, value);
-        <span class="kw">return</span> <span class="kw">true</span>;   <span class="cm">// succès</span>
-    } <span class="kw">catch</span> (e) {
-        <span class="cm">// QuotaExceededError = stockage plein (fréquent en navigation privée)</span>
-        console.<span class="fn">warn</span>(<span class="s">'localStorage.setItem échoué (quota ou mode privé ?) :'</span>, e);
-        <span class="kw">return</span> <span class="kw">false</span>;  <span class="cm">// appelant peut savoir que ça a échoué</span>
-    }
-}
-</pre></div>
-
-  <div class="box warn"><span class="bi">💡</span><div><b>storageSet retourne true ou false</b> — et <ic>saveCart()</ic> utilise ce retour. Si <ic>storageSet</ic> renvoie <ic>false</ic>, la fonction <ic>saveCart()</ic> affiche un toast d'avertissement à l'utilisateur. Le panier reste fonctionnel EN MÉMOIRE (dans la variable <ic>cart</ic>), mais ne survivra pas au rechargement de la page.</div></div>
-
-  <h3>Chargement initial du panier — triple protection</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">cart</span> = [];
-
+<hr> <!-- ══ 01 LOCALSTORAGE ══ -->
+<div class="sec" id="storage"> <div class="slabel">01 — Stockage sécurisé</div> <h2>storageGet et storageSet — accès localStorage blindé</h2> <p>localStorage peut tomber en panne pour trois raisons : navigation privée (quota très faible), cookies bloqués par l'utilisateur, ou stockage plein. Sans protection, le site planterait silencieusement. Ces deux fonctions encapsulent tous les accès.</p> <div class="diag"> <div class="dtitle">Ce que try/catch protège concrètement</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;"> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;"> Sans try/catch</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;"> <span style="color:#c084fc;">function</span> <span style="color:#6ee7b7;">storageGet</span>(key) {<br> &nbsp;&nbsp;<span style="color:#c084fc;">return</span> localStorage.<span style="color:#6ee7b7;">getItem</span>(key);<br> &nbsp;&nbsp;<span style="color:#555e74;font-style:italic;">// Si localStorage bloqué :</span><br> &nbsp;&nbsp;<span style="color:#ff9090;">//  SecurityError non attrapée</span><br> &nbsp;&nbsp;<span style="color:#ff9090;">//  tout le script s'arrête</span><br> }
+</div> <div style="font-size:.78rem;color:var(--t2);">Une erreur ici ferait planter l'ensemble de panier.js. Le badge ne s'afficherait pas, aucun ajout ne fonctionnerait.</div> </div> <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#6ee7b7;margin-bottom:.8rem;"> Avec try/catch</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;"> <span style="color:#c084fc;">function</span> <span style="color:#6ee7b7;">storageGet</span>(key) {<br> &nbsp;&nbsp;<span style="color:#c084fc;">try</span> {<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc;">return</span> localStorage.<span style="color:#6ee7b7;">getItem</span>(key);<br> &nbsp;&nbsp;} <span style="color:#c084fc;">catch</span> (e) {<br> &nbsp;&nbsp;&nbsp;&nbsp;console.<span style="color:#6ee7b7;">warn</span>('échoué :', e);<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc;">return</span> <span style="color:#c084fc;">null</span>;<br> &nbsp;&nbsp;}<br> }
+</div> <div style="font-size:.78rem;color:var(--t2);">Si localStorage est bloqué, on renvoie <ic>null</ic>. Le reste du code gère ce cas (<ic>|| []</ic> donne un panier vide). Le site fonctionne en mode dégradé.</div> </div> </div> </div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">storageGet</span>(key) {
 <span class="kw">try</span> {
-    cart = JSON.<span class="fn">parse</span>(<span class="fn">storageGet</span>(CART_STORAGE_KEY)) || [];
-    <span class="cm">// Couche 1 : storageGet → renvoie null si localStorage bloqué
-    // Couche 2 : JSON.parse(null) → renvoie null (sans erreur)
-    // Couche 3 : || [] → si null, panier vide par défaut
-    // Couche 4 : try/catch → si JSON corrompu, JSON.parse lance une SyntaxError</span>
+<span class="kw">return</span> localStorage.<span class="fn">getItem</span>(key);
 } <span class="kw">catch</span> (e) {
-    <span class="cm">// Données corrompues dans localStorage (ex: coupure réseau pendant l'écriture)</span>
-    console.<span class="fn">warn</span>(<span class="s">'Panier corrompu dans localStorage, réinitialisation :'</span>, e);
-    <span class="vr">cart</span> = [];
+console.<span class="fn">warn</span>(<span class="s">'localStorage.getItem échoué :'</span>, e);
+<span class="kw">return</span> <span class="kw">null</span>;
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Les 4 couches de protection du chargement</div>
-    <div class="vc">
-      <div class="vn w cgr">localStorage contient : <code>'[{"id":5,"name":"iPhone","quantity":2}]'</code></div>
-      <div class="va">↓<div class="val">storageGet('peartech-cart')</div></div>
-      <div class="vn w cbl">Retourne la chaîne… ou null si localStorage bloqué</div>
-      <div class="va">↓<div class="val">JSON.parse(chaîne)</div></div>
-      <div class="vn w cy">Convertit en vrai tableau JS… ou null si la chaîne était null</div>
-      <div class="va">↓<div class="val">|| []</div></div>
-      <div class="vn w cg">Panier chargé ✓ — ou tableau vide si tout a échoué</div>
-    </div>
-    <div style="margin-top:.8rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);">Si JSON.parse plante (données corrompues) → catch → cart = []</div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 02 CART ══ -->
-<div class="sec" id="cart">
-  <div class="slabel">02 — Gestion du panier</div>
-  <h2>updateCartBadge, saveCart — le cycle de vie du panier</h2>
-  <p>Toute modification du panier suit le même cycle : modifier la variable <ic>cart</ic> en mémoire → sauvegarder dans localStorage → mettre à jour le badge visuel.</p>
-
-  <div class="diag">
-    <div class="dtitle">Anatomie d'un cartItem — ce que stocke chaque ligne du panier</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-      <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;line-height:2;color:var(--t2);">
-        <span style="color:var(--t3);">// Un objet dans cart[] :</span><br>
-        {<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">id</span>:            <span style="color:#f7d97a;">5</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">name</span>:          <span style="color:#86efac;">"MacBook Air M2"</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">basePrice</span>:     <span style="color:#f7d97a;">999</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">price</span>:         <span style="color:#f7d97a;">1199</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">image</span>:         <span style="color:#86efac;">"asset/img/macbook.jpg"</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">specs</span>:         <span style="color:#86efac;">"Puce M2 · 8 Go · 256 Go"</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">options</span>:       [{name:<span style="color:#86efac;">"RAM"</span>, value:<span style="color:#86efac;">"16 Go"</span>, price:<span style="color:#f7d97a;">200</span>}],<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">optionSummary</span>: <span style="color:#86efac;">"16 Go"</span>,<br>
-        &nbsp;&nbsp;<span style="color:#6ee7b7;">quantity</span>:      <span style="color:#f7d97a;">2</span><br>
-        }
-      </div>
-      <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.78rem;color:var(--t2);">
-        <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">id</span><span>Clé de comparaison pour détecter les doublons</span></div>
-        <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">basePrice</span><span>Prix sans options — pour afficher la réduction</span></div>
-        <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">price</span><span>Prix <b>avec</b> options actives — celui qui est facturé</span></div>
-        <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">options</span><span>Tableau des choix — clé de dédup avec JSON.stringify</span></div>
-        <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">optionSummary</span><span>Chaîne lisible pour l'affichage "16 Go - 512 Go"</span></div>
-        <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">quantity</span><span>Nombre d'unités — incrémenté si doublon détecté</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="diag">
-    <div class="dtitle">Cycle de vie d'une modification du panier</div>
-    <div class="vc">
-      <div class="vn w cb">addToCart(produit) — modifie la variable cart en mémoire</div>
-      <div class="va">↓<div class="val">appelle</div></div>
-      <div class="vn w cy">saveCart()</div>
-      <div class="va">↓<div class="val">étape 1</div></div>
-      <div class="vn w cg">storageSet('peartech-cart', JSON.stringify(cart)) → persiste sur disque</div>
-      <div class="va">↓<div class="val">étape 2</div></div>
-      <div class="vn w cp">updateCartBadge() → calcule le total et met à jour le DOM</div>
-      <div class="va">↓<div class="val">résultats</div></div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="vn cg" style="font-size:.74rem;">#cart-count.textContent = "3"<br>badge visible</div>
-      </div>
-      <div class="fc">
-        <div class="vn cgr" style="font-size:.74rem;">'peartech-cart-count' = 3<br>autres scripts peuvent le lire</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">updateCartBadge</span>() {
-    <span class="kw">const</span> <span class="vr">totalItems</span> = cart.<span class="fn">reduce</span>((acc, item) => acc + item.quantity, <span class="nm">0</span>);
-    <span class="cm">// reduce : parcourt le tableau et accumule les quantités
-    // Exemple : [{qty:2}, {qty:3}, {qty:1}] → 0+2+3+1 = 6</span>
-
-    <span class="fn">storageSet</span>(<span class="s">'peartech-cart-count'</span>, totalItems);
-    <span class="cm">// Stocke aussi le total séparément — utile si une autre page
-    // veut afficher le nombre sans charger tout le panier</span>
-
-    <span class="kw">const</span> <span class="vr">badge</span> = document.<span class="fn">getElementById</span>(<span class="s">'cart-count'</span>);
-    <span class="kw">if</span> (badge) {
-        badge.textContent = totalItems;
-        badge.style.display = totalItems === <span class="nm">0</span> ? <span class="s">'none'</span> : <span class="s">'flex'</span>;
-        <span class="cm">// Si 0 articles → badge invisible (pas de "0" flottant)
-        // Si 1+ articles → badge flex pour centrer le chiffre</span>
-    }
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Le badge : affiché vs caché selon le nombre d'articles</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;">
-      <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.5rem;">totalItems = 0</div>
-        <div style="font-size:1.3rem;margin-bottom:.4rem;">🛒</div>
-        <div style="font-size:.78rem;color:var(--t2);">badge.style.display = <span style="color:#ff9090;">"none"</span><br>Rien n'est affiché</div>
-      </div>
-      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.5rem;">totalItems = 3</div>
-        <div style="position:relative;display:inline-block;font-size:1.3rem;margin-bottom:.4rem;">🛒<span style="position:absolute;top:-4px;right:-8px;background:#10b981;color:white;font-size:.55rem;font-weight:700;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;">3</span></div>
-        <div style="font-size:.78rem;color:var(--t2);">badge.style.display = <span style="color:#6ee7b7;">"flex"</span><br>Badge vert visible</div>
-      </div>
-      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.5rem;">totalItems = 12</div>
-        <div style="position:relative;display:inline-block;font-size:1.3rem;margin-bottom:.4rem;">🛒<span style="position:absolute;top:-4px;right:-10px;background:#10b981;color:white;font-size:.5rem;font-weight:700;border-radius:8px;padding:0 3px;display:flex;align-items:center;justify-content:center;">12</span></div>
-        <div style="font-size:.78rem;color:var(--t2);">badge.style.display = <span style="color:#6ee7b7;">"flex"</span><br>Badge toujours visible</div>
-      </div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 03 ADDTOCART ══ -->
-<div class="sec" id="add">
-  <div class="slabel">03 — Ajout au panier</div>
-  <h2>addToCart() — détecter les doublons avec les options</h2>
-<div class="schema">
-  <div class="schema-title">Détection des doublons — même produit, mêmes options</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:600px;">
-    <div style="display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);min-width:70px;">Clé doublon</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fde68a;line-height:1.7;">item.id + JSON.stringify(item.options)<br><span style="color:var(--t3);">ex: "7" + '{"couleur":"noir","stockage":"256GB"}' = clé unique</span></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;">
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">✅ Doublon trouvé → quantity++</div>
-        <div style="font-size:.72rem;color:var(--t2);line-height:1.7;">iPhone 15 noir 256GB déjà dans le panier → <ic>item.quantity += 1</ic><br>Panier : 1 article → 2 articles</div>
-      </div>
-      <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);border-radius:9px;padding:.8rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;">🆕 Nouveau produit → push()</div>
-        <div style="font-size:.72rem;color:var(--t2);line-height:1.7;">iPhone 15 blanc 256GB (couleur différente) → nouvelle entrée dans le tableau<br>Panier : 1 article → 2 articles distincts</div>
-      </div>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);">const key = id + JSON.stringify(options) · cart.find(item => item.id+JSON.stringify(item.options) === key)</div>
-  </div>
-</div>
-
-  <p>On ne peut pas juste vérifier si l'id existe déjà. Un même produit peut avoir des configurations différentes : 16 Go de RAM et 256 Go de stockage, ou 32 Go de RAM et 512 Go. Ce sont deux lignes distinctes dans le panier.</p>
-
-  <div class="diag">
-    <div class="dtitle">État du panier avant et après addToCart — 3 scénarios</div>
-    <div style="display:flex;flex-direction:column;gap:.9rem;">
-
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;">
-        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.8rem;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.4rem;">Panier avant</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:<b style="color:#f7d97a;">2</b>, options:[]}<br>]</div>
-        </div>
-        <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-bottom:.2rem;">addToCart({id:5, qty:1, options:[]})</div><div style="font-size:1.2rem;color:var(--t3);">→</div><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">doublon exact</div></div>
-        <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:9px;padding:.8rem;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-bottom:.4rem;">Panier après — quantité++</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:<b style="color:#6ee7b7;">3</b>, options:[]}<br>]</div>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;">
-        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.8rem;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.4rem;">Panier avant</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:7, name:"MacBook", qty:1, options:[{ram:"8Go"}]}<br>]</div>
-        </div>
-        <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;margin-bottom:.2rem;">addToCart({id:7, options:[{ram:"16Go"}]})</div><div style="font-size:1.2rem;color:var(--t3);">→</div><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">même id, options ≠</div></div>
-        <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:9px;padding:.8rem;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;margin-bottom:.4rem;">Panier après — nouvelle ligne</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:7, …, options:[{ram:"8Go"}]},<br>&nbsp;&nbsp;<span style="color:#f7d97a;">{id:7, …, options:[{ram:"16Go"}]}</span><br>]</div>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;">
-        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.8rem;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.4rem;">Panier avant</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:1}<br>]</div>
-        </div>
-        <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7eb5ff;margin-bottom:.2rem;">addToCart({id:12, name:"Galaxy S24"})</div><div style="font-size:1.2rem;color:var(--t3);">→</div><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">id différent</div></div>
-        <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:9px;padding:.8rem;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7eb5ff;margin-bottom:.4rem;">Panier après — nouveau produit</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:1},<br>&nbsp;&nbsp;<span style="color:#7eb5ff;">{id:12, name:"Galaxy S24", qty:1}</span><br>]</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>JSON.stringify pour comparer des objets :</b> En JavaScript, <ic>obj1 === obj2</ic> est <b>toujours faux</b> même si les deux objets ont les mêmes propriétés. C'est parce que <ic>===</ic> compare les <i>références</i> (les adresses mémoire), pas le contenu. <ic>JSON.stringify(obj1) === JSON.stringify(obj2)</ic> compare les textes produits — si le contenu est identique, les textes sont identiques. C'est le seul moyen simple de comparer deux objets en profondeur.</div></div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">addToCart</span>(product) {
-
-    <span class="kw">const</span> <span class="vr">existing</span> = cart.<span class="fn">find</span>(item =>
-        item.id === product.id &&
-        JSON.<span class="fn">stringify</span>(item.options) === JSON.<span class="fn">stringify</span>(product.options)
-    );
-    <span class="cm">// Cherche un article IDENTIQUE : même id ET mêmes options
-    // {ram:"16Go", storage:"256Go"} ≠ {ram:"32Go", storage:"256Go"}
-    // → deux lignes séparées dans le panier</span>
-
-    <span class="kw">if</span> (existing) {
-        existing.quantity += product.quantity || <span class="nm">1</span>;
-        <span class="cm">// Produit déjà dans le panier avec ces options → +1 à la quantité
-        // product.quantity || 1 : si quantity n'est pas fourni, on ajoute 1</span>
-    } <span class="kw">else</span> {
-        cart.<span class="fn">push</span>({
-            id:            product.id,
-            name:          product.name,
-            basePrice:     product.basePrice,
-            price:         product.price,        <span class="cm">// prix AVEC options</span>
-            image:         product.image,
-            specs:         product.specs || <span class="s">''</span>,
-            options:       product.options || [],
-            optionSummary: product.optionSummary || <span class="s">''</span>,
-            quantity:      product.quantity || <span class="nm">1</span>
-        });
-    }
-    <span class="fn">saveCart</span>();
+<span class="kw">function</span> <span class="fn">storageSet</span>(key, value) {
+<span class="kw">try</span> {
+localStorage.<span class="fn">setItem</span>(key, value);
+<span class="kw">return</span> <span class="kw">true</span>;   <span class="cm">// succès</span> } <span class="kw">catch</span> (e) {
+<span class="cm">// QuotaExceededError = stockage plein (fréquent en navigation privée)</span> console.<span class="fn">warn</span>(<span class="s">'localStorage.setItem échoué (quota ou mode privé ?) :'</span>, e);
+<span class="kw">return</span> <span class="kw">false</span>;  <span class="cm">// appelant peut savoir que ça a échoué</span> }
 }
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Détection des doublons — 3 scénarios concrets</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;">
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.6rem;">Scénario A — Doublon exact</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.7;margin-bottom:.5rem;">Panier : MacBook id=5 {ram:"16Go"}<br>Ajout  : MacBook id=5 {ram:"16Go"}</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;">id: 5===5 ✓ options: "16Go"==="16Go" ✓</div>
-        <div style="margin-top:.4rem;background:rgba(245,197,66,.15);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;">→ existing.quantity++ (1→2)</div>
-      </div>
-      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.6rem;">Scénario B — Mêmes id, options différentes</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.7;margin-bottom:.5rem;">Panier : MacBook id=5 {ram:"16Go"}<br>Ajout  : MacBook id=5 {ram:"32Go"}</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#ff9090;">id: 5===5 ✓ options: "16Go"!=="32Go" ✗</div>
-        <div style="margin-top:.4rem;background:rgba(255,107,107,.12);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#ff9090;">→ cart.push() (nouvelle ligne)</div>
-      </div>
-      <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.6rem;">Scénario C — Produit différent</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.7;margin-bottom:.5rem;">Panier : MacBook id=5<br>Ajout  : iPhone id=12</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7eb5ff;">id: 5!==12 ✗</div>
-        <div style="margin-top:.4rem;background:rgba(79,142,255,.12);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7eb5ff;">→ cart.push() (nouvelle ligne)</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>L'API publique — window.PearTechCart</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre>window.PearTechCart = {
-    add:     addToCart,
-    <span class="cm">// Exposé pour product_grid.js, product_detail.js, etc.</span>
-    <span class="cm">// Utilisation : window.PearTechCart.add({ id: 5, name: 'iPhone', price: 999, ... })</span>
-
-    getCart: () => cart,
-    <span class="cm">// Retourne le tableau en mémoire — utile pour la page panier
-    // () => cart = arrow function sans paramètre qui retourne cart</span>
-
-    clear: () => { cart = []; saveCart(); }
-    <span class="cm">// Vide le panier en mémoire et dans localStorage en une ligne</span>
+</pre></div> <div class="box warn"><span class="bi"></span><div><b>storageSet retourne true ou false</b> — et <ic>saveCart()</ic> utilise ce retour. Si <ic>storageSet</ic> renvoie <ic>false</ic>, la fonction <ic>saveCart()</ic> affiche un toast d'avertissement à l'utilisateur. Le panier reste fonctionnel EN MÉMOIRE (dans la variable <ic>cart</ic>), mais ne survivra pas au rechargement de la page.</div></div> <h3>Chargement initial du panier — triple protection</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">cart</span> = [];
+<span class="kw">try</span> {
+cart = JSON.<span class="fn">parse</span>(<span class="fn">storageGet</span>(CART_STORAGE_KEY)) || [];
+<span class="cm">// Couche 1 : storageGet  renvoie null si localStorage bloqué
+// Couche 2 : JSON.parse(null)  renvoie null (sans erreur)
+// Couche 3 : || []  si null, panier vide par défaut
+// Couche 4 : try/catch  si JSON corrompu, JSON.parse lance une SyntaxError</span>
+} <span class="kw">catch</span> (e) {
+<span class="cm">// Données corrompues dans localStorage (ex: coupure réseau pendant l'écriture)</span> console.<span class="fn">warn</span>(<span class="s">'Panier corrompu dans localStorage, réinitialisation :'</span>, e);
+<span class="vr">cart</span> = [];
+}
+</pre></div> <div class="diag"> <div class="dtitle">Les 4 couches de protection du chargement</div> <div class="vc"> <div class="vn w cgr">localStorage contient : <code>'[{"id":5,"name":"iPhone","quantity":2}]'</code></div> <div class="va"><div class="val">storageGet('peartech-cart')</div></div> <div class="vn w cbl">Retourne la chaîne… ou null si localStorage bloqué</div> <div class="va"><div class="val">JSON.parse(chaîne)</div></div> <div class="vn w cy">Convertit en vrai tableau JS… ou null si la chaîne était null</div> <div class="va"><div class="val">|| []</div></div> <div class="vn w cg">Panier chargé  — ou tableau vide si tout a échoué</div> </div> <div style="margin-top:.8rem;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);">Si JSON.parse plante (données corrompues)  catch  cart = []</div> </div>
+</div>
+<hr> <!-- ══ 02 CART ══ -->
+<div class="sec" id="cart"> <div class="slabel">02 — Gestion du panier</div> <h2>updateCartBadge, saveCart — le cycle de vie du panier</h2> <p>Toute modification du panier suit le même cycle : modifier la variable <ic>cart</ic> en mémoire  sauvegarder dans localStorage  mettre à jour le badge visuel.</p> <div class="diag"> <div class="dtitle">Anatomie d'un cartItem — ce que stocke chaque ligne du panier</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;line-height:2;color:var(--t2);"> <span style="color:var(--t3);">// Un objet dans cart[] :</span><br> {<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">id</span>:            <span style="color:#f7d97a;">5</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">name</span>:          <span style="color:#86efac;">"MacBook Air M2"</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">basePrice</span>:     <span style="color:#f7d97a;">999</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">price</span>:         <span style="color:#f7d97a;">1199</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">image</span>:         <span style="color:#86efac;">"asset/img/macbook.jpg"</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">specs</span>:         <span style="color:#86efac;">"Puce M2 · 8 Go · 256 Go"</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">options</span>:       [{name:<span style="color:#86efac;">"RAM"</span>, value:<span style="color:#86efac;">"16 Go"</span>, price:<span style="color:#f7d97a;">200</span>}],<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">optionSummary</span>: <span style="color:#86efac;">"16 Go"</span>,<br> &nbsp;&nbsp;<span style="color:#6ee7b7;">quantity</span>:      <span style="color:#f7d97a;">2</span><br> }
+</div> <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.78rem;color:var(--t2);"> <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">id</span><span>Clé de comparaison pour détecter les doublons</span></div> <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">basePrice</span><span>Prix sans options — pour afficher la réduction</span></div> <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">price</span><span>Prix <b>avec</b> options actives — celui qui est facturé</span></div> <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">options</span><span>Tableau des choix — clé de dédup avec JSON.stringify</span></div> <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">optionSummary</span><span>Chaîne lisible pour l'affichage "16 Go - 512 Go"</span></div> <div style="display:flex;gap:.5rem;align-items:flex-start;"><span style="color:#6ee7b7;font-family:'JetBrains Mono',monospace;font-size:.7rem;flex-shrink:0;">quantity</span><span>Nombre d'unités — incrémenté si doublon détecté</span></div> </div> </div> </div> <div class="diag"> <div class="dtitle">Cycle de vie d'une modification du panier</div> <div class="vc"> <div class="vn w cb">addToCart(produit) — modifie la variable cart en mémoire</div> <div class="va"><div class="val">appelle</div></div> <div class="vn w cy">saveCart()</div> <div class="va"><div class="val">étape 1</div></div> <div class="vn w cg">storageSet('peartech-cart', JSON.stringify(cart))  persiste sur disque</div> <div class="va"><div class="val">étape 2</div></div> <div class="vn w cp">updateCartBadge()  calcule le total et met à jour le DOM</div> <div class="va"><div class="val">résultats</div></div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="vn cg" style="font-size:.74rem;">#cart-count.textContent = "3"<br>badge visible</div> </div> <div class="fc"> <div class="vn cgr" style="font-size:.74rem;">'peartech-cart-count' = 3<br>autres scripts peuvent le lire</div> </div> </div> </div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">updateCartBadge</span>() {
+<span class="kw">const</span> <span class="vr">totalItems</span> = cart.<span class="fn">reduce</span>((acc, item) => acc + item.quantity, <span class="nm">0</span>);
+<span class="cm">// reduce : parcourt le tableau et accumule les quantités
+// Exemple : [{qty:2}, {qty:3}, {qty:1}]  0+2+3+1 = 6</span> <span class="fn">storageSet</span>(<span class="s">'peartech-cart-count'</span>, totalItems);
+<span class="cm">// Stocke aussi le total séparément — utile si une autre page
+// veut afficher le nombre sans charger tout le panier</span> <span class="kw">const</span> <span class="vr">badge</span> = document.<span class="fn">getElementById</span>(<span class="s">'cart-count'</span>);
+<span class="kw">if</span> (badge) {
+badge.textContent = totalItems;
+badge.style.display = totalItems === <span class="nm">0</span> ? <span class="s">'none'</span> : <span class="s">'flex'</span>;
+<span class="cm">// Si 0 articles  badge invisible (pas de "0" flottant)
+// Si 1+ articles  badge flex pour centrer le chiffre</span> }
+}
+</pre></div> <div class="diag"> <div class="dtitle">Le badge : affiché vs caché selon le nombre d'articles</div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;"> <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.5rem;">totalItems = 0</div> <div style="font-size:1.3rem;margin-bottom:.4rem;"></div> <div style="font-size:.78rem;color:var(--t2);">badge.style.display = <span style="color:#ff9090;">"none"</span><br>Rien n'est affiché</div> </div> <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.5rem;">totalItems = 3</div> <div style="position:relative;display:inline-block;font-size:1.3rem;margin-bottom:.4rem;"><span style="position:absolute;top:-4px;right:-8px;background:#10b981;color:white;font-size:.55rem;font-weight:700;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;">3</span></div> <div style="font-size:.78rem;color:var(--t2);">badge.style.display = <span style="color:#6ee7b7;">"flex"</span><br>Badge vert visible</div> </div> <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);margin-bottom:.5rem;">totalItems = 12</div> <div style="position:relative;display:inline-block;font-size:1.3rem;margin-bottom:.4rem;"><span style="position:absolute;top:-4px;right:-10px;background:#10b981;color:white;font-size:.5rem;font-weight:700;border-radius:8px;padding:0 3px;display:flex;align-items:center;justify-content:center;">12</span></div> <div style="font-size:.78rem;color:var(--t2);">badge.style.display = <span style="color:#6ee7b7;">"flex"</span><br>Badge toujours visible</div> </div> </div> </div>
+</div>
+<hr> <!-- ══ 03 ADDTOCART ══ -->
+<div class="sec" id="add"> <div class="slabel">03 — Ajout au panier</div> <h2>addToCart() — détecter les doublons avec les options</h2>
+<div class="schema"> <div class="schema-title">Détection des doublons — même produit, mêmes options</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:600px;"> <div style="display:grid;grid-template-columns:auto 1fr;gap:.7rem;align-items:start;background:var(--bg3);border-radius:9px;padding:.7rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);min-width:70px;">Clé doublon</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fde68a;line-height:1.7;">item.id + JSON.stringify(item.options)<br><span style="color:var(--t3);">ex: "7" + '{"couleur":"noir","stockage":"256GB"}' = clé unique</span></div> </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.7rem;"> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;"> Doublon trouvé  quantity++</div> <div style="font-size:.72rem;color:var(--t2);line-height:1.7;">iPhone 15 noir 256GB déjà dans le panier  <ic>item.quantity += 1</ic><br>Panier : 1 article  2 articles</div> </div> <div style="background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fdba74;margin-bottom:.4rem;"> Nouveau produit  push()</div> <div style="font-size:.72rem;color:var(--t2);line-height:1.7;">iPhone 15 blanc 256GB (couleur différente)  nouvelle entrée dans le tableau<br>Panier : 1 article  2 articles distincts</div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);">const key = id + JSON.stringify(options) · cart.find(item => item.id+JSON.stringify(item.options) === key)</div> </div>
+</div> <p>On ne peut pas juste vérifier si l'id existe déjà. Un même produit peut avoir des configurations différentes : 16 Go de RAM et 256 Go de stockage, ou 32 Go de RAM et 512 Go. Ce sont deux lignes distinctes dans le panier.</p> <div class="diag"> <div class="dtitle">État du panier avant et après addToCart — 3 scénarios</div> <div style="display:flex;flex-direction:column;gap:.9rem;"> <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;"> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.4rem;">Panier avant</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:<b style="color:#f7d97a;">2</b>, options:[]}<br>]</div> </div> <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-bottom:.2rem;">addToCart({id:5, qty:1, options:[]})</div><div style="font-size:1.2rem;color:var(--t3);"></div><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">doublon exact</div></div> <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-bottom:.4rem;">Panier après — quantité++</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:<b style="color:#6ee7b7;">3</b>, options:[]}<br>]</div> </div> </div> <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;"> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.4rem;">Panier avant</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:7, name:"MacBook", qty:1, options:[{ram:"8Go"}]}<br>]</div> </div> <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;margin-bottom:.2rem;">addToCart({id:7, options:[{ram:"16Go"}]})</div><div style="font-size:1.2rem;color:var(--t3);"></div><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">même id, options ≠</div></div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#f7d97a;margin-bottom:.4rem;">Panier après — nouvelle ligne</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:7, …, options:[{ram:"8Go"}]},<br>&nbsp;&nbsp;<span style="color:#f7d97a;">{id:7, …, options:[{ram:"16Go"}]}</span><br>]</div> </div> </div> <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:center;"> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);margin-bottom:.4rem;">Panier avant</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:1}<br>]</div> </div> <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7eb5ff;margin-bottom:.2rem;">addToCart({id:12, name:"Galaxy S24"})</div><div style="font-size:1.2rem;color:var(--t3);"></div><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">id différent</div></div> <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#7eb5ff;margin-bottom:.4rem;">Panier après — nouveau produit</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.7;">[<br>&nbsp;&nbsp;{id:5, name:"iPhone", qty:1},<br>&nbsp;&nbsp;<span style="color:#7eb5ff;">{id:12, name:"Galaxy S24", qty:1}</span><br>]</div> </div> </div> </div> </div> <div class="box def"><span class="bi"></span><div><b>JSON.stringify pour comparer des objets :</b> En JavaScript, <ic>obj1 === obj2</ic> est <b>toujours faux</b> même si les deux objets ont les mêmes propriétés. C'est parce que <ic>===</ic> compare les <i>références</i> (les adresses mémoire), pas le contenu. <ic>JSON.stringify(obj1) === JSON.stringify(obj2)</ic> compare les textes produits — si le contenu est identique, les textes sont identiques. C'est le seul moyen simple de comparer deux objets en profondeur.</div></div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">addToCart</span>(product) {
+<span class="kw">const</span> <span class="vr">existing</span> = cart.<span class="fn">find</span>(item => item.id === product.id &&
+JSON.<span class="fn">stringify</span>(item.options) === JSON.<span class="fn">stringify</span>(product.options)
+);
+<span class="cm">// Cherche un article IDENTIQUE : même id ET mêmes options
+// {ram:"16Go", storage:"256Go"} ≠ {ram:"32Go", storage:"256Go"}
+//  deux lignes séparées dans le panier</span> <span class="kw">if</span> (existing) {
+existing.quantity += product.quantity || <span class="nm">1</span>;
+<span class="cm">// Produit déjà dans le panier avec ces options  +1 à la quantité
+// product.quantity || 1 : si quantity n'est pas fourni, on ajoute 1</span> } <span class="kw">else</span> {
+cart.<span class="fn">push</span>({
+id:            product.id,
+name:          product.name,
+basePrice:     product.basePrice,
+price:         product.price,        <span class="cm">// prix AVEC options</span> image:         product.image,
+specs:         product.specs || <span class="s">''</span>,
+options:       product.options || [],
+optionSummary: product.optionSummary || <span class="s">''</span>,
+quantity:      product.quantity || <span class="nm">1</span> });
+}
+<span class="fn">saveCart</span>();
+}
+</pre></div> <div class="diag"> <div class="dtitle">Détection des doublons — 3 scénarios concrets</div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;"> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.3);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.6rem;">Scénario A — Doublon exact</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.7;margin-bottom:.5rem;">Panier : MacBook id=5 {ram:"16Go"}<br>Ajout  : MacBook id=5 {ram:"16Go"}</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;">id: 5===5  options: "16Go"==="16Go" </div> <div style="margin-top:.4rem;background:rgba(245,197,66,.15);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#f7d97a;"> existing.quantity++ (12)</div> </div> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.6rem;">Scénario B — Mêmes id, options différentes</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.7;margin-bottom:.5rem;">Panier : MacBook id=5 {ram:"16Go"}<br>Ajout  : MacBook id=5 {ram:"32Go"}</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#ff9090;">id: 5===5  options: "16Go"!=="32Go" </div> <div style="margin-top:.4rem;background:rgba(255,107,107,.12);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#ff9090;"> cart.push() (nouvelle ligne)</div> </div> <div style="background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.3);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7eb5ff;margin-bottom:.6rem;">Scénario C — Produit différent</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t2);line-height:1.7;margin-bottom:.5rem;">Panier : MacBook id=5<br>Ajout  : iPhone id=12</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7eb5ff;">id: 5!==12 </div> <div style="margin-top:.4rem;background:rgba(79,142,255,.12);border-radius:5px;padding:.3rem .5rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7eb5ff;"> cart.push() (nouvelle ligne)</div> </div> </div> </div> <h3>L'API publique — window.PearTechCart</h3> <div class="cb2"><span class="cbl2">javascript</span><pre>window.PearTechCart = {
+add:     addToCart,
+<span class="cm">// Exposé pour product_grid.js, product_detail.js, etc.</span> <span class="cm">// Utilisation : window.PearTechCart.add({ id: 5, name: 'iPhone', price: 999, ... })</span> getCart: () => cart,
+<span class="cm">// Retourne le tableau en mémoire — utile pour la page panier
+// () => cart = arrow function sans paramètre qui retourne cart</span> clear: () => { cart = []; saveCart(); }
+<span class="cm">// Vide le panier en mémoire et dans localStorage en une ligne</span>
 };
-</pre></div>
-
-  <div class="box info"><span class="bi">💡</span><div><b>Pourquoi exposer une API plutôt que d'utiliser window.addToCart directement ?</b> En regroupant les fonctions dans un objet nommé <ic>PearTechCart</ic>, on évite de polluer l'espace global avec des noms génériques comme "addToCart" qui pourraient entrer en conflit avec d'autres scripts. C'est l'équivalent d'un espace de noms (namespace).</div></div>
+</pre></div> <div class="box info"><span class="bi"></span><div><b>Pourquoi exposer une API plutôt que d'utiliser window.addToCart directement ?</b> En regroupant les fonctions dans un objet nommé <ic>PearTechCart</ic>, on évite de polluer l'espace global avec des noms génériques comme "addToCart" qui pourraient entrer en conflit avec d'autres scripts. C'est l'équivalent d'un espace de noms (namespace).</div></div>
 </div>
-<hr>
-
-<!-- ══ 04 DELEGATION ══ -->
-<div class="sec" id="delegation">
-  <div class="slabel">04 — Délégation d'événements</div>
-  <h2>Un seul listener pour tous les boutons "Ajouter au panier"</h2>
-  <p>Les boutons "Ajouter au panier" peuvent être créés dynamiquement (par product_grid.js ou product_detail.js), exister en nombre variable, et être présents sur plusieurs pages différentes. Installer un écouteur sur chacun serait fragile. La délégation résout tout cela.</p>
-
-  <div class="box def"><span class="bi">🔤</span><div><b>e.target.closest('.btn-add-cart')</b><br><br>Quand on clique sur un bouton, <ic>e.target</ic> peut être l'icône SVG à l'intérieur du bouton — pas le bouton lui-même. <ic>.closest('.btn-add-cart')</ic> remonte depuis l'icône jusqu'au bouton parent qui a cette classe. Si le clic n'est pas dans un bouton "Ajouter au panier", <ic>closest()</ic> retourne <ic>null</ic>, et le <ic>if (!addButton) return</ic> fait sortir immédiatement.</div></div>
-
-  <div class="diag">
-    <div class="dtitle">Délégation vs Écouteur direct — comparaison</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;">
-      <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;">❌ Sans délégation — écouteur direct</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;">
-          <span style="color:#555e74;font-style:italic;">// Il faudrait faire ça pour CHAQUE bouton :</span><br>
-          document.<span style="color:#6ee7b7;">querySelectorAll</span>(<span style="color:#86efac;">'.btn-add-cart'</span>)<br>
-          &nbsp;&nbsp;.<span style="color:#6ee7b7;">forEach</span>(btn =&gt; {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;btn.<span style="color:#6ee7b7;">addEventListener</span>(<span style="color:#86efac;">'click'</span>, …)<br>
-          &nbsp;&nbsp;});
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);">✗ Ne fonctionne pas sur les boutons ajoutés plus tard dynamiquement<br>✗ Installe N écouteurs (un par bouton)<br>✗ Doit être ré-exécuté à chaque injection de HTML</div>
-      </div>
-      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:1.1rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#6ee7b7;margin-bottom:.8rem;">✅ Avec délégation — utilisé ici</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;">
-          <span style="color:#555e74;font-style:italic;">// Un seul écouteur, pour toujours :</span><br>
-          document.<span style="color:#6ee7b7;">addEventListener</span>(<span style="color:#86efac;">'click'</span>, <span style="color:#c084fc;">function</span>(e) {<br>
-          &nbsp;&nbsp;<span style="color:#c084fc;">const</span> btn = e.target.<span style="color:#6ee7b7;">closest</span>(<span style="color:#86efac;">'.btn-add-cart'</span>);<br>
-          &nbsp;&nbsp;<span style="color:#c084fc;">if</span> (!btn) <span style="color:#c084fc;">return</span>;<br>
-          &nbsp;&nbsp;<span style="color:#555e74;font-style:italic;">// traitement…</span><br>
-          });
-        </div>
-        <div style="font-size:.78rem;color:var(--t2);">✓ Fonctionne pour les boutons présents et futurs<br>✓ Un seul écouteur installé une fois<br>✓ Couvre toutes les pages automatiquement</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="diag">
-    <div class="dtitle">Comment closest() remonte l'arbre HTML</div>
-    <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;color:var(--t2);">
-      <div style="color:#555e74;font-style:italic;">// Utilisateur clique sur l'icône panier SVG à l'intérieur du bouton</div>
-      <div>e.target = <span style="color:#ff9090;">&lt;svg&gt; ← point de départ</span></div>
-      <div style="padding-left:1rem;color:var(--t3);">closest('.btn-add-cart') remonte :</div>
-      <div style="padding-left:2rem;color:var(--t2);">SVG ? non →</div>
-      <div style="padding-left:3rem;color:var(--t2);">SPAN ? non →</div>
-      <div style="padding-left:4rem;color:#6ee7b7;">BUTTON.btn-add-cart ? <b>OUI ✓</b></div>
-      <div style="padding-left:4rem;color:#6ee7b7;">→ retourne le bouton</div>
-    </div>
-  </div>
+<hr> <!-- ══ 04 DELEGATION ══ -->
+<div class="sec" id="delegation"> <div class="slabel">04 — Délégation d'événements</div> <h2>Un seul listener pour tous les boutons "Ajouter au panier"</h2> <p>Les boutons "Ajouter au panier" peuvent être créés dynamiquement (par product_grid.js ou product_detail.js), exister en nombre variable, et être présents sur plusieurs pages différentes. Installer un écouteur sur chacun serait fragile. La délégation résout tout cela.</p> <div class="box def"><span class="bi"></span><div><b>e.target.closest('.btn-add-cart')</b><br><br>Quand on clique sur un bouton, <ic>e.target</ic> peut être l'icône SVG à l'intérieur du bouton — pas le bouton lui-même. <ic>.closest('.btn-add-cart')</ic> remonte depuis l'icône jusqu'au bouton parent qui a cette classe. Si le clic n'est pas dans un bouton "Ajouter au panier", <ic>closest()</ic> retourne <ic>null</ic>, et le <ic>if (!addButton) return</ic> fait sortir immédiatement.</div></div> <div class="diag"> <div class="dtitle">Délégation vs Écouteur direct — comparaison</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;"> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;"> Sans délégation — écouteur direct</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;"> <span style="color:#555e74;font-style:italic;">// Il faudrait faire ça pour CHAQUE bouton :</span><br> document.<span style="color:#6ee7b7;">querySelectorAll</span>(<span style="color:#86efac;">'.btn-add-cart'</span>)<br> &nbsp;&nbsp;.<span style="color:#6ee7b7;">forEach</span>(btn =&gt; {<br> &nbsp;&nbsp;&nbsp;&nbsp;btn.<span style="color:#6ee7b7;">addEventListener</span>(<span style="color:#86efac;">'click'</span>, …)<br> &nbsp;&nbsp;});
+</div> <div style="font-size:.78rem;color:var(--t2);"> Ne fonctionne pas sur les boutons ajoutés plus tard dynamiquement<br> Installe N écouteurs (un par bouton)<br> Doit être ré-exécuté à chaque injection de HTML</div> </div> <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#6ee7b7;margin-bottom:.8rem;"> Avec délégation — utilisé ici</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;background:var(--bg3);border-radius:8px;padding:.7rem;line-height:1.8;color:var(--t2);margin-bottom:.6rem;"> <span style="color:#555e74;font-style:italic;">// Un seul écouteur, pour toujours :</span><br> document.<span style="color:#6ee7b7;">addEventListener</span>(<span style="color:#86efac;">'click'</span>, <span style="color:#c084fc;">function</span>(e) {<br> &nbsp;&nbsp;<span style="color:#c084fc;">const</span> btn = e.target.<span style="color:#6ee7b7;">closest</span>(<span style="color:#86efac;">'.btn-add-cart'</span>);<br> &nbsp;&nbsp;<span style="color:#c084fc;">if</span> (!btn) <span style="color:#c084fc;">return</span>;<br> &nbsp;&nbsp;<span style="color:#555e74;font-style:italic;">// traitement…</span><br> });
+</div> <div style="font-size:.78rem;color:var(--t2);"> Fonctionne pour les boutons présents et futurs<br> Un seul écouteur installé une fois<br> Couvre toutes les pages automatiquement</div> </div> </div> </div> <div class="diag"> <div class="dtitle">Comment closest() remonte l'arbre HTML</div> <div style="background:var(--code);border:1px solid var(--border);border-radius:10px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;line-height:2;color:var(--t2);"> <div style="color:#555e74;font-style:italic;">// Utilisateur clique sur l'icône panier SVG à l'intérieur du bouton</div> <div>e.target = <span style="color:#ff9090;">&lt;svg&gt;  point de départ</span></div> <div style="padding-left:1rem;color:var(--t3);">closest('.btn-add-cart') remonte :</div> <div style="padding-left:2rem;color:var(--t2);">SVG ? non </div> <div style="padding-left:3rem;color:var(--t2);">SPAN ? non </div> <div style="padding-left:4rem;color:#6ee7b7;">BUTTON.btn-add-cart ? <b>OUI </b></div> <div style="padding-left:4rem;color:#6ee7b7;"> retourne le bouton</div> </div> </div>
 </div>
-<hr>
-
-<!-- ══ 05 CAS ══ -->
-<div class="sec" id="cas">
-  <div class="slabel">05 — Deux contextes d'ajout</div>
-  <h2>Cas 1 (card) vs Cas 2 (fiche produit)</h2>
-  <p>Un clic "Ajouter au panier" peut venir de deux endroits très différents dans le DOM. Le script détecte automatiquement le contexte avec <ic>.closest('.product-card')</ic>.</p>
-
-  <div class="diag">
-    <div class="dtitle">Détection du contexte — qui a cliqué ?</div>
-    <div class="vc">
-      <div class="vn w cgr">Clic détecté sur document — e.target.closest('.btn-add-cart') → bouton trouvé</div>
-      <div class="va">↓</div>
-      <div class="vn w cy">addButton.closest('.product-card') → trouver la carte parente</div>
-    </div>
-    <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;">
-      <div class="fc">
-        <div class="fl flg">productCard !== null</div>
-        <div class="va">↓</div>
-        <div class="vn cg" style="font-size:.74rem;">CAS 1 — Bouton dans une carte<br>(accueil, catalogue, produits similaires)</div>
-        <div class="va">↓</div>
-        <div class="vn cbl" style="font-size:.72rem;">Lit les données depuis le DOM de la carte<br>.product-name, .product-price, img…</div>
-      </div>
-      <div class="fc">
-        <div class="fl flr">productCard === null</div>
-        <div class="va">↓</div>
-        <div class="vn cb" style="font-size:.74rem;">CAS 2 — Bouton sur la fiche produit<br>(page_produit.html)</div>
-        <div class="va">↓</div>
-        <div class="vn cy" style="font-size:.72rem;">Lit depuis le DOM de la fiche<br>.product-title, .current-price, .option-btn.active…</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>CAS 1 — Extraire les données depuis la carte</h3>
-  <div class="cb2"><span class="cbl2">javascript — cas 1 : bouton dans une .product-card</span><pre><span class="kw">const</span> <span class="vr">productId</span>  = productCard.dataset.productId;   <span class="cm">// data-product-id="5"</span>
-<span class="kw">const</span> <span class="vr">nameEl</span>     = productCard.<span class="fn">querySelector</span>(<span class="s">'.product-name'</span>);
-<span class="kw">const</span> <span class="vr">priceEl</span>    = productCard.<span class="fn">querySelector</span>(<span class="s">'.product-price'</span>);
-<span class="kw">const</span> <span class="vr">imgEl</span>      = productCard.<span class="fn">querySelector</span>(<span class="s">'.product-image img'</span>);
-
+<hr> <!-- ══ 05 CAS ══ -->
+<div class="sec" id="cas"> <div class="slabel">05 — Deux contextes d'ajout</div> <h2>Cas 1 (card) vs Cas 2 (fiche produit)</h2> <p>Un clic "Ajouter au panier" peut venir de deux endroits très différents dans le DOM. Le script détecte automatiquement le contexte avec <ic>.closest('.product-card')</ic>.</p> <div class="diag"> <div class="dtitle">Détection du contexte — qui a cliqué ?</div> <div class="vc"> <div class="vn w cgr">Clic détecté sur document — e.target.closest('.btn-add-cart')  bouton trouvé</div> <div class="va"></div> <div class="vn w cy">addButton.closest('.product-card')  trouver la carte parente</div> </div> <div class="fork f2" style="max-width:720px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flg">productCard !== null</div> <div class="va"></div> <div class="vn cg" style="font-size:.74rem;">CAS 1 — Bouton dans une carte<br>(accueil, catalogue, produits similaires)</div> <div class="va"></div> <div class="vn cbl" style="font-size:.72rem;">Lit les données depuis le DOM de la carte<br>.product-name, .product-price, img…</div> </div> <div class="fc"> <div class="fl flr">productCard === null</div> <div class="va"></div> <div class="vn cb" style="font-size:.74rem;">CAS 2 — Bouton sur la fiche produit<br>(page_produit.html)</div> <div class="va"></div> <div class="vn cy" style="font-size:.72rem;">Lit depuis le DOM de la fiche<br>.product-title, .current-price, .option-btn.active…</div> </div> </div> </div> <h3>CAS 1 — Extraire les données depuis la carte</h3> <div class="cb2"><span class="cbl2">javascript — cas 1 : bouton dans une .product-card</span><pre><span class="kw">const</span> <span class="vr">productId</span> = productCard.dataset.productId;   <span class="cm">// data-product-id="5"</span>
+<span class="kw">const</span> <span class="vr">nameEl</span> = productCard.<span class="fn">querySelector</span>(<span class="s">'.product-name'</span>);
+<span class="kw">const</span> <span class="vr">priceEl</span> = productCard.<span class="fn">querySelector</span>(<span class="s">'.product-price'</span>);
+<span class="kw">const</span> <span class="vr">imgEl</span> = productCard.<span class="fn">querySelector</span>(<span class="s">'.product-image img'</span>);
 <span class="cm">// Extraire le nombre depuis le texte "1 299,00 €"
-// .replace(/[^\d,]/g, '') → supprime tout sauf chiffres et virgule → "1299,00"
-// .replace(',', '.') → remplace la virgule décimale par un point → "1299.00"
-// parseFloat("1299.00") → 1299</span>
+// .replace(/[^\d,]/g, '')  supprime tout sauf chiffres et virgule  "1299,00"
+// .replace(',', '.')  remplace la virgule décimale par un point  "1299.00"
+// parseFloat("1299.00")  1299</span>
 <span class="kw">const</span> <span class="vr">parsedPrice</span> = priceEl
-    ? <span class="fn">parseFloat</span>(priceEl.textContent.<span class="fn">replace</span>(/[^\d,]/g, <span class="s">''</span>).<span class="fn">replace</span>(<span class="s">','</span>, <span class="s">'.'</span>))
-    : <span class="nm">0</span>;
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Parsing du prix depuis le texte DOM</div>
-    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.4rem;align-items:center;flex-wrap:wrap;">
-      <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:8px;padding:.7rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">textContent</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--t2);">"1 299,00 €"</div>
-      </div>
-      <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#f7d97a;">.replace<br>(/[^\d,]/g,'')<br>→</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.7rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">chiffres + virgule</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#f7d97a;">"1299,00"</div>
-      </div>
-      <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7eb5ff;">.replace<br>(',','.')<br>→</div>
-      <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.25);border-radius:8px;padding:.7rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">format anglais</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#7eb5ff;">"1299.00"</div>
-      </div>
-      <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#6ee7b7;">parseFloat<br>→</div>
-      <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:8px;padding:.7rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">nombre JS</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#6ee7b7;">1299</div>
-      </div>
-    </div>
-  </div>
-
-  <h3>CAS 2 — Extraire les options et le prix total</h3>
-  <div class="cb2"><span class="cbl2">javascript — cas 2 : fiche produit avec options</span><pre><span class="kw">const</span> <span class="vr">options</span> = [];
+? <span class="fn">parseFloat</span>(priceEl.textContent.<span class="fn">replace</span>(/[^\d,]/g, <span class="s">''</span>).<span class="fn">replace</span>(<span class="s">','</span>, <span class="s">'.'</span>))
+: <span class="nm">0</span>;
+</pre></div> <div class="diag"> <div class="dtitle">Parsing du prix depuis le texte DOM</div> <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:.4rem;align-items:center;flex-wrap:wrap;"> <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:8px;padding:.7rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">textContent</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--t2);">"1 299,00 €"</div> </div> <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#f7d97a;">.replace<br>(/[^\d,]/g,'')<br></div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:8px;padding:.7rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">chiffres + virgule</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#f7d97a;">"1299,00"</div> </div> <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7eb5ff;">.replace<br>(',','.')<br></div> <div style="background:rgba(79,142,255,.08);border:1px solid rgba(79,142,255,.25);border-radius:8px;padding:.7rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">format anglais</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#7eb5ff;">"1299.00"</div> </div> <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#6ee7b7;">parseFloat<br></div> <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:8px;padding:.7rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.3rem;">nombre JS</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:#6ee7b7;">1299</div> </div> </div> </div> <h3>CAS 2 — Extraire les options et le prix total</h3> <div class="cb2"><span class="cbl2">javascript — cas 2 : fiche produit avec options</span><pre><span class="kw">const</span> <span class="vr">options</span> = [];
 <span class="kw">let</span> <span class="vr">totalPrice</span> = basePrice;
-
 <span class="cm">// Parcourt chaque groupe d'options (RAM, Stockage, Couleur…)</span>
 <span class="kw">const</span> <span class="vr">optionGroups</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.option-group'</span>);
-
 optionGroups.<span class="fn">forEach</span>(group => {
-    <span class="kw">const</span> <span class="vr">activeBtn</span> = group.<span class="fn">querySelector</span>(<span class="s">'.option-btn.active'</span>);
-    <span class="cm">// .option-btn.active = le bouton sélectionné dans ce groupe</span>
-
-    <span class="kw">if</span> (activeBtn) {
-        <span class="kw">const</span> <span class="vr">optionPrice</span> = <span class="fn">parseFloat</span>(activeBtn.dataset.price) || <span class="nm">0</span>;
-        <span class="cm">// data-price="150" → surcoût de cette option</span>
-
-        options.<span class="fn">push</span>({
-            name:  group.<span class="fn">querySelector</span>(<span class="s">'.option-label'</span>)?.textContent.<span class="fn">replace</span>(<span class="s">':'</span>, <span class="s">''</span>),
-            value: activeBtn.dataset.value || activeBtn.textContent,
-            price: optionPrice
-        });
-        totalPrice += optionPrice;  <span class="cm">// cumul : basePrice + toutes les options actives</span>
-    }
+<span class="kw">const</span> <span class="vr">activeBtn</span> = group.<span class="fn">querySelector</span>(<span class="s">'.option-btn.active'</span>);
+<span class="cm">// .option-btn.active = le bouton sélectionné dans ce groupe</span> <span class="kw">if</span> (activeBtn) {
+<span class="kw">const</span> <span class="vr">optionPrice</span> = <span class="fn">parseFloat</span>(activeBtn.dataset.price) || <span class="nm">0</span>;
+<span class="cm">// data-price="150"  surcoût de cette option</span> options.<span class="fn">push</span>({
+name:  group.<span class="fn">querySelector</span>(<span class="s">'.option-label'</span>)?.textContent.<span class="fn">replace</span>(<span class="s">':'</span>, <span class="s">''</span>),
+value: activeBtn.dataset.value || activeBtn.textContent,
+price: optionPrice
 });
-
+totalPrice += optionPrice;  <span class="cm">// cumul : basePrice + toutes les options actives</span> }
+});
 <span class="cm">// optionSummary : chaîne lisible pour afficher dans le récapitulatif
 // Exemple : "16 Go RAM - 512 Go SSD - Argent"</span>
 <span class="kw">const</span> <span class="vr">optionSummary</span> = options.<span class="fn">map</span>(opt => opt.value).<span class="fn">join</span>(<span class="s">' - '</span>);
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Calcul du prix total avec options — exemple concret</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;align-items:start;">
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t3);margin-bottom:.5rem;">Groupe RAM</div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <div style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#6ee7b7;">8 Go  data-price="0" ← actif</div>
-          <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">16 Go data-price="150"</div>
-          <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">32 Go data-price="400"</div>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-top:.5rem;">+0 €</div>
-      </div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t3);margin-bottom:.5rem;">Groupe Stockage</div>
-        <div style="display:flex;flex-direction:column;gap:.25rem;">
-          <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">256 Go data-price="0"</div>
-          <div style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#6ee7b7;">512 Go data-price="200" ← actif</div>
-          <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">1 To  data-price="500"</div>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-top:.5rem;">+200 €</div>
-      </div>
-      <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#6ee7b7;margin-bottom:.5rem;">Total calculé</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;">
-          basePrice = 999 €<br>
-          RAM actif = +0 €<br>
-          SSD actif = +200 €<br>
-          <span style="border-top:1px solid var(--border);display:block;margin-top:.3rem;padding-top:.3rem;"></span>
-          totalPrice = <span style="color:#6ee7b7;font-weight:700;">1 199 €</span>
-        </div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);margin-top:.5rem;">optionSummary: "8 Go - 512 Go"</div>
-      </div>
-    </div>
-  </div>
+</pre></div> <div class="diag"> <div class="dtitle">Calcul du prix total avec options — exemple concret</div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;align-items:start;"> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t3);margin-bottom:.5rem;">Groupe RAM</div> <div style="display:flex;flex-direction:column;gap:.25rem;"> <div style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#6ee7b7;">8 Go  data-price="0"  actif</div> <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">16 Go data-price="150"</div> <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">32 Go data-price="400"</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-top:.5rem;">+0 €</div> </div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--t3);margin-bottom:.5rem;">Groupe Stockage</div> <div style="display:flex;flex-direction:column;gap:.25rem;"> <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">256 Go data-price="0"</div> <div style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#6ee7b7;">512 Go data-price="200"  actif</div> <div style="background:rgba(139,147,168,.08);border:1px solid var(--border);border-radius:5px;padding:.3rem .6rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--t3);">1 To  data-price="500"</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:#6ee7b7;margin-top:.5rem;">+200 €</div> </div> <div style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.3);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#6ee7b7;margin-bottom:.5rem;">Total calculé</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;"> basePrice = 999 €<br> RAM actif = +0 €<br> SSD actif = +200 €<br> <span style="border-top:1px solid var(--border);display:block;margin-top:.3rem;padding-top:.3rem;"></span> totalPrice = <span style="color:#6ee7b7;font-weight:700;">1 199 €</span> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);margin-top:.5rem;">optionSummary: "8 Go - 512 Go"</div> </div> </div> </div>
 </div>
-<hr>
-
-<!-- ══ 06 TOAST ══ -->
-<div class="sec" id="toast">
-  <div class="slabel">06 — Retour visuel</div>
-  <h2>Animation bouton + Toast de notification</h2>
-  <p>Deux retours visuels confirment à l'utilisateur que l'ajout a bien eu lieu : le bouton change temporairement de texte, et une notification en haut à droite apparaît puis disparaît.</p>
-<div class="diag">
-  <div class="dtitle">Deux confirmations visuelles en parallèle — timelines</div>
-  <div style="display:flex;flex-direction:column;gap:.5rem;max-width:580px;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.1rem;">BOUTON "Ajouter au panier"</div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#7ee8b8;">textContent → "✓ Ajouté" · background → #10b981</div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 2000ms</div>
-      <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">textContent → original · background → '' (CSS reprend)</div>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.5rem;margin-bottom:.1rem;">TOAST notification</div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div>
-      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#7dd3fc;">createElement → className → body.appendChild → opacity 0→1 via CSS</div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 2000ms</div>
-      <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#f7d97a;">classList.add('hide') → opacity 1→0 en 300ms CSS</div>
-    </div>
-    <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 2300ms</div>
-      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#fda4af;">toast.remove() — supprimé du DOM</div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Animation du bouton "Ajouter au panier" → "✓ Ajouté"</span>
+<hr> <!-- ══ 06 TOAST ══ -->
+<div class="sec" id="toast"> <div class="slabel">06 — Retour visuel</div> <h2>Animation bouton + Toast de notification</h2> <p>Deux retours visuels confirment à l'utilisateur que l'ajout a bien eu lieu : le bouton change temporairement de texte, et une notification en haut à droite apparaît puis disparaît.</p>
+<div class="diag"> <div class="dtitle">Deux confirmations visuelles en parallèle — timelines</div> <div style="display:flex;flex-direction:column;gap:.5rem;max-width:580px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.1rem;">BOUTON "Ajouter au panier"</div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#7ee8b8;">textContent  " Ajouté" · background  #10b981</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 2000ms</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:var(--t2);">textContent  original · background  '' (CSS reprend)</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.5rem;margin-bottom:.1rem;">TOAST notification</div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#7dd3fc;">createElement  className  body.appendChild  opacity 01 via CSS</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 2000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#f7d97a;">classList.add('hide')  opacity 10 en 300ms CSS</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.4rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 2300ms</div> <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:6px;padding:.3rem .6rem;font-size:.71rem;color:#fda4af;">toast.remove() — supprimé du DOM</div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Animation du bouton "Ajouter au panier"  " Ajouté"</span>
 <span class="kw">const</span> <span class="vr">originalText</span> = addButton.textContent;
-addButton.textContent = <span class="s">'✓ Ajouté'</span>;
+addButton.textContent = <span class="s">' Ajouté'</span>;
 addButton.style.background = <span class="s">'#10b981'</span>;
 setTimeout(() => {
-    addButton.textContent  = originalText;
-    addButton.style.background = <span class="s">''</span>;  <span class="cm">// '' = revient au CSS d'origine</span>
+addButton.textContent  = originalText;
+addButton.style.background = <span class="s">''</span>;  <span class="cm">// '' = revient au CSS d'origine</span>
 }, <span class="nm">2000</span>);  <span class="cm">// 2 secondes</span>
-</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Cycle de vie du toast de notification</div>
-    <div class="vc">
-      <div class="vn w cb">showNotification('Produit ajouté au panier') appelée</div>
-      <div class="va">↓<div class="val">supprime un toast existant si présent (évite l'empilement)</div></div>
-      <div class="vn w cy">document.createElement('div') → crée le toast en mémoire</div>
-      <div class="va">↓<div class="val">style inline appliqué (position, couleur, animation…)</div></div>
-      <div class="vn w cg">document.body.appendChild(toast) → visible en haut à droite</div>
-      <div class="va">↓<div class="val">setTimeout 3000ms</div></div>
-      <div class="vn w cp">toast.style.animation = 'slideOutNotif' → glisse vers la droite</div>
-      <div class="va">↓<div class="val">setTimeout 300ms (durée animation)</div></div>
-      <div class="vn w cgr">toast.remove() → retiré du DOM</div>
-    </div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">showNotification</span>(message, type = <span class="s">'success'</span>) {
-    <span class="cm">// type = 'success' par défaut (paramètre par défaut ES6)
-    // Peut aussi être 'error' ou autre → couleur différente</span>
-
-    <span class="kw">const</span> <span class="vr">existing</span> = document.<span class="fn">querySelector</span>(<span class="s">'.notification-toast'</span>);
-    <span class="kw">if</span> (existing) existing.<span class="fn">remove</span>();
-    <span class="cm">// Si un toast est déjà visible, on le supprime avant d'en créer un nouveau.
-    // Évite 3 toasts empilés si on clique 3× rapidement sur "Ajouter"</span>
-
-    <span class="kw">const</span> <span class="vr">notification</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
-    notification.className = <span class="s">'notification-toast'</span>;
-    notification.style.cssText = <span class="s">`
-        position: fixed; top: 20px; right: 20px;
-        background: ${type === <span class="s">'success'</span> ? <span class="s">'#10b981'</span> : <span class="s">'#ef4444'</span>};
-        …
-    `</span>;
-    document.body.<span class="fn">appendChild</span>(notification);
-
-    setTimeout(() => {
-        notification.style.animation = <span class="s">'slideOutNotif 0.3s ease'</span>;
-        setTimeout(() => notification.<span class="fn">remove</span>(), <span class="nm">300</span>);
-        <span class="cm">// Délai imbriqué : d'abord l'animation (0.3s) PUIS supprimer</span>
-    }, <span class="nm">3000</span>);
+</pre></div> <div class="diag"> <div class="dtitle">Cycle de vie du toast de notification</div> <div class="vc"> <div class="vn w cb">showNotification('Produit ajouté au panier') appelée</div> <div class="va"><div class="val">supprime un toast existant si présent (évite l'empilement)</div></div> <div class="vn w cy">document.createElement('div')  crée le toast en mémoire</div> <div class="va"><div class="val">style inline appliqué (position, couleur, animation…)</div></div> <div class="vn w cg">document.body.appendChild(toast)  visible en haut à droite</div> <div class="va"><div class="val">setTimeout 3000ms</div></div> <div class="vn w cp">toast.style.animation = 'slideOutNotif'  glisse vers la droite</div> <div class="va"><div class="val">setTimeout 300ms (durée animation)</div></div> <div class="vn w cgr">toast.remove()  retiré du DOM</div> </div> </div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">showNotification</span>(message, type = <span class="s">'success'</span>) {
+<span class="cm">// type = 'success' par défaut (paramètre par défaut ES6)
+// Peut aussi être 'error' ou autre  couleur différente</span> <span class="kw">const</span> <span class="vr">existing</span> = document.<span class="fn">querySelector</span>(<span class="s">'.notification-toast'</span>);
+<span class="kw">if</span> (existing) existing.<span class="fn">remove</span>();
+<span class="cm">// Si un toast est déjà visible, on le supprime avant d'en créer un nouveau.
+// Évite 3 toasts empilés si on clique 3× rapidement sur "Ajouter"</span> <span class="kw">const</span> <span class="vr">notification</span> = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+notification.className = <span class="s">'notification-toast'</span>;
+notification.style.cssText = <span class="s">`
+position: fixed; top: 20px; right: 20px;
+background: ${type === <span class="s">'success'</span> ? <span class="s">'#10b981'</span> : <span class="s">'#ef4444'</span>};
+…
+`</span>;
+document.body.<span class="fn">appendChild</span>(notification);
+setTimeout(() => {
+notification.style.animation = <span class="s">'slideOutNotif 0.3s ease'</span>;
+setTimeout(() => notification.<span class="fn">remove</span>(), <span class="nm">300</span>);
+<span class="cm">// Délai imbriqué : d'abord l'animation (0.3s) PUIS supprimer</span> }, <span class="nm">3000</span>);
 }
-</pre></div>
-
-  <div class="box warn"><span class="bi">⚠️</span><div><b>Injection CSS dynamique</b> — panier.js crée une balise <ic>&lt;style&gt;</ic> dans le <ic>&lt;head&gt;</ic> pour les animations du toast (<ic>slideInNotif</ic> / <ic>slideOutNotif</ic>). Il vérifie d'abord si <ic>#notif-style</ic> existe déjà pour éviter de l'injecter deux fois. C'est une technique courante quand on veut des animations sans dépendre d'un fichier CSS externe.</div></div>
+</pre></div> <div class="box warn"><span class="bi"></span><div><b>Injection CSS dynamique</b> — panier.js crée une balise <ic>&lt;style&gt;</ic> dans le <ic>&lt;head&gt;</ic> pour les animations du toast (<ic>slideInNotif</ic> / <ic>slideOutNotif</ic>). Il vérifie d'abord si <ic>#notif-style</ic> existe déjà pour éviter de l'injecter deux fois. C'est une technique courante quand on veut des animations sans dépendre d'un fichier CSS externe.</div></div>
 </div>
+<hr> <!-- ══ 07 RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">07 — Récapitulatif</div> <h2>Le film complet de A à Z</h2>
+<div class="diag"> <div class="dtitle">Le film complet de panier.js — de l'init au badge mis à jour</div> <div style="display:flex;flex-direction:column;gap:.25rem;max-width:640px;"> <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded (toutes les pages)</div></div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> storageGet('peartech-cart') · updateCartBadge()</div> <div class="flow-row"><div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">window.PearTechCart exposé</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">add · remove · clear · getItems · getCount — API publique</div></div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> delegation globale sur document</div> <div class="flow-row"><div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">Clic .btn-add-cart n'importe où</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">Cas 1 (card) ou Cas 2 (fiche)  addToCart()</div></div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> clé doublon calculée = id + JSON.stringify(options)</div> <div class="flow-row"> <div style="font-size:.72rem;color:var(--t2);background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;flex:1;">Doublon  quantity++ · Nouveau  push() · saveCart() · updateCartBadge()</div> </div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> feedback visuel</div> <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Bouton  (2s) + Toast (3s)</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">dispatch productAddedToCart</div></div> </div>
+</div> <div class="tl"> <div class="tli"><div class="tld" style="background:var(--a4)"></div> <div class="tlh"><div class="tls">Au chargement de la page</div><div class="tlt">Initialisation du panier</div></div> <div class="tlb">L'IIFE s'exécute immédiatement. <ic>storageGet</ic> lit le panier depuis localStorage. <ic>JSON.parse</ic> le convertit en tableau. Si tout échoue, <ic>cart = []</ic>. <ic>updateCartBadge()</ic> met à jour le badge du header.</div> </div> <div class="tli"><div class="tld" style="background:var(--a)"></div> <div class="tlh"><div class="tls">En permanence</div><div class="tlt">Surveillance des clics</div></div> <div class="tlb">Un seul écouteur sur <ic>document</ic> attend les clics. Pour chaque clic, il vérifie si la cible est (ou est dans) un <ic>.btn-add-cart</ic> via <ic>e.target.closest()</ic>.</div> </div> <div class="tli"><div class="tld" style="background:var(--a3)"></div> <div class="tlh"><div class="tls">Clic "Ajouter au panier" détecté</div><div class="tlt">Détection du contexte</div></div> <div class="tlb"><ic>addButton.closest('.product-card')</ic> détermine le contexte : carte produit (lit le DOM de la carte) ou fiche produit (lit le DOM de la page entière, collecte les options actives).</div> </div> <div class="tli"><div class="tld" style="background:var(--a5)"></div> <div class="tlh"><div class="tls">Traitement</div><div class="tlt">Ajout et sauvegarde</div></div> <div class="tlb"><ic>addToCart()</ic> cherche un doublon (même id ET même options). Si trouvé : quantité++. Sinon : <ic>cart.push()</ic>. <ic>saveCart()</ic> persiste dans localStorage. <ic>updateCartBadge()</ic> met à jour le badge.</div> </div> <div class="tli" style="margin-bottom:0"><div class="tld" style="background:var(--a2)"></div> <div class="tlh"><div class="tls">Retour visuel</div><div class="tlt">Confirmation utilisateur</div></div> <div class="tlb">Le bouton passe à " Ajouté" (vert) pendant 2 secondes. Un toast "Produit ajouté au panier" glisse depuis la droite, reste 3 secondes, puis disparaît avec une animation de sortie.</div> </div> </div>
+</div> </div>
+
 <hr>
-
-<!-- ══ 07 RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">07 — Récapitulatif</div>
-  <h2>Le film complet de A à Z</h2>
-<div class="diag">
-  <div class="dtitle">Le film complet de panier.js — de l'init au badge mis à jour</div>
-  <div style="display:flex;flex-direction:column;gap:.25rem;max-width:640px;">
-    <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">DOMContentLoaded (toutes les pages)</div></div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ storageGet('peartech-cart') · updateCartBadge()</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;">window.PearTechCart exposé</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">add · remove · clear · getItems · getCount — API publique</div></div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ delegation globale sur document</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">Clic .btn-add-cart n'importe où</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">Cas 1 (card) ou Cas 2 (fiche) → addToCart()</div></div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ clé doublon calculée = id + JSON.stringify(options)</div>
-    <div class="flow-row">
-      <div style="font-size:.72rem;color:var(--t2);background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;flex:1;">Doublon → quantity++ · Nouveau → push() · saveCart() · updateCartBadge()</div>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
     </div>
-    <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);">↓ feedback visuel</div>
-    <div class="flow-row"><div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Bouton ✓ (2s) + Toast (3s)</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">dispatch productAddedToCart</div></div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">localStorage</div>
+      <div class="glos-def">Stockage clé-valeur persistant dans le navigateur — survit à la fermeture. Capacité ~5 Mo. Clé/valeur uniquement en string : les objets passent par <ic>JSON.stringify()</ic> avant stockage et <ic>JSON.parse()</ic> à la lecture.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">JSON — JavaScript Object Notation</div>
+      <div class="glos-def">Format texte pour sérialiser des objets. <ic>JSON.stringify(obj)</ic> → string stockable. <ic>JSON.parse(str)</ic> → objet utilisable. Obligatoire pour stocker/lire des objets dans localStorage ou sessionStorage.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Délégation d'événements</div>
+      <div class="glos-def">Un seul listener sur un parent au lieu d'un listener par enfant. L'événement remonte (bubble) de l'enfant vers le parent. <ic>e.target.closest('.btn')</ic> identifie l'élément source. Avantage : fonctionne pour les éléments ajoutés dynamiquement après l'initialisation.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">CustomEvent</div>
+      <div class="glos-def">Événement personnalisé émis par le code : <ic>document.dispatchEvent(new CustomEvent('nom', {detail: données}))</ic>. Permet à des modules de communiquer sans se connaître — couplage zéro. L'abonné écoute via <ic>document.addEventListener('nom', fn)</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">dataset</div>
+      <div class="glos-def">Interface qui expose les attributs <ic>data-*</ic> d'un élément. <ic>el.dataset.productId</ic> lit <ic>data-product-id</ic>. Permet de stocker des données métier directement dans le HTML sans variables globales. La conversion camelCase est automatique : <ic>data-product-id</ic> → <ic>dataset.productId</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Template literal</div>
+      <div class="glos-def">Chaîne avec backtick <ic>`...`</ic> qui permet d'insérer des expressions avec <ic>${variable}</ic> et des retours à la ligne. Remplace la concaténation de strings. Utilisé massivement pour générer le HTML des cards dynamiquement.</div>
+    </div>
   </div>
-</div>
-
-  <div class="tl">
-    <div class="tli"><div class="tld" style="background:var(--a4)"></div>
-      <div class="tlh"><div class="tls">Au chargement de la page</div><div class="tlt">Initialisation du panier</div></div>
-      <div class="tlb">L'IIFE s'exécute immédiatement. <ic>storageGet</ic> lit le panier depuis localStorage. <ic>JSON.parse</ic> le convertit en tableau. Si tout échoue, <ic>cart = []</ic>. <ic>updateCartBadge()</ic> met à jour le badge du header.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a)"></div>
-      <div class="tlh"><div class="tls">En permanence</div><div class="tlt">Surveillance des clics</div></div>
-      <div class="tlb">Un seul écouteur sur <ic>document</ic> attend les clics. Pour chaque clic, il vérifie si la cible est (ou est dans) un <ic>.btn-add-cart</ic> via <ic>e.target.closest()</ic>.</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a3)"></div>
-      <div class="tlh"><div class="tls">Clic "Ajouter au panier" détecté</div><div class="tlt">Détection du contexte</div></div>
-      <div class="tlb"><ic>addButton.closest('.product-card')</ic> détermine le contexte : carte produit (lit le DOM de la carte) ou fiche produit (lit le DOM de la page entière, collecte les options actives).</div>
-    </div>
-    <div class="tli"><div class="tld" style="background:var(--a5)"></div>
-      <div class="tlh"><div class="tls">Traitement</div><div class="tlt">Ajout et sauvegarde</div></div>
-      <div class="tlb"><ic>addToCart()</ic> cherche un doublon (même id ET même options). Si trouvé : quantité++. Sinon : <ic>cart.push()</ic>. <ic>saveCart()</ic> persiste dans localStorage. <ic>updateCartBadge()</ic> met à jour le badge.</div>
-    </div>
-    <div class="tli" style="margin-bottom:0"><div class="tld" style="background:var(--a2)"></div>
-      <div class="tlh"><div class="tls">Retour visuel</div><div class="tlt">Confirmation utilisateur</div></div>
-      <div class="tlb">Le bouton passe à "✓ Ajouté" (vert) pendant 2 secondes. Un toast "Produit ajouté au panier" glisse depuis la droite, reste 3 secondes, puis disparaît avec une animation de sortie.</div>
-    </div>
-  </div>
-</div>
-
 </div>
 </body>
 </html>

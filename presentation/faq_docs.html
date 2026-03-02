@@ -5,522 +5,292 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — faq.js</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#2dd4bf;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-  *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
-  .nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-  nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-  nav a:hover{background:var(--bg3);color:var(--t);}
-  .page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-  .hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-  .htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-  .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-  .hero h1 span{color:var(--a);}
-  .hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-  .fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-  .sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-  .slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
-  .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-  .sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-  .sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);}
-  .sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-  ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#5eead4;white-space:nowrap;}
-  .diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-  .dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-  .vc{display:flex;flex-direction:column;align-items:center;}
-  .vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
-  .vn.w{max-width:720px;}
-  .va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-  .val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-  .ct{background:rgba(45,212,191,.11);border:1px solid rgba(45,212,191,.4);color:#5eead4;}
-  .cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-  .cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-  .cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-  .cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-  .fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-  .fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
-  .fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-  .box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-  .box .bi{font-size:1.25rem;flex-shrink:0;}
-  .box.info{background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);color:#5eead4;}
-  .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-  .box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-  .box b{font-weight:700;}
-  .box ic{background:rgba(255,255,255,.09);border:none;}
-  .cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-  .cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
-  .cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-  .kw{color:#c084fc}.fn{color:#5eead4}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-  .sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-  .sni{font-size:.95rem;flex-shrink:0;}
-  hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-  @media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
-
-  /* ─── CARTE INTERNE ─── */
-  .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-  .carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
-  .carte-col{display:flex;flex-direction:column;gap:.5rem;}
-  .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-  .carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-  .carte-item b{color:var(--t);font-weight:700;}
-  .carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-  .carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-  @media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-
-
-  /* ─── EXTRA SCHEMAS ─── */
-  .schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-  .schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-  .schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
-  .ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
-  .ls-key{font-weight:700;margin-bottom:.25rem;}
-  .ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
-  .h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
-  .state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
-  .state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
-  .state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
-  .timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
-  .timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
-  .timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-  .timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
-  .chain-seq{display:flex;flex-direction:column;gap:.3rem;}
-  .cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
-  .cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
-  .cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
-  .cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
-  .cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
-  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .cmp-box{border-radius:11px;padding:1rem;}
-  .cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
-  .cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-  .cmp-item:last-child{border-bottom:none;}
-  @media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
-
-  /* pass3 */
-  .recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-  .recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-  .recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-  .recap-table tr:hover td{background:rgba(255,255,255,.02);}
-  .recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-  .flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-  .flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-  .flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-  .effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-  @media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-  .effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-  .effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-  .effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-  .effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  @media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-  .mini-box{border-radius:9px;padding:.75rem .9rem;}
-  .mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-  .mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#2dd4bf;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:56px;overflow-x:auto;}
+.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
+nav a{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);text-decoration:none;padding:.3rem .5rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
+nav a:hover{background:var(--bg3);color:var(--t);}
+.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
+.hero h1 span{color:var(--a);}
+.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
+.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
+.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);}
+.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
+ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#5eead4;white-space:nowrap;}
+.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
+.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
+.vn.w{max-width:720px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
+.ct{background:rgba(45,212,191,.11);border:1px solid rgba(45,212,191,.4);color:#5eead4;}
+.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
+.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
+.fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
+.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
+.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
+.box .bi{font-size:1.25rem;flex-shrink:0;}
+.box.info{background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);color:#5eead4;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box b{font-weight:700;}
+.box ic{background:rgba(255,255,255,.09);border:none;}
+.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
+.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
+.kw{color:#c084fc}.fn{color:#5eead4}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
+.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
+.sni{font-size:.95rem;flex-shrink:0;}
+hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+@media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
+/* ─── CARTE INTERNE ─── */
+.carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
+.carte-col{display:flex;flex-direction:column;gap:.5rem;}
+.carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
+.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--t);font-weight:700;}
+.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
+@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
+/* ─── EXTRA SCHEMAS ─── */
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
+.ls-key{font-weight:700;margin-bottom:.25rem;}
+.ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
+.h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
+.state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
+.state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
+.timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
+.timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;}
+.cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
+.cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
+.cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.cmp-box{border-radius:11px;padding:1rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
+.cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+@media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
+/* pass3 */
+.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
+.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
+.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
+.recap-table tr:hover td{background:rgba(255,255,255,.02);}
+.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
+.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
+.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
+.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
+.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
+@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
+.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
+.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
+.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+.mini-box{border-radius:9px;padding:.75rem .9rem;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
 </style>
 </head>
 <body>
-<nav>
-  <div class="nl">faq.js</div>
-  <a href="#intro">Intro</a>
-  <a href="#accordeon">Accordéon</a>
-  <a href="#animation">Animation height</a>
-  <a href="#filtres">Recherche & Filtres</a>
-  <a href="#recap">Récap</a>
+<nav> <div class="nl">faq.js</div> <a href="#intro">Intro</a> <a href="#accordeon">Accordéon</a> <a href="#animation">Animation height</a> <a href="#filtres">Recherche & Filtres</a> <a href="#recap">Récap</a>
+<a href="#glossaire">Glossaire</a>
 </nav>
-<div class="page">
-
-<div class="hero">
-  <div class="htag">Documentation · niveau débutant absolu</div>
-
-<!-- CARTE INTERNE DIAGRAM -->
-<div class="carte">
-  <div class="carte-title">🗺 Carte interne du fichier — entrées, traitements, sorties</div>
-  <div class="carte-body">
-    <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;">📥 ENTRÉES</div>
+<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
+<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
 <div class="carte-item"><b>Click .faq-question</b><br><span style="color:var(--t3);font-size:.71rem;">ouverture / fermeture</span></div>
 <div class="carte-item"><b>Input #faq-search-input</b><br><span style="color:var(--t3);font-size:.71rem;">recherche avec debounce 200ms</span></div>
 <div class="carte-item"><b>Click .category-btn</b><br><span style="color:var(--t3);font-size:.71rem;">filtre par catégorie</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#2dd4bf22;color:#2dd4bf;border:1px solid #2dd4bf44;">⚙️ TRAITEMENTS</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#2dd4bf22;color:#2dd4bf;border:1px solid #2dd4bf44;"> TRAITEMENTS</div>
 <div class="carte-item"><b>initItems()</b><br><span style="color:var(--t3);font-size:.71rem;">wrappers + height:0 + événements</span></div>
-<div class="carte-item"><b>openItem(item)</b><br><span style="color:var(--t3);font-size:.71rem;">height 0→scrollHeight→auto</span></div>
-<div class="carte-item"><b>closeItem(item)</b><br><span style="color:var(--t3);font-size:.71rem;">height scrollHeight→0</span></div>
-<div class="carte-item"><b>applyFilters()</b><br><span style="color:var(--t3);font-size:.71rem;">catOk && termOk → show/hide</span></div>
+<div class="carte-item"><b>openItem(item)</b><br><span style="color:var(--t3);font-size:.71rem;">height 0scrollHeightauto</span></div>
+<div class="carte-item"><b>closeItem(item)</b><br><span style="color:var(--t3);font-size:.71rem;">height scrollHeight0</span></div>
+<div class="carte-item"><b>applyFilters()</b><br><span style="color:var(--t3);font-size:.71rem;">catOk && termOk  show/hide</span></div>
 <div class="carte-item"><b>debounce 200ms</b><br><span style="color:var(--t3);font-size:.71rem;">clearTimeout + setTimeout</span></div>
-</div>
-    <div class="carte-arrow">→</div>
-    <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;">📤 SORTIES</div>
+</div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#7ee8b822;color:#7ee8b8;border:1px solid #7ee8b844;"> SORTIES</div>
 <div class="carte-item"><b>DOM</b><br><span style="color:var(--t3);font-size:.71rem;">items visibles/cachés, .active, hauteur animée</span></div>
 <div class="carte-item"><b>noResults.classList</b><br><span style="color:var(--t3);font-size:.71rem;">'visible' si 0 résultats</span></div>
 <div class="carte-item"><b>Aucune écriture</b><br><span style="color:var(--t3);font-size:.71rem;">ni localStorage ni sessionStorage</span></div>
+</div> </div>
 </div>
-  </div>
+<!-- END CARTE --> <h1>Comprendre<br><span>faq.js</span></h1> <p>Ce fichier gère la page FAQ. Il implémente un accordéon animé (ouverture/fermeture avec transition sur la hauteur), une recherche par mot-clé avec debounce, et un filtrage par catégorie — les trois combinés pour n'afficher que les questions pertinentes.</p> <div class="fbadge"><div class="dot"></div>faq.js · ~150 lignes · 7 fonctions · accordéon + recherche + catégories · aucune dépendance</div>
+</div> <!-- ══ 00 INTRO ══ -->
+<div class="sec" id="intro"> <div class="slabel">00 — Vue d'ensemble</div> <h2>3 fonctionnalités liées par applyFilters()</h2> <div class="diag"> <div class="dtitle">Architecture de faq.js</div> <div class="fork f3"> <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#5eead4;margin-bottom:.3rem;">Accordéon</div> <div style="font-size:.77rem;color:var(--t2);">initItems() · openItem() · closeItem(). Transition height animée. Un seul ouvert à la fois.</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">Recherche</div> <div style="font-size:.77rem;color:var(--t2);">searchInput 'input' + debounce 200ms. Escape pour vider. Cherche dans question ET réponse.</div> </div> <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.3rem;">Catégories</div> <div style="font-size:.77rem;color:var(--t2);">Boutons .category-btn. data-category sur chaque item. applyFilters() combine tout.</div> </div> </div> </div>
 </div>
-<!-- END CARTE -->
-
-  <h1>Comprendre<br><span>faq.js</span></h1>
-  <p>Ce fichier gère la page FAQ. Il implémente un accordéon animé (ouverture/fermeture avec transition sur la hauteur), une recherche par mot-clé avec debounce, et un filtrage par catégorie — les trois combinés pour n'afficher que les questions pertinentes.</p>
-  <div class="fbadge"><div class="dot"></div>faq.js · ~150 lignes · 7 fonctions · accordéon + recherche + catégories · aucune dépendance</div>
-</div>
-
-<!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro">
-  <div class="slabel">00 — Vue d'ensemble</div>
-  <h2>3 fonctionnalités liées par applyFilters()</h2>
-  <div class="diag">
-    <div class="dtitle">Architecture de faq.js</div>
-    <div class="fork f3">
-      <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);border-radius:11px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#5eead4;margin-bottom:.3rem;">Accordéon</div>
-        <div style="font-size:.77rem;color:var(--t2);">initItems() · openItem() · closeItem(). Transition height animée. Un seul ouvert à la fois.</div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">Recherche</div>
-        <div style="font-size:.77rem;color:var(--t2);">searchInput 'input' + debounce 200ms. Escape pour vider. Cherche dans question ET réponse.</div>
-      </div>
-      <div style="background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);border-radius:11px;padding:.9rem;text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#d3a8ff;margin-bottom:.3rem;">Catégories</div>
-        <div style="font-size:.77rem;color:var(--t2);">Boutons .category-btn. data-category sur chaque item. applyFilters() combine tout.</div>
-      </div>
-    </div>
-  </div>
-</div>
-<hr>
-
-<!-- ══ 01 ACCORDEON ══ -->
-<div class="sec" id="accordeon">
-  <div class="slabel">01 — Accordéon</div>
-  <h2>initItems() — préparer chaque question pour l'anim</h2><div class="diag">
-  <div class="dtitle">initItems() — préparer chaque .faq-item pour l'animation</div>
-  <div style="display:flex;flex-direction:column;gap:.35rem;max-width:560px;">
-    <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">querySelectorAll('.faq-item')</div><div class="flow-arr">→</div><div style="font-size:.72rem;color:var(--t2);">tableau de tous les items FAQ</div></div>
-    <div style="font-size:.67rem;color:var(--t3);padding-left:1rem;">↓ forEach item →</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;">
-      <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.6rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">Chaque .faq-answer</div>
-        <div style="font-size:.72rem;color:var(--t2);">style.height = '0'<br>style.overflow = 'hidden'<br>→ invisible mais dans le DOM</div>
-      </div>
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:.6rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">Chaque .faq-question</div>
-        <div style="font-size:.72rem;color:var(--t2);">addEventListener('click')<br>→ toggleItem(item)<br>aria-expanded set</div>
-      </div>
-    </div>
-    <div style="font-size:.74rem;color:var(--t2);background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.15);border-radius:7px;padding:.45rem .7rem;">⚠ Si initItems() n'est pas appelé, height='0' n'est pas posé → la transition de 0→auto ne fonctionnera pas (le point de départ serait inconnu)</div>
-  </div>
+<hr> <!-- ══ 01 ACCORDEON ══ -->
+<div class="sec" id="accordeon"> <div class="slabel">01 — Accordéon</div> <h2>initItems() — préparer chaque question pour l'anim</h2><div class="diag"> <div class="dtitle">initItems() — préparer chaque .faq-item pour l'animation</div> <div style="display:flex;flex-direction:column;gap:.35rem;max-width:560px;"> <div class="flow-row"><div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">querySelectorAll('.faq-item')</div><div class="flow-arr"></div><div style="font-size:.72rem;color:var(--t2);">tableau de tous les items FAQ</div></div> <div style="font-size:.67rem;color:var(--t3);padding-left:1rem;"> forEach item </div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;"> <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:.6rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">Chaque .faq-answer</div> <div style="font-size:.72rem;color:var(--t2);">style.height = '0'<br>style.overflow = 'hidden'<br> invisible mais dans le DOM</div> </div> <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:.6rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#c4b5fd;margin-bottom:.3rem;">Chaque .faq-question</div> <div style="font-size:.72rem;color:var(--t2);">addEventListener('click')<br> toggleItem(item)<br>aria-expanded set</div> </div> </div> <div style="font-size:.74rem;color:var(--t2);background:rgba(250,204,21,.06);border:1px solid rgba(250,204,21,.15);border-radius:7px;padding:.45rem .7rem;"> Si initItems() n'est pas appelé, height='0' n'est pas posé  la transition de 0auto ne fonctionnera pas (le point de départ serait inconnu)</div> </div>
 </div>
 ation
-  <p>Avant d'animer la hauteur, il faut mettre le contenu dans un état initial précis : <ic>height: 0</ic> + <ic>overflow: hidden</ic>. Et si le wrapper <ic>.faq-answer-inner</ic> manque dans le HTML, on le crée dynamiquement.</p>
+<p>Avant d'animer la hauteur, il faut mettre le contenu dans un état initial précis : <ic>height: 0</ic> + <ic>overflow: hidden</ic>. Et si le wrapper <ic>.faq-answer-inner</ic> manque dans le HTML, on le crée dynamiquement.</p>
 
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">initItems</span>() {
-    <span class="fn">getItems</span>().<span class="fn">forEach</span>(<span class="kw">function</span>(item) {
-        <span class="kw">const</span> <span class="vr">answer</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>);
-
-        <span class="cm">// Crée le wrapper interne si absent du HTML (compatibilité)</span>
-        <span class="kw">let</span> <span class="vr">inner</span> = answer.<span class="fn">querySelector</span>(<span class="s">'.faq-answer-inner'</span>);
-        <span class="kw">if</span> (!inner) {
-            inner = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
-            inner.className = <span class="s">'faq-answer-inner'</span>;
-            <span class="kw">while</span> (answer.firstChild) inner.<span class="fn">appendChild</span>(answer.firstChild); <span class="cm">// Déplace tout</span>
-            answer.<span class="fn">appendChild</span>(inner);
-        }
-
-        <span class="cm">// État initial : fermé</span>
-        answer.style.height   = <span class="s">'0'</span>;
-        answer.style.overflow = <span class="s">'hidden'</span>;
-        answer.style.display  = <span class="s">'block'</span>; <span class="cm">// display:block requis pour que height s'anime</span>
-
-        item.<span class="fn">querySelector</span>(<span class="s">'.faq-question'</span>).<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
-            <span class="kw">if</span> (item.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) {
-                <span class="fn">closeItem</span>(item);
-            } <span class="kw">else</span> {
-                <span class="cm">// Ferme tous les autres d'abord (un seul ouvert à la fois)</span>
-                <span class="fn">getItems</span>().<span class="fn">forEach</span>(other => {
-                    <span class="kw">if</span> (other !== item && other.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) <span class="fn">closeItem</span>(other);
-                });
-                <span class="fn">openItem</span>(item);
-            }
-        });
-    });
+<div class="diag">
+  <div class="dtitle">État initial posé par initItems() — 3 propriétés CSS critiques</div>
+  <table class="recap-table" style="font-size:.8rem">
+    <tr><th>Propriété</th><th>Valeur initiale</th><th>Pourquoi</th></tr>
+    <tr><td>height</td><td style="color:#7dd3fc">'0'</td><td>Contenu caché au départ — permet d'animer vers scrollHeight</td></tr>
+    <tr><td>overflow</td><td style="color:#7dd3fc">'hidden'</td><td>Masque ce qui dépasse pendant l'animation height</td></tr>
+    <tr><td>display</td><td style="color:#7dd3fc">'block'</td><td>Obligatoire — display:none bloque la transition CSS</td></tr>
+  </table>
+</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">initItems</span>() {
+<span class="fn">getItems</span>().<span class="fn">forEach</span>(<span class="kw">function</span>(item) {
+<span class="kw">const</span> <span class="vr">answer</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>);
+<span class="cm">// Crée le wrapper interne si absent du HTML (compatibilité)</span> <span class="kw">let</span> <span class="vr">inner</span> = answer.<span class="fn">querySelector</span>(<span class="s">'.faq-answer-inner'</span>);
+<span class="kw">if</span> (!inner) {
+inner = document.<span class="fn">createElement</span>(<span class="s">'div'</span>);
+inner.className = <span class="s">'faq-answer-inner'</span>;
+<span class="kw">while</span> (answer.firstChild) inner.<span class="fn">appendChild</span>(answer.firstChild); <span class="cm">// Déplace tout</span> answer.<span class="fn">appendChild</span>(inner);
 }
-
+<span class="cm">// État initial : fermé</span> answer.style.height   = <span class="s">'0'</span>;
+answer.style.overflow = <span class="s">'hidden'</span>;
+answer.style.display  = <span class="s">'block'</span>; <span class="cm">// display:block requis pour que height s'anime</span> item.<span class="fn">querySelector</span>(<span class="s">'.faq-question'</span>).<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
+<span class="kw">if</span> (item.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) {
+<span class="fn">closeItem</span>(item);
+} <span class="kw">else</span> {
+<span class="cm">// Ferme tous les autres d'abord (un seul ouvert à la fois)</span> <span class="fn">getItems</span>().<span class="fn">forEach</span>(other => {
+<span class="kw">if</span> (other !== item && other.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) <span class="fn">closeItem</span>(other);
+});
+<span class="fn">openItem</span>(item);
+}
+});
+});
+}
 <span class="cm">// getItems() est une fonction, pas une variable — pour toujours avoir
 // les items actuels même si le DOM change après l'initialisation</span>
 <span class="kw">function</span> <span class="fn">getItems</span>() {
-    <span class="kw">return</span> Array.<span class="fn">from</span>(faqList.<span class="fn">querySelectorAll</span>(<span class="s">'.faq-item'</span>));
-}</pre></div>
-
-  <div class="box info"><span class="bi">💡</span><div><b>while (answer.firstChild) inner.appendChild(…)</b> — cette boucle déplace <b>chaque</b> nœud enfant un par un dans le nouveau wrapper. Utiliser <ic>innerHTML</ic> serait plus court mais détruirait les écouteurs déjà attachés sur ces enfants. Le déplacement direct préserve tout.</div></div>
+<span class="kw">return</span> Array.<span class="fn">from</span>(faqList.<span class="fn">querySelectorAll</span>(<span class="s">'.faq-item'</span>));
+}</pre></div> <div class="box info"><span class="bi"></span><div><b>while (answer.firstChild) inner.appendChild(…)</b> — cette boucle déplace <b>chaque</b> nœud enfant un par un dans le nouveau wrapper. Utiliser <ic>innerHTML</ic> serait plus court mais détruirait les écouteurs déjà attachés sur ces enfants. Le déplacement direct préserve tout.</div></div>
 </div>
-<hr>
-
-<!-- ══ 02 ANIMATION ══ -->
-<div class="sec" id="animation">
-  <div class="slabel">02 — Animation de hauteur</div>
-  <h2>Le problème de height:auto — impossible à animer directement en CSS</h2>
-  <p>En CSS, on ne peut pas écrire <ic>transition: height 0.3s</ic> de <ic>0</ic> vers <ic>auto</ic>. Le navigateur ne sait pas calculer le point d'arrivée. La solution : <b>mesurer la hauteur réelle en JS</b>, puis animer vers cette valeur fixe.</p>
-<div class="diag">
-  <div class="dtitle">openItem() — les 4 étapes pour animer height:0 → height:auto</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;">
-    <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;">①</div>
-      <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">height = 'auto' → le navigateur calcule la vraie hauteur</div>
-    </div>
-    <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;">②</div>
-      <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">scrollHeight lu → ex: 148px (valeur fixe mémorisée)</div>
-    </div>
-    <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fda4af;">③</div>
-      <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">height = '0' → retour à 0, instantané (pas de transition)</div>
-    </div>
-    <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;">④</div>
-      <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">requestAnimationFrame → height = '148px' → CSS transition s'active : 0 → 148px en 0.3s</div>
-    </div>
-  </div>
-  <div style="margin-top:.7rem;background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:8px;padding:.5rem .8rem;font-size:.73rem;color:var(--t2);">Le passage par height='0' avant rAF est obligatoire. Sans lui, le navigateur ne voit pas de changement d'état et n'anime pas la transition.</div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript — openItem() — la technique en 4 étapes</span><pre><span class="kw">function</span> <span class="fn">openItem</span>(item) {
-    <span class="kw">const</span> <span class="vr">answer</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>);
-    item.classList.<span class="fn">add</span>(<span class="s">'active'</span>);
-
-    <span class="cm">// Étape 1 : passe en height:auto pour MESURER</span>
-    answer.style.height = <span class="s">'auto'</span>;
-    <span class="kw">const</span> <span class="vr">targetHeight</span> = answer.scrollHeight + <span class="s">'px'</span>; <span class="cm">// Ex: "248px"</span>
-
-    <span class="cm">// Étape 2 : remet à 0 pour partir du bon point de départ</span>
-    answer.style.height = <span class="s">'0'</span>;
-
-    <span class="cm">// Étape 3 : FORCE le navigateur à recalculer le DOM (reflow)</span>
-    <span class="cm">// Sans ça, le navigateur optimise et saute l'étape 2 → pas d'animation</span>
-    answer.<span class="fn">getBoundingClientRect</span>();
-
-    <span class="cm">// Étape 4 : installe la transition et lance l'animation</span>
-    answer.style.transition = <span class="s">'height 0.32s cubic-bezier(0.4, 0, 0.2, 1)'</span>;
-    answer.style.height     = targetHeight; <span class="cm">// → animé de 0 vers 248px</span>
-
-    <span class="cm">// Après l'animation : repasse en auto pour s'adapter au contenu dynamique</span>
-    answer.<span class="fn">addEventListener</span>(<span class="s">'transitionend'</span>, <span class="kw">function</span> <span class="fn">onEnd</span>() {
-        answer.<span class="fn">removeEventListener</span>(<span class="s">'transitionend'</span>, onEnd); <span class="cm">// Usage unique</span>
-        <span class="kw">if</span> (item.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) answer.style.height = <span class="s">'auto'</span>;
-    });
-}</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Timeline de l'animation d'ouverture</div>
-    <div style="display:flex;flex-direction:column;gap:.4rem;">
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 0ms</div>
-        <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:var(--t2);">height:auto → scrollHeight = 248px → height:0 → getBoundingClientRect()</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1ms</div>
-        <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#5eead4;">transition installée → height passe de 0 à 248px en 320ms</div>
-      </div>
-      <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 321ms</div>
-        <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">transitionend → height passe en auto → contenu peut grandir librement</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="cb2"><span class="cbl2">javascript — closeItem() — l'inverse en 3 étapes</span><pre><span class="kw">function</span> <span class="fn">closeItem</span>(item) {
-    <span class="kw">const</span> <span class="vr">answer</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>);
-
-    <span class="cm">// Étape 1 : fige la hauteur actuelle (si elle est en 'auto', on ne peut pas partir d'auto)</span>
-    answer.style.height = answer.scrollHeight + <span class="s">'px'</span>;
-
-    <span class="cm">// Étape 2 : force le reflow</span>
-    answer.<span class="fn">getBoundingClientRect</span>();
-
-    <span class="cm">// Étape 3 : transition vers 0 (légèrement plus rapide qu'à l'ouverture)</span>
-    answer.style.transition = <span class="s">'height 0.28s cubic-bezier(0.4, 0, 0.2, 1)'</span>;
-    answer.style.height     = <span class="s">'0'</span>;
-
-    item.classList.<span class="fn">remove</span>(<span class="s">'active'</span>); <span class="cm">// Retire la classe immédiatement (styles CSS)</span>
-    <span class="cm">// Pas besoin de transitionend ici : height:0 est la position finale souhaitée</span>
-}</pre></div>
-
-  <div class="box warn"><span class="bi">⚡</span><div><b>getBoundingClientRect()</b> force ce qu'on appelle un <b>reflow</b> — le navigateur recalcule la géométrie du DOM. Sans ça, le navigateur peut "batching" les changements de style et fusionner height:0 et height:248px en un seul saut, sans transition visible. Cet appel "force" le navigateur à valider l'état height:0 avant de lancer l'animation.</div></div>
-</div>
-<hr>
-
-<!-- ══ 03 FILTRES ══ -->
-<div class="sec" id="filtres">
-  <div class="slabel">03 — Recherche & Filtres</div>
-  <h2>applyFilters() — deux conditions simultanées</h2>
-<div class="schema">
-  <div class="schema-title">Debounce 200ms — sans vs avec</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">❌ Sans debounce — 6 appels à applyFilters()</div>
-      <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;">
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">0ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "i" → applyFilters()</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">80ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "p" → applyFilters()</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">150ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "h" → applyFilters()</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">220ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "o" → applyFilters()</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">290ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "n" → applyFilters()</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">350ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "e" → applyFilters()</div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">✅ Avec debounce 200ms — 1 seul appel</div>
-      <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;">
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">0ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "i" → timer lancé</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">80ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "p" → timer reset</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">150ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "h" → timer reset</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">220ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">…frappe toutes les lettres…</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">350ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "e" → timer reset</div>
-        </div>
-        <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;">
-          <div style="color:var(--t3);">550ms</div><div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.3);border-radius:4px;padding:.2rem .4rem;color:#7ee8b8;">⚡ applyFilters("iphone") — UNE seule fois</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="margin-top:.8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">clearTimeout(debounceTimer) à chaque frappe · setTimeout(applyFilters, 200) relancé · applyFilters exécutée uniquement si 200ms de silence</div>
-</div>
-
-<div class="schema">
-  <div class="schema-title">applyFilters() — logique AND entre catégorie ET terme de recherche</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem;max-width:620px;">
-    <div style="display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:.3rem;align-items:center;text-align:center;font-size:.72rem;">
-      <div style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);border-radius:8px;padding:.5rem;">catOk<br><span style="font-size:.62rem;color:var(--t3);">catégorie = 'all'<br>OU item.dataset.category === cat</span></div>
-      <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;">&&</div>
-      <div style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);border-radius:8px;padding:.5rem;">termOk<br><span style="font-size:.62rem;color:var(--t3);">term = ''<br>OU texte.includes(term)</span></div>
-      <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;">=</div>
-      <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:8px;padding:.5rem;color:#7ee8b8;font-weight:700;">show ?<br><span style="font-size:.62rem;font-weight:400;color:var(--t3);">display: '' ou 'none'</span></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.3rem;font-size:.68rem;text-align:center;margin-top:.3rem;">
-      <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;">✅ all + ''</span><br><span style="color:var(--t3);">tout visible</span></div>
-      <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;">✅ apple + ''</span><br><span style="color:var(--t3);">Apple visible</span></div>
-      <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;">✅ all + 'pro'</span><br><span style="color:var(--t3);">contenant "pro"</span></div>
-      <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;">✅ apple + 'pro'</span><br><span style="color:var(--t3);">Apple ET "pro"</span></div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="cb2"><span class="cbl2">javascript — la logique de filtrage</span><pre><span class="kw">function</span> <span class="fn">applyFilters</span>() {
-    <span class="kw">const</span> <span class="vr">term</span>     = searchInput ? searchInput.value.<span class="fn">toLowerCase</span>().<span class="fn">trim</span>() : <span class="s">''</span>;
-    <span class="kw">const</span> <span class="vr">category</span> = document.<span class="fn">querySelector</span>(<span class="s">'.category-btn.active'</span>)?.dataset.category || <span class="s">'all'</span>;
-    <span class="kw">let</span> <span class="vr">visibleCount</span> = <span class="nm">0</span>;
-
-    <span class="fn">getItems</span>().<span class="fn">forEach</span>(<span class="kw">function</span>(item) {
-        <span class="kw">const</span> <span class="vr">qText</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-question-text'</span>).textContent.<span class="fn">toLowerCase</span>();
-        <span class="kw">const</span> <span class="vr">aText</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>).textContent.<span class="fn">toLowerCase</span>();
-        <span class="kw">const</span> <span class="vr">iCat</span>  = item.dataset.category || <span class="s">''</span>;
-
-        <span class="kw">const</span> <span class="vr">catOk</span>  = category === <span class="s">'all'</span> || iCat === category;
-        <span class="kw">const</span> <span class="vr">termOk</span> = term === <span class="s">''</span> || qText.<span class="fn">includes</span>(term) || aText.<span class="fn">includes</span>(term);
-        <span class="kw">const</span> <span class="vr">show</span>   = catOk && termOk; <span class="cm">// Les DEUX conditions doivent être vraies</span>
-
-        item.style.display = show ? <span class="s">''</span> : <span class="s">'none'</span>;
-        <span class="kw">if</span> (!show && item.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) <span class="fn">closeItem</span>(item); <span class="cm">// Ferme si caché</span>
-        <span class="kw">if</span> (show) visibleCount++;
-    });
-
-    noResults.classList.<span class="fn">toggle</span>(<span class="s">'visible'</span>, visibleCount === <span class="nm">0</span>); <span class="cm">// Message si 0 résultats</span>
-}</pre></div>
-
-  <div class="diag">
-    <div class="dtitle">Logique de filtrage — pour chaque item</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:700px;margin:0 auto;">
-      <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#5eead4;margin-bottom:.3rem;">catOk</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">category === 'all' → tout passe<br>sinon item.dataset.category === category sélectionnée</div>
-      </div>
-      <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.9rem;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">termOk</div>
-        <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">term === '' → tout passe<br>sinon term dans la question OU la réponse</div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--t3);">show = catOk <b style="color:var(--t);">&&</b> termOk — les deux doivent être true</div>
-  </div>
-
-  <h3>Debounce — ne pas filtrer à chaque frappe</h3>
-  <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">debounceTimer</span>;
-
-searchInput.<span class="fn">addEventListener</span>(<span class="s">'input'</span>, <span class="kw">function</span>() {
-    <span class="fn">clearTimeout</span>(debounceTimer);          <span class="cm">// Annule le timer précédent</span>
-    debounceTimer = <span class="fn">setTimeout</span>(applyFilters, <span class="nm">200</span>); <span class="cm">// Lance après 200ms de silence</span>
+<hr> <!-- ══ 02 ANIMATION ══ -->
+<div class="sec" id="animation"> <div class="slabel">02 — Animation de hauteur</div> <h2>Le problème de height:auto — impossible à animer directement en CSS</h2> <p>En CSS, on ne peut pas écrire <ic>transition: height 0.3s</ic> de <ic>0</ic> vers <ic>auto</ic>. Le navigateur ne sait pas calculer le point d'arrivée. La solution : <b>mesurer la hauteur réelle en JS</b>, puis animer vers cette valeur fixe.</p>
+<div class="diag"> <div class="dtitle">openItem() — les 4 étapes pour animer height:0  height:auto</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;"> <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#c4b5fd;">①</div> <div style="background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">height = 'auto'  le navigateur calcule la vraie hauteur</div> </div> <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;">②</div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">scrollHeight lu  ex: 148px (valeur fixe mémorisée)</div> </div> <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#fda4af;">③</div> <div style="background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">height = '0'  retour à 0, instantané (pas de transition)</div> </div> <div style="display:grid;grid-template-columns:26px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;">④</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .7rem;font-size:.73rem;color:var(--t2);">requestAnimationFrame  height = '148px'  CSS transition s'active : 0  148px en 0.3s</div> </div> </div> <div style="margin-top:.7rem;background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);border-radius:8px;padding:.5rem .8rem;font-size:.73rem;color:var(--t2);">Le passage par height='0' avant rAF est obligatoire. Sans lui, le navigateur ne voit pas de changement d'état et n'anime pas la transition.</div>
+</div> <div class="cb2"><span class="cbl2">javascript — openItem() — la technique en 4 étapes</span><pre><span class="kw">function</span> <span class="fn">openItem</span>(item) {
+<span class="kw">const</span> <span class="vr">answer</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>);
+item.classList.<span class="fn">add</span>(<span class="s">'active'</span>);
+<span class="cm">// Étape 1 : passe en height:auto pour MESURER</span> answer.style.height = <span class="s">'auto'</span>;
+<span class="kw">const</span> <span class="vr">targetHeight</span> = answer.scrollHeight + <span class="s">'px'</span>; <span class="cm">// Ex: "248px"</span> <span class="cm">// Étape 2 : remet à 0 pour partir du bon point de départ</span> answer.style.height = <span class="s">'0'</span>;
+<span class="cm">// Étape 3 : FORCE le navigateur à recalculer le DOM (reflow)</span> <span class="cm">// Sans ça, le navigateur optimise et saute l'étape 2  pas d'animation</span> answer.<span class="fn">getBoundingClientRect</span>();
+<span class="cm">// Étape 4 : installe la transition et lance l'animation</span> answer.style.transition = <span class="s">'height 0.32s cubic-bezier(0.4, 0, 0.2, 1)'</span>;
+answer.style.height     = targetHeight; <span class="cm">//  animé de 0 vers 248px</span> <span class="cm">// Après l'animation : repasse en auto pour s'adapter au contenu dynamique</span> answer.<span class="fn">addEventListener</span>(<span class="s">'transitionend'</span>, <span class="kw">function</span> <span class="fn">onEnd</span>() {
+answer.<span class="fn">removeEventListener</span>(<span class="s">'transitionend'</span>, onEnd); <span class="cm">// Usage unique</span> <span class="kw">if</span> (item.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) answer.style.height = <span class="s">'auto'</span>;
 });
-
-<span class="cm">// "Le" → annulé / "Les" → annulé / "Les p" → annulé / "Les pr" → 200ms → applyFilters()
-// Sans debounce : applyFilters s'appellerait 6 fois pour "Les pr" au lieu d'1 fois.</span></pre></div>
-
-  <div class="sn"><span class="sni">💡</span><span><ic>clearTimeout</ic> sur un ID déjà expiré ne fait rien (pas d'erreur). Donc la première frappe fait <ic>clearTimeout(undefined)</ic> → no-op, puis installe le timer. C'est un pattern parfaitement sûr.</span></div>
+}</pre></div> <div class="diag"> <div class="dtitle">Timeline de l'animation d'ouverture</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:var(--t2);">height:auto  scrollHeight = 248px  height:0  getBoundingClientRect()</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1ms</div> <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#5eead4;">transition installée  height passe de 0 à 248px en 320ms</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 321ms</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">transitionend  height passe en auto  contenu peut grandir librement</div> </div> </div> </div> <div class="cb2"><span class="cbl2">javascript — closeItem() — l'inverse en 3 étapes</span><pre><span class="kw">function</span> <span class="fn">closeItem</span>(item) {
+<span class="kw">const</span> <span class="vr">answer</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>);
+<span class="cm">// Étape 1 : fige la hauteur actuelle (si elle est en 'auto', on ne peut pas partir d'auto)</span> answer.style.height = answer.scrollHeight + <span class="s">'px'</span>;
+<span class="cm">// Étape 2 : force le reflow</span> answer.<span class="fn">getBoundingClientRect</span>();
+<span class="cm">// Étape 3 : transition vers 0 (légèrement plus rapide qu'à l'ouverture)</span> answer.style.transition = <span class="s">'height 0.28s cubic-bezier(0.4, 0, 0.2, 1)'</span>;
+answer.style.height     = <span class="s">'0'</span>;
+item.classList.<span class="fn">remove</span>(<span class="s">'active'</span>); <span class="cm">// Retire la classe immédiatement (styles CSS)</span> <span class="cm">// Pas besoin de transitionend ici : height:0 est la position finale souhaitée</span>
+}</pre></div> <div class="box warn"><span class="bi"></span><div><b>getBoundingClientRect()</b> force ce qu'on appelle un <b>reflow</b> — le navigateur recalcule la géométrie du DOM. Sans ça, le navigateur peut "batching" les changements de style et fusionner height:0 et height:248px en un seul saut, sans transition visible. Cet appel "force" le navigateur à valider l'état height:0 avant de lancer l'animation.</div></div>
 </div>
-<hr>
+<hr> <!-- ══ 03 FILTRES ══ -->
+<div class="sec" id="filtres"> <div class="slabel">03 — Recherche & Filtres</div> <h2>applyFilters() — deux conditions simultanées</h2>
+<div class="schema"> <div class="schema-title">Debounce 200ms — sans vs avec</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;"> Sans debounce — 6 appels à applyFilters()</div> <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;"> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">0ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "i"  applyFilters()</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">80ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "p"  applyFilters()</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">150ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "h"  applyFilters()</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">220ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "o"  applyFilters()</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">290ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "n"  applyFilters()</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">350ms</div><div style="background:rgba(244,63,94,.15);border-radius:4px;padding:.2rem .4rem;color:#fda4af;">frappe "e"  applyFilters()</div> </div> </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;"> Avec debounce 200ms — 1 seul appel</div> <div style="display:flex;flex-direction:column;gap:.2rem;font-family:'JetBrains Mono',monospace;font-size:.63rem;"> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">0ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "i"  timer lancé</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">80ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "p"  timer reset</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">150ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "h"  timer reset</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">220ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">…frappe toutes les lettres…</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">350ms</div><div style="background:rgba(139,147,168,.08);border-radius:4px;padding:.2rem .4rem;color:var(--t3);">frappe "e"  timer reset</div> </div> <div style="display:grid;grid-template-columns:55px 1fr;gap:.3rem;align-items:center;"> <div style="color:var(--t3);">550ms</div><div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.3);border-radius:4px;padding:.2rem .4rem;color:#7ee8b8;"> applyFilters("iphone") — UNE seule fois</div> </div> </div> </div> </div> <div style="margin-top:.8rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">clearTimeout(debounceTimer) à chaque frappe · setTimeout(applyFilters, 200) relancé · applyFilters exécutée uniquement si 200ms de silence</div>
+</div> <div class="schema"> <div class="schema-title">applyFilters() — logique AND entre catégorie ET terme de recherche</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:620px;"> <div style="display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:.3rem;align-items:center;text-align:center;font-size:.72rem;"> <div style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);border-radius:8px;padding:.5rem;">catOk<br><span style="font-size:.62rem;color:var(--t3);">catégorie = 'all'<br>OU item.dataset.category === cat</span></div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;">&&</div> <div style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);border-radius:8px;padding:.5rem;">termOk<br><span style="font-size:.62rem;color:var(--t3);">term = ''<br>OU texte.includes(term)</span></div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.85rem;">=</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:8px;padding:.5rem;color:#7ee8b8;font-weight:700;">show ?<br><span style="font-size:.62rem;font-weight:400;color:var(--t3);">display: '' ou 'none'</span></div> </div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:.3rem;font-size:.68rem;text-align:center;margin-top:.3rem;"> <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;"> all + ''</span><br><span style="color:var(--t3);">tout visible</span></div> <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;"> apple + ''</span><br><span style="color:var(--t3);">Apple visible</span></div> <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;"> all + 'pro'</span><br><span style="color:var(--t3);">contenant "pro"</span></div> <div style="background:rgba(86,209,158,.08);border-radius:6px;padding:.35rem;"><span style="color:#7ee8b8;"> apple + 'pro'</span><br><span style="color:var(--t3);">Apple ET "pro"</span></div> </div> </div>
+</div> <div class="cb2"><span class="cbl2">javascript — la logique de filtrage</span><pre><span class="kw">function</span> <span class="fn">applyFilters</span>() {
+<span class="kw">const</span> <span class="vr">term</span> = searchInput ? searchInput.value.<span class="fn">toLowerCase</span>().<span class="fn">trim</span>() : <span class="s">''</span>;
+<span class="kw">const</span> <span class="vr">category</span> = document.<span class="fn">querySelector</span>(<span class="s">'.category-btn.active'</span>)?.dataset.category || <span class="s">'all'</span>;
+<span class="kw">let</span> <span class="vr">visibleCount</span> = <span class="nm">0</span>;
+<span class="fn">getItems</span>().<span class="fn">forEach</span>(<span class="kw">function</span>(item) {
+<span class="kw">const</span> <span class="vr">qText</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-question-text'</span>).textContent.<span class="fn">toLowerCase</span>();
+<span class="kw">const</span> <span class="vr">aText</span> = item.<span class="fn">querySelector</span>(<span class="s">'.faq-answer'</span>).textContent.<span class="fn">toLowerCase</span>();
+<span class="kw">const</span> <span class="vr">iCat</span> = item.dataset.category || <span class="s">''</span>;
+<span class="kw">const</span> <span class="vr">catOk</span> = category === <span class="s">'all'</span> || iCat === category;
+<span class="kw">const</span> <span class="vr">termOk</span> = term === <span class="s">''</span> || qText.<span class="fn">includes</span>(term) || aText.<span class="fn">includes</span>(term);
+<span class="kw">const</span> <span class="vr">show</span> = catOk && termOk; <span class="cm">// Les DEUX conditions doivent être vraies</span> item.style.display = show ? <span class="s">''</span> : <span class="s">'none'</span>;
+<span class="kw">if</span> (!show && item.classList.<span class="fn">contains</span>(<span class="s">'active'</span>)) <span class="fn">closeItem</span>(item); <span class="cm">// Ferme si caché</span> <span class="kw">if</span> (show) visibleCount++;
+});
+noResults.classList.<span class="fn">toggle</span>(<span class="s">'visible'</span>, visibleCount === <span class="nm">0</span>); <span class="cm">// Message si 0 résultats</span>
+}</pre></div> <div class="diag"> <div class="dtitle">Logique de filtrage — pour chaque item</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:700px;margin:0 auto;"> <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#5eead4;margin-bottom:.3rem;">catOk</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">category === 'all'  tout passe<br>sinon item.dataset.category === category sélectionnée</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.3rem;">termOk</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">term === ''  tout passe<br>sinon term dans la question OU la réponse</div> </div> </div> <div style="text-align:center;margin-top:.7rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--t3);">show = catOk <b style="color:var(--t);">&&</b> termOk — les deux doivent être true</div> </div> <h3>Debounce — ne pas filtrer à chaque frappe</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">debounceTimer</span>;
+searchInput.<span class="fn">addEventListener</span>(<span class="s">'input'</span>, <span class="kw">function</span>() {
+<span class="fn">clearTimeout</span>(debounceTimer);          <span class="cm">// Annule le timer précédent</span> debounceTimer = <span class="fn">setTimeout</span>(applyFilters, <span class="nm">200</span>); <span class="cm">// Lance après 200ms de silence</span>
+});
+<span class="cm">// "Le"  annulé / "Les"  annulé / "Les p"  annulé / "Les pr"  200ms  applyFilters()
+// Sans debounce : applyFilters s'appellerait 6 fois pour "Les pr" au lieu d'1 fois.</span></pre></div> <div class="sn"><span class="sni"></span><span><ic>clearTimeout</ic> sur un ID déjà expiré ne fait rien (pas d'erreur). Donc la première frappe fait <ic>clearTimeout(undefined)</ic> no-op, puis installe le timer. C'est un pattern parfaitement sûr.</span></div>
+</div>
+<hr> <!-- ══ RECAP ══ -->
+<div class="sec" id="recap"> <div class="slabel">04 — Récapitulatif</div> <h2>Les 7 fonctions et leurs rôles</h2>
 
-<!-- ══ RECAP ══ -->
-<div class="sec" id="recap">
-  <div class="slabel">04 — Récapitulatif</div>
-  <h2>Les 7 fonctions et leurs rôles</h2>
 <div class="diag">
-  <div class="dtitle">Les 7 fonctions de faq.js</div>
-  <table class="recap-table">
-    <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Rôle</th></tr></thead>
-    <tbody>
-      <tr><td class="fn-cell">initItems()</td><td>DOMContentLoaded</td><td>Pose height:0, overflow:hidden, attache click sur chaque question</td></tr>
-      <tr><td class="fn-cell">toggleItem(item)</td><td>Clic question</td><td>Si ouvert → closeItem() · Sinon → ferme tous, openItem()</td></tr>
-      <tr><td class="fn-cell">openItem(item)</td><td>appelée par toggleItem</td><td>auto→scrollHeight→0→getBCR→transition→auto (4 étapes)</td></tr>
-      <tr><td class="fn-cell">closeItem(item)</td><td>appelée par toggleItem</td><td>scrollHeight→0 avec transition · retire .active</td></tr>
-      <tr><td class="fn-cell">applyFilters()</td><td>Input recherche + clic catégorie</td><td>catOk && termOk → display '' ou 'none'</td></tr>
-      <tr><td class="fn-cell">debounce(fn, delay)</td><td>interne</td><td>clearTimeout + setTimeout — retarde applyFilters de 200ms</td></tr>
-      <tr><td class="fn-cell">initFilters()</td><td>DOMContentLoaded</td><td>Attache input + click avec debounce sur les contrôles</td></tr>
-    </tbody>
-  </table>
+  <div class="dtitle">Qui appelle qui — dépendances entre les 7 fonctions</div>
+  <div style="display:flex;flex-direction:column;gap:.3rem">
+    <div class="flow-row"><span class="chain-title">initItems()</span><span style="font-size:.78rem;color:var(--t2)">appelle getItems() · attache click → toggleItem()</span></div>
+    <div class="flow-row"><span class="chain-title">toggleItem()</span><span style="font-size:.78rem;color:var(--t2)">si ouvert → closeItem() · sinon → ferme les autres + openItem()</span></div>
+    <div class="flow-row"><span class="chain-title">openItem()</span><span style="font-size:.78rem;color:var(--t2)">height auto → scrollHeight → 0 → rAF → targetHeight (4 étapes)</span></div>
+    <div class="flow-row"><span class="chain-title">closeItem()</span><span style="font-size:.78rem;color:var(--t2)">scrollHeight → transition → height:0 · retire class active</span></div>
+    <div class="flow-row"><span class="chain-title">applyFilters()</span><span style="font-size:.78rem;color:var(--t2)">appelle getItems() · si item caché + ouvert → closeItem()</span></div>
+    <div class="flow-row"><span class="chain-title">searchInput</span><span style="font-size:.78rem;color:var(--t2)">debounce 200ms → applyFilters()</span></div>
+    <div class="flow-row"><span class="chain-title">categoryBtns</span><span style="font-size:.78rem;color:var(--t2)">clic → active btn → applyFilters()</span></div>
+  </div>
 </div>
+<div class="diag"> <div class="dtitle">Les 7 fonctions de faq.js</div> <table class="recap-table"> <thead><tr><th>Fonction</th><th>Déclencheur</th><th>Rôle</th></tr></thead> <tbody> <tr><td class="fn-cell">initItems()</td><td>DOMContentLoaded</td><td>Pose height:0, overflow:hidden, attache click sur chaque question</td></tr> <tr><td class="fn-cell">toggleItem(item)</td><td>Clic question</td><td>Si ouvert  closeItem() · Sinon  ferme tous, openItem()</td></tr> <tr><td class="fn-cell">openItem(item)</td><td>appelée par toggleItem</td><td>autoscrollHeight0getBCRtransitionauto (4 étapes)</td></tr> <tr><td class="fn-cell">closeItem(item)</td><td>appelée par toggleItem</td><td>scrollHeight0 avec transition · retire .active</td></tr> <tr><td class="fn-cell">applyFilters()</td><td>Input recherche + clic catégorie</td><td>catOk && termOk  display '' ou 'none'</td></tr> <tr><td class="fn-cell">debounce(fn, delay)</td><td>interne</td><td>clearTimeout + setTimeout — retarde applyFilters de 200ms</td></tr> <tr><td class="fn-cell">initFilters()</td><td>DOMContentLoaded</td><td>Attache input + click avec debounce sur les contrôles</td></tr> </tbody> </table>
+</div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);">Tableau des fonctions</div> <div style="display:flex;flex-direction:column;"> <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">getItems()</span><span style="color:var(--t2);">Retourne Array des .faq-item du DOM à l'instant t</span></div> <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">initItems()</span><span style="color:var(--t2);">Prépare les wrappers, state initial height:0, attache les clics</span></div> <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">openItem(item)</span><span style="color:var(--t2);">Mesure scrollHeight, anime de 0 vers hauteur réelle, repasse en auto</span></div> <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">closeItem(item)</span><span style="color:var(--t2);">Fige hauteur courante, anime vers 0, retire .active</span></div> <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">applyFilters()</span><span style="color:var(--t2);">Combine recherche + catégorie  affiche/cache chaque item</span></div> <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">searchInput 'input'</span><span style="color:var(--t2);">Debounce 200ms  applyFilters(). Escape  vide + blur + applyFilters()</span></div> <div style="display:grid;grid-template-columns:180px 1fr;padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">categoryBtns 'click'</span><span style="color:var(--t2);">Active le bouton cliqué, désactive les autres, applyFilters()</span></div> </div> </div> <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;margin-top:1rem;"> <b style="color:#5eead4;">Dépendances :</b> aucune. faq.js est entièrement autonome. Il ne lit pas PearTechDB ni localStorage.
+</div>
+</div> </div>
 
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);">Tableau des fonctions</div>
-    <div style="display:flex;flex-direction:column;">
-      <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">getItems()</span><span style="color:var(--t2);">Retourne Array des .faq-item du DOM à l'instant t</span></div>
-      <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">initItems()</span><span style="color:var(--t2);">Prépare les wrappers, state initial height:0, attache les clics</span></div>
-      <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">openItem(item)</span><span style="color:var(--t2);">Mesure scrollHeight, anime de 0 vers hauteur réelle, repasse en auto</span></div>
-      <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">closeItem(item)</span><span style="color:var(--t2);">Fige hauteur courante, anime vers 0, retire .active</span></div>
-      <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">applyFilters()</span><span style="color:var(--t2);">Combine recherche + catégorie → affiche/cache chaque item</span></div>
-      <div style="display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid rgba(35,40,53,.6);padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">searchInput 'input'</span><span style="color:var(--t2);">Debounce 200ms → applyFilters(). Escape → vide + blur + applyFilters()</span></div>
-      <div style="display:grid;grid-template-columns:180px 1fr;padding:.6rem 1.1rem;font-size:.82rem;"><span style="font-family:'JetBrains Mono',monospace;color:#5eead4;">categoryBtns 'click'</span><span style="color:var(--t2);">Active le bouton cliqué, désactive les autres, applyFilters()</span></div>
+<hr>
+<!-- GLOSSAIRE -->
+<div class="sec" id="glossaire">
+  <div class="slabel">Glossaire</div>
+  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <p>Définitions des termes importants rencontrés dans cette documentation.</p>
+  <div class="glos-grid">
+    <div class="glos-item">
+      <div class="glos-term">Document Object Model</div>
+      <div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">Immediately Invoked Function Expression</div>
+      <div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">DOMContentLoaded</div>
+      <div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">scrollHeight</div>
+      <div class="glos-def">Hauteur totale d'un élément incluant la partie non visible (défilable). Toujours >= hauteur visible. Utilisé pour mesurer la hauteur réelle d'un contenu avant de l'animer : <ic>height:0 → height:scrollHeight+'px'</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">debounce</div>
+      <div class="glos-def">Regroupe plusieurs appels rapides en un seul différé. Frappe 5 lettres en 200ms → 1 seule recherche lancée 300ms après la dernière frappe. Implémenté avec <ic>clearTimeout(timer) + timer = setTimeout(fn, 300)</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">dataset</div>
+      <div class="glos-def">Interface qui expose les attributs <ic>data-*</ic> d'un élément. <ic>el.dataset.productId</ic> lit <ic>data-product-id</ic>. Permet de stocker des données métier directement dans le HTML sans variables globales. La conversion camelCase est automatique : <ic>data-product-id</ic> → <ic>dataset.productId</ic>.</div>
+    </div>
+    <div class="glos-item">
+      <div class="glos-term">classList</div>
+      <div class="glos-def">Interface de manipulation des classes CSS. <ic>add()</ic>, <ic>remove()</ic>, <ic>toggle()</ic>, <ic>contains()</ic>. Plus fiable que modifier <ic>className</ic> comme une string. <ic>toggle('active', condition)</ic> ajoute ou retire selon un booléen.</div>
     </div>
   </div>
-  <div style="background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;margin-top:1rem;">
-    <b style="color:#5eead4;">Dépendances :</b> aucune. faq.js est entièrement autonome. Il ne lit pas PearTechDB ni localStorage.
-  </div>
-</div>
-
 </div>
 </body>
 </html>
