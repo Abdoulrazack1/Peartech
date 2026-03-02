@@ -1,6 +1,4 @@
-/* ============================================
-   page_favoris.css – Page favoris - PearTech
-   ============================================ */
+/* page_favoris.css */
 
 /* ── Fil d'Ariane ── */
 .breadcrumb {
@@ -351,9 +349,7 @@
     to   { transform: translateY(0);    opacity: 1; }
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
 @media (max-width: 1200px) {
     .favoris-grid {

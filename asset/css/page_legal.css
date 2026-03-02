@@ -1,6 +1,4 @@
-/* ============================================
-   page_legal.css - Pages légales (CGU, CGV, Mentions)
-   ============================================ */
+/* page_legal.css */
 
 /* ── Breadcrumb ── */
 .breadcrumb {
@@ -106,9 +104,7 @@
     line-height: 1.6;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
 @media (max-width: 768px) {
     .legal-content {

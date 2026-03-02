@@ -1,6 +1,4 @@
-/* ============================================
-   Page catalogue - PearTech
-   ============================================ */
+/* Page catalogue  */
 
 .catalogue-layout {
     display: grid;
@@ -553,9 +551,7 @@
     margin: 0 0.3rem;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
 /* Tablette large */
 @media (max-width: 1200px) {

@@ -629,9 +629,7 @@ html {
     margin-top: 2rem;   /* Espace au-dessus */
 }
 
-/* ══════════════════════════════════════════
-   13. FIL D'ARIANE (breadcrumb)
-   ══════════════════════════════════════════ */
+/* 13. FIL D'ARIANE (breadcrumb) */
 .breadcrumb {
     display: flex;        /* Éléments sur une ligne */
     align-items: center;  /* Centrage vertical */

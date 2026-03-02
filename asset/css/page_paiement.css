@@ -1,6 +1,4 @@
-/* ============================================
-   page_paiement.css - Page de paiement - PearTech
-   ============================================ */
+/* page_paiement.css */
 
 /* ── Titre de page ── */
 .page-title {
@@ -485,9 +483,7 @@
     flex-wrap: wrap;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
 @media (max-width: 1024px) {
     .checkout-layout {

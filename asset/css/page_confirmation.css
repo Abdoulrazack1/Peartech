@@ -1,6 +1,4 @@
-/* ============================================
-   page_confirmation.css - Confirmation de commande
-   ============================================ */
+/* page_confirmation.css */
 
 /* ── En-tête de confirmation ── */
 .confirmation-header {
@@ -191,9 +189,7 @@
     padding: 0.9rem 1.2rem;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
 @media (max-width: 1024px) {
     .confirmation-layout {

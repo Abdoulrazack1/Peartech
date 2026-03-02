@@ -1,6 +1,4 @@
-/* ============================================
-   NovaCompute - Design System
-   ============================================ */
+/* Page Accueil */
 
 /* VARIABLES CSS - Design System avec Dark/Light Mode */
 :root {
@@ -83,9 +81,7 @@ a {
     padding: 0 var(--spacing-md);
 }
 
-/* ============================================
-   ACCESSIBILITÉ - Lien d'évitement
-   ============================================ */
+/* ACCESSIBILITÉ - Lien d'évitement */
 
 .skip-link {
     position: absolute;
@@ -128,9 +124,7 @@ a {
     border-radius: 4px;
 }
 
-/* ============================================
-   HEADER
-   ============================================ */
+/* HEADER */
 
 .header {
     background: var(--secondary);
@@ -425,9 +419,7 @@ a {
     display: none;
 }
 
-/* ============================================
-   DROPDOWN MENU
-   ============================================ */
+/* DROPDOWN MENU */
 
 .dropdown-menu {
     position: absolute;
@@ -550,9 +542,7 @@ a {
     color: var(--primary-hover);
 }
 
-/* ============================================
-   HERO SECTION
-   ============================================ */
+/* HERO SECTION */
 
 .hero-section {
     padding: var(--spacing-xl) 0;
@@ -671,9 +661,7 @@ a {
     color: var(--text-primary);
 }
 
-/* ============================================
-   CAROUSEL CSS PUR
-   ============================================ */
+/* CAROUSEL  */
 
 .hero-right {
     position: relative;
@@ -865,9 +853,7 @@ a {
     transform: translateX(-4px);
 }
 
-/* ============================================
-   CATEGORIES SECTION
-   ============================================ */
+/* CATEGORIES SECTION */
 
 .categories-section,
 .products-section,
@@ -957,9 +943,7 @@ a {
     color: var(--text-secondary);
 }
 
-/* ============================================
-   PRODUCTS SECTION
-   ============================================ */
+/*PRODUCTS SECTION */
 
 .filter-tabs {
     display: flex;
@@ -1279,9 +1263,7 @@ a {
     font-size: 0.9rem;
 }
 
-/* ============================================
-   SERVICES SECTION
-   ============================================ */
+/* SERVICES SECTION */
 
 .services-grid {
     display: grid;
@@ -1316,9 +1298,7 @@ a {
     font-size: 0.9rem;
 }
 
-/* ============================================
-   NEWSLETTER SECTION
-   ============================================ */
+/* NEWSLETTER SECTION */
 
 .newsletter-section {
     padding: var(--spacing-xl) 0;
@@ -1358,9 +1338,7 @@ a {
     border-color: var(--primary);
 }
 
-/* ============================================
-   FOOTER
-   ============================================ */
+/* FOOTER */
 
 .footer {
     background: var(--secondary);
@@ -1412,9 +1390,7 @@ a {
     font-size: 0.8rem;
 }
 
-/* ============================================
-   BREADCRUMB - Global (toutes les pages)
-   ============================================ */
+/* BREADCRUMB - Global (toutes les pages) */
 
 .breadcrumb {
     padding: 1rem 0;
@@ -1440,9 +1416,7 @@ a {
     margin: 0 0.3rem;
 }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+/* RESPONSIVE */
 
 /* Burger Button (caché par défaut) */
 .burger-btn {
@@ -1698,7 +1672,7 @@ a {
     font-size: 1.5rem;
 }
 
-/* Media Queries - Optimisées */
+/* Media Queries */
 @media (max-width: 1024px) {
     .container { padding: 0 1.5rem; }
     .hero-content { grid-template-columns: 1fr; gap: 2rem; }
