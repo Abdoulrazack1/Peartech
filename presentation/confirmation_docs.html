@@ -2,144 +2,1098 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Page de confirmation de commande — lit les données depuis sessionStorage, affiche le récap, vide le panier, gère le fallback si données absentes.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Documentation — confirmation.js">
+<meta property="og:description" content="Page de confirmation de commande — lit les données depuis sessionStorage, affiche le récap, vide le panier, gère le fallback si données absentes.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — confirmation.js</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#34d399;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
-.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-nav a:hover{background:var(--bg3);color:var(--t);}
-.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-.hero h1 span{color:var(--a);}
-.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+<style>/* ═══════════════════════════════════════════════════════════════════
+   PEARTECH DOCS — CSS MASTER (réécriture complète)
+   Couvre les 268 classes utilisées dans les 20 fichiers
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── VARIABLES ──────────────────────────────────────────────────── */
+:root {
+  --bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
+  --accent:#f5c542; --accent2:#ff6b6b; --accent3:#56d19e;
+  --accent4:#4f8eff; --accent5:#c084fc;
+  --text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+  /* Alias courts utilisés dans les styles inline générés */
+  --t:var(--text); --t2:var(--text2); --t3:var(--text3);
+  --a:var(--accent);
+}
+
+/* ── RESET & BASE ───────────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+/* ── NAV ────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--accent);white-space:nowrap;}
+.nav-links{display:flex;gap:.15rem;flex-wrap:wrap;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+.nav-links a:hover,.nav-links a.active{background:var(--bg3);color:var(--text);}
+.nav-dropdown,.dropdown-menu,.mobile-menu,.burger-btn{display:none;}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+.page{max-width:1040px;margin:0 auto;padding:80px 1.5rem 5rem;}
+
+/* ── HERO ───────────────────────────────────────────────────────── */
+.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.28rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1.2rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
+.hero h1 span{color:var(--accent);}
+.hero p{color:var(--text2);font-size:1rem;max-width:640px;line-height:1.8;}
+.file-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.38rem 1rem;border-radius:8px;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.35rem .9rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0;}
+
+/* ── SECTION ────────────────────────────────────────────────────── */
+.section,.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.section h2,.sec h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.section h3,.sec h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+.section h4,.sec h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
+.section p,.sec p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
+.section p b,.sec p b{color:var(--text);font-weight:600;}
+.section p code,.sec p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
 .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);}
-.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#6ee7b7;white-space:nowrap;}
-.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-.vc{display:flex;flex-direction:column;align-items:center;}
-.vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
-.vn.w{max-width:720px;}
-.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-.ca{background:rgba(52,211,153,.11);border:1px solid rgba(52,211,153,.4);color:#6ee7b7;}
-.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-.cg{background:rgba(52,211,153,.11);border:1px solid rgba(52,211,153,.4);color:#6ee7b7;}
-.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-.fc .vn{width:100%;max-width:100%;}
-.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-.flr{background:rgba(255,107,107,.15);color:#ff9090;}
-.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-.box .bi{font-size:1.25rem;flex-shrink:0;}
-.box.info{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);color:#6ee7b7;}
+.nl{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);margin-bottom:.4rem;}
+.sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800;background:var(--bg3);border:1px solid var(--border);color:var(--text3);margin-right:.5rem;flex-shrink:0;vertical-align:middle;}
+
+/* ── INLINE CODE (balise personnalisée) ─────────────────────────── */
+
+/* ── CODE BLOCK ─────────────────────────────────────────────────── */
+.code-block{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.code-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent4),var(--accent5),transparent);border-radius:12px 12px 0 0;opacity:.5;}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+.cb-lang{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);}
+/* Coloration syntaxique */
+.kw{color:#c084fc}
+
+/* ── COLORATION SYNTAXIQUE — toutes les classes ─────────────────── */
+/* Classes du coloriseur manuel (sections annotées) */
+.cm  { color: #555e74; font-style: italic; }   /* commentaire alt    */
+.str { color: #7ee8b8; }                        /* string alt         */
+.vr  { color: #ffb3a0; }                        /* variable           */
+/* Classes du coloriseur automatique (code source complet) */
+.s   { color: #7ee8b8; }                        /* string             */
+.bi  { color: #56d19e; font-weight: 600; }      /* builtin            */
+.n   { color: #f7d97a; }                        /* nombre             */
+.rx  { color: #ff9090; }                        /* regex              */
+
+/* ── BARRE DE PROGRESSION DE LECTURE ─────────────────────────────── */
+#read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--accent4), var(--accent5), var(--accent3));
+  z-index: 200;
+  transition: width .1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── BOUTON COPIER ────────────────────────────────────────────────── */
+.copy-btn {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  padding: .22rem .6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  transition: all .18s;
+  z-index: 2;
+  white-space: nowrap;
+}
+.copy-btn:hover {
+  background: rgba(79,142,255,.12);
+  border-color: rgba(79,142,255,.4);
+  color: #7eb5ff;
+}
+.copy-btn.copied {
+  background: rgba(86,209,158,.12);
+  border-color: rgba(86,209,158,.4);
+  color: #7ee8b8;
+}
+.copy-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+/* ── CODE-BLOCK INLINE — mini barre titre ────────────────────────── */
+.code-block {
+  font-size: .81rem; /* légèrement augmenté */
+}
+.code-block pre {
+  font-size: .81rem;
+}
+
+/* ── SRC-BLOCK — bouton copier dans le header ────────────────────── */
+.src-header .copy-btn {
+  position: static;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── NAV ACTIVE ──────────────────────────────────────────────────── */
+.nav-links a.active {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+/* ── COLORATION SYNTAXIQUE — classes complètes ──────────────────── */
+.s  { color: #7ee8b8; }                          /* strings          */
+.bi { color: #56d19e; font-weight: 600; }        /* builtins         */
+.n  { color: #f7d97a; }                          /* numbers          */
+.rx { color: #ff9090; }                          /* regex            */
+
+/* ── BLOC CODE COMPLET — style IDE ──────────────────────────────── */
+.src-block {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  position: relative;
+}
+.src-header {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .65rem 1.2rem;
+  background: rgba(255,255,255,.03);
+  border-bottom: 1px solid var(--border);
+}
+.src-dots { display: flex; gap: .38rem; }
+.src-dot  { width: 11px; height: 11px; border-radius: 50%; }
+.src-dot.r { background: #ff5f57; }
+.src-dot.y { background: #ffbd2e; }
+.src-dot.g { background: #27c93f; }
+.src-fname {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: var(--text2);
+  flex: 1;
+  text-align: center;
+  margin-right: 3rem;
+}
+.src-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  color: var(--text3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .18rem .6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.src-body {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: 520px;
+  transition: max-height .4s ease;
+  position: relative;
+}
+.src-body.expanded { max-height: none; }
+.src-body pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .77rem;
+  line-height: 1.8;
+  padding: 1rem 0;
+  counter-reset: ln;
+  white-space: pre;
+  tab-size: 2;
+}
+.ln {
+  display: block;
+  padding: 0 1.2rem 0 0;
+  white-space: pre;
+}
+.ln:hover { background: rgba(255,255,255,.025); }
+.ln::before {
+  counter-increment: ln;
+  content: counter(ln);
+  display: inline-block;
+  width: 3.2rem;
+  text-align: right;
+  padding-right: 1.2rem;
+  color: var(--text3);
+  font-size: .7rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+.src-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, var(--code));
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.src-body.expanded + .src-fade { opacity: 0; }
+.src-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .65rem;
+  background: rgba(255,255,255,.025);
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.src-expand-btn:hover { background: rgba(255,255,255,.05); color: var(--text); }
+
+/* ── BANDEAU DE STATS FICHIER ──────────────────────────────────── */
+.file-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: .8rem;
+  margin: 1.5rem 0;
+}
+.fstat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.fstat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.fstat-label {
+  font-size: .72rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── PATTERN TAG ────────────────────────────────────────────────── */
+.pattern-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem 1rem;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  margin: .3rem .2rem;
+  border: 1px solid transparent;
+}
+.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
+.cb{background:var(--bg3);border-radius:4px;padding:.05rem .35rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#7eb5ff;}
+
+/* ── COULEURS NŒUDS (partagées : vnode, state, kbox, schema-card…) */
+.c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+/* Variantes courtes (utilisées en inline et via vn/kbox) */
+.ca{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cb.c{background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.cg{background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cr{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cp{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+.cy{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.co{background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;}
+.ct{background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.35);color:#5eead4;}
+.cbl{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:#7dd3fc;}
+.cpi{background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.35);color:#f9a8d4;}
+.cm{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.25);color:var(--text2);}
+.fc{background:rgba(163,230,53,.12);border:1px solid rgba(163,230,53,.35);color:#bef264;}
+.w{max-width:680px;}
+.wide{max-width:720px!important;}
+
+/* ── CALLOUT ────────────────────────────────────────────────────── */
+.callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
+.callout b{font-weight:700;}
+.callout 
+/* Modificateurs callout */
+.callout.info,.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+.callout.warn,.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.success,.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.danger,.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.callout.beginner,.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.callout.analogy,.analogy{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.ok,.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.ana,.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+
+/* ── BOX (callout compact sans icône obligatoire) ───────────────── */
+.box{display:flex;gap:.8rem;padding:.9rem 1.1rem;border-radius:11px;margin:1rem 0;font-size:.86rem;line-height:1.75;}
+.box.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
 .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-.box b{font-weight:700;}
-.box ic{background:rgba(255,255,255,.09);border:none;}
-.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
-.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-.kw{color:#c084fc}.fn{color:#6ee7b7}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.83rem;}
-.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
-.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--t2);line-height:1.65;}
-.tbl tr:last-child td{border-bottom:none;}
-.tc{font-family:'JetBrains Mono',monospace;color:#6ee7b7;font-size:.76rem;}
-.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-.sni{font-size:.95rem;flex-shrink:0;}
-hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-@media(max-width:600px){.fork.f2{grid-template-columns:1fr;}}
-/* ─── CARTE INTERNE ─── */
+.box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+.box.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.bi{font-size:1.1rem;flex-shrink:0;margin-top:.05rem;}
+
+/* ── SIDE NOTE ──────────────────────────────────────────────────── */
+.sn{display:flex;align-items:flex-start;gap:.7rem;padding:.75rem 1rem;border-radius:9px;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;margin:.8rem 0;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+.side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
+.side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+/* ── GOTCHA / PROTIP ────────────────────────────────────────────── */
+.gotcha{background:rgba(255,107,107,.05);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;}
+.gotcha-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#ff9090;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;}
+.gotcha-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.gotcha-body 
+.protip{background:linear-gradient(135deg,rgba(245,197,66,.07),rgba(86,209,158,.05));border:1px solid rgba(245,197,66,.25);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;display:flex;gap:.8rem;align-items:flex-start;}
+.protip-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;color:var(--accent);background:rgba(245,197,66,.15);padding:.2rem .55rem;border-radius:5px;letter-spacing:.08em;white-space:nowrap;margin-top:.15rem;flex-shrink:0;}
+.protip div{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.protip 
+
+/* ── DIAGRAMME (container générique) ───────────────────────────── */
+.diagram,.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.5rem 0;overflow-x:auto;}
+.diagram-title,.dtitle{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.4rem;}
+
+/* ── CHAÎNE VERTICALE (vchain / vnode / varrow) ─────────────────── */
+.vchain{display:flex;flex-direction:column;align-items:center;}
+.vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vnode.wide,.vnode.w{max-width:700px;}
+.varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
+.varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
+/* Chaîne verticale simplifiée (vc/vn/va/val) */
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{padding:.65rem 1.2rem;border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:.77rem;font-weight:600;text-align:center;line-height:1.5;width:100%;max-width:560px;word-break:break-word;}
+.vn.w,.vn.wide{max-width:680px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--text3);font-size:1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:center;}
+
+/* ── FORK (bifurcation) ─────────────────────────────────────────── */
+.fork{display:grid;gap:1rem;width:100%;max-width:700px;}
+.fork.f2,.f2{grid-template-columns:1fr 1fr;}
+.fork.f3,.f3{grid-template-columns:1fr 1fr 1fr;}
+.fork.f4,.f4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
+.fork-col .vnode,.fork-col .vn{max-width:100%;width:100%;}
+.fork-col .varrow,.fork-col .va{width:100%;}
+.fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
+.fl{display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;}
+.fl-green,.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.fl-red,.flr  {background:rgba(255,107,107,.15);color:#ff9090;}
+.flo          {background:rgba(251,146,60,.15);color:#fdba74;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+
+/* ── FLOW (boîtes de flux horizontal) ───────────────────────────── */
+.flow-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.4rem 0;}
+.flow-box{padding:.5rem .9rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.77rem;border:1px solid var(--border);background:var(--bg2);}
+.flow-arr{color:var(--text3);font-size:.9rem;flex-shrink:0;}
+
+/* ── TIMELINE ───────────────────────────────────────────────────── */
+.timeline{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+.timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:1.8rem;}
+.tl-dot{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+.tl-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.tl-step{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);}
+.tl-title{font-size:.95rem;font-weight:700;}
+.tl-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.tl-body 
+
+/* ── SÉQUENCE ───────────────────────────────────────────────────── */
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--text3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--text2);line-height:1.65;}
+.seq-arrow{color:var(--text3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+
+/* ── STATE MACHINE ──────────────────────────────────────────────── */
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;margin:1rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--text3);}
+.trans-line{width:28px;height:1px;background:var(--text3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--text3);text-align:center;max-width:70px;line-height:1.3;}
+
+/* ── KBOX GRID ──────────────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+/* Les couleurs viennent de .c-blue, .c-green etc. appliquées en plus */
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--text2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+
+/* ── SP-ROW (barres de progression) ────────────────────────────── */
+.sp-row{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.sp-step{display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+
+/* ── OBJ SCHEMA ─────────────────────────────────────────────────── */
+.obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
+.obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
+.obj-row:last-child{border-bottom:none;}
+.obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
+.obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
+.obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
+.obj-req {font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.65rem;min-width:14px;}
+/* Variante ancienne (or/ok2/oty/od/oreq) */
+.osc{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;margin:1rem 0;}
+.ost{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;}
+.or{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:1px solid rgba(35,40,53,.7);flex-wrap:wrap;}
+.or:last-child{border-bottom:none;}
+.ok2{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.77rem;min-width:140px;font-weight:600;}
+.oty{font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:.7rem;min-width:70px;}
+.od{font-size:.8rem;color:var(--text2);flex:1;line-height:1.6;min-width:180px;}
+.oreq{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent2);min-width:14px;}
+
+/* ── SCHEMA GRID ────────────────────────────────────────────────── */
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
+.schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
+.schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.schema-card.yellow::before{background:linear-gradient(to right,var(--accent),transparent);}
+.schema-card.green::before {background:linear-gradient(to right,var(--accent3),transparent);}
+.schema-card.blue::before  {background:linear-gradient(to right,var(--accent4),transparent);}
+.schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
+.schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
+/* Couleur de teinte légère par card */
+.schema-card.yellow{border-color:rgba(245,197,66,.2);}
+.schema-card.green {border-color:rgba(86,209,158,.2);}
+.schema-card.blue  {border-color:rgba(79,142,255,.2);}
+.schema-card.red   {border-color:rgba(255,107,107,.2);}
+.schema-card.purple{border-color:rgba(192,132,252,.2);}
+.schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
+.schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.schema-card 
+/* Couleur tags standalone */
+.yellow{color:#f7d97a;}.green{color:#7ee8b8;}.blue{color:#7eb5ff;}.red{color:#ff9090;}.purple{color:#d3a8ff;}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
+.tag-yellow{background:rgba(245,197,66,.15);color:var(--accent);}
+.tag-green {background:rgba(86,209,158,.15);color:var(--accent3);}
+.tag-blue  {background:rgba(79,142,255,.15);color:var(--accent4);}
+.tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
+
+/* ── DATA TABLE ─────────────────────────────────────────────────── */
+.data-table,.recap-table,.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
+.data-table th,.recap-table th,.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.data-table td,.recap-table td,.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
+.data-table tr:last-child td,.recap-table tr:last-child td,.tbl tr:last-child td{border-bottom:none;}
+.data-table tr:hover td,.tbl tr:hover td{background:rgba(255,255,255,.015);}
+.td-code,.fn-cell,.tc{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+.td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
+/* Tableau (tc-card) — carte table */
+.tc-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.2rem;margin:.6rem 0;}
+.tc-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.6rem;}
+
+/* ── TERM BOX ───────────────────────────────────────────────────── */
+.term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
+.term-row:last-child{border-bottom:none;}
+.term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
+.term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
+
+/* ── GLOSSAIRE ──────────────────────────────────────────────────── */
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin:1.2rem 0;}
+.glos-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;}
+.glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.4rem;}
+.glos-def {font-size:.83rem;color:var(--text2);line-height:1.65;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+/* Variantes (grow/gterm/gdef) */
+.grow{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;margin:.5rem 0;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.35rem;}
+.gdef{font-size:.83rem;color:var(--text2);line-height:1.65;}
+
+/* ── TABS DEMO ──────────────────────────────────────────────────── */
+.tabs-demo{display:flex;gap:.5rem;flex-wrap:wrap;padding:1.2rem;background:var(--bg3);border-radius:12px;margin:1rem 0;border:1px solid var(--border);}
+.tab-demo{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.4rem .9rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:default;}
+.tab-demo.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.tab{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.35rem .8rem;border-radius:7px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);display:inline-block;margin:.15rem;}
+.tab.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.active{opacity:1;}
+
+/* ── CARTE (colonne 3) ──────────────────────────────────────────── */
 .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
 .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
 .carte-col{display:flex;flex-direction:column;gap:.5rem;}
 .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-.carte-item b{color:var(--t);font-weight:700;}
-.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-/* ─── EXTRA SCHEMAS ─── */
-.schema{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
-.schema-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.ls-block{border-radius:10px;padding:.75rem 1rem;margin-bottom:.5rem;font-family:'JetBrains Mono',monospace;font-size:.71rem;}
-.ls-key{font-weight:700;margin-bottom:.25rem;}
-.ls-val{opacity:.75;font-size:.65rem;line-height:1.6;word-break:break-all;}
-.h-bar{height:6px;border-radius:3px;margin:.2rem 0;}
-.state-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap;}
-.state-node{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.35rem .9rem;border-radius:8px;text-align:center;min-width:90px;}
-.state-arrow{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-.state-label{font-size:.68rem;color:var(--t3);flex-shrink:0;}
-.timing-wrap{display:flex;flex-direction:column;gap:.3rem;}
-.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
-.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-.timing-bar{border-radius:5px;padding:.28rem .6rem;font-size:.68rem;line-height:1.4;}
-.chain-seq{display:flex;flex-direction:column;gap:.3rem;}
-.cs-row{display:grid;grid-template-columns:24px 160px 1fr;gap:.5rem;align-items:start;}
-.cs-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.35rem;}
-.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.25rem .6rem;border-radius:6px;text-align:center;}
-.cs-desc{font-size:.76rem;color:var(--t2);line-height:1.6;padding:.25rem 0;}
-.cs-arrow{color:var(--t3);font-size:.75rem;padding-left:2rem;display:block;margin:.05rem 0;}
-.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-.cmp-box{border-radius:11px;padding:1rem;}
-.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;margin-bottom:.6rem;}
-.cmp-item{font-size:.77rem;color:var(--t2);line-height:1.7;padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.cmp-item:last-child{border-bottom:none;}
-@media(max-width:600px){.compare-grid{grid-template-columns:1fr;}.timing-row{grid-template-columns:55px 1fr;}}
-/* pass3 */
-.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-.recap-table tr:hover td{background:rgba(255,255,255,.02);}
-.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-.mini-box{border-radius:9px;padding:.75rem .9rem;}
-.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+.carte-item{font-size:.76rem;color:var(--text2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--text);font-weight:700;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--text3);font-size:1.1rem;}
 
-  .glos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.75rem;margin-top:.8rem}
-  .glos-item{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--a);border-radius:6px;padding:.75rem 1rem}
-  .glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--a);margin-bottom:.35rem}
-  .glos-def{font-size:.78rem;color:var(--t2);line-height:1.65}
-  .glos-def ic{font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--bg3);border:1px solid var(--border);padding:.02rem .3rem;border-radius:3px;color:#bef264}
-  </style>
+/* ── SCHEMA 2 ───────────────────────────────────────────────────── */
+.schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t::after{content:'';flex:1;height:1px;background:var(--border);}
+.pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
+.pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
+.row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
+.arr{color:var(--text3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);}
+
+/* ── ORDRE DU CODE ──────────────────────────────────────────────── */
+.ordre-seq{display:flex;flex-direction:column;margin:1.8rem 0;position:relative;}
+.ordre-seq::before{content:'';position:absolute;left:20px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,var(--accent) 0%,rgba(132,204,22,.1) 100%);z-index:0;}
+.os-bloc{display:flex;gap:1rem;align-items:flex-start;margin-bottom:.5rem;position:relative;z-index:1;}
+.os-num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:800;color:var(--accent);box-shadow:0 0 0 4px var(--bg);}
+.os-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:.3rem;}
+.os-head{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.os-pill{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .65rem;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+/* Variantes os-pill */
+.os-pill.init,.init{background:rgba(132,204,22,.15);color:#bef264;border:1px solid rgba(132,204,22,.4);}
+.os-pill.data,.data{background:rgba(56,189,248,.12);color:#7dd3fc;border:1px solid rgba(56,189,248,.35);}
+.os-pill.util,.util{background:rgba(245,197,66,.12);color:#fde68a;border:1px solid rgba(245,197,66,.35);}
+.os-pill.dom,.dom{background:rgba(192,132,252,.12);color:#d3a8ff;border:1px solid rgba(192,132,252,.35);}
+.os-pill.event,.event{background:rgba(251,146,60,.12);color:#fdba74;border:1px solid rgba(251,146,60,.35);}
+.os-pill.guard,.guard{background:rgba(244,63,94,.12);color:#fda4af;border:1px solid rgba(244,63,94,.35);}
+.os-pill.expose,.expose{background:rgba(86,209,158,.12);color:#7ee8b8;border:1px solid rgba(86,209,158,.35);}
+.os-pill.render,.render{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.35);}
+.os-name{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:700;color:var(--text);}
+.os-body{padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.65rem;}
+.os-why{font-size:.84rem;color:var(--text2);line-height:1.85;}
+.os-why b{color:var(--text);font-weight:700;}
+.os-why ic,.os-dep ic,.os-err 
+.os-err 
+.os-dep 
+.os-err{display:flex;gap:.6rem;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.22);border-left:3px solid rgba(244,63,94,.6);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#fda4af;line-height:1.7;}
+.os-err::before{content:'✗';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-dep{display:flex;gap:.6rem;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.2);border-left:3px solid rgba(56,189,248,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#7dd3fc;line-height:1.7;}
+.os-dep::before{content:'→';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-rule{display:flex;gap:.6rem;background:rgba(132,204,22,.06);border:1px solid rgba(132,204,22,.2);border-left:3px solid rgba(132,204,22,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#bef264;line-height:1.7;}
+.os-rule::before{content:'✓';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-arrow{padding:.15rem 0 .15rem 1.4rem;font-size:.69rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.os-synthese{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:14px;padding:1.3rem 1.5rem;margin-top:2rem;}
+.os-synthese-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:800;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.os-synthese-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.os-synthese p{font-size:.85rem;color:var(--text2);line-height:1.85;margin:0;}
+.os-synthese p b{color:var(--text);}
+.os-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.6rem;margin-top:1rem;}
+.os-grid-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;}
+.og-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent);font-weight:800;margin-bottom:.3rem;}
+.og-name{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.2rem;}
+.og-why{font-size:.7rem;color:var(--text3);line-height:1.55;}
+
+/* ── DIFF VIEW ──────────────────────────────────────────────────── */
+.diff-view{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.2rem 0;}
+.diff-col{border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.diff-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.45rem 1rem;letter-spacing:.07em;text-transform:uppercase;}
+.diff-label-bad {background:rgba(255,107,107,.12);color:#ff9090;}
+.diff-label-good{background:rgba(86,209,158,.12);color:#7ee8b8;}
+.diff-col pre{font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.75;padding:.9rem 1rem;background:var(--code);white-space:pre-wrap;word-break:break-word;}
+.diff-note{font-size:.82rem;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.65rem 1rem;margin-top:.5rem;line-height:1.7;}
+.diff-bad {color:#ff9090;}.diff-good{color:#7ee8b8;}
+
+/* ── METRIC ROW ─────────────────────────────────────────────────── */
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.75rem;margin:1.3rem 0;}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;text-align:center;}
+.metric-val{font-family:'JetBrains Mono',monospace;font-size:1.65rem;font-weight:800;line-height:1;margin-bottom:.35rem;}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;}
+
+/* ── TIMING VIZ ─────────────────────────────────────────────────── */
+.timing-wrap{margin:1.2rem 0;display:flex;flex-direction:column;gap:.35rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.timing-bar{border-radius:6px;padding:.3rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.4;}
+
+/* ── DÉBOUNCE VIZ ───────────────────────────────────────────────── */
+.debounce-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.dbv-scenario{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.dbv-track{display:flex;flex-direction:column;gap:.4rem;}
+.dbv-line{display:flex;align-items:center;gap:.5rem;}
+.dbv-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);min-width:55px;}
+.dbv-window{flex:1;position:relative;height:28px;background:rgba(139,147,168,.05);border-radius:6px;overflow:hidden;}
+.dbv-dot{position:absolute;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;}
+.dbv-event{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 .4rem;font-size:.6rem;font-family:'JetBrains Mono',monospace;border-radius:4px;}
+.dbv-top{background:rgba(255,107,107,.25);color:#ff9090;}
+.dbv-bot{background:rgba(86,209,158,.25);color:#7ee8b8;}
+
+/* ── CHAIN SEQ (héritage) ───────────────────────────────────────── */
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.cs-row{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;flex-wrap:wrap;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--text3);}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0;}
+.cs-desc{font-size:.8rem;color:var(--text2);line-height:1.65;flex:1;}
+.cs-arrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text3);padding-left:1.8rem;display:block;margin:.1rem 0;}
+.chain-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--text3);width:20px;text-align:right;flex-shrink:0;}
+
+/* ── DIVERS COMPOSANTS ──────────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0;}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0;}
+.cmp-box{border-radius:12px;padding:1.1rem 1.2rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;margin-bottom:.7rem;}
+.cmp-item{font-size:.82rem;color:var(--text2);line-height:1.65;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+.effect-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin:1rem 0;}
+.effect-card{border-radius:12px;padding:1rem 1.1rem;}
+.effect-icon{font-size:1.3rem;margin-bottom:.5rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;margin-bottom:.3rem;}
+.effect-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.mini-box{border-radius:10px;padding:.9rem 1rem;margin:.5rem 0;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.5rem;}
+.mini-item{font-size:.8rem;color:var(--text2);line-height:1.65;padding:.15rem 0;}
+.key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1rem 0;}
+.key-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;}
+.key-badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.18rem .5rem;border-radius:5px;margin-bottom:.5rem;display:inline-block;}
+.key-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;}
+.slide{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin:.5rem 0;}
+.def{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin:.6rem 0;}
+.prow{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid rgba(35,40,53,.6);flex-wrap:wrap;}
+.prow:last-child{border-bottom:none;}
+.pnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:800;flex-shrink:0;}
+.pcond{font-family:'JetBrains Mono',monospace;font-size:.77rem;min-width:200px;flex:1;color:var(--text);}
+.pbadge{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.15rem .5rem;border-radius:5px;white-space:nowrap;flex-shrink:0;}
+.pnote{font-size:.78rem;color:var(--text3);font-style:italic;min-width:100%;padding-top:.2rem;}
+.prio{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin:1rem 0;}
+.active-filter{font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(245,197,66,.15);color:var(--accent);border:1px solid rgba(245,197,66,.3);padding:.2rem .6rem;border-radius:5px;display:inline-flex;align-items:center;gap:.3rem;margin:.2rem;}
+.product-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+.fav-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.6rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text);z-index:1000;}
+.btn-fav{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.3rem .7rem;border-radius:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;}
+
+/* ── INLINE HIGHLIGHTS ──────────────────────────────────────────── */
+.hl-y{background:rgba(245,197,66,.15);color:#f7d97a;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-g{background:rgba(86,209,158,.15);color:#7ee8b8;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-b{background:rgba(79,142,255,.15);color:#7eb5ff;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-r{background:rgba(255,107,107,.15);color:#ff9090;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+
+/* ── FILE STATS ─────────────────────────────────────────────────── */
+.file-stats{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0;}
+.fs-pill{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.3rem .75rem;border-radius:100px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);}
+.fs-pill b{color:var(--text);}
+.complexity{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;margin-left:.6rem;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── BADGES PRODUIT ─────────────────────────────────────────────── */
+.badge-new  {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(86,209,158,.2);color:#7ee8b8;border:1px solid rgba(86,209,158,.4);}
+.badge-bs   {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(255,107,107,.2);color:#ff9090;border:1px solid rgba(255,107,107,.4);}
+.badge-promo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(245,197,66,.2);color:#f7d97a;border:1px solid rgba(245,197,66,.4);}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .fork.f2,.f2{grid-template-columns:1fr;}
+  .fork.f3,.f3{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .diff-view{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .carte-body{grid-template-columns:1fr;}
+  .carte-arrow{display:none;}
+  nav{padding:0 1rem;}
+  .schema-grid{grid-template-columns:1fr;}
+  .compare-grid,.effect-grid,.key-grid,.os-grid{grid-template-columns:1fr;}
+  .timing-row{grid-template-columns:60px 1fr;}
+  .or{flex-direction:column;}
+  .prow{flex-direction:column;}
+}
+@media(max-width:480px){
+  .page{padding:70px 1rem 3rem;}
+  .obj-row{flex-direction:column;}
+  .term-row{flex-direction:column;}
+}
+
+/* ── NAV AMÉLIORÉ ───────────────────────────────────────────────── */
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;color:var(--text2);white-space:nowrap;text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;flex-shrink:0;}
+.nav-logo:hover{background:var(--bg3);color:var(--text);}
+.nav-file{flex-shrink:0;}
+.nav-links{display:flex;gap:.1rem;flex-wrap:wrap;flex:1;overflow:hidden;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text2);text-decoration:none;padding:.28rem .55rem;border-radius:5px;transition:all .15s;white-space:nowrap;}
+.nav-links a:hover{background:var(--bg3);color:var(--text);}
+.nav-links a.active{background:rgba(245,197,66,.12);color:var(--accent);}
+/* ── HERO AMÉLIORÉ ──────────────────────────────────────────────── */
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.25rem .75rem;border-radius:100px;letter-spacing:.07em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:.5rem;}
+.complexity{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── INLINE CODE <ic> — définition unique canonique ─────────────── */
+ic {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8em;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .05rem .38rem;
+  border-radius: 4px;
+  color: #7eb5ff;
+  white-space: nowrap;
+  display: inline;
+}
+/* Overrides contextuels */
+.gotcha-body ic { color: #ffb0b0; background: rgba(255,107,107,.1); }
+.protip ic      { color: #f7d97a; background: rgba(245,197,66,.1);  }
+.callout.warn ic, .callout.analogy ic { color: #f7d97a; }
+.callout.ok ic, .callout.success ic   { color: #7ee8b8; }
+
+
+/* ── CODE-BLOCK inline — header barre avec bouton copier ─────────── */
+.code-block {
+  padding-top: 2.4rem !important; /* espace pour la barre de titre */
+}
+.code-block .cb-lang {
+  top: .55rem;
+  left: .9rem;
+  right: auto;
+}
+
+/* ── SRC-BLOCK mobile ────────────────────────────────────────────── */
+.src-body {
+  overflow-x: auto;
+}
+.src-body pre {
+  white-space: pre;
+  min-width: max-content;
+}
+
+/* ── LIENS ANCRE sur h2 ──────────────────────────────────────────── */
+.sec h2 .anchor-link {
+  opacity: 0;
+  font-size: .65em;
+  color: var(--text3);
+  text-decoration: none;
+  margin-left: .5rem;
+  transition: opacity .2s;
+  vertical-align: middle;
+  font-weight: 400;
+}
+.sec h2:hover .anchor-link { opacity: 1; }
+.sec h2:hover .anchor-link:hover { color: var(--accent4); }
+
+/* ── FOOTER NAVIGATION INTER-DOCS ──────────────────────────────── */
+.docs-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+.docs-footer-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 1rem;
+}
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: .5rem;
+}
+.docs-link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .8rem;
+  border-radius: 8px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  color: var(--text2);
+  transition: all .18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docs-link:hover {
+  background: var(--bg3);
+  border-color: rgba(79,142,255,.3);
+  color: var(--text);
+}
+.docs-link.current {
+  border-color: rgba(245,197,66,.35);
+  background: rgba(245,197,66,.06);
+  color: var(--accent);
+  pointer-events: none;
+}
+.docs-link-icon { flex-shrink: 0; font-size: .9rem; }
+
+
+/* ╔═══════════════════════════════════════════════════════════════╗
+   ║  CANONICAL OVERRIDES — résolution de tous les conflits CSS    ║
+   ╚═══════════════════════════════════════════════════════════════╝ */
+
+/* ── 1. scroll-padding-top (nav fixe 56px + 12px marge) ────────── */
+html {
+  scroll-padding-top: 68px;
+}
+
+/* ── 2a. .bi conflit : syntaxe JS vs icône-emoji dans .box ──────── */
+/* Dans les blocs de code, .bi = builtin JS (vert) */
+pre .bi, code .bi, .src-body .bi {
+  color: #56d19e;
+  font-weight: 600;
+  font-size: inherit;
+  flex-shrink: unset;
+  margin-top: 0;
+  line-height: inherit;
+}
+/* Dans les box/listes, .bi = icône emoji */
+.box .bi, .kbox-item .bi, .list-item .bi,
+.callout .bi, .protip .bi, .gotcha-body .bi {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  margin-top: .1rem;
+  color: inherit;
+  font-weight: normal;
+  line-height: 1;
+}
+
+/* ── 2b. .cm conflit : commentaire de code vs kbox-card ─────────── */
+/* Dans les blocs de code, .cm = commentaire gris italique */
+pre .cm, code .cm, .src-body .cm {
+  color: #555e74;
+  font-style: italic;
+  background: none;
+  border: none;
+}
+/* .cm comme container (hors code) garde le style card si présent */
+div.cm, .cm-card {
+  background: rgba(139,147,168,.08);
+  border: 1px solid rgba(139,147,168,.25);
+  color: var(--text2);
+}
+
+/* ── 2c. .nav-links a.active — version canonique unique ─────────── */
+.nav-links a.active {
+  background: rgba(245,197,66,.15) !important;
+  color: var(--accent) !important;
+  border-radius: 6px;
+}
+
+/* ── 2d. .file-stats — layout grid canonique ────────────────────── */
+.file-stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+  gap: .8rem !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* ── 2e. .code-block pre — taille canonique ─────────────────────── */
+.code-block pre {
+  font-size: .81rem !important;
+  line-height: 1.82 !important;
+}
+
+/* ── 2f. .src-body — overflow canonique ─────────────────────────── */
+.src-body {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-height: 520px !important;
+  transition: max-height .4s ease !important;
+}
+.src-body.expanded {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* ── 3. Safari : -webkit-backdrop-filter ──────────────────────────
+   (injecté directement dans la règle nav via Python)               */
+
+/* ── 4. prefers-reduced-motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #read-progress { display: none !important; }
+  .src-body       { transition: none !important; }
+}
+
+/* ── 5. Tables responsive ───────────────────────────────────────── */
+.tbl-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 1.2rem 0;
+}
+.tbl-wrap table,
+.tbl-wrap .data-table,
+.tbl-wrap .recap-table,
+.tbl-wrap .tbl {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0;
+  width: 100%;
+}
+
+/* ── 6. :focus-visible (navigation clavier) ─────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.copy-btn:focus-visible,
+.src-expand-btn:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 2px;
+}
+.nav-links a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── 8. Nav active — meilleur contraste ─────────────────────────── */
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: left .2s, right .2s;
+}
+.nav-links a { position: relative; }
+
+/* ── 9. code-block mobile ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .code-block {
+    padding-top: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: .76rem !important;
+  }
+  .code-block .cb-lang {
+    display: none;
+  }
+  .copy-btn.abs {
+    top: .45rem;
+    right: .45rem;
+    padding: .18rem .45rem;
+    font-size: .58rem;
+  }
+  .src-header .src-fname {
+    display: none;
+  }
+  .ln::before {
+    width: 2rem;
+    padding-right: .6rem;
+  }
+}
+
+/* ── 11. @media print ───────────────────────────────────────────── */
+@media print {
+  #read-progress,
+  nav,
+  .copy-btn,
+  .src-expand-btn,
+  .src-fade,
+  .docs-footer {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 11pt !important;
+  }
+  .page {
+    padding: 1cm !important;
+    max-width: 100% !important;
+  }
+  .hero {
+    padding: 1rem 0 !important;
+  }
+  .sec {
+    break-inside: avoid;
+  }
+  .code-block, .src-block {
+    background: #f4f4f4 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    break-inside: avoid;
+  }
+  .code-block pre, .src-body pre {
+    color: #111 !important;
+    font-size: 8pt !important;
+  }
+  .kw    { color: #7b2fbe !important; }
+  .fn    { color: #0550ae !important; }
+  .s, .str { color: #0a7c42 !important; }
+  .cmt, .cm { color: #666 !important; }
+  .n     { color: #b07d00 !important; }
+  ic {
+    background: #eee !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+  }
+  a { color: #333 !important; text-decoration: none !important; }
+  .schema-card, .vnode, .gotcha, .protip, .callout {
+    border: 1px solid #ccc !important;
+    background: #f9f9f9 !important;
+    color: #111 !important;
+    break-inside: avoid;
+  }
+}
+
+</style>
 </head>
 <body>
-<nav> <div class="nl">confirmation.js</div> <a href="#intro">Intro</a> <a href="#session">sessionStorage</a> <a href="#fallback">Fallback</a> <a href="#affichage">Affichage</a> <a href="#panier">Panier</a> <a href="#recap">Récap</a>
-<a href="#glossaire">Glossaire</a>
+<nav>
+  <a class="nav-logo" href="index.html">← PearTech Docs</a>
+  <div class="nav-file" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#34d399;padding:.25rem .7rem;border-radius:6px;background:rgba(52,211,153,.15);border:1px solid #34d39944;white-space:nowrap;flex-shrink:0;">confirmation.js</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#session">Session</a>
+    <a href="#fallback">Fallback</a>
+    <a href="#affichage">Affichage</a>
+    <a href="#panier">Panier</a>
+    <a href="#recap">Récap</a>
+    <a href="#ordre">Ordre</a>
+    <a href="#glossaire">Glossaire</a>
+    <a href="#plus-loin">✦ Plus loin</a>
+    <a href="#decryptage">⌨ Décryptage</a>
+    <a href="#code-annote">⟨/⟩ Annoté</a>
+  </div>
 </nav>
-<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
-<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
+<div class="page"> <div class="hero">
+  <div class="hero-tag">E-commerce · Confirmation</div>
+  <h1>Comprendre<br><span style="color:#34d399">confirmation.js</span></h1>
+  <p style="color:var(--text2);font-size:.97rem;max-width:680px;line-height:1.85;margin-top:.6rem;">Page de confirmation de commande — lit les données depuis sessionStorage, affiche le récap, vide le panier, gère le fallback si données absentes.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem;align-items:center;">
+    <div class="file-badge"><span class="dot" style="background:#34d399;"></span>confirmation.js</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text2);">~95 lignes</span>
+    <span class="complexity cx-low" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;">Débutant</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Dépendances : panier.js</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Pages : page_confirmation.html</span>
+  </div>
+  <div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>sessionStorage peartech-last-order</b><br><span style="color:var(--t3);font-size:.71rem;">écrit par paiement.js</span></div>
 <div class="carte-item"><b>window.PearTechCart</b><br><span style="color:var(--t3);font-size:.71rem;">pour clear() final</span></div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
@@ -156,12 +1110,12 @@ hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
 </div>
 <!-- END CARTE --> <h1>Comprendre<br><span>confirmation.js</span></h1> <p>Ce fichier gère la page de confirmation de commande. Il lit les données de commande écrites par <ic>paiement.js</ic> dans <ic>sessionStorage</ic>, les injecte dans le DOM, nettoie le panier, puis supprime les données de session pour éviter qu'elles s'affichent à nouveau lors d'une prochaine visite.</p> <div class="fbadge"><div class="dot"></div>confirmation.js · ~65 lignes · lecture sessionStorage  DOM  nettoyage panier</div>
 </div> <!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Le maillon final de la chaîne d'achat</h2>
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Le maillon final de la chaîne d'achat <a class="anchor-link" href="#intro" title="Lien direct">¶</a></h2>
 <div class="schema"> <div class="schema-title">Cycle de vie complet — de la commande à la confirmation</div> <div class="chain-seq"> <div class="cs-row"> <div class="cs-num">1</div> <div class="cs-tag" style="background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;">paiement.js</div> <div class="cs-desc">Formulaire validé  <ic>generateOrderNumber()</ic> assemble <ic>orderData</ic> <ic>sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData))</ic></div> </div> <div class="cs-arrow"> PearTechCart.clear()  localStorage cart vidé  window.location = 'page_confirmation.html'</div> <div class="cs-row"> <div class="cs-num">2</div> <div class="cs-tag" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;">confirmation.js</div> <div class="cs-desc"><ic>sessionStorage.getItem('peartech-last-order')</ic> parse JSON  <b>usage unique : removeItem() immédiat</b></div> </div> <div class="cs-row"> <div class="cs-num">3</div> <div class="cs-tag" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.35);color:#6ee7b7;">confirmation.js</div> <div class="cs-desc">Injecte les données dans 8 zones DOM  badge panier mis à 0</div> </div> <div class="cs-arrow"> si l'utilisateur recharge la page : sessionStorage.getItem() retourne null  fallback affiché</div> <div class="cs-row"> <div class="cs-num">4</div> <div class="cs-tag" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">Rechargement</div> <div class="cs-desc">La clé a été supprimée  <ic>null</ic> fallback "Commande enregistrée avec succès" générique</div> </div> </div> <div class="box warn" style="margin-top:1rem;"><span class="bi"></span><div><b>Pourquoi removeItem() immédiatement ?</b> Un rafraîchissement de la page ne doit <em>pas</em> ré-afficher le récapitulatif comme si c'était une nouvelle commande. <ic>removeItem()</ic> dès la première lecture garantit l'usage unique — le récapitulatif n'est visible qu'une seule fois.</div></div>
 </div> <div class="box ana"><span class="bi"></span><div><b>Place dans le parcours :</b> <ic>paiement.js</ic> écrit les données de commande dans <ic>sessionStorage</ic> juste avant de rediriger vers la page de confirmation. confirmation.js lit ces données, les affiche, puis les <b>supprime</b> pour que la page soit propre à la prochaine visite.</div></div> <div class="diag"> <div class="dtitle">Chaîne causale — de paiement.js à confirmation.js</div> <div class="vc"> <div class="vn w cgr">paiement.js — l'utilisateur valide sa commande</div> <div class="va"><div class="val">sessionStorage.setItem('peartech-last-order', JSON)</div></div> <div class="vn w cy">sessionStorage contient l'objet orderData sérialisé</div> <div class="va"><div class="val">window.location.href = 'page_confirmation.html'</div></div> <div class="vn w cgr">page_confirmation.html se charge</div> <div class="va"><div class="val">confirmation.js — DOMContentLoaded</div></div> <div class="vn w ca">sessionStorage.getItem('peartech-last-order')  parse  affiche</div> <div class="va"><div class="val">sessionStorage.removeItem() — consommation unique</div></div> <div class="vn w cgr">Page propre — rechargement ne relit rien (fallback s'affiche)</div> </div> </div>
 </div>
 <hr> <!-- ══ 01 SESSION STORAGE ══ -->
-<div class="sec" id="session"> <div class="slabel">01 — Lecture du sessionStorage</div> <h2>Lire, parser, et consommer les données</h2>
+<div class="sec" id="session"> <div class="slabel">01 — Lecture du sessionStorage</div> <h2>Lire, parser, et consommer les données <a class="anchor-link" href="#session" title="Lien direct">¶</a></h2>
 
 <div class="diag">
   <div class="dtitle">Pourquoi removeItem immédiatement après parse ?</div>
@@ -234,7 +1188,7 @@ hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
     </div>
   </div>
 </div>
- <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">orderData</span>;
+ <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">let</span> <span class="vr">orderData</span>;
 <span class="kw">const</span> <span class="vr">stored</span> = sessionStorage.<span class="fn">getItem</span>(<span class="s">'peartech-last-order'</span>);
 <span class="kw">if</span> (stored) {
 <span class="kw">try</span> {
@@ -243,11 +1197,34 @@ console.<span class="fn">warn</span>(<span class="s">'Impossible de parser peart
 <span class="cm">// orderData reste undefined  fallback s'active</span> }
 }</pre></div> <div class="box info"><span class="bi"></span><div><b>Pourquoi removeItem() immédiatement après la lecture ?</b> Pour garantir que ces données ne sont affichées qu'<b>une seule fois</b>. Si l'utilisateur appuie sur F5 (rafraîchit la page), <ic>getItem</ic> retourne <ic>null</ic>, <ic>orderData</ic> reste <ic>undefined</ic>, et le fallback avec des données fictives s'affiche à la place.</div></div> <div class="diag"> <div class="dtitle">Structure de l'objet orderData attendu</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--code);border-radius:10px;padding:1.1rem 1.3rem;line-height:2;color:var(--t2);"> {<br> &nbsp;&nbsp;<span style="color:#f7d97a;">orderNumber</span>: <span style="color:#86efac;">"CMD-847291"</span>,<br> &nbsp;&nbsp;<span style="color:#f7d97a;">email</span>:       <span style="color:#86efac;">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553f30343b153120253a3b217b3327">[email&#160;protected]</a>"</span>,<br> &nbsp;&nbsp;<span style="color:#f7d97a;">delivery</span>: {<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">name</span>:    <span style="color:#86efac;">"Jean Dupont"</span>,<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">address</span>: <span style="color:#86efac;">"15 rue de la Paix, 75001 Paris"</span>,<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">mode</span>:    <span style="color:#86efac;">"Livraison standard (3-5 jours)"</span>,<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f7d97a;">payment</span>: <span style="color:#86efac;">"Carte bancaire **** 4242"</span><br> &nbsp;&nbsp;},<br> &nbsp;&nbsp;<span style="color:#f7d97a;">items</span>: [<br> &nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#f7d97a;">name</span>: <span style="color:#86efac;">"iPhone 15 Pro Max"</span>, <span style="color:#f7d97a;">quantity</span>: <span style="color:#f7d97a;">1</span>, <span style="color:#f7d97a;">price</span>: <span style="color:#f7d97a;">1479</span> },<br> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#555e74;">// … autres articles</span><br> &nbsp;&nbsp;],<br> &nbsp;&nbsp;<span style="color:#f7d97a;">shipping</span>: <span style="color:#f7d97a;">5.90</span>,<br> &nbsp;&nbsp;<span style="color:#f7d97a;">total</span>:    <span style="color:#f7d97a;">1484.90</span><br> }
 </div> </div>
+<h3>Structure de l'objet orderData</h3>
+<div class="obj-schema">
+<div class="obj-title">orderData — écrit par paiement.js, lu par confirmation.js</div>
+<div class="obj-row"><span class="obj-key"><ic>orderNumber</ic></span><span class="obj-type">string</span><span class="obj-desc">ex: <ic>"CMD-1719847234-7K3X"</ic> — généré par <ic>Date.now() + Math.random().toString(36)</ic></span></div>
+<div class="obj-row"><span class="obj-key"><ic>email</ic></span><span class="obj-type">string</span><span class="obj-desc">Email du client — affiché dans la confirmation</span></div>
+<div class="obj-row"><span class="obj-key"><ic>delivery.name</ic></span><span class="obj-type">string</span><span class="obj-desc">Prénom + nom du destinataire</span></div>
+<div class="obj-row"><span class="obj-key"><ic>delivery.address</ic></span><span class="obj-type">string</span><span class="obj-desc">Adresse complète — <ic>[rue, ville, cp, pays].filter(Boolean).join(', ')</ic></span></div>
+<div class="obj-row"><span class="obj-key"><ic>delivery.mode</ic></span><span class="obj-type">string</span><span class="obj-desc">Libellé du mode de livraison choisi</span></div>
+<div class="obj-row"><span class="obj-key"><ic>delivery.payment</ic></span><span class="obj-type">string</span><span class="obj-desc">ex: <ic>"Carte bancaire **** 4242"</ic> ou <ic>"PayPal"</ic></span></div>
+<div class="obj-row"><span class="obj-key"><ic>items</ic></span><span class="obj-type">array</span><span class="obj-desc">Articles [{name, quantity, price}] — générés depuis cart[]</span></div>
+<div class="obj-row"><span class="obj-key"><ic>shipping</ic></span><span class="obj-type">number</span><span class="obj-desc">Frais de port en euros (0 si gratuit)</span></div>
+<div class="obj-row"><span class="obj-key"><ic>promoCode</ic></span><span class="obj-type">string|null</span><span class="obj-desc">Code promo appliqué ou null</span></div>
+<div class="obj-row"><span class="obj-key"><ic>promoDiscount</ic></span><span class="obj-type">number</span><span class="obj-desc">Montant de la réduction en euros</span></div>
+<div class="obj-row"><span class="obj-key"><ic>total</ic></span><span class="obj-type">number</span><span class="obj-desc">Total TTC — <ic>subtotal - promoDiscount + shipping</ic></span></div>
+</div>
+<h3>Le cycle write→read→delete en détail</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">paiement.js</span><span class="tl-title">JSON.stringify(orderData) → sessionStorage</span></div><div class="tl-body"><ic>sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData))</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Navigation</span><span class="tl-title">window.location.href vers confirmation.html</span></div><div class="tl-body">La page change — sessionStorage survit à la navigation entre pages du même domaine</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">confirmation.js</span><span class="tl-title">sessionStorage.getItem() → JSON.parse()</span></div><div class="tl-body">Lecture et parsing — le JSON devient un objet JS</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">Consommation</span><span class="tl-title">sessionStorage.removeItem()</span></div><div class="tl-body">Suppression immédiate — si F5, les données de démo s'affichent à la place</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">Affichage</span><span class="tl-title">8 injections textContent + forEach items</span></div><div class="tl-body">Remplissage des éléments DOM — sans innerHTML pour prévenir le XSS</div></div>
+</div>
 </div>
 <hr> <!-- ══ 02 FALLBACK ══ -->
-<div class="sec" id="fallback"> <div class="slabel">02 — Données de secours</div> <h2>Le fallback — afficher quelque chose si sessionStorage est vide</h2> <p>Si <ic>orderData</ic> est <ic>undefined</ic> (sessionStorage vide, page rafraîchie, ou JSON corrompu), un objet de démonstration prend le relais. La page ne reste jamais vide.</p>
+<div class="sec" id="fallback"> <div class="slabel">02 — Données de secours</div> <h2>Le fallback — afficher quelque chose si sessionStorage est vide <a class="anchor-link" href="#fallback" title="Lien direct">¶</a></h2> <p>Si <ic>orderData</ic> est <ic>undefined</ic> (sessionStorage vide, page rafraîchie, ou JSON corrompu), un objet de démonstration prend le relais. La page ne reste jamais vide.</p>
 <div class="diag"> <div class="dtitle">Lecture et consommation de sessionStorage — séquence critique</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;"> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);padding-top:.1rem;">①</div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7dd3fc;">getItem('peartech-last-order')  string JSON ou null</div> </div> <div style="padding-left:1.2rem;font-size:.65rem;color:var(--t3);"> si non-null</div> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);padding-top:.1rem;">②</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#f7d97a;">JSON.parse(stored)  objet orderData en mémoire</div> </div> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;padding-top:.1rem;">③</div> <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#fda4af;">removeItem('peartech-last-order')  immédiatement après parse</div> </div> <div style="display:grid;grid-template-columns:24px 1fr;gap:.5rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;padding-top:.1rem;">④</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.4rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#7ee8b8;">renderConfirmation(orderData)  injecte dans 9 zones DOM</div> </div> <div style="background:rgba(139,147,168,.05);border:1px solid var(--border);border-radius:7px;padding:.45rem .7rem;font-size:.73rem;color:var(--t2);">Si parse échoue (JSON corrompu)  catch  orderData = undefined  fallback générique affiché, pas de crash</div> <div style="background:rgba(244,63,94,.05);border:1px solid rgba(244,63,94,.15);border-radius:7px;padding:.45rem .7rem;font-size:.73rem;color:var(--t2);">Rechargement F5  getItem retourne null (déjà supprimé)  fallback. Comportement intentionnel.</div> </div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (!orderData) {
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">if</span> (!orderData) {
 orderData = {
 orderNumber: <span class="s">'CMD-'</span> + Math.<span class="fn">floor</span>(Math.<span class="fn">random</span>() * <span class="nm">1000000</span>), <span class="cm">// Numéro aléatoire</span> email: <span class="s">'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf1fefaf5b5ffeeebf4f5efdbfef6faf2f7b5f8f4f6">[email&#160;protected]</a>'</span>,
 delivery: {
@@ -263,11 +1240,61 @@ items: [
 shipping: <span class="nm">0</span>,
 total:    <span class="nm">1280.00</span> };
 }</pre></div> <div class="diag"> <div class="dtitle">Quand le fallback s'active</div> <div class="fork f2" style="max-width:700px;margin:0 auto;"> <div style="background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#6ee7b7;margin-bottom:.4rem;">orderData défini</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">sessionStorage contenait des données valides  commande réelle affichée</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">orderData undefined</div> <div style="font-size:.78rem;color:var(--t2);line-height:1.7;">Page rafraîchie · Accès direct à la page · JSON corrompu ·  données démo affichées</div> </div> </div> </div>
+<h3>Le fallback — garantie d'affichage non-vide</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">Cas normal</div>
+<div class="kbox-item">sessionStorage contient les données</div>
+<div class="kbox-item">JSON.parse → orderData peuplé</div>
+<div class="kbox-item">Affichage de la vraie commande</div>
+</div>
+<div class="kbox c-red"><div class="kbox-h">Cas dégradé</div>
+<div class="kbox-item">sessionStorage vide ou corrompu</div>
+<div class="kbox-item">orderData reste undefined</div>
+<div class="kbox-item">Fallback avec données fictives</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">Déclencheurs du fallback</div>
+<div class="kbox-item">Rechargement de page (F5)</div>
+<div class="kbox-item">Accès direct à la page sans commande</div>
+<div class="kbox-item">sessionStorage bloqué (kiosque, privé)</div>
+</div>
+</div>
+<h3>Pourquoi un fallback avec données fictives ?</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">Cas normaux couverts</div>
+<div class="kbox-item">Utilisateur vient de payer → orderData réel</div>
+<div class="kbox-item">Page toujours cohérente et complète</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">Cas couverts par le fallback</div>
+<div class="kbox-item">Développeur teste la page directement</div>
+<div class="kbox-item">Utilisateur tape l'URL manuellement</div>
+<div class="kbox-item">F5 après confirmation (données effacées)</div>
+</div>
+<div class="kbox c-red"><div class="kbox-h">Ce que le fallback évite</div>
+<div class="kbox-item">Page vide avec éléments DOM vides</div>
+<div class="kbox-item">Erreurs null reference sur les injections</div>
+<div class="kbox-item">UX dégradée en cas d'erreur technique</div>
+</div>
+</div>
+<div class="callout beginner"><span class="callout-icon">🎓</span><div>Le fallback n'est pas un bug — c'est une <b>décision de design défensif</b>. Une page qui s'affiche avec des données de démo vaut mieux qu'une page blanche ou une erreur JS. En production, on pourrait rediriger vers l'accueil au lieu du fallback.</div></div>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> DEMO_ORDER = {
+    orderNumber: <span class="str">'CMD-DEMO-1234'</span>,
+    email: <span class="str">'<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2d4e41444843596d49484042034e4240">[email&#160;protected]</a>'</span>,
+    delivery: {
+        name: <span class="str">'Jean Dupont'</span>,
+        address: <span class="str">'12 Rue de la Paix, 75001 Paris'</span>,
+        mode: <span class="str">'Livraison standard (3-5 jours)'</span>,
+        payment: <span class="str">'Carte bancaire **** 4242'</span>
+    },
+    items: [{ name: <span class="str">'iPhone 15 Pro 256Go'</span>, quantity: 1, price: 1199 }],
+    total: 1199
+};</pre></div>
+<p>Si sessionStorage est vide (accès direct ou F5), les données DEMO permettent de visualiser la page sans simuler un achat complet.</p>
+<div class="protip"><div class="protip-label">PRO TIP</div><div>Pour tester avec des données custom sans acheter : <ic>sessionStorage.setItem('peartech-last-order', JSON.stringify({...}))</ic> dans la console → F5.</div></div>
 </div>
 <hr> <!-- ══ 03 AFFICHAGE ══ -->
-<div class="sec" id="affichage"> <div class="slabel">03 — Injection dans le DOM</div> <h2>Remplir 8 éléments HTML + générer la liste des articles</h2>
+<div class="sec" id="affichage"> <div class="slabel">03 — Injection dans le DOM</div> <h2>Remplir 8 éléments HTML + générer la liste des articles <a class="anchor-link" href="#affichage" title="Lien direct">¶</a></h2>
 <div class="schema"> <div class="schema-title">Les 8 zones DOM remplies par confirmation.js</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;"> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#order-number</span> <span style="font-size:.73rem;color:var(--t2);">CMD-K7X2-1706789012</span> </div> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#customer-email</span> <span style="font-size:.73rem;color:var(--t2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee4ebefe0ceebe3efe7e2a0ede1e3">[email&#160;protected]</a></span> </div> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#delivery-name</span> <span style="font-size:.73rem;color:var(--t2);">Jean Dupont</span> </div> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#delivery-address</span> <span style="font-size:.73rem;color:var(--t2);">12 rue de la Paix, Paris</span> </div> </div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#delivery-mode</span> <span style="font-size:.73rem;color:var(--t2);">Livraison standard</span> </div> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#payment-method</span> <span style="font-size:.73rem;color:var(--t2);">Carte bancaire</span> </div> <div style="background:var(--bg3);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">#order-total</span> <span style="font-size:.73rem;color:var(--t2);">1 134,09 €</span> </div> <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:.6rem .8rem;display:grid;grid-template-columns:auto 1fr;gap:.6rem;align-items:center;"> <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#7ee8b8;">#order-items</span> <span style="font-size:.73rem;color:#7ee8b8;">loop articles  innerHTML</span> </div> </div> </div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="cm">// Champs texte simples — remplissage direct</span>
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cm">// Champs texte simples — remplissage direct</span>
 document.<span class="fn">getElementById</span>(<span class="s">'order-number'</span>).textContent     = orderData.orderNumber;
 document.<span class="fn">getElementById</span>(<span class="s">'customer-email'</span>).textContent    = orderData.email;
 document.<span class="fn">getElementById</span>(<span class="s">'delivery-name'</span>).textContent     = orderData.delivery.name;
@@ -288,33 +1315,693 @@ itemsContainer.innerHTML = itemsHtml;
 <span class="kw">const</span> <span class="vr">shippingText</span> = orderData.shipping === <span class="nm">0</span> ? <span class="s">'Gratuit'</span> : orderData.shipping.<span class="fn">toFixed</span>(<span class="nm">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>,<span class="s">','</span>) + <span class="s">' €'</span>;
 document.<span class="fn">getElementById</span>(<span class="s">'shipping-cost'</span>).textContent = shippingText;
 document.<span class="fn">getElementById</span>(<span class="s">'total-paid'</span>).textContent = orderData.total.<span class="fn">toFixed</span>(<span class="nm">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>,<span class="s">','</span>) + <span class="s">' €'</span>;</pre></div> <div class="diag"> <div class="dtitle">Table de correspondance — propriétés  IDs DOM</div> <table class="tbl"> <thead><tr><th>ID HTML</th><th>Propriété orderData</th></tr></thead> <tbody> <tr><td class="tc">order-number</td><td style="color:var(--t2)"><ic>orderData.orderNumber</ic></td></tr> <tr><td class="tc">customer-email</td><td style="color:var(--t2)"><ic>orderData.email</ic></td></tr> <tr><td class="tc">delivery-name</td><td style="color:var(--t2)"><ic>orderData.delivery.name</ic></td></tr> <tr><td class="tc">delivery-address</td><td style="color:var(--t2)"><ic>orderData.delivery.address</ic></td></tr> <tr><td class="tc">delivery-mode</td><td style="color:var(--t2)"><ic>orderData.delivery.mode</ic></td></tr> <tr><td class="tc">payment-method</td><td style="color:var(--t2)"><ic>orderData.delivery.payment</ic></td></tr> <tr><td class="tc">order-items</td><td style="color:var(--t2)"><ic>orderData.items[]</ic> — généré via forEach + innerHTML</td></tr> <tr><td class="tc">shipping-cost</td><td style="color:var(--t2)"><ic>orderData.shipping</ic> — "Gratuit" si 0</td></tr> <tr><td class="tc">total-paid</td><td style="color:var(--t2)"><ic>orderData.total</ic> — formaté en français</td></tr> </tbody> </table> </div>
+<h3>Les 8 injections DOM — textContent vs innerHTML</h3>
+<table class="data-table">
+<thead><tr><th>Cible</th><th>Méthode</th><th>Donnée injectée</th><th>Pourquoi</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>#order-number</ic></td><td><ic>textContent</ic></td><td><ic>orderData.orderNumber</ic></td><td>Texte brut — pas de HTML attendu</td></tr>
+<tr><td class="td-code"><ic>#customer-email</ic></td><td><ic>textContent</ic></td><td><ic>orderData.email</ic></td><td>Protection XSS — email peut contenir des chars spéciaux</td></tr>
+<tr><td class="td-code"><ic>#delivery-name</ic></td><td><ic>textContent</ic></td><td><ic>orderData.delivery.name</ic></td><td>Texte brut</td></tr>
+<tr><td class="td-code"><ic>#delivery-address</ic></td><td><ic>textContent</ic></td><td><ic>orderData.delivery.address</ic></td><td>Texte brut</td></tr>
+<tr><td class="td-code"><ic>#delivery-mode</ic></td><td><ic>textContent</ic></td><td><ic>orderData.delivery.mode</ic></td><td>Texte brut</td></tr>
+<tr><td class="td-code"><ic>#payment-method</ic></td><td><ic>textContent</ic></td><td><ic>orderData.delivery.payment</ic></td><td>Texte brut</td></tr>
+<tr><td class="td-code"><ic>#order-items</ic></td><td><ic>innerHTML</ic></td><td>HTML généré par forEach</td><td>Structure HTML nécessaire pour les items</td></tr>
+<tr><td class="td-code"><ic>#shipping-cost</ic></td><td><ic>textContent</ic></td><td><ic>"Gratuit"</ic> ou montant</td><td>Texte conditionnel</td></tr>
+</tbody></table>
+<h3>Les 8 injections DOM — textContent ou innerHTML ?</h3>
+<table class="data-table">
+<thead><tr><th>Élément</th><th>Méthode</th><th>Raison</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>#order-number</ic></td><td><ic>textContent</ic></td><td>Donnée simple — protection XSS</td></tr>
+<tr><td class="td-code"><ic>#customer-email</ic></td><td><ic>textContent</ic></td><td>Email = donnée utilisateur — jamais innerHTML</td></tr>
+<tr><td class="td-code"><ic>#delivery-name</ic></td><td><ic>textContent</ic></td><td>Nom utilisateur — XSS possible avec innerHTML</td></tr>
+<tr><td class="td-code"><ic>#delivery-address</ic></td><td><ic>textContent</ic></td><td>Adresse — peut contenir des < > si mal saisie</td></tr>
+<tr><td class="td-code"><ic>#order-items</ic></td><td><ic>innerHTML</ic></td><td>Liste d'articles — nécessite balises HTML structurées</td></tr>
+<tr><td class="td-code"><ic>#shipping-cost</ic></td><td><ic>textContent</ic></td><td><ic>"Gratuit"</ic> ou montant formaté — texte pur</td></tr>
+<tr><td class="td-code"><ic>#total-paid</ic></td><td><ic>textContent</ic></td><td>Montant — texte pur</td></tr>
+</tbody></table>
+<div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Règle d'or</b> : <ic>textContent</ic> pour toute donnée provenant de l'utilisateur, <ic>innerHTML</ic> uniquement pour du HTML généré par votre propre code (templates). La seule exception ici est <ic>#order-items</ic> — le HTML est construit par votre propre <ic>forEach</ic>, pas par l'utilisateur.</div></div>
+<h3>Les 8 injections DOM — champ par champ</h3>
+<table class="data-table">
+<thead><tr><th>Élément DOM</th><th>Donnée injectée</th><th>Méthode</th><th>Sécurité</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>#order-number</ic></td><td><ic>orderData.orderNumber</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#customer-email</ic></td><td><ic>orderData.email</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-name</ic></td><td><ic>orderData.delivery.name</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-address</ic></td><td><ic>orderData.delivery.address</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-mode</ic></td><td><ic>orderData.delivery.mode</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#payment-method</ic></td><td><ic>orderData.delivery.payment</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#order-items</ic></td><td>HTML généré via forEach</td><td><ic>innerHTML</ic></td><td>Données internes — pas utilisateur</td></tr>
+<tr><td class="td-code"><ic>#shipping-cost</ic></td><td><ic>"Gratuit"</ic> ou formaté</td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+</tbody></table>
+<div class="callout success"><span class="callout-icon">✓</span><div>Toutes les données utilisateur (email, nom, adresse) utilisent <ic>textContent</ic> — jamais <ic>innerHTML</ic>. Seul <ic>#order-items</ic> utilise innerHTML, mais avec des données issues de <ic>orderData.items</ic> qui viennent du panier JS (pas d'une saisie utilisateur directe).</div></div>
+<h3>Les 8 injections DOM — champ par champ</h3>
+<table class="data-table">
+<thead><tr><th>Élément DOM</th><th>Donnée injectée</th><th>Méthode</th><th>Sécurité</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>#order-number</ic></td><td><ic>orderData.orderNumber</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#customer-email</ic></td><td><ic>orderData.email</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-name</ic></td><td><ic>orderData.delivery.name</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-address</ic></td><td><ic>orderData.delivery.address</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-mode</ic></td><td><ic>orderData.delivery.mode</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#payment-method</ic></td><td><ic>orderData.delivery.payment</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#order-items</ic></td><td>HTML généré via forEach</td><td><ic>innerHTML</ic></td><td>Données internes — pas utilisateur</td></tr>
+<tr><td class="td-code"><ic>#shipping-cost</ic></td><td><ic>"Gratuit"</ic> ou formaté</td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+</tbody></table>
+<div class="callout success"><span class="callout-icon">✓</span><div>Toutes les données utilisateur (email, nom, adresse) utilisent <ic>textContent</ic> — jamais <ic>innerHTML</ic>. Seul <ic>#order-items</ic> utilise innerHTML, mais avec des données issues de <ic>orderData.items</ic> qui viennent du panier JS (pas d'une saisie utilisateur directe).</div></div>
+<h3>Les 8 injections DOM — champ par champ</h3>
+<table class="data-table">
+<thead><tr><th>Élément DOM</th><th>Donnée injectée</th><th>Méthode</th><th>Sécurité</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>#order-number</ic></td><td><ic>orderData.orderNumber</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#customer-email</ic></td><td><ic>orderData.email</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-name</ic></td><td><ic>orderData.delivery.name</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-address</ic></td><td><ic>orderData.delivery.address</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#delivery-mode</ic></td><td><ic>orderData.delivery.mode</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#payment-method</ic></td><td><ic>orderData.delivery.payment</ic></td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+<tr><td class="td-code"><ic>#order-items</ic></td><td>HTML généré via forEach</td><td><ic>innerHTML</ic></td><td>Données internes — pas utilisateur</td></tr>
+<tr><td class="td-code"><ic>#shipping-cost</ic></td><td><ic>"Gratuit"</ic> ou formaté</td><td><ic>textContent</ic></td><td>XSS-safe</td></tr>
+</tbody></table>
+<div class="callout success"><span class="callout-icon">✓</span><div>Toutes les données utilisateur (email, nom, adresse) utilisent <ic>textContent</ic> — jamais <ic>innerHTML</ic>. Seul <ic>#order-items</ic> utilise innerHTML, mais avec des données issues de <ic>orderData.items</ic> qui viennent du panier JS (pas d'une saisie utilisateur directe).</div></div>
 </div>
 <hr> <!-- ══ 04 PANIER ══ -->
-<div class="sec" id="panier"> <div class="slabel">04 — Nettoyage du panier</div> <h2>Vider le panier après confirmation</h2>
-<div class="diag"> <div class="dtitle">Vider le panier après confirmation — pourquoi et comment</div> <div style="display:flex;flex-direction:column;gap:.35rem;max-width:560px;"> <div class="flow-row"> <div class="flow-box" style="background:rgba(139,147,168,.08);border:1px solid var(--border);color:var(--t2);">Données orderData parsées avec succès</div> </div> <div style="padding-left:1rem;font-size:.67rem;color:var(--t3);"> immédiatement après l'affichage</div> <div class="flow-row"> <div class="flow-box" style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;">PearTechCart.clear()</div> <div class="flow-arr"></div> <div style="font-size:.73rem;color:var(--t2);">localStorage.removeItem('peartech-cart')</div> </div> <div class="flow-row"> <div class="flow-box" style="background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.25);color:#fdba74;">sessionStorage.removeItem('peartech-last-order')</div> </div> <div class="flow-row"> <div class="flow-box" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.3);color:#7ee8b8;">Badge panier  0</div> <div class="flow-arr"></div> <div style="font-size:.73rem;color:var(--t2);">updateCartBadge() via PearTechCart</div> </div> </div> <div style="margin-top:.7rem;font-size:.75rem;color:var(--t3);">Si l'utilisateur recharge la page : panier déjà vide + orderData supprimé  fallback générique affiché. C'est le comportement voulu.</div>
-</div> <p>Une fois la commande confirmée, le panier doit être vidé. confirmation.js utilise l'API centralisée si disponible, sinon un fallback direct.</p> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (window.PearTechCart) {
-window.PearTechCart.<span class="fn">clear</span>(); <span class="cm">// API panier.js  vide + met à jour badge</span>
+<div class="sec" id="panier"> <div class="slabel">04 — Nettoyage du panier</div> <h2>Vider le panier après confirmation <a class="anchor-link" href="#panier" title="Lien direct">¶</a></h2>
+<p>Le nettoyage du panier est la <b>dernière action</b> de confirmation.js et la seule action irréversible : une fois le panier vidé, les données de commande ne peuvent pas être récupérées depuis le panier (elles sont déjà dans sessionStorage pour la confirmation).</p>
+<h3>Le code complet</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cm">// Utilise l<span class="s">'API centralisée PearTechCart si disponible</span>
+<span class="kw">if</span> (window.PearTechCart) {
+    window.PearTechCart.clear(); <span class="cm">// Vide le panier et met à jour localStorage</span>
 } <span class="kw">else</span> {
-localStorage.<span class="fn">setItem</span>(<span class="s">'peartech-cart-count'</span>, <span class="s">'0'</span>); <span class="cm">// Fallback direct</span>
+    <span class="cm">// Fallback : remise à zéro directe du compteur</span>
+    localStorage.setItem('</span>peartech-cart-count<span class="s">', '</span>0<span class="s">');
 }
-<span class="kw">const</span> <span class="vr">badge</span> = document.<span class="fn">getElementById</span>(<span class="s">'cart-count'</span>);
+
+<span class="cm">// Met à jour le badge du header</span>
+<span class="kw">const</span> badge = document.getElementById('</span>cart-count<span class="s">');
 <span class="kw">if</span> (badge) {
-badge.textContent    = <span class="s">'0'</span>;
-badge.style.display  = <span class="s">'none'</span>; <span class="cm">// Cache le badge quand il est à 0</span>
-}</pre></div> <div class="sn"><span class="sni"></span><span>Le localStorage <ic>'peartech-cart'</ic> lui-même n'est pas vidé ici — <ic>PearTechCart.clear()</ic> s'en charge. En fallback, seul le compteur est mis à zéro. Pour une robustesse maximale, il faudrait aussi faire <ic>localStorage.removeItem('peartech-cart')</ic> dans le fallback.</span></div>
+    badge.textContent = '</span>0<span class="s">';
+    badge.style.display = '</span>none'; <span class="cm">// Cache le badge quand le compteur est à 0</span>
+}</pre></div>
+<h3>PearTechCart.clear() vs fallback localStorage</h3>
+<p><ic>window.PearTechCart</ic> est défini dans <ic>panier.js</ic>. Il expose une API propre dont <ic>clear()</ic> qui vide le tableau <ic>cartItems</ic> ET met à jour localStorage ET met à jour le badge. Si <ic>panier.js</ic> n'est pas chargé sur cette page, le fallback <ic>localStorage.setItem('peartech-cart-count', '0')</ic> effectue uniquement la mise à zéro du compteur — suffisant pour que le badge disparaisse.</p>
+<h3>Pourquoi le badge est géré en plus de PearTechCart.clear()</h3>
+<p>En théorie, <ic>PearTechCart.clear()</ic> devrait mettre à jour le badge. En pratique, <ic>confirmation.js</ic> met à jour le badge <b>explicitement en plus</b> comme sécurité : si <ic>panier.js</ic> n'a pas correctement mis à jour le badge (ex: timing ou bug), la page de confirmation garantit que le header affiche bien <ic>0</ic> après la commande.</p>
+<div class="box warn"><span class="bi">⚠️</span><div>Placer le nettoyage du panier <b>après</b> l'affichage des données (et non avant) est critique. Si <ic>PearTechCart.clear()</ic> était appelé avant les injections DOM et qu'une erreur survenait, l'utilisateur verrait sa commande confirmée mais le panier non vidé. L'ordre actuel garantit qu'on affiche d'abord, puis on nettoie.</div></div>
+<h3>Le fallback hiérarchique pour vider le panier</h3>
+<div class="state-machine">
+<div class="state c-yellow">window.PearTechCart ?</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">oui</div></div>
+<div class="state c-green">PearTechCart.clear()</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">non</div></div>
+<div class="state c-blue">localStorage direct</div>
+</div>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">Voie principale — PearTechCart.clear()</div>
+<div class="kbox-item">Vide le tableau cartItems en mémoire</div>
+<div class="kbox-item">Met à jour localStorage[CART_KEY]</div>
+<div class="kbox-item">Met à jour le badge header</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Fallback — localStorage direct</div>
+<div class="kbox-item"><ic>localStorage.setItem('peartech-cart-count', '0')</ic></div>
+<div class="kbox-item">Seul le compteur est remis à zéro</div>
+<div class="kbox-item">Le tableau n'est pas vidé — edge case</div>
+</div>
+</div>
+<h3>Le fallback hiérarchique pour vider le panier</h3>
+<div class="state-machine">
+<div class="state c-yellow">window.PearTechCart ?</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">oui</div></div>
+<div class="state c-green">PearTechCart.clear()</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">non</div></div>
+<div class="state c-blue">localStorage direct</div>
+</div>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">Voie principale — PearTechCart.clear()</div>
+<div class="kbox-item">Vide le tableau cartItems en mémoire</div>
+<div class="kbox-item">Met à jour localStorage[CART_KEY]</div>
+<div class="kbox-item">Met à jour le badge header</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Fallback — localStorage direct</div>
+<div class="kbox-item"><ic>localStorage.setItem('peartech-cart-count', '0')</ic></div>
+<div class="kbox-item">Seul le compteur est remis à zéro</div>
+<div class="kbox-item">Le tableau n'est pas vidé — edge case</div>
+</div>
+</div>
+<h3>Le fallback hiérarchique pour vider le panier</h3>
+<div class="state-machine">
+<div class="state c-yellow">window.PearTechCart ?</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">oui</div></div>
+<div class="state c-green">PearTechCart.clear()</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">non</div></div>
+<div class="state c-blue">localStorage direct</div>
+</div>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">Voie principale — PearTechCart.clear()</div>
+<div class="kbox-item">Vide le tableau cartItems en mémoire</div>
+<div class="kbox-item">Met à jour localStorage[CART_KEY]</div>
+<div class="kbox-item">Met à jour le badge header</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Fallback — localStorage direct</div>
+<div class="kbox-item"><ic>localStorage.setItem('peartech-cart-count', '0')</ic></div>
+<div class="kbox-item">Seul le compteur est remis à zéro</div>
+<div class="kbox-item">Le tableau n'est pas vidé — edge case</div>
+</div>
+</div>
 </div>
 <hr> <!-- ══ RECAP ══ -->
-<div class="sec" id="recap"> <div class="slabel">05 — Récapitulatif</div> <h2>Vue d'ensemble — séquence complète</h2> <div class="diag"> <div class="dtitle">Flux de confirmation.js — du chargement à l'affichage</div> <div class="vc"> <div class="vn w cgr">DOMContentLoaded</div> <div class="va"><div class="val">sessionStorage.getItem('peartech-last-order')</div></div> </div> <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flg" style="font-size:.6rem;">Données trouvées</div> <div class="vn ca" style="font-size:.7rem;">JSON.parse(stored)<br>removeItem() — consommation</div> </div> <div class="fc"> <div class="fl flr" style="font-size:.6rem;">Absent / corrompu</div> <div class="vn cy" style="font-size:.7rem;">orderData = objet fallback<br>avec CMD-aléatoire</div> </div> </div> <div class="vc" style="margin-top:.5rem;"> <div class="va"><div class="val">les deux chemins convergent ici</div></div> <div class="vn w cgr">Injection dans 9 éléments DOM (textContent + innerHTML)</div> <div class="va"></div> <div class="vn w ca">PearTechCart.clear() ou fallback localStorage</div> <div class="va"></div> <div class="vn w cgr">Badge cart-count  "0"  display:none</div> </div> </div> <div style="margin-top:1.5rem;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25
+<div class="sec" id="recap"> <div class="slabel">05 — Récapitulatif</div> <h2>Vue d'ensemble — séquence complète <a class="anchor-link" href="#recap" title="Lien direct">¶</a></h2>
+<p>confirmation.js est le script le plus simple de la chaîne d'achat : aucune interaction utilisateur, aucun event listener, aucun appel réseau. C'est un script de <b>lecture et affichage</b> pur.</p>
+<h3>La séquence complète du fichier</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cm">// 1. DOMContentLoaded</span>
+<span class="cm">//    └── <span class="kw">let</span> orderData; (déclaration dans le bon scope)</span>
+
+<span class="cm">// 2. sessionStorage.getItem(<span class="s">'peartech-last-order'</span>)</span>
+<span class="cm">//    ├── si trouvé → JSON.parse() + removeItem() (consommer les données)</span>
+<span class="cm">//    └── si absent/corrompu → <span class="kw">catch</span>(e) → orderData reste <span class="kw">undefined</span></span>
+
+<span class="cm">// 3. <span class="kw">if</span> (!orderData) → fallback avec données fictives</span>
+<span class="cm">//    └── garantit que la page ne s'affiche jamais vide</span>
+
+<span class="cm">// 4. Injections DOM (x8 éléments) + forEach items → innerHTML</span>
+<span class="cm">//    └── textContent pour les données simples, innerHTML pour la liste</span>
+
+<span class="cm">// 5. Nettoyage : PearTechCart.clear() + badge → 0</span></pre></div>
+<h3>Pourquoi removeItem() immédiatement après getItem()</h3>
+<p>La donnée <ic>peartech-last-order</ic> est consommée en une fois : lire puis supprimer immédiatement. Si l'utilisateur rafraîchit la page (F5), <ic>getItem()</ic> retourne <ic>null</ic> — le fallback s'affiche. C'est intentionnel : on ne veut pas qu'un rechargement de page re-affiche une ancienne commande comme si elle venait d'être passée.</p>
+<h3>textContent vs innerHTML — Sécurité XSS</h3>
+<p>Les injections simples (<ic>orderData.email</ic>, <ic>orderData.orderNumber</ic>…) utilisent <ic>.textContent</ic> et non <ic>.innerHTML</ic>. <ic>textContent</ic> traite la valeur comme du texte brut — si la valeur contient <ic>&lt;script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"&gt;&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</ic>, ce texte s'affiche littéralement sans exécution. C'est la protection de base contre les attaques XSS (Cross-Site Scripting).</p>
+<div class="box ok"><span class="bi">✓</span><div>confirmation.js est un exemple de script de rendu final d'une chaîne de traitement : <ic>paiement.js</ic> écrit, <ic>confirmation.js</ic> lit et consomme. Le pattern write → read → delete garantit qu'une commande ne peut être affichée qu'une seule fois, même en cas de rafraîchissement.</div></div>
+<h3>confirmation.js dans la chaîne de commande complète</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">catalogue/product_detail</span><span class="tl-title">Sélection produit + ajout panier</span></div><div class="tl-body"><ic>PearTechCart.addToCart(product)</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">cart.js</span><span class="tl-title">Validation du panier + promo</span></div><div class="tl-body"><ic>sessionStorage['peartech-promo']</ic> + navigation</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">paiement.js</span><span class="tl-title">Formulaire livraison/paiement + submit</span></div><div class="tl-body"><ic>sessionStorage['peartech-last-order'] = orderData</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">confirmation.js</span><span class="tl-title">Lecture + affichage + nettoyage</span></div><div class="tl-body"><ic>getItem → parse → removeItem → DOM → clearCart</ic></div></div>
+</div>
+<h3>confirmation.js dans la chaîne de commande complète</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">catalogue/product_detail</span><span class="tl-title">Sélection produit + ajout panier</span></div><div class="tl-body"><ic>PearTechCart.addToCart(product)</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">cart.js</span><span class="tl-title">Validation du panier + promo</span></div><div class="tl-body"><ic>sessionStorage['peartech-promo']</ic> + navigation</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">paiement.js</span><span class="tl-title">Formulaire livraison/paiement + submit</span></div><div class="tl-body"><ic>sessionStorage['peartech-last-order'] = orderData</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">confirmation.js</span><span class="tl-title">Lecture + affichage + nettoyage</span></div><div class="tl-body"><ic>getItem → parse → removeItem → DOM → clearCart</ic></div></div>
+</div>
+<h3>confirmation.js dans la chaîne de commande complète</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">catalogue/product_detail</span><span class="tl-title">Sélection produit + ajout panier</span></div><div class="tl-body"><ic>PearTechCart.addToCart(product)</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">cart.js</span><span class="tl-title">Validation du panier + promo</span></div><div class="tl-body"><ic>sessionStorage['peartech-promo']</ic> + navigation</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">paiement.js</span><span class="tl-title">Formulaire livraison/paiement + submit</span></div><div class="tl-body"><ic>sessionStorage['peartech-last-order'] = orderData</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">confirmation.js</span><span class="tl-title">Lecture + affichage + nettoyage</span></div><div class="tl-body"><ic>getItem → parse → removeItem → DOM → clearCart</ic></div></div>
+</div>
+</div> <div style="margin-top:1.5rem;background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.25);border-radius:12px;padding:1.1rem;color:#6ee7b7;font-size:.84rem;line-height:1.75;">La page confirmation ne fait <b>aucune requête réseau</b> — elle lit uniquement depuis sessionStorage. Si les données sont absentes, elle affiche des données de démo. Entièrement testable hors ligne.</div>
+</div>
+<hr>
+
+
+<hr>
+<div class="sec" id="ordre"><div class="slabel">06 — Ordre du code</div><h2>Pourquoi chaque bloc est placé là où il est <a class="anchor-link" href="#ordre" title="Lien direct">¶</a></h2><p>confirmation.js suit la séquence <b>lire → supprimer immédiatement → fallback → afficher → nettoyer en dernier</b>. Les deux suppressions (<ic>removeItem</ic> sessionStorage à l'étape 3, <ic>clear()</ic> panier à l'étape 7) illustrent la même règle : supprimer au plus tard possible pour les données irremplaçables, au plus tôt possible pour les données temporaires.</p><div class="ordre-seq"><div class="os-bloc"><div class="os-num">1</div><div class="os-card"><div class="os-head"><span class="os-pill data">Déclaration de portée</span><span class="os-name">let orderData (sans valeur initiale)</span></div><div class="os-body"><div class="os-why"><b>Déclarée sans valeur pour être accessible dans tout le bloc DOMContentLoaded.</b> <ic>orderData</ic> est lue dans le bloc <ic>if (stored)</ic>, dans le bloc <ic>if (!orderData)</ic> (fallback), et dans toutes les injections DOM. En JS, <ic>let</ic> déclarée dans un <ic>if</ic> est hors scope pour les blocs suivants — la déclarer en tête de scope résout ce problème.</div><div class="os-err">Si déclarée à l'intérieur du <ic>if (stored) { let orderData = … }</ic> : le fallback et les injections DOM ne pourraient pas y accéder → <ic>ReferenceError: orderData is not defined</ic>.</div></div></div></div><div class="os-arrow">↓ lire la source de vérité avant d'afficher quoi que ce soit</div><div class="os-bloc"><div class="os-num">2</div><div class="os-card"><div class="os-head"><span class="os-pill data">Lecture sessionStorage</span><span class="os-name">sessionStorage.getItem('peartech-last-order') + JSON.parse dans try/catch</span></div><div class="os-body"><div class="os-why"><b>Source de vérité principale — doit être lue avant tout affichage.</b> Le <ic>try/catch</ic> autour du <ic>JSON.parse</ic> est indispensable : une chaîne corrompue dans sessionStorage (données tronquées, quota dépassé) lèverait une <ic>SyntaxError</ic> non attrapée qui stopperait toute la page. La page de confirmation resterait blanche avec un panier non vidé.</div><div class="os-dep">Alimente <ic>orderData</ic> (étape 1). Si null/invalide → fallback (étape 4) prend le relais.</div></div></div></div><div class="os-arrow">↓ supprimer immédiatement après lecture — action défensive</div><div class="os-bloc"><div class="os-num">3</div><div class="os-card"><div class="os-head"><span class="os-pill guard">Suppression immédiate</span><span class="os-name">sessionStorage.removeItem('peartech-last-order') — juste après parse réussi</span></div><div class="os-body"><div class="os-why"><b>Supprimée au plus tôt, pas en fin de script.</b> Si l'utilisateur appuie sur F5, la page se recharge. Sans cette suppression immédiate, la même commande serait réaffichée — l'utilisateur verrait une 'fausse' confirmation pour une commande déjà enregistrée. De plus, si une erreur JS survenait dans les injections DOM (étape 5–6), un <ic>removeItem</ic> placé en fin de script ne s'exécuterait jamais.</div><div class="os-err">Si <ic>removeItem</ic> était en étape 7 (après les injections DOM) : une erreur dans l'injection (élément manquant) → exception → le script s'arrête avant <ic>removeItem</ic> → la donnée reste en sessionStorage → réaffichée au prochain chargement.</div><div class="os-rule">Principe fondamental : <b>supprimer/invalider une donnée dès qu'elle est lue avec succès</b>, jamais à la fin d'une longue séquence qui peut échouer.</div></div></div></div><div class="os-arrow">↓ fallback uniquement si les données réelles sont absentes</div><div class="os-bloc"><div class="os-num">4</div><div class="os-card"><div class="os-head"><span class="os-pill data">Données de secours</span><span class="os-name">if (!orderData) { orderData = { … données factices … } }</span></div><div class="os-body"><div class="os-why"><b>Placé après la tentative de lecture — on ne sait pas si le fallback est nécessaire avant d'avoir essayé.</b> Ce bloc s'exécute seulement si <ic>orderData</ic> est encore <ic>undefined</ic> (sessionStorage vide, JSON corrompu, ou page accédée directement via URL). Il garantit que la page ne reste jamais vide. À partir de cette étape, <ic>orderData</ic> est <em>garantie non-null</em>.</div><div class="os-dep">À partir d'ici, toutes les injections (étapes 5–6) peuvent utiliser <ic>orderData</ic> sans vérification supplémentaire.</div></div></div></div><div class="os-arrow">↓ données garanties → on peut afficher (simple avant complexe)</div><div class="os-bloc"><div class="os-num">5</div><div class="os-card"><div class="os-head"><span class="os-pill dom">Injections simples</span><span class="os-name">getElementById('order-number').textContent = … (×5 éléments)</span></div><div class="os-body"><div class="os-why"><b>Avant la construction HTML complexe — du plus simple au plus complexe.</b> Les injections <ic>textContent</ic> directes (numéro de commande, email, nom, adresse, date) sont triviales : un élément → une valeur. Les placer avant le <ic>forEach</ic> suit la convention de lisibilité : voir les cas simples avant les cas complexes. Fonctionnellement, l'ordre entre les injections simples et la boucle est indifférent.</div></div></div></div><div class="os-arrow">↓ liste des articles — construction HTML par boucle</div><div class="os-bloc"><div class="os-num">6</div><div class="os-card"><div class="os-head"><span class="os-pill render">Construction HTML</span><span class="os-name">orderData.items.forEach(item => …) + innerHTML</span></div><div class="os-body"><div class="os-why"><b>Plus complexe que les injections simples — génère du HTML dynamique.</b> Cette boucle construit la liste complète des articles commandés avec leurs images, prix et quantités. La placer après les injections simples (étape 5) est une convention : on affiche d'abord les informations de synthèse (numéro, email), puis le détail. En pratique, l'ordre est inversable sans impact fonctionnel.</div></div></div></div><div class="os-arrow">↓ vider le panier en tout dernier — action irréversible</div><div class="os-bloc"><div class="os-num">7</div><div class="os-card"><div class="os-head"><span class="os-pill guard">Nettoyage irréversible</span><span class="os-name">PearTechCart.clear() + badge mis à 0</span></div><div class="os-body"><div class="os-why"><b>En tout dernier — vider le panier après que tout l'affichage est confirmé sans erreur.</b> Si le panier était vidé à l'étape 3 (juste après la lecture) et qu'une erreur JS survenait dans les injections DOM, l'utilisateur verrait une page de confirmation vide avec son panier déjà perdu. Placer le nettoyage en dernier garantit que l'affichage complet a réussi avant toute action irréversible.</div><div class="os-err">Si <ic>PearTechCart.clear()</ic> était à l'étape 3 : erreur dans l'injection DOM (ex: <ic>getElementById('order-number')</ic> → null) → exception → page vide + panier vidé. L'utilisateur perd sa commande et ses articles.</div><div class="os-rule">Règle d'or : <b>les actions irréversibles (vider, supprimer) se placent en dernier, après que leur prérequis (l'affichage) est confirmé.</b></div></div></div></div></div></div><div class="os-synthese"><div class="os-synthese-title">Règle générale de ce fichier</div><p>L'ordre de suppression est délibéré : <ic>sessionStorage.removeItem()</ic> tôt (protège contre F5), <ic>cart.clear()</ic> tard (protège contre les erreurs JS). Ces deux décisions opposées reflètent la même logique : minimiser les risques.</p><div class="os-grid"><div class="os-grid-item"><div class="og-num">01</div><div class="og-name">let orderData</div><div class="og-why">Portée étendue</div></div><div class="os-grid-item"><div class="og-num">02</div><div class="og-name">getItem + parse</div><div class="og-why">Source de vérité</div></div><div class="os-grid-item"><div class="og-num">03</div><div class="og-name">removeItem</div><div class="og-why">Protège F5</div></div><div class="os-grid-item"><div class="og-num">04</div><div class="og-name">Fallback</div><div class="og-why">Garantit non-null</div></div><div class="os-grid-item"><div class="og-num">05</div><div class="og-name">Injections simples</div><div class="og-why">Simple d'abord</div></div><div class="os-grid-item"><div class="og-num">06</div><div class="og-name">forEach HTML</div><div class="og-why">Complexe ensuite</div></div><div class="os-grid-item"><div class="og-num">07</div><div class="og-name">cart.clear()</div><div class="og-why">Irréversible en dernier</div></div></div></div>
 <hr>
 <div class="sec" id="glossaire">
   <div class="slabel">Glossaire</div>
-  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <h2>Concepts et termes techniques utilisés dans ce fichier <a class="anchor-link" href="#glossaire" title="Lien direct">¶</a></h2>
   <p>Définitions des termes importants rencontrés dans cette documentation.</p>
   <div class="glos-grid">
     <div class="glos-item"><div class="glos-term">Document Object Model</div><div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div></div>
     <div class="glos-item"><div class="glos-term">Immediately Invoked Function Expression</div><div class="glos-def">Fonction qui s'exécute immédiatement à sa déclaration : <ic>(function() { ... })()</ic>. Crée un scope isolé — tout ce qui est déclaré dedans reste privé et ne pollue pas <ic>window</ic>. Tous les fichiers JS du projet utilisent ce pattern.</div></div>
     <div class="glos-item"><div class="glos-term">DOMContentLoaded</div><div class="glos-def">Événement déclenché quand le HTML est parsé et le DOM prêt — avant images et CSS. Moment idéal pour initialiser les modules JS. Distinct de <ic>window.load</ic> qui attend tous les assets réseau.</div></div>
     <div class="glos-item"><div class="glos-term">sessionStorage</div><div class="glos-def">Identique à localStorage mais limité à l'onglet courant. Effacé à la fermeture de l'onglet. Utilisé ici pour transmettre la commande de <ic>paiement.js</ic> vers <ic>confirmation.js</ic> sans la persister.</div></div>
-    <div class="glos-item"><div class="glos-term">JSON — JavaScript Object Notation</div><div class="glos-def">Format texte pour sérialiser des objets. <ic>JSON.stringify(obj)</ic> → string stockable. <ic>JSON.parse(str)</ic> → objet utilisable. Obligatoire pour stocker/lire des objets dans localStorage ou sessionStorage.</div></div>
+    <div class="glos-item"><div class="glos-term">JSON — JavaScript Object Notation</div><div class="glos-def">Format texte pour sérialiser des objets JS en chaîne. JSON.parse() = string → object. JSON.stringify() = object → string. localStorage ne stocke que des strings — tout objet doit être sérialisé.</div></div>
   </div>
 </div>
+
+<hr class="sep">
+<div class="sec" id="plus-loin">
+  <div class="slabel">✦ Pour aller plus loin</div>
+  <h2>Page de confirmation : lecture, affichage et nettoyage <a class="anchor-link" href="#plus-loin" title="Lien direct">¶</a></h2>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — URLSearchParams :</b> Une URL avec paramètres est comme une lettre avec une adresse et des post-its collés dessus. <ic>URLSearchParams</ic> te permet de lire les post-its (<ic>?orderId=42&total=99</ic>) sans décoller la lettre ou te souvenir de leur position.</div></div>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — Nettoyage après commande :</b> Vider le panier après confirmation, c'est comme le serveur qui débarrasse la table après que tu aies mangé. Tu gardes le ticket (numéro de commande affiché) mais les plats (localStorage) disparaissent.</div></div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Afficher une page de confirmation sans vérifier qu'une commande existe</div>
+    <div class="gotcha-body">
+      Si l'utilisateur arrive directement sur <ic>/confirmation.html</ic> sans paramètre d'URL, la page doit gérer ce cas. Toujours vérifier que les paramètres requis existent (<ic>urlParams.get('orderId')</ic> peut retourner <ic>null</ic>) et afficher un message d'erreur ou rediriger.
+    </div>
+  </div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Vider le panier avant de confirmer l'affichage</div>
+    <div class="gotcha-body">
+      Le nettoyage de localStorage doit se faire <em>après</em> que les données ont été lues et affichées. Si tu vides d'abord et que le rendu échoue ensuite, l'utilisateur perd ses données sans voir sa confirmation.
+    </div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Génère un numéro de commande unique côté client avec <ic>Date.now().toString(36).toUpperCase()</ic>. Pas besoin de serveur pour un numéro de référence visuellement convaincant.</div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Après une commande confirmée, désactive le bouton retour avec <ic>history.pushState(null, '', location.href)</ic> suivi d'un listener sur <ic>popstate</ic>. Évite que l'utilisateur revienne sur un panier vide et repasse commande accidentellement.</div>
+  </div>
+
+  <div class="schema-grid">
+    <div class="schema-card yellow"><h4>URLSearchParams</h4><p>Lit les paramètres de l'URL proprement. Pas de split manuel sur <ic>?</ic> et <ic>&</ic>.</p></div>
+    <div class="schema-card green"><h4>Lecture avant nettoyage</h4><p>Afficher les données d'abord, vider localStorage ensuite. L'ordre est critique.</p></div>
+    <div class="schema-card blue"><h4>Guard clause</h4><p>Vérifier l'existence des paramètres avant de tenter l'affichage. Retour propre si absent.</p></div>
+    <div class="schema-card purple"><h4>Numéro de commande</h4><p>Généré côté client pour l'UX. Dans un vrai projet, vient du serveur après validation paiement.</p></div>
+  </div>
+
+  <h3>Code source — <ic>confirmation.js</ic></h3>
+
+  <div class="file-stats">
+    <div class="fstat">
+      <div class="fstat-val">114</div>
+      <div class="fstat-label">Lignes</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">2</div>
+      <div class="fstat-label">Fonctions</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">4</div>
+      <div class="fstat-label">const / let</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">32</div>
+      <div class="fstat-label">Commentaires</div>
+    </div>
+  </div>
+  <div style="margin:.8rem 0 1.2rem;"><span class="pattern-tag" style="background:rgba(86,209,158,.15);border-color:rgba(86,209,158,.4);color:#7ee8b8;">✅ Pattern : sessionStorage + fallback demo data</span></div>
+  <div class="src-block">
+    <div class="src-header">
+      <div class="src-dots">
+        <div class="src-dot r"></div>
+        <div class="src-dot y"></div>
+        <div class="src-dot g"></div>
+      </div>
+      <div class="src-fname">confirmation.js</div>
+      <div class="src-badge">114 lignes</div>
+    </div>
+    <div class="src-body">
+      <pre><span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"><span class="cmt">// confirmation.js - Page de confirmation de commande</span></span>
+<span class="ln"><span class="cmt">// Lit les données de commande stockées en sessionStorage</span></span>
+<span class="ln"><span class="cmt">// (renseignées par paiement.js) et les affiche dynamiquement</span></span>
+<span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="cmt">// IIFE pour isoler le code et éviter les conflits</span></span>
+<span class="ln">(<span class="kw">function</span>() {</span>
+<span class="ln">    <span class="s">'use strict'</span>; <span class="cmt">// Mode strict : meilleure sécurité et détection d'erreurs</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="cmt">// Attend que le DOM soit complètement chargé avant d'exécuter le code</span></span>
+<span class="ln">    <span class="bi">document</span>.<span class="fn">addEventListener</span>(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Variable qui contiendra les données de la commande</span></span>
+<span class="ln">        <span class="kw">let</span> orderData;</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Récupère les données de la dernière commande stockées dans sessionStorage</span></span>
+<span class="ln">        <span class="cmt">// sessionStorage est utilisé car les données doivent survivre à un rechargement de page</span></span>
+<span class="ln">        <span class="cmt">// mais être effacées à la fermeture de l'onglet (contrairement à localStorage)</span></span>
+<span class="ln">        <span class="kw">const</span> stored = <span class="bi">sessionStorage</span>.<span class="fn">getItem</span>(<span class="s">'peartech-last-order'</span>);</span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">if</span> (stored) {</span>
+<span class="ln">            <span class="kw">try</span> {</span>
+<span class="ln">                <span class="cmt">// Tente de parser la chaîne JSON en objet JavaScript</span></span>
+<span class="ln">                orderData = <span class="bi">JSON</span>.<span class="fn">parse</span>(stored);</span>
+<span class="ln">                <span class="cmt">// Une fois lues, on supprime les données pour éviter de les réafficher plus tard</span></span>
+<span class="ln">                <span class="cmt">// (par exemple si l'utilisateur rafraîchit la page, on ne veut pas garder l'ancienne commande)</span></span>
+<span class="ln">                <span class="bi">sessionStorage</span>.<span class="fn">removeItem</span>(<span class="s">'peartech-last-order'</span>);</span>
+<span class="ln">            } <span class="kw">catch</span> (e) {</span>
+<span class="ln">                <span class="cmt">// En cas d'erreur de parsing (ex: JSON invalide), on log une alerte</span></span>
+<span class="ln">                <span class="bi">console</span>.<span class="fn">warn</span>(<span class="s">'Impossible de parser peartech-last-order'</span>, e);</span>
+<span class="ln">            }</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Si aucune donnée n'a été trouvée (pas de commande précédente ou erreur),</span></span>
+<span class="ln">        <span class="cmt">// on utilise des données factices pour que la page ait un affichage cohérent</span></span>
+<span class="ln">        <span class="cmt">// (utile en développement ou si l'utilisateur arrive directement sur la page)</span></span>
+<span class="ln">        <span class="kw">if</span> (!orderData) {</span>
+<span class="ln">            orderData = {</span>
+<span class="ln">                orderNumber: <span class="s">'CMD-'</span> + <span class="bi">Math</span>.<span class="fn">floor</span>(<span class="bi">Math</span>.<span class="fn">random</span>() * <span class="n">1000000</span>), <span class="cmt">// Génère un numéro aléatoire</span></span>
+<span class="ln">                email: <span class="s">'jean.dupont@email.com'</span>,</span>
+<span class="ln">                delivery: {</span>
+<span class="ln">                    name: <span class="s">'Jean Dupont'</span>,</span>
+<span class="ln">                    address: <span class="s">'15 rue de la Paix, 75001 Paris, France'</span>,</span>
+<span class="ln">                    mode: <span class="s">'Livraison standard (3-5 jours)'</span>,</span>
+<span class="ln">                    payment: <span class="s">'Carte bancaire **** 4242'</span></span>
+<span class="ln">                },</span>
+<span class="ln">                items: [</span>
+<span class="ln">                    { name: <span class="s">'Ordinateur Portable Gamer X1'</span>, quantity: <span class="n">1</span>, price: <span class="n">1200.00</span> },</span>
+<span class="ln">                    { name: <span class="s">'Souris sans fil Pro'</span>,          quantity: <span class="n">1</span>, price: <span class="n">50.00</span> },</span>
+<span class="ln">                    { name: <span class="s">'Sacoche de transport'</span>,         quantity: <span class="n">1</span>, price: <span class="n">30.00</span> }</span>
+<span class="ln">                ],</span>
+<span class="ln">                shipping: <span class="n">0</span>, <span class="cmt">// Frais de port (gratuit ici)</span></span>
+<span class="ln">                total: <span class="n">1280.00</span> <span class="cmt">// Total calculé</span></span>
+<span class="ln">            };</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Remplissage des éléments du DOM avec les données de la commande ──</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Numéro de commande</span></span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'order-number'</span>).textContent = orderData.orderNumber;</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Email du client (texte simple, pas de lien)</span></span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'customer-email'</span>).textContent = orderData.email; <span class="cmt">// CORRECTION : texte simple, pas de lien</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Informations de livraison</span></span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'delivery-name'</span>).textContent   = orderData.delivery.name;</span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'delivery-address'</span>).textContent = orderData.delivery.address;</span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'delivery-mode'</span>).textContent   = orderData.delivery.mode;</span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'payment-method'</span>).textContent  = orderData.delivery.payment;</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Construction de la liste des articles commandés ──</span></span>
+<span class="ln">        <span class="kw">const</span> itemsContainer = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'order-items'</span>);</span>
+<span class="ln">        <span class="kw">let</span> itemsHtml = <span class="s">''</span>;</span>
+<span class="ln">        <span class="cmt">// Parcourt chaque article et génère le HTML correspondant</span></span>
+<span class="ln">        orderData.items.<span class="fn">forEach</span>(item =&gt; {</span>
+<span class="ln">            itemsHtml += <span class="s">`</span>
+<span class="ln">                &lt;div class="order-item"&gt;</span>
+<span class="ln">                    &lt;span class="item-name"&gt;${item.quantity}x ${item.name}&lt;/span&gt;</span>
+<span class="ln">                    &lt;span class="item-price"&gt;${item.price.toFixed(2).replace('.',',')} €&lt;/span&gt;</span>
+<span class="ln">                &lt;/div&gt;</span>
+<span class="ln">            `</span>;</span>
+<span class="ln">        });</span>
+<span class="ln">        <span class="cmt">// Injecte le HTML dans le conteneur</span></span>
+<span class="ln">        itemsContainer.innerHTML = itemsHtml;</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Affichage des frais de port ──</span></span>
+<span class="ln">        <span class="cmt">// Si shipping est 0, on affiche "Gratuit", sinon on formate le montant</span></span>
+<span class="ln">        <span class="kw">const</span> shippingText = orderData.shipping === <span class="n">0</span></span>
+<span class="ln">            ? <span class="s">'Gratuit'</span></span>
+<span class="ln">            : orderData.shipping.<span class="fn">toFixed</span>(<span class="n">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>,<span class="s">','</span>) + <span class="s">' €'</span>;</span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'shipping-cost'</span>).textContent = shippingText;</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Affichage du total payé ──</span></span>
+<span class="ln">        <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'total-paid'</span>).textContent = orderData.total.<span class="fn">toFixed</span>(<span class="n">2</span>).<span class="fn">replace</span>(<span class="s">'.'</span>,<span class="s">','</span>) + <span class="s">' €'</span>;</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Nettoyage du panier après confirmation de commande ──</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Utilise l'API centralisée PearTechCart si elle existe (pour vider le panier)</span></span>
+<span class="ln">        <span class="kw">if</span> (<span class="bi">window</span>.PearTechCart) {</span>
+<span class="ln">            <span class="bi">window</span>.PearTechCart.<span class="fn">clear</span>(); <span class="cmt">// vide le panier</span></span>
+<span class="ln">        } <span class="kw">else</span> {</span>
+<span class="ln">            <span class="cmt">// Fallback : on remet simplement le compteur à zéro dans localStorage</span></span>
+<span class="ln">            <span class="bi">localStorage</span>.<span class="fn">setItem</span>(<span class="s">'peartech-cart-count'</span>, <span class="s">'0'</span>);</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Met à jour le badge du panier dans le header</span></span>
+<span class="ln">        <span class="kw">const</span> badge = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'cart-count'</span>);</span>
+<span class="ln">        <span class="kw">if</span> (badge) {</span>
+<span class="ln">            badge.textContent = <span class="s">'0'</span>;      <span class="cmt">// Affiche 0</span></span>
+<span class="ln">            badge.style.display = <span class="s">'none'</span>; <span class="cmt">// Cache le badge (car zéro)</span></span>
+<span class="ln">        }</span>
+<span class="ln">    });</span>
+<span class="ln">})();</span></pre>
+    </div><div class="src-fade"></div>
+<button class="src-expand-btn" data-lines="114"><span>▼</span> Voir tout le code (114 lignes)</button>
+  </div>
+
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="decryptage">
+  <div class="slabel">⌨ Patterns clés du code</div>
+  <h2>confirmation.js — les patterns essentiels <a class="anchor-link" href="#decryptage" title="Lien direct">¶</a></h2>
+
+  <h3>Guard clause — protection systématique</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Pattern universel dans tous les modules PearTech</span>
+<span class="cmt">// Récupérer les éléments DOM nécessaires</span>
+<span class="kw">const</span> el = document.<span class="fn">getElementById</span>(<span class="str">'mon-element'</span>);
+
+<span class="cmt">// Guard immédiat — si l'élément est absent de la page, stop</span>
+<span class="cmt">// Ce module peut être chargé sur des pages où l'élément n'existe pas</span>
+<span class="kw">if</span> (!el) {
+  console.<span class="fn">warn</span>(<span class="str">'confirmation.js : élément introuvable'</span>);
+  <span class="kw">return</span>; <span class="cmt">// sortie propre, pas de TypeError en cascade</span>
+}</pre></div>
+
+  <h3>Délégation d'événements</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Plutôt que d'attacher un listener sur chaque bouton...</span>
+<span class="cmt">// On attache UN seul listener sur le container parent</span>
+container.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>(e) {
+
+  <span class="cmt">// matches() vérifie si l'élément cliqué correspond au sélecteur</span>
+  <span class="kw">if</span> (e.target.<span class="fn">matches</span>(<span class="str">'.btn-action'</span>)) {
+    <span class="kw">const</span> id = e.target.dataset.id; <span class="cmt">// lire data-id="..."</span>
+    <span class="fn">handleAction</span>(id);
+  }
+
+  <span class="cmt">// closest() remonte l'arbre DOM — utile si le clic est sur un enfant</span>
+  <span class="kw">const</span> card = e.target.<span class="fn">closest</span>(<span class="str">'.card'</span>);
+  <span class="kw">if</span> (card) <span class="fn">handleCard</span>(card.dataset.id);
+});</pre></div>
+
+  <h3>Persistance localStorage avec try/catch</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Lire depuis localStorage de façon sécurisée</span>
+<span class="kw">function</span> <span class="fn">load</span>(key) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> raw = localStorage.<span class="fn">getItem</span>(key);
+    <span class="kw">return</span> raw ? JSON.<span class="fn">parse</span>(raw) : <span class="kw">null</span>;
+  } <span class="kw">catch</span> { <span class="kw">return</span> <span class="kw">null</span>; } <span class="cmt">// corrompu → null</span>
+}
+
+<span class="cmt">// Écrire dans localStorage</span>
+<span class="kw">function</span> <span class="fn">save</span>(key, data) {
+  localStorage.<span class="fn">setItem</span>(key, JSON.<span class="fn">stringify</span>(data));
+  <span class="cmt">// JSON.stringify : tableau/objet JS → string stockable</span>
+}</pre></div>
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="code-annote">
+  <div class="slabel">⟨/⟩ Code annoté — confirmation.js complet</div>
+  <h2>Chaque ligne décortiquée <a class="anchor-link" href="#code-annote" title="Lien direct">¶</a></h2>
+
+  <h3>① Lecture des paramètres d'URL</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">initConfirmation</span>() {
+  <span class="kw">const</span> <span class="vr">params</span> = <span class="kw">new</span> <span class="fn">URLSearchParams</span>(location.search);
+  <span class="cmt">// location.search = '?orderId=ABC123&total=249.98&items=3'
+  // URLSearchParams parse automatiquement tous les paramètres.</span>
+
+  <span class="kw">const</span> <span class="vr">orderId</span> = <span class="vr">params</span>.<span class="fn">get</span>(<span class="str">'orderId'</span>);
+  <span class="kw">const</span> <span class="vr">total</span>   = <span class="vr">params</span>.<span class="fn">get</span>(<span class="str">'total'</span>);
+  <span class="kw">const</span> <span class="vr">items</span>   = <span class="vr">params</span>.<span class="fn">get</span>(<span class="str">'items'</span>);
+  <span class="cmt">// get retourne la string ou null si le paramètre est absent.</span>
+
+  <span class="cmt">// ── Guard : paramètres requis absents ─────────────────────────────</span>
+  <span class="kw">if</span> (!<span class="vr">orderId</span> || !<span class="vr">total</span>) {
+    <span class="fn">showError</span>(<span class="str">'Commande introuvable. Retournez à la boutique.'</span>);
+    <span class="kw">return</span>; <span class="cmt">// Stoppe l'initialisation proprement</span>
+  }
+
+  <span class="cmt">// ── Affichage ─────────────────────────────────────────────────────</span>
+  <span class="fn">renderConfirmation</span>({ orderId: <span class="vr">orderId</span>, total: <span class="vr">total</span>, items: <span class="vr">items</span> });
+
+  <span class="cmt">// ── Nettoyage APRÈS l'affichage ───────────────────────────────────
+  // Ordre critique : afficher d'abord, nettoyer ensuite.
+  // Si renderConfirmation plante, on ne perd pas les données localStorage.</span>
+  PearTechCart.<span class="fn">clearCart</span>();
+  <span class="cmt">// Vide le panier côté localStorage. L'utilisateur a commandé, c'est logique.</span>
+
+  <span class="fn">cleanURL</span>();
+  <span class="cmt">// Remplace l'URL ?orderId=… par /confirmation.html (sans paramètres sensibles)
+  // dans l'historique. history.replaceState, pas pushState (on ne veut pas
+  // que l'utilisateur puisse revenir sur l'URL avec paramètres).</span>
+}
+
+<span class="kw">function</span> <span class="fn">cleanURL</span>() {
+  history.<span class="fn">replaceState</span>({}, <span class="str">''</span>, location.pathname);
+  <span class="cmt">// replaceState : modifie l'URL courante sans créer une nouvelle entrée d'historique.
+  // location.pathname = '/confirmation.html' (sans le ?query).</span>
+}</pre></div>
+
+  <h3>② Génération du numéro de commande côté client</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">generateOrderId</span>() {
+  <span class="kw">return</span> Date.<span class="fn">now</span>().<span class="fn">toString</span>(<span class="nm">36</span>).<span class="fn">toUpperCase</span>()
+    + <span class="str">'-'</span>
+    + Math.<span class="fn">random</span>().<span class="fn">toString</span>(<span class="nm">36</span>).<span class="fn">slice</span>(<span class="nm">2</span>, <span class="nm">6</span>).<span class="fn">toUpperCase</span>();
+  <span class="cmt">// Date.now() = timestamp en ms = 1735000000000
+  // .toString(36) = base 36 (0-9 + a-z) = 'lkfxe3c' (compact)
+  // Math.random().toString(36).slice(2, 6) = 4 chars aléatoires
+  // Résultat : 'LKFXE3C-X9T2' — lisible et unique à 99.99%
+  //
+  // ⚠ En production : le vrai ID vient du serveur après validation paiement.
+  // Ici c'est purement pour l'UX de la démo.</span>
+}
+
+<span class="cmt">// Exemples de sorties :
+// 'M4J9Z2-A3KP'
+// 'M4J9ZX-B7YQ'</span></pre></div>
+
+</div>
+
+<script>
+
+(function() {
+  'use strict';
+
+  /* ───────────────────────────────────────────────
+     BARRE DE PROGRESSION DE LECTURE
+  ─────────────────────────────────────────────── */
+  var bar = document.createElement('div');
+  bar.id = 'read-progress';
+  document.body.prepend(bar);
+
+  function updateProgress() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docH      = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (docH > 0 ? Math.min(100, (scrollTop / docH) * 100) : 0) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* ───────────────────────────────────────────────
+     NAV ACTIVE AU SCROLL
+  ─────────────────────────────────────────────── */
+  var navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (navLinks.length > 0) {
+    var secs = navLinks.reduce(function(acc, a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) acc.push({ el: el, a: a });
+      return acc;
+    }, []);
+
+    if (secs.length > 0) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            navLinks.forEach(function(a) { a.classList.remove('active'); });
+            var hit = secs.find(function(s) { return s.el === entry.target; });
+            if (hit) hit.a.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-56px 0px -55% 0px', threshold: 0 });
+      secs.forEach(function(s) { io.observe(s.el); });
+    }
+  }
+
+  /* ───────────────────────────────────────────────
+     BOUTON COPIER
+  ─────────────────────────────────────────────── */
+  var COPY_SVG  = '<svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6z"/><path d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h7a1 1 0 0 0 0-2H3V6a1 1 0 0 0-1-1z"/></svg>';
+  var CHECK_SVG = '<svg viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/></svg>';
+
+  function makeBtn(extraClass) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn' + (extraClass ? ' ' + extraClass : '');
+    btn.innerHTML = COPY_SVG + ' Copier';
+    btn.setAttribute('aria-label', 'Copier le code');
+    return btn;
+  }
+
+  function attachCopy(btn, getCode) {
+    btn.addEventListener('click', function() {
+      var code = getCode();
+      if (!code) return;
+      var finish = function() {
+        btn.innerHTML = CHECK_SVG + ' Copié !';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.innerHTML = COPY_SVG + ' Copier';
+          btn.classList.remove('copied');
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(finish).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          finish();
+        } catch(e) {}
+      }
+    });
+  }
+
+  /* Inline code-blocks */
+  document.querySelectorAll('.code-block').forEach(function(block) {
+    var pre = block.querySelector('pre');
+    if (!pre) return;
+    block.style.position = 'relative';
+    var btn = makeBtn('abs');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    block.appendChild(btn);
+  });
+
+  /* Src-blocks (code source complet) */
+  document.querySelectorAll('.src-block').forEach(function(block) {
+    var header = block.querySelector('.src-header');
+    var pre    = block.querySelector('pre');
+    if (!header || !pre) return;
+    var btn = makeBtn('');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    header.appendChild(btn);
+  });
+
+  /* ───────────────────────────────────────────────
+     EXPAND / COLLAPSE code source
+  ─────────────────────────────────────────────── */
+  document.querySelectorAll('.src-expand-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var block   = this.closest('.src-block');
+      if (!block) return;
+      var body    = block.querySelector('.src-body');
+      var fade    = block.querySelector('.src-fade');
+      if (!body) return;
+      var expanded = body.classList.toggle('expanded');
+      if (fade) fade.style.opacity = expanded ? '0' : '1';
+      this.innerHTML = expanded
+        ? '<span>▲</span> Réduire'
+        : '<span>▼</span> Voir tout (' + (this.dataset.lines || '?') + ' lignes)';
+    });
+  });
+
+
+  /* ── Wrapper responsive pour les tables ── */
+  document.querySelectorAll('table').forEach(function(tbl) {
+    if (tbl.closest('.tbl-wrap')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tbl-wrap';
+    tbl.parentNode.insertBefore(wrap, tbl);
+    wrap.appendChild(tbl);
+  });
+
+})();
+
+</script>
+<!-- DOCS-FOOTER -->
+<div class="docs-footer"><div class="docs-footer-title">📚 Tous les modules PearTech</div><div class="docs-grid">
+    <a href="animation_docs.html" class="docs-link"><span class="docs-link-icon">✨</span>animation.js</a>
+    <a href="carousel_docs.html" class="docs-link"><span class="docs-link-icon">🎠</span>carousel.js</a>
+    <a href="cart_docs.html" class="docs-link"><span class="docs-link-icon">🛒</span>cart.js</a>
+    <a href="catalogue_docs.html" class="docs-link"><span class="docs-link-icon">📦</span>catalogue.js</a>
+    <a href="#" class="docs-link current"><span class="docs-link-icon">✅</span>confirmation.js</a>
+    <a href="contact_docs.html" class="docs-link"><span class="docs-link-icon">📬</span>contact.js</a>
+    <a href="darkmode_docs.html" class="docs-link"><span class="docs-link-icon">🌙</span>darkmode.js</a>
+    <a href="data_docs.html" class="docs-link"><span class="docs-link-icon">🗄️</span>data.js</a>
+    <a href="dropdown_docs.html" class="docs-link"><span class="docs-link-icon">📋</span>dropdown.js</a>
+    <a href="faq_docs.html" class="docs-link"><span class="docs-link-icon">❓</span>faq.js</a>
+    <a href="favoris_docs.html" class="docs-link"><span class="docs-link-icon">❤️</span>favoris.js</a>
+    <a href="filtre_docs.html" class="docs-link"><span class="docs-link-icon">🔍</span>filtre.js</a>
+    <a href="main_docs.html" class="docs-link"><span class="docs-link-icon">🚀</span>main.js</a>
+    <a href="menu_burger_docs.html" class="docs-link"><span class="docs-link-icon">🍔</span>menu_burger.js</a>
+    <a href="paiement_docs.html" class="docs-link"><span class="docs-link-icon">💳</span>paiement.js</a>
+    <a href="panier_docs.html" class="docs-link"><span class="docs-link-icon">🛍️</span>panier.js</a>
+    <a href="product_detail_docs.html" class="docs-link"><span class="docs-link-icon">📱</span>product_detail.js</a>
+    <a href="profil_docs.html" class="docs-link"><span class="docs-link-icon">👤</span>profil.js</a>
+    <a href="recherche_docs.html" class="docs-link"><span class="docs-link-icon">🔎</span>recherche.js</a>
+  </div></div>
+</body>
+</html>

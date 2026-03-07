@@ -2,124 +2,416 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Système d'onglets catégories sur le catalogue — écoute le CustomEvent de dropdown.js et déclenche le filtrage via catalogue.js.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Documentation — filtre.js">
+<meta property="og:description" content="Système d'onglets catégories sur le catalogue — écoute le CustomEvent de dropdown.js et déclenche le filtrage via catalogue.js.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — filtre.js</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style> :root {
---bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
---accent:#f5c542; --accent2:#ff6b6b; --accent3:#56d19e;
---accent4:#4f8eff; --accent5:#c084fc;
---text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+<style>/* ═══════════════════════════════════════════════════════════════════
+   PEARTECH DOCS — CSS MASTER (réécriture complète)
+   Couvre les 268 classes utilisées dans les 20 fichiers
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── VARIABLES ──────────────────────────────────────────────────── */
+:root {
+  --bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
+  --accent:#f5c542; --accent2:#ff6b6b; --accent3:#56d19e;
+  --accent4:#4f8eff; --accent5:#c084fc;
+  --text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+  /* Alias courts utilisés dans les styles inline générés */
+  --t:var(--text); --t2:var(--text2); --t3:var(--text3);
+  --a:var(--accent);
 }
+
+/* ── RESET & BASE ───────────────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.7;overflow-x:hidden;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+
+/* ── NAV ────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
 .nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--accent);white-space:nowrap;}
 .nav-links{display:flex;gap:.15rem;flex-wrap:wrap;}
 .nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
-.nav-links a:hover{background:var(--bg3);color:var(--text);}
+.nav-links a:hover,.nav-links a.active{background:var(--bg3);color:var(--text);}
+.nav-dropdown,.dropdown-menu,.mobile-menu,.burger-btn{display:none;}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
 .page{max-width:1040px;margin:0 auto;padding:80px 1.5rem 5rem;}
+
+/* ── HERO ───────────────────────────────────────────────────────── */
 .hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
 .hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.28rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1.2rem;}
 .hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
 .hero h1 span{color:var(--accent);}
 .hero p{color:var(--text2);font-size:1rem;max-width:640px;line-height:1.8;}
 .file-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.38rem 1rem;border-radius:8px;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.35rem .9rem;border-radius:8px;}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0;}
-.section{margin-bottom:4.5rem;scroll-margin-top:70px;}
+
+/* ── SECTION ────────────────────────────────────────────────────── */
+.section,.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
 .section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
 .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-.section h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;}
-.section h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
-.section h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
-.section p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
-.section p b{color:var(--text);font-weight:600;}
-.section p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
-/* DIAGRAMMES */
-.diagram{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;margin:1.5rem 0;}
-.diagram-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.8rem;}
-.vchain{display:flex;flex-direction:column;align-items:center;}
-.vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-.vnode.wide{max-width:700px;}
-.varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
-.varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
-.c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
-.c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-.c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-.c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-.c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-.c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
-.fork{display:grid;gap:1rem;width:100%;max-width:700px;}
-.fork.f2{grid-template-columns:1fr 1fr;}
-.fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
-.fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
-.fl-green{background:rgba(86,209,158,.15);color:#7ee8b8;}
-.fl-red  {background:rgba(255,107,107,.15);color:#ff9090;}
-.fork-col .vnode{max-width:100%;width:100%;}
-.fork-col .varrow{width:100%;}
-/* CALLOUTS */
-.callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
-.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
-.callout.info    {background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
-.callout.warn    {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-.callout.success {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
-.callout.danger  {background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
-.callout.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
-.callout.analogy {background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-.callout b{font-weight:700;}
-.callout code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:rgba(255,255,255,.08);padding:.1rem .3rem;border-radius:3px;}
-/* CODE */
+.section h2,.sec h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.section h3,.sec h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+.section h4,.sec h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
+.section p,.sec p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
+.section p b,.sec p b{color:var(--text);font-weight:600;}
+.section p code,.sec p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+.slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.nl{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);margin-bottom:.4rem;}
+.sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800;background:var(--bg3);border:1px solid var(--border);color:var(--text3);margin-right:.5rem;flex-shrink:0;vertical-align:middle;}
+
+/* ── INLINE CODE (balise personnalisée) ─────────────────────────── */
+
+/* ── CODE BLOCK ─────────────────────────────────────────────────── */
 .code-block{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.code-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent4),var(--accent5),transparent);border-radius:12px 12px 0 0;opacity:.5;}
 .code-block pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
 .cb-lang{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);}
-.kw{color:#c084fc}.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
-/* TERME */
-.term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
-.term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
-.term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
-.term-row:last-child{border-bottom:none;}
-.term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
-.term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
-/* SCHEMA */
-.schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
-.schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
-.schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-.schema-card.yellow::before{background:linear-gradient(to right,var(--accent),transparent);}
-.schema-card.green::before {background:linear-gradient(to right,var(--accent3),transparent);}
-.schema-card.blue::before  {background:linear-gradient(to right,var(--accent4),transparent);}
-.schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
-.schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
-.schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
-.schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
-.schema-card code{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:#7eb5ff;}
-.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
-.tag-yellow{background:rgba(245,197,66,.15);color:var(--accent);}
-.tag-green {background:rgba(86,209,158,.15);color:var(--accent3);}
-.tag-blue  {background:rgba(79,142,255,.15);color:var(--accent4);}
-.tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
-/* OBJ */
-.obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
-.obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
-.obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
-.obj-row:last-child{border-bottom:none;}
-.obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
-.obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
-.obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
-.obj-req {font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.65rem;min-width:14px;}
-/* TABLE */
-.data-table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
-.data-table th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
-.data-table td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
-.data-table tr:last-child td{border-bottom:none;}
-.data-table tr:hover td{background:rgba(255,255,255,.015);}
-.td-code{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
-.td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
-/* TABS DEMO */
-.tabs-demo{display:flex;gap:.5rem;flex-wrap:wrap;padding:1.2rem;background:var(--bg3);border-radius:12px;margin:1rem 0;border:1px solid var(--border);}
-.tab-demo{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.4rem .9rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:default;}
-.tab-demo.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
-/* TIMELINE */
+/* Coloration syntaxique */
+.kw{color:#c084fc}
+
+/* ── COLORATION SYNTAXIQUE — toutes les classes ─────────────────── */
+/* Classes du coloriseur manuel (sections annotées) */
+.cm  { color: #555e74; font-style: italic; }   /* commentaire alt    */
+.str { color: #7ee8b8; }                        /* string alt         */
+.vr  { color: #ffb3a0; }                        /* variable           */
+/* Classes du coloriseur automatique (code source complet) */
+.s   { color: #7ee8b8; }                        /* string             */
+.bi  { color: #56d19e; font-weight: 600; }      /* builtin            */
+.n   { color: #f7d97a; }                        /* nombre             */
+.rx  { color: #ff9090; }                        /* regex              */
+
+/* ── BARRE DE PROGRESSION DE LECTURE ─────────────────────────────── */
+#read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--accent4), var(--accent5), var(--accent3));
+  z-index: 200;
+  transition: width .1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── BOUTON COPIER ────────────────────────────────────────────────── */
+.copy-btn {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  padding: .22rem .6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  transition: all .18s;
+  z-index: 2;
+  white-space: nowrap;
+}
+.copy-btn:hover {
+  background: rgba(79,142,255,.12);
+  border-color: rgba(79,142,255,.4);
+  color: #7eb5ff;
+}
+.copy-btn.copied {
+  background: rgba(86,209,158,.12);
+  border-color: rgba(86,209,158,.4);
+  color: #7ee8b8;
+}
+.copy-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+/* ── CODE-BLOCK INLINE — mini barre titre ────────────────────────── */
+.code-block {
+  font-size: .81rem; /* légèrement augmenté */
+}
+.code-block pre {
+  font-size: .81rem;
+}
+
+/* ── SRC-BLOCK — bouton copier dans le header ────────────────────── */
+.src-header .copy-btn {
+  position: static;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── NAV ACTIVE ──────────────────────────────────────────────────── */
+.nav-links a.active {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+/* ── COLORATION SYNTAXIQUE — classes complètes ──────────────────── */
+.s  { color: #7ee8b8; }                          /* strings          */
+.bi { color: #56d19e; font-weight: 600; }        /* builtins         */
+.n  { color: #f7d97a; }                          /* numbers          */
+.rx { color: #ff9090; }                          /* regex            */
+
+/* ── BLOC CODE COMPLET — style IDE ──────────────────────────────── */
+.src-block {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  position: relative;
+}
+.src-header {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .65rem 1.2rem;
+  background: rgba(255,255,255,.03);
+  border-bottom: 1px solid var(--border);
+}
+.src-dots { display: flex; gap: .38rem; }
+.src-dot  { width: 11px; height: 11px; border-radius: 50%; }
+.src-dot.r { background: #ff5f57; }
+.src-dot.y { background: #ffbd2e; }
+.src-dot.g { background: #27c93f; }
+.src-fname {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: var(--text2);
+  flex: 1;
+  text-align: center;
+  margin-right: 3rem;
+}
+.src-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  color: var(--text3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .18rem .6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.src-body {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: 520px;
+  transition: max-height .4s ease;
+  position: relative;
+}
+.src-body.expanded { max-height: none; }
+.src-body pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .77rem;
+  line-height: 1.8;
+  padding: 1rem 0;
+  counter-reset: ln;
+  white-space: pre;
+  tab-size: 2;
+}
+.ln {
+  display: block;
+  padding: 0 1.2rem 0 0;
+  white-space: pre;
+}
+.ln:hover { background: rgba(255,255,255,.025); }
+.ln::before {
+  counter-increment: ln;
+  content: counter(ln);
+  display: inline-block;
+  width: 3.2rem;
+  text-align: right;
+  padding-right: 1.2rem;
+  color: var(--text3);
+  font-size: .7rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+.src-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, var(--code));
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.src-body.expanded + .src-fade { opacity: 0; }
+.src-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .65rem;
+  background: rgba(255,255,255,.025);
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.src-expand-btn:hover { background: rgba(255,255,255,.05); color: var(--text); }
+
+/* ── BANDEAU DE STATS FICHIER ──────────────────────────────────── */
+.file-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: .8rem;
+  margin: 1.5rem 0;
+}
+.fstat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.fstat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.fstat-label {
+  font-size: .72rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── PATTERN TAG ────────────────────────────────────────────────── */
+.pattern-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem 1rem;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  margin: .3rem .2rem;
+  border: 1px solid transparent;
+}
+.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
+.cb{background:var(--bg3);border-radius:4px;padding:.05rem .35rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#7eb5ff;}
+
+/* ── COULEURS NŒUDS (partagées : vnode, state, kbox, schema-card…) */
+.c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+/* Variantes courtes (utilisées en inline et via vn/kbox) */
+.ca{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cb.c{background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.cg{background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cr{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cp{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+.cy{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.co{background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;}
+.ct{background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.35);color:#5eead4;}
+.cbl{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:#7dd3fc;}
+.cpi{background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.35);color:#f9a8d4;}
+.cm{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.25);color:var(--text2);}
+.fc{background:rgba(163,230,53,.12);border:1px solid rgba(163,230,53,.35);color:#bef264;}
+.w{max-width:680px;}
+.wide{max-width:720px!important;}
+
+/* ── CALLOUT ────────────────────────────────────────────────────── */
+.callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
+.callout b{font-weight:700;}
+.callout 
+/* Modificateurs callout */
+.callout.info,.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+.callout.warn,.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.success,.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.danger,.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.callout.beginner,.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.callout.analogy,.analogy{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.ok,.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.ana,.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+
+/* ── BOX (callout compact sans icône obligatoire) ───────────────── */
+.box{display:flex;gap:.8rem;padding:.9rem 1.1rem;border-radius:11px;margin:1rem 0;font-size:.86rem;line-height:1.75;}
+.box.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+.box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+.box.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.bi{font-size:1.1rem;flex-shrink:0;margin-top:.05rem;}
+
+/* ── SIDE NOTE ──────────────────────────────────────────────────── */
+.sn{display:flex;align-items:flex-start;gap:.7rem;padding:.75rem 1rem;border-radius:9px;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;margin:.8rem 0;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+.side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
+.side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+/* ── GOTCHA / PROTIP ────────────────────────────────────────────── */
+.gotcha{background:rgba(255,107,107,.05);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;}
+.gotcha-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#ff9090;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;}
+.gotcha-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.gotcha-body 
+.protip{background:linear-gradient(135deg,rgba(245,197,66,.07),rgba(86,209,158,.05));border:1px solid rgba(245,197,66,.25);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;display:flex;gap:.8rem;align-items:flex-start;}
+.protip-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;color:var(--accent);background:rgba(245,197,66,.15);padding:.2rem .55rem;border-radius:5px;letter-spacing:.08em;white-space:nowrap;margin-top:.15rem;flex-shrink:0;}
+.protip div{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.protip 
+
+/* ── DIAGRAMME (container générique) ───────────────────────────── */
+.diagram,.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.5rem 0;overflow-x:auto;}
+.diagram-title,.dtitle{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.4rem;}
+
+/* ── CHAÎNE VERTICALE (vchain / vnode / varrow) ─────────────────── */
+.vchain{display:flex;flex-direction:column;align-items:center;}
+.vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vnode.wide,.vnode.w{max-width:700px;}
+.varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
+.varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
+/* Chaîne verticale simplifiée (vc/vn/va/val) */
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{padding:.65rem 1.2rem;border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:.77rem;font-weight:600;text-align:center;line-height:1.5;width:100%;max-width:560px;word-break:break-word;}
+.vn.w,.vn.wide{max-width:680px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--text3);font-size:1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:center;}
+
+/* ── FORK (bifurcation) ─────────────────────────────────────────── */
+.fork{display:grid;gap:1rem;width:100%;max-width:700px;}
+.fork.f2,.f2{grid-template-columns:1fr 1fr;}
+.fork.f3,.f3{grid-template-columns:1fr 1fr 1fr;}
+.fork.f4,.f4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
+.fork-col .vnode,.fork-col .vn{max-width:100%;width:100%;}
+.fork-col .varrow,.fork-col .va{width:100%;}
+.fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
+.fl{display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;}
+.fl-green,.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.fl-red,.flr  {background:rgba(255,107,107,.15);color:#ff9090;}
+.flo          {background:rgba(251,146,60,.15);color:#fdba74;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+
+/* ── FLOW (boîtes de flux horizontal) ───────────────────────────── */
+.flow-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.4rem 0;}
+.flow-box{padding:.5rem .9rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.77rem;border:1px solid var(--border);background:var(--bg2);}
+.flow-arr{color:var(--text3);font-size:.9rem;flex-shrink:0;}
+
+/* ── TIMELINE ───────────────────────────────────────────────────── */
 .timeline{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
 .timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
 .tl-item{position:relative;margin-bottom:1.8rem;}
@@ -128,65 +420,678 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95
 .tl-step{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);}
 .tl-title{font-size:.95rem;font-weight:700;}
 .tl-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
-.tl-body code{font-family:'JetBrains Mono',monospace;font-size:.8rem;background:var(--bg3);padding:.1rem .3rem;border-radius:3px;color:#7eb5ff;}
-/* SIDE NOTE */
-.side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
-.side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
-.sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-@media(max-width:600px){
-.fork.f2{grid-template-columns:1fr;}
-nav{padding:0 1rem;}
-.schema-grid{grid-template-columns:1fr;}
-}
-/* ─── CARTE INTERNE ─── */
+.tl-body 
+
+/* ── SÉQUENCE ───────────────────────────────────────────────────── */
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--text3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--text2);line-height:1.65;}
+.seq-arrow{color:var(--text3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+
+/* ── STATE MACHINE ──────────────────────────────────────────────── */
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;margin:1rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--text3);}
+.trans-line{width:28px;height:1px;background:var(--text3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--text3);text-align:center;max-width:70px;line-height:1.3;}
+
+/* ── KBOX GRID ──────────────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+/* Les couleurs viennent de .c-blue, .c-green etc. appliquées en plus */
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--text2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+
+/* ── SP-ROW (barres de progression) ────────────────────────────── */
+.sp-row{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.sp-step{display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+
+/* ── OBJ SCHEMA ─────────────────────────────────────────────────── */
+.obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
+.obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
+.obj-row:last-child{border-bottom:none;}
+.obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
+.obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
+.obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
+.obj-req {font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.65rem;min-width:14px;}
+/* Variante ancienne (or/ok2/oty/od/oreq) */
+.osc{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;margin:1rem 0;}
+.ost{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;}
+.or{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:1px solid rgba(35,40,53,.7);flex-wrap:wrap;}
+.or:last-child{border-bottom:none;}
+.ok2{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.77rem;min-width:140px;font-weight:600;}
+.oty{font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:.7rem;min-width:70px;}
+.od{font-size:.8rem;color:var(--text2);flex:1;line-height:1.6;min-width:180px;}
+.oreq{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent2);min-width:14px;}
+
+/* ── SCHEMA GRID ────────────────────────────────────────────────── */
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
+.schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
+.schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.schema-card.yellow::before{background:linear-gradient(to right,var(--accent),transparent);}
+.schema-card.green::before {background:linear-gradient(to right,var(--accent3),transparent);}
+.schema-card.blue::before  {background:linear-gradient(to right,var(--accent4),transparent);}
+.schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
+.schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
+/* Couleur de teinte légère par card */
+.schema-card.yellow{border-color:rgba(245,197,66,.2);}
+.schema-card.green {border-color:rgba(86,209,158,.2);}
+.schema-card.blue  {border-color:rgba(79,142,255,.2);}
+.schema-card.red   {border-color:rgba(255,107,107,.2);}
+.schema-card.purple{border-color:rgba(192,132,252,.2);}
+.schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
+.schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.schema-card 
+/* Couleur tags standalone */
+.yellow{color:#f7d97a;}.green{color:#7ee8b8;}.blue{color:#7eb5ff;}.red{color:#ff9090;}.purple{color:#d3a8ff;}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
+.tag-yellow{background:rgba(245,197,66,.15);color:var(--accent);}
+.tag-green {background:rgba(86,209,158,.15);color:var(--accent3);}
+.tag-blue  {background:rgba(79,142,255,.15);color:var(--accent4);}
+.tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
+
+/* ── DATA TABLE ─────────────────────────────────────────────────── */
+.data-table,.recap-table,.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
+.data-table th,.recap-table th,.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.data-table td,.recap-table td,.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
+.data-table tr:last-child td,.recap-table tr:last-child td,.tbl tr:last-child td{border-bottom:none;}
+.data-table tr:hover td,.tbl tr:hover td{background:rgba(255,255,255,.015);}
+.td-code,.fn-cell,.tc{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+.td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
+/* Tableau (tc-card) — carte table */
+.tc-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.2rem;margin:.6rem 0;}
+.tc-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.6rem;}
+
+/* ── TERM BOX ───────────────────────────────────────────────────── */
+.term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
+.term-row:last-child{border-bottom:none;}
+.term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
+.term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
+
+/* ── GLOSSAIRE ──────────────────────────────────────────────────── */
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin:1.2rem 0;}
+.glos-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;}
+.glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.4rem;}
+.glos-def {font-size:.83rem;color:var(--text2);line-height:1.65;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+/* Variantes (grow/gterm/gdef) */
+.grow{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;margin:.5rem 0;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.35rem;}
+.gdef{font-size:.83rem;color:var(--text2);line-height:1.65;}
+
+/* ── TABS DEMO ──────────────────────────────────────────────────── */
+.tabs-demo{display:flex;gap:.5rem;flex-wrap:wrap;padding:1.2rem;background:var(--bg3);border-radius:12px;margin:1rem 0;border:1px solid var(--border);}
+.tab-demo{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.4rem .9rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:default;}
+.tab-demo.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.tab{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.35rem .8rem;border-radius:7px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);display:inline-block;margin:.15rem;}
+.tab.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.active{opacity:1;}
+
+/* ── CARTE (colonne 3) ──────────────────────────────────────────── */
 .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
 .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
 .carte-col{display:flex;flex-direction:column;gap:.5rem;}
 .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-.carte-item b{color:var(--t);font-weight:700;}
-.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-/* ─── SCHEMAS PASS 2 ─── */
+.carte-item{font-size:.76rem;color:var(--text2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--text);font-weight:700;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--text3);font-size:1.1rem;}
+
+/* ── SCHEMA 2 ───────────────────────────────────────────────────── */
 .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
 .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
 .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
 .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-.kbox{border-radius:11px;padding:.9rem 1rem;}
-.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.kbox-item:last-child{border-bottom:none;}
-.sp-row{display:flex;flex-direction:column;gap:.3rem;}
-.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-.seq{display:flex;flex-direction:column;gap:.3rem;}
-.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-.trans-line{width:28px;height:1px;background:var(--t3);}
-.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+.arr{color:var(--text3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);}
+
+/* ── ORDRE DU CODE ──────────────────────────────────────────────── */
+.ordre-seq{display:flex;flex-direction:column;margin:1.8rem 0;position:relative;}
+.ordre-seq::before{content:'';position:absolute;left:20px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,var(--accent) 0%,rgba(132,204,22,.1) 100%);z-index:0;}
+.os-bloc{display:flex;gap:1rem;align-items:flex-start;margin-bottom:.5rem;position:relative;z-index:1;}
+.os-num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:800;color:var(--accent);box-shadow:0 0 0 4px var(--bg);}
+.os-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:.3rem;}
+.os-head{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.os-pill{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .65rem;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+/* Variantes os-pill */
+.os-pill.init,.init{background:rgba(132,204,22,.15);color:#bef264;border:1px solid rgba(132,204,22,.4);}
+.os-pill.data,.data{background:rgba(56,189,248,.12);color:#7dd3fc;border:1px solid rgba(56,189,248,.35);}
+.os-pill.util,.util{background:rgba(245,197,66,.12);color:#fde68a;border:1px solid rgba(245,197,66,.35);}
+.os-pill.dom,.dom{background:rgba(192,132,252,.12);color:#d3a8ff;border:1px solid rgba(192,132,252,.35);}
+.os-pill.event,.event{background:rgba(251,146,60,.12);color:#fdba74;border:1px solid rgba(251,146,60,.35);}
+.os-pill.guard,.guard{background:rgba(244,63,94,.12);color:#fda4af;border:1px solid rgba(244,63,94,.35);}
+.os-pill.expose,.expose{background:rgba(86,209,158,.12);color:#7ee8b8;border:1px solid rgba(86,209,158,.35);}
+.os-pill.render,.render{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.35);}
+.os-name{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:700;color:var(--text);}
+.os-body{padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.65rem;}
+.os-why{font-size:.84rem;color:var(--text2);line-height:1.85;}
+.os-why b{color:var(--text);font-weight:700;}
+.os-why ic,.os-dep ic,.os-err 
+.os-err 
+.os-dep 
+.os-err{display:flex;gap:.6rem;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.22);border-left:3px solid rgba(244,63,94,.6);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#fda4af;line-height:1.7;}
+.os-err::before{content:'✗';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-dep{display:flex;gap:.6rem;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.2);border-left:3px solid rgba(56,189,248,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#7dd3fc;line-height:1.7;}
+.os-dep::before{content:'→';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-rule{display:flex;gap:.6rem;background:rgba(132,204,22,.06);border:1px solid rgba(132,204,22,.2);border-left:3px solid rgba(132,204,22,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#bef264;line-height:1.7;}
+.os-rule::before{content:'✓';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-arrow{padding:.15rem 0 .15rem 1.4rem;font-size:.69rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.os-synthese{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:14px;padding:1.3rem 1.5rem;margin-top:2rem;}
+.os-synthese-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:800;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.os-synthese-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.os-synthese p{font-size:.85rem;color:var(--text2);line-height:1.85;margin:0;}
+.os-synthese p b{color:var(--text);}
+.os-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.6rem;margin-top:1rem;}
+.os-grid-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;}
+.og-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent);font-weight:800;margin-bottom:.3rem;}
+.og-name{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.2rem;}
+.og-why{font-size:.7rem;color:var(--text3);line-height:1.55;}
+
+/* ── DIFF VIEW ──────────────────────────────────────────────────── */
+.diff-view{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.2rem 0;}
+.diff-col{border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.diff-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.45rem 1rem;letter-spacing:.07em;text-transform:uppercase;}
+.diff-label-bad {background:rgba(255,107,107,.12);color:#ff9090;}
+.diff-label-good{background:rgba(86,209,158,.12);color:#7ee8b8;}
+.diff-col pre{font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.75;padding:.9rem 1rem;background:var(--code);white-space:pre-wrap;word-break:break-word;}
+.diff-note{font-size:.82rem;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.65rem 1rem;margin-top:.5rem;line-height:1.7;}
+.diff-bad {color:#ff9090;}.diff-good{color:#7ee8b8;}
+
+/* ── METRIC ROW ─────────────────────────────────────────────────── */
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.75rem;margin:1.3rem 0;}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;text-align:center;}
+.metric-val{font-family:'JetBrains Mono',monospace;font-size:1.65rem;font-weight:800;line-height:1;margin-bottom:.35rem;}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;}
+
+/* ── TIMING VIZ ─────────────────────────────────────────────────── */
+.timing-wrap{margin:1.2rem 0;display:flex;flex-direction:column;gap:.35rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.timing-bar{border-radius:6px;padding:.3rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.4;}
+
+/* ── DÉBOUNCE VIZ ───────────────────────────────────────────────── */
+.debounce-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.dbv-scenario{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.dbv-track{display:flex;flex-direction:column;gap:.4rem;}
+.dbv-line{display:flex;align-items:center;gap:.5rem;}
+.dbv-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);min-width:55px;}
+.dbv-window{flex:1;position:relative;height:28px;background:rgba(139,147,168,.05);border-radius:6px;overflow:hidden;}
+.dbv-dot{position:absolute;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;}
+.dbv-event{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 .4rem;font-size:.6rem;font-family:'JetBrains Mono',monospace;border-radius:4px;}
+.dbv-top{background:rgba(255,107,107,.25);color:#ff9090;}
+.dbv-bot{background:rgba(86,209,158,.25);color:#7ee8b8;}
+
+/* ── CHAIN SEQ (héritage) ───────────────────────────────────────── */
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.cs-row{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;flex-wrap:wrap;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--text3);}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0;}
+.cs-desc{font-size:.8rem;color:var(--text2);line-height:1.65;flex:1;}
+.cs-arrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text3);padding-left:1.8rem;display:block;margin:.1rem 0;}
+.chain-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--text3);width:20px;text-align:right;flex-shrink:0;}
+
+/* ── DIVERS COMPOSANTS ──────────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0;}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0;}
+.cmp-box{border-radius:12px;padding:1.1rem 1.2rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;margin-bottom:.7rem;}
+.cmp-item{font-size:.82rem;color:var(--text2);line-height:1.65;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+.effect-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin:1rem 0;}
+.effect-card{border-radius:12px;padding:1rem 1.1rem;}
+.effect-icon{font-size:1.3rem;margin-bottom:.5rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;margin-bottom:.3rem;}
+.effect-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.mini-box{border-radius:10px;padding:.9rem 1rem;margin:.5rem 0;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.5rem;}
+.mini-item{font-size:.8rem;color:var(--text2);line-height:1.65;padding:.15rem 0;}
+.key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1rem 0;}
+.key-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;}
+.key-badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.18rem .5rem;border-radius:5px;margin-bottom:.5rem;display:inline-block;}
+.key-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;}
+.slide{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin:.5rem 0;}
+.def{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin:.6rem 0;}
+.prow{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid rgba(35,40,53,.6);flex-wrap:wrap;}
+.prow:last-child{border-bottom:none;}
+.pnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:800;flex-shrink:0;}
+.pcond{font-family:'JetBrains Mono',monospace;font-size:.77rem;min-width:200px;flex:1;color:var(--text);}
+.pbadge{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.15rem .5rem;border-radius:5px;white-space:nowrap;flex-shrink:0;}
+.pnote{font-size:.78rem;color:var(--text3);font-style:italic;min-width:100%;padding-top:.2rem;}
+.prio{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin:1rem 0;}
+.active-filter{font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(245,197,66,.15);color:var(--accent);border:1px solid rgba(245,197,66,.3);padding:.2rem .6rem;border-radius:5px;display:inline-flex;align-items:center;gap:.3rem;margin:.2rem;}
+.product-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+.fav-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.6rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text);z-index:1000;}
+.btn-fav{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.3rem .7rem;border-radius:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;}
+
+/* ── INLINE HIGHLIGHTS ──────────────────────────────────────────── */
+.hl-y{background:rgba(245,197,66,.15);color:#f7d97a;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-g{background:rgba(86,209,158,.15);color:#7ee8b8;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-b{background:rgba(79,142,255,.15);color:#7eb5ff;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-r{background:rgba(255,107,107,.15);color:#ff9090;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+
+/* ── FILE STATS ─────────────────────────────────────────────────── */
+.file-stats{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0;}
+.fs-pill{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.3rem .75rem;border-radius:100px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);}
+.fs-pill b{color:var(--text);}
+.complexity{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;margin-left:.6rem;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── BADGES PRODUIT ─────────────────────────────────────────────── */
+.badge-new  {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(86,209,158,.2);color:#7ee8b8;border:1px solid rgba(86,209,158,.4);}
+.badge-bs   {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(255,107,107,.2);color:#ff9090;border:1px solid rgba(255,107,107,.4);}
+.badge-promo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(245,197,66,.2);color:#f7d97a;border:1px solid rgba(245,197,66,.4);}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .fork.f2,.f2{grid-template-columns:1fr;}
+  .fork.f3,.f3{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .diff-view{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .carte-body{grid-template-columns:1fr;}
+  .carte-arrow{display:none;}
+  nav{padding:0 1rem;}
+  .schema-grid{grid-template-columns:1fr;}
+  .compare-grid,.effect-grid,.key-grid,.os-grid{grid-template-columns:1fr;}
+  .timing-row{grid-template-columns:60px 1fr;}
+  .or{flex-direction:column;}
+  .prow{flex-direction:column;}
+}
+@media(max-width:480px){
+  .page{padding:70px 1rem 3rem;}
+  .obj-row{flex-direction:column;}
+  .term-row{flex-direction:column;}
+}
+
+/* ── NAV AMÉLIORÉ ───────────────────────────────────────────────── */
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;color:var(--text2);white-space:nowrap;text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;flex-shrink:0;}
+.nav-logo:hover{background:var(--bg3);color:var(--text);}
+.nav-file{flex-shrink:0;}
+.nav-links{display:flex;gap:.1rem;flex-wrap:wrap;flex:1;overflow:hidden;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text2);text-decoration:none;padding:.28rem .55rem;border-radius:5px;transition:all .15s;white-space:nowrap;}
+.nav-links a:hover{background:var(--bg3);color:var(--text);}
+.nav-links a.active{background:rgba(245,197,66,.12);color:var(--accent);}
+/* ── HERO AMÉLIORÉ ──────────────────────────────────────────────── */
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.25rem .75rem;border-radius:100px;letter-spacing:.07em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:.5rem;}
+.complexity{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── INLINE CODE <ic> — définition unique canonique ─────────────── */
+ic {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8em;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .05rem .38rem;
+  border-radius: 4px;
+  color: #7eb5ff;
+  white-space: nowrap;
+  display: inline;
+}
+/* Overrides contextuels */
+.gotcha-body ic { color: #ffb0b0; background: rgba(255,107,107,.1); }
+.protip ic      { color: #f7d97a; background: rgba(245,197,66,.1);  }
+.callout.warn ic, .callout.analogy ic { color: #f7d97a; }
+.callout.ok ic, .callout.success ic   { color: #7ee8b8; }
+
+
+/* ── CODE-BLOCK inline — header barre avec bouton copier ─────────── */
+.code-block {
+  padding-top: 2.4rem !important; /* espace pour la barre de titre */
+}
+.code-block .cb-lang {
+  top: .55rem;
+  left: .9rem;
+  right: auto;
+}
+
+/* ── SRC-BLOCK mobile ────────────────────────────────────────────── */
+.src-body {
+  overflow-x: auto;
+}
+.src-body pre {
+  white-space: pre;
+  min-width: max-content;
+}
+
+/* ── LIENS ANCRE sur h2 ──────────────────────────────────────────── */
+.sec h2 .anchor-link {
+  opacity: 0;
+  font-size: .65em;
+  color: var(--text3);
+  text-decoration: none;
+  margin-left: .5rem;
+  transition: opacity .2s;
+  vertical-align: middle;
+  font-weight: 400;
+}
+.sec h2:hover .anchor-link { opacity: 1; }
+.sec h2:hover .anchor-link:hover { color: var(--accent4); }
+
+/* ── FOOTER NAVIGATION INTER-DOCS ──────────────────────────────── */
+.docs-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+.docs-footer-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 1rem;
+}
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: .5rem;
+}
+.docs-link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .8rem;
+  border-radius: 8px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  color: var(--text2);
+  transition: all .18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docs-link:hover {
+  background: var(--bg3);
+  border-color: rgba(79,142,255,.3);
+  color: var(--text);
+}
+.docs-link.current {
+  border-color: rgba(245,197,66,.35);
+  background: rgba(245,197,66,.06);
+  color: var(--accent);
+  pointer-events: none;
+}
+.docs-link-icon { flex-shrink: 0; font-size: .9rem; }
+
+
+/* ╔═══════════════════════════════════════════════════════════════╗
+   ║  CANONICAL OVERRIDES — résolution de tous les conflits CSS    ║
+   ╚═══════════════════════════════════════════════════════════════╝ */
+
+/* ── 1. scroll-padding-top (nav fixe 56px + 12px marge) ────────── */
+html {
+  scroll-padding-top: 68px;
+}
+
+/* ── 2a. .bi conflit : syntaxe JS vs icône-emoji dans .box ──────── */
+/* Dans les blocs de code, .bi = builtin JS (vert) */
+pre .bi, code .bi, .src-body .bi {
+  color: #56d19e;
+  font-weight: 600;
+  font-size: inherit;
+  flex-shrink: unset;
+  margin-top: 0;
+  line-height: inherit;
+}
+/* Dans les box/listes, .bi = icône emoji */
+.box .bi, .kbox-item .bi, .list-item .bi,
+.callout .bi, .protip .bi, .gotcha-body .bi {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  margin-top: .1rem;
+  color: inherit;
+  font-weight: normal;
+  line-height: 1;
+}
+
+/* ── 2b. .cm conflit : commentaire de code vs kbox-card ─────────── */
+/* Dans les blocs de code, .cm = commentaire gris italique */
+pre .cm, code .cm, .src-body .cm {
+  color: #555e74;
+  font-style: italic;
+  background: none;
+  border: none;
+}
+/* .cm comme container (hors code) garde le style card si présent */
+div.cm, .cm-card {
+  background: rgba(139,147,168,.08);
+  border: 1px solid rgba(139,147,168,.25);
+  color: var(--text2);
+}
+
+/* ── 2c. .nav-links a.active — version canonique unique ─────────── */
+.nav-links a.active {
+  background: rgba(245,197,66,.15) !important;
+  color: var(--accent) !important;
+  border-radius: 6px;
+}
+
+/* ── 2d. .file-stats — layout grid canonique ────────────────────── */
+.file-stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+  gap: .8rem !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* ── 2e. .code-block pre — taille canonique ─────────────────────── */
+.code-block pre {
+  font-size: .81rem !important;
+  line-height: 1.82 !important;
+}
+
+/* ── 2f. .src-body — overflow canonique ─────────────────────────── */
+.src-body {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-height: 520px !important;
+  transition: max-height .4s ease !important;
+}
+.src-body.expanded {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* ── 3. Safari : -webkit-backdrop-filter ──────────────────────────
+   (injecté directement dans la règle nav via Python)               */
+
+/* ── 4. prefers-reduced-motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #read-progress { display: none !important; }
+  .src-body       { transition: none !important; }
+}
+
+/* ── 5. Tables responsive ───────────────────────────────────────── */
+.tbl-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 1.2rem 0;
+}
+.tbl-wrap table,
+.tbl-wrap .data-table,
+.tbl-wrap .recap-table,
+.tbl-wrap .tbl {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0;
+  width: 100%;
+}
+
+/* ── 6. :focus-visible (navigation clavier) ─────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.copy-btn:focus-visible,
+.src-expand-btn:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 2px;
+}
+.nav-links a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── 8. Nav active — meilleur contraste ─────────────────────────── */
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: left .2s, right .2s;
+}
+.nav-links a { position: relative; }
+
+/* ── 9. code-block mobile ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .code-block {
+    padding-top: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: .76rem !important;
+  }
+  .code-block .cb-lang {
+    display: none;
+  }
+  .copy-btn.abs {
+    top: .45rem;
+    right: .45rem;
+    padding: .18rem .45rem;
+    font-size: .58rem;
+  }
+  .src-header .src-fname {
+    display: none;
+  }
+  .ln::before {
+    width: 2rem;
+    padding-right: .6rem;
+  }
+}
+
+/* ── 11. @media print ───────────────────────────────────────────── */
+@media print {
+  #read-progress,
+  nav,
+  .copy-btn,
+  .src-expand-btn,
+  .src-fade,
+  .docs-footer {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 11pt !important;
+  }
+  .page {
+    padding: 1cm !important;
+    max-width: 100% !important;
+  }
+  .hero {
+    padding: 1rem 0 !important;
+  }
+  .sec {
+    break-inside: avoid;
+  }
+  .code-block, .src-block {
+    background: #f4f4f4 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    break-inside: avoid;
+  }
+  .code-block pre, .src-body pre {
+    color: #111 !important;
+    font-size: 8pt !important;
+  }
+  .kw    { color: #7b2fbe !important; }
+  .fn    { color: #0550ae !important; }
+  .s, .str { color: #0a7c42 !important; }
+  .cmt, .cm { color: #666 !important; }
+  .n     { color: #b07d00 !important; }
+  ic {
+    background: #eee !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+  }
+  a { color: #333 !important; text-decoration: none !important; }
+  .schema-card, .vnode, .gotcha, .protip, .callout {
+    border: 1px solid #ccc !important;
+    background: #f9f9f9 !important;
+    color: #111 !important;
+    break-inside: avoid;
+  }
+}
+
 </style>
 </head>
-<body> <nav> <div class="nav-logo">filtre.js</div> <div class="nav-links"> <a href="#intro">Intro</a> <a href="#structure">Structure</a> <a href="#filter">filterProducts</a> <a href="#tabs">Onglets</a> <a href="#observer">MutationObserver</a> <a href="#integration">Intégration</a> <a href="#resume">Récap</a> </div>
-<a href="#glossaire">Glossaire</a>
-</nav> <div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
-<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
+<body> <nav>
+  <a class="nav-logo" href="index.html">← PearTech Docs</a>
+  <div class="nav-file" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#f5c542;padding:.25rem .7rem;border-radius:6px;background:rgba(245,197,66,.15);border:1px solid #f5c54244;white-space:nowrap;flex-shrink:0;">filtre.js</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#iife">IIFE</a>
+    <a href="#tabs-section">Onglets</a>
+    <a href="#filter">Filtrage</a>
+    <a href="#events">Events</a>
+    <a href="#recap">Récap</a>
+    <a href="#ordre">Ordre</a>
+    <a href="#glossaire">Glossaire</a>
+    <a href="#plus-loin">✦ Plus loin</a>
+    <a href="#decryptage">⌨ Décryptage</a>
+    <a href="#code-annote">⟨/⟩ Annoté</a>
+  </div>
+</nav> <div class="page"> <div class="hero">
+  <div class="hero-tag">UI · Filtrage onglets</div>
+  <h1>Comprendre<br><span style="color:#f5c542">filtre.js</span></h1>
+  <p style="color:var(--text2);font-size:.97rem;max-width:680px;line-height:1.85;margin-top:.6rem;">Système d'onglets catégories sur le catalogue — écoute le CustomEvent de dropdown.js et déclenche le filtrage via catalogue.js.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem;align-items:center;">
+    <div class="file-badge"><span class="dot" style="background:#f5c542;"></span>filtre.js</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text2);">~70 lignes</span>
+    <span class="complexity cx-med" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;">Intermédiaire</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Dépendances : dropdown.js · catalogue.js</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Pages : catalogue.html</span>
+  </div>
+  <div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>CustomEvent categorySelected
 <div class="schema2"> <div class="s2t">Pipeline de filtrage — de l'événement au DOM</div> <div class="seq"> <div class="seq-row"> <div class="seq-n">1</div> <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">categorySelected</span> reçu (detail.category = 'Apple') OU clic bouton filtre</div> </div> <div class="seq-arrow"> activeCategory mis à jour</div> <div class="seq-row"> <div class="seq-n">2</div> <div class="seq-body"><span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filterCards(category)</span> querySelectorAll('.product-card')</div> </div> <div class="seq-arrow"> pour chaque carte</div> <div class="seq-row"> <div class="seq-n">3</div> <div class="seq-body">card.dataset.category === category <span style="color:var(--t3);font-size:.7rem;">(ou category === 'all')</span><br> <span style="color:#7ee8b8;">display: ''</span> (visible) ou <span style="color:#fda4af;">display: 'none'</span> (caché)</div> </div> <div class="seq-arrow"></div> <div class="seq-row"> <div class="seq-n">4</div> <div class="seq-body">dispatch <span style="font-family:'JetBrains Mono',monospace;color:#fcd34d;">filterChanged</span> main.js reçoit pour debug</div> </div> </div> <div style="margin-top:.8rem;font-size:.74rem;color:var(--t3);">Contrainte clé : les cartes .product-card avec data-category doivent exister dans le DOM AVANT que filtre.js s'initialise  product_grid.js DOIT être chargé avant filtre.js</div>
 </div>
@@ -258,10 +1163,354 @@ gridObserver.<span class="fn">observe</span>(productsGrid, { childList: <span cl
 </pre></div> <div class="diagram"> <div class="diagram-title"> Ce que { childList: true } surveille — et ce qu'il ignore</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;"> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;"> Déclenche l'observer</div> <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--text2);"> <div style="background:rgba(86,209,158,.1);border-radius:6px;padding:.4rem .7rem;">product_grid.js injecte 8 cartes <code>&lt;article&gt;</code> dans la grille</div> <div style="background:rgba(86,209,158,.1);border-radius:6px;padding:.4rem .7rem;">Un script supprime toutes les cartes (rechargement)</div> <div style="background:rgba(86,209,158,.1);border-radius:6px;padding:.4rem .7rem;">Une carte est ajoutée manuellement via la console</div> </div> </div> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1.1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;"> N'active PAS l'observer</div> <div style="display:flex;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--text2);"> <div style="background:rgba(255,107,107,.08);border-radius:6px;padding:.4rem .7rem;">Un <code>data-category</code> change sur une carte existante</div> <div style="background:rgba(255,107,107,.08);border-radius:6px;padding:.4rem .7rem;">La classe <code>.active</code> change sur un onglet</div> <div style="background:rgba(255,107,107,.08);border-radius:6px;padding:.4rem .7rem;">Un texte à l'intérieur d'une carte est modifié</div> </div> </div> </div> <div class="side-note" style="margin-top:1rem;"> <span class="side-note-icon"></span> <span>On aurait pu utiliser <code>{ subtree: true, attributes: true }</code> pour surveiller tout — mais cela déclencherait l'observer des dizaines de fois à chaque petit changement. <code>childList: true</code> seul est suffisant et minimal.</span> </div> </div> </div> <hr class="sep"> <!-- ══════ 05 INTÉGRATION ══════ --> <div class="section" id="integration"> <div class="section-label">05 — Intégration avec les autres fichiers</div> <h2>Le "contrat" entre les fichiers</h2> <p>filtre.js et product_grid.js ne se parlent pas directement. Leur seul pont de communication, c'est le <b>HTML dans la page</b>.</p> <div class="diagram"> <div class="diagram-title"> Comment les deux fichiers se coordonnent via le DOM</div> <div class="vchain"> <div class="vnode c-blue wide">product_grid.js écrit :<br><code>&lt;article class="product-card" data-category="apple"&gt;</code></div> <div class="varrow"><div class="varrow-label">injecté dans #products-grid</div></div> <div class="vnode c-gray wide">Le DOM — terrain neutre visible par tous les fichiers</div> <div class="varrow"><div class="varrow-label">lu par filtre.js</div></div> <div class="vnode c-yellow wide">filtre.js lit <code>card.dataset.category</code> et compare avec son filtre actif</div> <div class="varrow"></div> <div class="vnode c-green wide">Carte visible ou cachée selon la correspondance</div> </div> </div> <div class="callout danger"> <span class="callout-icon"></span> <div><b>Le point de rupture critique :</b> Si product_grid.js change les valeurs de <code>data-category</code> (ex: utiliser <code>"cat_apple"</code> au lieu de <code>"apple"</code>), les onglets de filtre.js ne fonctionneront plus. Les valeurs de <code>data-filter</code> sur les onglets et de <code>data-category</code> sur les cartes <b>doivent être identiques</b>.</div> </div> <div class="diagram"> <div class="diagram-title"> vs  — Contrat respecté vs contrat rompu</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#7ee8b8;margin-bottom:.8rem;text-align:center;"> Contrat respecté — ça marche</div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:1rem;font-size:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des onglets :</div> <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#7ee8b8;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-filter="apple"</code> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des cartes :</div> <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#7ee8b8;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-category="apple"</code> <div style="font-size:.78rem;color:var(--text2);">Les deux ont exactement <code>"apple"</code> la comparaison <code>category === filter</code> est <span style="color:#7ee8b8;font-weight:700;">vraie</span> carte visible</div> </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:#ff9090;margin-bottom:.8rem;text-align:center;"> Contrat rompu — filtre silencieux</div> <div style="background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:1rem;font-size:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des onglets :</div> <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#ff9090;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-filter="apple"</code> <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);margin-bottom:.6rem;">Dans le HTML des cartes (modifié) :</div> <code style="font-family:'JetBrains Mono',monospace;font-size:.71rem;color:#ff9090;background:var(--bg3);padding:.25rem .5rem;border-radius:4px;display:block;margin-bottom:.8rem;">data-category="cat_apple"</code> <div style="font-size:.78rem;color:var(--text2);"><code>"apple"</code> ≠ <code>"cat_apple"</code> comparaison <span style="color:#ff9090;font-weight:700;">fausse</span> toutes les cartes cachées. Pas d'erreur dans la console — juste une page vide.</div> </div> </div> </div> </div> <div class="data-table"> <thead><tr><th>Onglet (data-filter)</th><th>Carte attendue (data-category)</th><th>Résultat</th></tr></thead> <tbody> <tr><td class="td-code">data-filter="tous"</td><td>n'importe laquelle</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8">Toutes visibles</span></td></tr> <tr><td class="td-code">data-filter="apple"</td><td class="td-code">data-category="apple"</td><td><span class="td-pill" style="background:rgba(86,209,158,.15);color:#7ee8b8"> Visible</span></td></tr> <tr><td class="td-code">data-filter="apple"</td><td class="td-code">data-category="android"</td><td><span class="td-pill" style="background:rgba(255,107,107,.15);color:#ff9090"> Cachée</span></td></tr> </tbody> </div> </div> <hr class="sep"> <!-- ══════ 06 RECAP ══════ --> <div class="section" id="resume"> <div class="section-label">06 — Récapitulatif</div> <h2>Le film complet de A à Z</h2> <div class="timeline"> <div class="tl-item"> <div class="tl-dot" style="background:var(--accent4)"></div> <div class="tl-head"><div class="tl-step">Étape 1</div><div class="tl-title">Chargement du fichier</div></div> <div class="tl-body">L'IIFE s'exécute. Tout est mis en attente dans <code>DOMContentLoaded</code>.</div> </div> <div class="tl-item"> <div class="tl-dot" style="background:var(--accent)"></div> <div class="tl-head"><div class="tl-step">Étape 2</div><div class="tl-title">HTML prêt — vérification de sécurité</div></div> <div class="tl-body">On cherche les onglets <code>.tab</code>. S'il n'y en a pas (autre page du site), <code>return</code> — on sort sans erreur.</div> </div> <div class="tl-item"> <div class="tl-dot" style="background:var(--accent3)"></div> <div class="tl-head"><div class="tl-step">Étape 3</div><div class="tl-title">Mise en place</div></div> <div class="tl-body">Chaque onglet reçoit un écouteur de clic. <code>filterProducts('tous')</code> est appelé — toutes les cartes déjà présentes sont affichées. L'observer est activé sur <code>#products-grid</code>.</div> </div> <div class="tl-item"> <div class="tl-dot" style="background:var(--accent5)"></div> <div class="tl-head"><div class="tl-step">Étape 4</div><div class="tl-title">product_grid.js injecte les cartes</div></div> <div class="tl-body">L'observer détecte les nouveaux enfants dans la grille. Il re-filtre immédiatement avec le filtre actif. Même si l'utilisateur avait déjà cliqué un onglet, le bon filtre est appliqué.</div> </div> <div class="tl-item"> <div class="tl-dot" style="background:var(--accent2)"></div> <div class="tl-head"><div class="tl-step">Étape 5</div><div class="tl-title">L'utilisateur clique un onglet</div></div> <div class="tl-body">Tous les onglets perdent <code>active</code>. Le cliqué le reçoit. Son <code>data-filter</code> est lu. <code>filterProducts(filtre)</code> boucle sur toutes les cartes : celles qui correspondent passent en <code>display: flex</code>, les autres en <code>display: none</code>.</div> </div> </div> </div> </div>
 
 <hr>
+<div class="sec" id="intro">
+<div class="slabel">00 — Vue d'ensemble</div>
+<h2>filtre.js — Filtrage des produits par onglets <a class="anchor-link" href="#intro" title="Lien direct">¶</a></h2>
+<p>filtre.js est le module le plus court du projet (55 lignes) mais son rôle est fondamental : il permet de filtrer les cartes produits par catégorie (<ic>Tous</ic>, <ic>Apple</ic>, <ic>Android</ic>, <ic>Accessoires</ic>…) via les onglets de la page d'accueil. Il ne crée rien, ne fetch rien — il <b>cache et montre</b> des éléments déjà présents dans le DOM.</p>
+<div class="diag"><div class="dtitle">Flux complet de filtrage</div><div class="vc"><div class="vn cg">Utilisateur clique sur un onglet</div><div class="va">↓<div class="val">déclencheur</div></div><div class="vn cy">listener click → lit data-filter</div><div class="va">↓<div class="val"></div></div><div class="vn ct">filterProducts(filter) — boucle sur toutes les cards</div><div class="va">↓<div class="val"></div></div><div class="vn cg">card.dataset.category === filter ?</div><div class="va">↓<div class="val">comparaison stricte</div></div><div class="vn cp">display:flex ou display:none</div></div></div>
+<h3>Ce que fait ce fichier</h3>
+<p><b>1.</b> Écouter les clics sur les onglets (<ic>.tab</ic>) et activer visuellement le bon onglet.<br><b>2.</b> Appeler <ic>filterProducts(filter)</ic> pour cacher/montrer les cards selon leur <ic>data-category</ic>.<br><b>3.</b> Surveiller via <ic>MutationObserver</ic> si <ic>product_grid.js</ic> injecte de nouvelles cards pour re-appliquer le filtre actif automatiquement.</p>
+<h3>Ce qu'il ne fait PAS</h3>
+<div class="box warn"><span class="bi">⚠️</span><div>filtre.js ne crée aucun élément HTML et ne fait aucun appel réseau. Il agit uniquement sur la visibilité des éléments déjà présents. Si les cards ne s'affichent pas, le problème vient de <ic>product_grid.js</ic> — pas de filtre.js.</div></div>
+<h3>Dépendances</h3>
+<p><b>Reçoit de :</b> <ic>product_grid.js</ic> et <ic>catalogue.js</ic> — qui injectent les <ic>.product-card</ic> avec attribut <ic>data-category</ic><br><b>Ne dépend pas de :</b> <ic>PearTechDB</ic>, <ic>panier.js</ic>, ni aucun autre module — il est totalement autonome.</p>
+
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cm">// filtre.js — 55 lignes, 0 dépendance externe</span>
+(<span class="kw">function</span>() {
+    <span class="s">'use strict'</span>;
+    document.addEventListener(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
+        <span class="kw">const</span> tabs = document.querySelectorAll(<span class="s">'.tab'</span>);
+        <span class="kw">if</span> (tabs.length === 0) <span class="kw">return</span>; <span class="cm">// Guard — autres pages sans onglets</span>
+
+        <span class="cm">// Listeners de clic sur chaque onglet</span>
+        tabs.forEach(tab =&gt; { tab.addEventListener(<span class="s">'click'</span>, <span class="kw">function</span>() { ... }); });
+
+        <span class="cm">// Fonction de filtrage centrale</span>
+        <span class="kw">function</span> filterProducts(filter) { ... }
+
+        <span class="cm">// Appel initial + surveillance MutationObserver</span>
+        filterProducts(<span class="s">'tous'</span>);
+        <span class="kw">new</span> MutationObserver(() =&gt; { ... }).observe(productsGrid, { childList: <span class="kw">true</span> });
+    });
+})();</pre></div>
+<div class="box info"><span class="bi">💡</span><div>Astuce debug : ouvrir la console et taper <ic>document.querySelectorAll('.product-card').length</ic> pour vérifier combien de cards sont dans le DOM. Si <ic>0</ic> → les cards n'ont pas encore été injectées par product_grid.js. Si > 0 → le problème est dans filtre.js lui-même.</div></div>
+<h3>Démonstration visuelle — les onglets en action</h3>
+<div class="tabs-demo">
+<div class="tab-demo active">Tous</div>
+<div class="tab-demo">Apple</div>
+<div class="tab-demo">Android</div>
+<div class="tab-demo">Accessoires</div>
+</div>
+<p>Quand l'utilisateur clique sur <ic>Apple</ic>, le JS fait deux choses simultanément : l'onglet <ic>Apple</ic> passe en <ic>.active</ic> (style visuel), et <ic>filterProducts('apple')</ic> cache toutes les cards dont <ic>data-category</ic> n'est pas <ic>"apple"</ic>.</p>
+<div class="schema-grid">
+<div class="schema-card green"><div class="tag tag-green">REÇOIT</div><h4>Cards HTML</h4><p>Les <ic>.product-card</ic> avec <ic>data-category</ic> injectées par <ic>product_grid.js</ic> ou <ic>catalogue.js</ic></p></div>
+<div class="schema-card yellow"><div class="tag tag-yellow">FAIT</div><h4>Filtrage visuel</h4><p>Cache/montre via <ic>display:none</ic>/<ic>display:flex</ic> — aucune création, aucun réseau</p></div>
+<div class="schema-card blue"><div class="tag tag-blue">ÉMET</div><h4>Classe active</h4><p>Met à jour la classe <ic>.active</ic> sur l'onglet cliqué pour le style CSS</p></div>
+</div>
+</div>
+
+<hr>
+<div class="sec" id="iife">
+<div class="slabel">01 — Isolation et timing</div>
+<h2>IIFE + DOMContentLoaded — Pourquoi et comment <a class="anchor-link" href="#iife" title="Lien direct">¶</a></h2>
+<p>Chaque fichier JS du projet est enveloppé dans deux couches : une <b>IIFE</b> et un listener <b>DOMContentLoaded</b>. Ces deux constructions répondent à des problèmes différents.</p>
+<h3>L'IIFE — Immediately Invoked Function Expression</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre>(<span class="kw">function</span>() {
+    <span class="s">'use strict'</span>; <span class="cm">// Mode strict activé</span>
+    <span class="cm">// ... tout le code est ici ...</span>
+})(); <span class="cm">// La fonction s'appelle immédiatement</span></pre></div>
+<p>L'IIFE crée un nouveau <b>scope JS isolé</b>. Toutes les variables déclarées à l'intérieur (<ic>const tabs</ic>, <ic>function filterProducts</ic>…) restent <b>privées</b> — elles n'existent pas dans <ic>window</ic> et ne peuvent pas entrer en conflit avec d'autres scripts.</p>
+<div class="box warn"><span class="bi">⚠️</span><div>Sans IIFE, <ic>const tabs</ic> serait accessible depuis la console ou tout autre script. Si deux scripts déclaraient <ic>const tabs</ic>, le second lèverait une <ic>SyntaxError: Identifier already declared</ic>.</div></div>
+<div class="box info"><span class="bi">💡</span><div><ic>'use strict'</ic> active le mode strict : interdit les variables non déclarées (<ic>x = 5</ic> sans <ic>let/const</ic> → erreur), interdit <ic>this</ic> non défini, et permet aux moteurs JS d'optimiser le code. Les erreurs silencieuses deviennent des exceptions claires.</div></div>
+<h3>DOMContentLoaded — Attendre le HTML</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre>document.addEventListener(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
+    <span class="cm">// Le HTML est intégralement parsé ici</span>
+    <span class="cm">// Tous les éléments existent dans le DOM</span>
+    <span class="kw">const</span> tabs = document.querySelectorAll(<span class="s">'.tab'</span>); <span class="cm">// fonctionne</span>
+});</pre></div>
+<p><ic>DOMContentLoaded</ic> se déclenche quand le navigateur a <b>fini de parser le HTML</b> — mais avant que les images et CSS soient chargés. C'est le moment idéal : les éléments existent, on n'attend pas les ressources lourdes.</p>
+<div class="diag"><div class="dtitle">Ordre des événements navigateur</div><div class="vc"><div class="vn cr">Script s'exécute — querySelectorAll('.tab') → 0 éléments (trop tôt)</div><div class="va">↓<div class="val"></div></div><div class="vn ct">DOMContentLoaded — HTML 100% parsé</div><div class="va">↓<div class="val">correct</div></div><div class="vn cg">querySelectorAll('.tab') → retourne les onglets</div><div class="va">↓<div class="val"></div></div><div class="vn cgr">window.load — images+CSS chargés (trop tard)</div></div></div>
+<div class="box ana"><span class="bi">🔍</span><div>Différence <ic>DOMContentLoaded</ic> vs <ic>window.load</ic> : <ic>DOMContentLoaded</ic> se déclenche quand le HTML est parsé (~50-200ms). <ic>window.load</ic> se déclenche quand TOUT est chargé — images, CSS, polices (2-5 secondes). Attendre <ic>load</ic> pour manipuler le DOM serait une perte de temps.</div></div>
+
+<h3>Pourquoi IIFE plutôt que module ES6 ?</h3>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">IIFE (utilisé)</div>
+<div class="kbox-item">Syntaxe universelle — IE11 compatible</div>
+<div class="kbox-item">Pas besoin de bundler/transpiler</div>
+<div class="kbox-item">Fonctionne avec simple <ic>&lt;script src=&gt;</ic></div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">ES6 Module (alternative)</div>
+<div class="kbox-item"><ic>&lt;script type="module"&gt;</ic></div>
+<div class="kbox-item">Scope isolé natif sans IIFE</div>
+<div class="kbox-item">Imports/exports — mais nécessite un serveur</div>
+</div>
+</div>
+<div class="callout info"><span class="callout-icon">💡</span><div>Le projet PearTech utilise des IIFE plutôt que des modules ES6 car les fichiers sont servis directement depuis le filesystem (<ic>file://</ic>). Les modules ES6 requièrent un serveur HTTP même en local. Les IIFE offrent le même scope isolé sans contrainte de serveur.</div></div>
+<h3>Pourquoi IIFE + 'use strict' ensemble</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">IIFE seul</div>
+<div class="kbox-item">Isole les variables (pas de pollution globale)</div>
+<div class="kbox-item"><ic>const tabs = ...</ic> invisible de l'extérieur</div>
+<div class="kbox-item">Mais les erreurs silencieuses passent inaperçues</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">'use strict' seul</div>
+<div class="kbox-item">Active les erreurs strictes</div>
+<div class="kbox-item">Mais si dans le scope global, les variables polluent</div>
+<div class="kbox-item"><ic>tabs = ...</ic> sans <ic>const</ic> crée une globale</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">IIFE + 'use strict' ensemble</div>
+<div class="kbox-item">Scope isolé ET erreurs strictes</div>
+<div class="kbox-item">Le combo standard de JS pré-modules</div>
+<div class="kbox-item">Équivalent à <ic>type='module'</ic> mais compatible IE11</div>
+</div>
+</div>
+<div class="callout analogy"><span class="callout-icon">🔍</span><div>En 2024, <ic>&lt;script type="module"&gt;</ic> offre la même isolation et le strict mode par défaut. L'IIFE+strict est le pattern <b>ES5-compatible</b> qui fonctionne sans bundler, sans transpilation. Pour PearTech qui n'utilise pas Webpack/Vite, c'est le bon choix.</div></div>
+<h3>Pourquoi IIFE + 'use strict' ensemble</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">IIFE seul</div>
+<div class="kbox-item">Isole les variables (pas de pollution globale)</div>
+<div class="kbox-item"><ic>const tabs = ...</ic> invisible de l'extérieur</div>
+<div class="kbox-item">Mais les erreurs silencieuses passent inaperçues</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">'use strict' seul</div>
+<div class="kbox-item">Active les erreurs strictes</div>
+<div class="kbox-item">Mais si dans le scope global, les variables polluent</div>
+<div class="kbox-item"><ic>tabs = ...</ic> sans <ic>const</ic> crée une globale</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">IIFE + 'use strict' ensemble</div>
+<div class="kbox-item">Scope isolé ET erreurs strictes</div>
+<div class="kbox-item">Le combo standard de JS pré-modules</div>
+<div class="kbox-item">Équivalent à <ic>type='module'</ic> mais compatible IE11</div>
+</div>
+</div>
+<div class="callout analogy"><span class="callout-icon">🔍</span><div>En 2024, <ic>&lt;script type="module"&gt;</ic> offre la même isolation et le strict mode par défaut. L'IIFE+strict est le pattern <b>ES5-compatible</b> qui fonctionne sans bundler, sans transpilation. Pour PearTech qui n'utilise pas Webpack/Vite, c'est le bon choix.</div></div>
+</div>
+
+<hr>
+<div class="sec" id="tabs-section">
+<div class="slabel">02 — Récupération des onglets</div>
+<h2>querySelectorAll('.tab') et le guard clause fail-fast <a class="anchor-link" href="#tabs-section" title="Lien direct">¶</a></h2>
+<p>Le module récupère les onglets et se protège immédiatement. Ce pattern — récupérer puis protéger — est utilisé dans tous les fichiers du projet.</p>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> tabs = document.querySelectorAll(<span class="s">'.tab'</span>); <span class="cm">// NodeList de tous les onglets</span>
+<span class="kw">if</span> (tabs.length === 0) <span class="kw">return</span>; <span class="cm">// Pas d'onglets → on arrête tout</span></pre></div>
+<p><ic>document.querySelectorAll()</ic> retourne une <b>NodeList</b> — similaire à un tableau, contenant tous les éléments correspondant au sélecteur CSS. Contrairement à <ic>querySelector()</ic> (retourne le premier ou <ic>null</ic>), <ic>querySelectorAll()</ic> retourne toujours une NodeList, même vide.</p>
+<div class="diag"><div class="dtitle">querySelector vs querySelectorAll</div><div class="vc"><div class="vn ct">querySelector('.tab') → premier élément ou null</div><div class="va">↓<div class="val">1 résultat max</div></div><div class="vn cg">querySelectorAll('.tab') → NodeList de 0, 1 ou N éléments</div></div></div>
+<h3>La NodeList — pas un vrai tableau</h3>
+<p>Une <ic>NodeList</ic> supporte <ic>.forEach()</ic> et <ic>.length</ic>, mais pas <ic>.map()</ic>, <ic>.filter()</ic>, ou <ic>.find()</ic>. C'est pourquoi dans d'autres fichiers du projet on utilise <ic>Array.from(nodeList)</ic> pour la convertir. Ici <ic>.forEach()</ic> suffit.</p>
+<div class="box info"><span class="bi">💡</span><div>La NodeList de <ic>querySelectorAll()</ic> est <b>statique</b> — elle représente l'état du DOM au moment de l'appel. Si des onglets étaient ajoutés dynamiquement après, ils ne seraient pas dedans. C'est pourquoi le MutationObserver re-lit les onglets à chaque changement.</div></div>
+<h3>Le guard clause — fail fast</h3>
+<p>La ligne <ic>if (tabs.length === 0) return;</ic> est un <b>guard clause</b> : si la condition n'est pas remplie, on sort immédiatement. filtre.js est chargé sur <b>toutes les pages du site</b>. Sur la page FAQ, contact, profil — il n'y a pas d'onglets <ic>.tab</ic>. Sans ce <ic>return</ic>, le code s'exécuterait inutilement.</p>
+<div class="box ok"><span class="bi">✓</span><div>Le <ic>return</ic> dans <ic>DOMContentLoaded</ic> ne quitte pas le script — il quitte uniquement ce callback. Le script reste chargé en mémoire, ce qui est correct car d'autres modules peuvent en avoir besoin sur la même page.</div></div>
+
+<h3>querySelectorAll('.tab') vs querySelectorAll('.tab.active')</h3>
+<table class="data-table">
+<thead><tr><th>Sélecteur</th><th>Quand utilisé</th><th>Retourne</th><th>Pourquoi</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>querySelectorAll('.tab')</ic></td><td>À l'init une fois</td><td>Tous les onglets</td><td>Pour attacher les listeners sur tous</td></tr>
+<tr><td class="td-code"><ic>querySelector('.tab.active')</ic></td><td>Dans MutationObserver</td><td>L'onglet actif ou null</td><td>Pour relire le filtre courant après injection</td></tr>
+<tr><td class="td-code"><ic>this</ic> dans le listener</td><td>Au clic</td><td>L'onglet cliqué</td><td>Référence directe — plus efficace que re-chercher</td></tr>
+</tbody></table>
+<h3>NodeList vs Array — pourquoi ça compte</h3>
+<table class="data-table">
+<thead><tr><th></th><th>NodeList (<ic>querySelectorAll</ic>)</th><th>Array (<ic>[...NodeList]</ic>)</th></tr></thead>
+<tbody>
+<tr><td class="td-code">forEach()</td><td>✓ disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">map()</td><td>✗ non disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">filter()</td><td>✗ non disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">find()</td><td>✗ non disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">Mise à jour auto</td><td>✓ réflète les changements DOM</td><td>✗ snapshot statique</td></tr>
+<tr><td class="td-code">Dans filtre.js</td><td><ic>forEach</ic> suffit — pas de conversion</td><td>Non utilisé</td></tr>
+</tbody></table>
+<div class="callout info"><span class="callout-icon">💡</span><div>filtre.js utilise uniquement <ic>forEach</ic> sur la NodeList — donc la conversion <ic>[...tabs]</ic> n'est pas nécessaire. Si on voulait filtrer les onglets actifs avec <ic>.filter()</ic>, il faudrait convertir en Array d'abord.</div></div>
+<h3>NodeList vs Array — pourquoi ça compte</h3>
+<table class="data-table">
+<thead><tr><th></th><th>NodeList (<ic>querySelectorAll</ic>)</th><th>Array (<ic>[...NodeList]</ic>)</th></tr></thead>
+<tbody>
+<tr><td class="td-code">forEach()</td><td>✓ disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">map()</td><td>✗ non disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">filter()</td><td>✗ non disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">find()</td><td>✗ non disponible</td><td>✓ disponible</td></tr>
+<tr><td class="td-code">Mise à jour auto</td><td>✓ réflète les changements DOM</td><td>✗ snapshot statique</td></tr>
+<tr><td class="td-code">Dans filtre.js</td><td><ic>forEach</ic> suffit — pas de conversion</td><td>Non utilisé</td></tr>
+</tbody></table>
+<div class="callout info"><span class="callout-icon">💡</span><div>filtre.js utilise uniquement <ic>forEach</ic> sur la NodeList — donc la conversion <ic>[...tabs]</ic> n'est pas nécessaire. Si on voulait filtrer les onglets actifs avec <ic>.filter()</ic>, il faudrait convertir en Array d'abord.</div></div>
+</div>
+
+<hr>
+<div class="sec" id="filter">
+<div class="slabel">03 — La fonction centrale</div>
+<h2>filterProducts() — Logique de filtrage ligne par ligne <a class="anchor-link" href="#filter" title="Lien direct">¶</a></h2>
+<p>C'est la seule vraie logique du fichier. Elle prend un filtre (chaîne de caractères) et met à jour la visibilité de chaque carte produit.</p>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> filterProducts(filter) {
+    <span class="cm">// Récupère TOUTES les cards à chaque appel</span>
+    <span class="cm">// Pourquoi ? product_grid.js peut en avoir ajouté depuis le dernier appel</span>
+    <span class="kw">const</span> productCards = document.querySelectorAll(<span class="s">'.product-card'</span>);
+
+    productCards.forEach(card =&gt; {
+        <span class="kw">const</span> category = card.dataset.category; <span class="cm">// ex: <span class="s">'apple'</span>, <span class="s">'android'</span></span>
+
+        <span class="kw">if</span> (filter === <span class="s">'tous'</span> || category === filter) {
+            card.style.display = <span class="s">'flex'</span>; <span class="cm">// IMPORTANT : flex, pas block !</span>
+            card.style.opacity = <span class="s">'1'</span>;   <span class="cm">// Force la visibilité</span>
+        } <span class="kw">else</span> {
+            card.style.display = <span class="s">'none'</span>; <span class="cm">// Cache les cards qui ne correspondent pas</span>
+        }
+    });
+}</pre></div>
+<h3>Pourquoi display:flex et pas display:block ?</h3>
+<p>Les cartes produits utilisent <ic>display:flex</ic> pour aligner leur contenu interne. Réafficher une card avec <ic>display:block</ic> casserait son layout. <b>Règle</b> : quand on montre un élément caché par <ic>display:none</ic>, on doit lui redonner son type d'affichage d'origine.</p>
+<div class="box warn"><span class="bi">⚠️</span><div>Utiliser <ic>card.style.display = ''</ic> (chaîne vide) pour effacer le style inline est élégant mais risqué : certains reset CSS peuvent annuler le <ic>display:flex</ic> défini en CSS. L'assignation explicite <ic>'flex'</ic> est plus fiable.</div></div>
+<h3>L'opérateur || et le court-circuit</h3>
+<p>La condition <ic>filter === 'tous' || category === filter</ic> utilise le <b>court-circuit</b> : si <ic>filter === 'tous'</ic> est <ic>true</ic>, la deuxième partie (<ic>category === filter</ic>) n'est <b>jamais évaluée</b>. Plus efficace qu'un <ic>if/else if</ic> séparé.</p>
+<h3>card.dataset.category — Lire les attributs data-*</h3>
+<p>L'attribut HTML <ic>data-category="apple"</ic> est accessible en JS via <ic>card.dataset.category</ic>. L'API <ic>dataset</ic> convertit automatiquement les attributs <ic>data-*</ic> en propriétés camelCase : <ic>data-product-id</ic> → <ic>dataset.productId</ic>. Si l'attribut est absent, <ic>dataset.category</ic> retourne <ic>undefined</ic> — la comparaison est <ic>false</ic>, la card serait cachée.</p>
+<div class="box info"><span class="bi">💡</span><div>Dans le HTML : <ic>&lt;div class="product-card" data-category="apple"&gt;</ic>. En JS : <ic>card.dataset.category</ic> → <ic>"apple"</ic>. C'est le mécanisme de communication entre HTML statique et JS dynamique — sans requête réseau, sans PearTechDB.</div></div>
+
+<h3>Machine d'état du filtrage</h3>
+<div class="state-machine">
+<div class="state c-gray">État initial</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">page load</div></div>
+<div class="state c-green">filterProducts('tous')</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">clic onglet</div></div>
+<div class="state c-yellow">filterProducts('apple')</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">MutationObserver</div></div>
+<div class="state c-blue">Re-applique le filtre actif</div>
+</div>
+<h3>Comparaison des sélecteurs utilisés</h3>
+<table class="data-table">
+<thead><tr><th>Sélecteur</th><th>Retourne</th><th>Utilisation dans filtre.js</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>querySelectorAll('.tab')</ic></td><td>NodeList statique</td><td>À l'init — récupère tous les onglets une fois</td></tr>
+<tr><td class="td-code"><ic>querySelector('.tab.active')</ic></td><td>1er élément ou null</td><td>Dans MutationObserver — onglet actif courant</td></tr>
+<tr><td class="td-code"><ic>querySelectorAll('.product-card')</ic></td><td>NodeList statique</td><td>Dans filterProducts() — relue à CHAQUE appel</td></tr>
+<tr><td class="td-code"><ic>getElementById('products-grid')</ic></td><td>Élément ou null</td><td>Une fois pour le MutationObserver</td></tr>
+</tbody></table>
+</div>
+
+<hr>
+<div class="sec" id="events">
+<div class="slabel">04 — Événements et surveillance</div>
+<h2>Listeners d'onglets, état initial et MutationObserver <a class="anchor-link" href="#events" title="Lien direct">¶</a></h2>
+<div class="code-block"><span class="cb-lang">javascript</span><pre>tabs.forEach(tab =&gt; {
+    tab.addEventListener(<span class="s">'click'</span>, <span class="kw">function</span>() {
+        tabs.forEach(t =&gt; t.classList.remove(<span class="s">'active'</span>)); <span class="cm">// Désactive tout</span>
+        <span class="kw">this</span>.classList.add(<span class="s">'active'</span>);                    <span class="cm">// Active l<span class="s">'onglet cliqué</span>
+        <span class="kw">const</span> filter = <span class="kw">this</span>.dataset.filter;             <span class="cm">// ex: '</span>apple<span class="s">', '</span>tous<span class="s">'</span>
+        filterProducts(filter);                         <span class="cm">// Applique le filtre</span>
+        console.log('</span>Filtre appliqué :', filter);
+    });
+});</pre></div>
+<h3>L'ordre : d'abord tout désactiver, puis activer un</h3>
+<p>On retire <ic>'active'</ic> de tous les onglets, PUIS on l'ajoute à l'onglet cliqué. Si on l'ajoutait d'abord puis retirait, l'onglet cliqué serait retiré dans la boucle <ic>forEach</ic> — il faudrait un test pour l'exclure. L'ordre actuel est simple et sans cas particulier.</p>
+<h3>Le mot-clé 'this' dans un listener</h3>
+<p>Dans un <ic>addEventListener</ic>, <ic>this</ic> fait référence à l'élément qui a reçu l'événement — ici l'onglet cliqué. C'est pourquoi le callback utilise <ic>function()</ic> et non une arrow function : les arrow functions héritent du <ic>this</ic> du contexte englobant, ce qui serait incorrect.</p>
+<div class="diag"><div class="dtitle">this dans function() vs arrow function</div><div class="vc"><div class="vn cg">function() { this → l'onglet cliqué ✓ }</div><div class="va">↓<div class="val"></div></div><div class="vn cr">() => { this → window ou undefined ✗ }</div></div></div>
+<h3>data-filter vs data-category — Deux attributs distincts</h3>
+<p>L'onglet a <ic>data-filter="apple"</ic>. La card produit a <ic>data-category="apple"</ic>. Les valeurs doivent être <b>strictement identiques</b> (même casse). <ic>"Apple" === "apple"</ic> est <ic>false</ic> en JS — une incohérence de casse casserait silencieusement le filtrage.</p>
+<h3>filterProducts('tous') — L'appel d'initialisation</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre>filterProducts(<span class="s">'tous'</span>); <span class="cm">// Affiche toutes les cards au chargement initial</span></pre></div>
+<p>Cet appel assure la cohérence dès le chargement. Il s'exécute après l'attachement des listeners — si une card avait un problème d'affichage initial, cet appel le corrigerait.</p>
+<h3>Le MutationObserver — Surveiller les ajouts futurs</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> productsGrid = document.getElementById(<span class="s">'products-grid'</span>);
+<span class="kw">if</span> (productsGrid) {
+    <span class="kw">const</span> gridObserver = <span class="kw">new</span> MutationObserver(<span class="kw">function</span>() {
+        <span class="kw">const</span> activeTab = document.querySelector(<span class="s">'.tab.active'</span>);
+        <span class="kw">const</span> currentFilter = activeTab ? activeTab.dataset.filter : <span class="s">'tous'</span>;
+        filterProducts(currentFilter); <span class="cm">// Re-applique le filtre sur les nouvelles cards</span>
+    });
+    gridObserver.observe(productsGrid, { childList: <span class="kw">true</span> });
+}</pre></div>
+<p><ic>product_grid.js</ic> injecte les cartes produits <em>après</em> DOMContentLoaded. Sans le MutationObserver, si l'utilisateur avait sélectionné 'Apple' avant que les cards soient injectées, toutes les cards ignoreraient le filtre actif.</p>
+<div class="diag"><div class="dtitle">Sans MutationObserver — le bug</div><div class="vc"><div class="vn cy">Utilisateur clique 'Apple' → filterProducts('apple') — 0 cards visibles</div><div class="va">↓<div class="val"></div></div><div class="vn cr">product_grid.js injecte 30 cards — TOUTES visibles, filtre ignoré</div><div class="va">↓<div class="val">bug</div></div><div class="vn cg">Avec MutationObserver → filterProducts('apple') → corrige automatiquement</div></div></div>
+<div class="box info"><span class="bi">💡</span><div>L'option <ic>{ childList: true }</ic> surveille uniquement l'ajout ou la suppression d'enfants directs. Suffisant car <ic>product_grid.js</ic> injecte les cards directement dans la grille via <ic>innerHTML</ic>.</div></div>
+<div class="box ana"><span class="bi">🔍</span><div>L'opérateur ternaire <ic>activeTab ? activeTab.dataset.filter : 'tous'</ic> : si <ic>activeTab</ic> est <ic>null</ic> (aucun onglet actif), on utilise <ic>'tous'</ic> par défaut. Sans cette sécurité, <ic>activeTab.dataset.filter</ic> sur <ic>null</ic> lèverait un <ic>TypeError</ic>.</div></div>
+
+<h3>Chronologie d'exécution — du chargement au premier filtre</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">0ms</span><span class="tl-title">DOMContentLoaded</span></div><div class="tl-body">Le HTML est parsé — <ic>querySelectorAll('.tab')</ic> retourne les onglets</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">~1ms</span><span class="tl-title">Listeners attachés</span></div><div class="tl-body">Un <ic>addEventListener('click')</ic> par onglet — ils attendent</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">~2ms</span><span class="tl-title">filterProducts('tous')</span></div><div class="tl-body">Affiche toutes les cards présentes dans le DOM à cet instant</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">~3ms</span><span class="tl-title">MutationObserver.observe()</span></div><div class="tl-body">Surveillance de <ic>#products-grid</ic> activée</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">~50ms</span><span class="tl-title">product_grid.js injecte</span></div><div class="tl-body">Les cards arrivent — MutationObserver déclenche — filtre ré-appliqué</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Au clic</span><span class="tl-title">Onglet cliqué</span></div><div class="tl-body">reset active → set active → filterProducts(filter) — le cycle continue</div></div>
+</div>
+</div>
+
+<hr>
+<div class="sec" id="recap">
+<div class="slabel">05 — Récapitulatif</div>
+<h2>Vue d'ensemble — tout filtre.js en un schéma <a class="anchor-link" href="#recap" title="Lien direct">¶</a></h2>
+<div class="diag"><div class="dtitle">Séquence d'initialisation</div><div class="vc"><div class="vn cgr">DOMContentLoaded déclenche</div><div class="va">↓<div class="val"></div></div><div class="vn ct">querySelectorAll('.tab') → NodeList</div><div class="va">↓<div class="val">0 éléments ? → return</div></div><div class="vn cg">forEach(tab) → addEventListener('click')</div><div class="va">↓<div class="val">un listener par onglet</div></div><div class="vn cy">filterProducts('tous')</div><div class="va">↓<div class="val">état initial</div></div><div class="vn cp">MutationObserver.observe(productsGrid)</div></div></div>
+<div class="diag"><div class="dtitle">Flux d'un clic sur 'Apple'</div><div class="vc"><div class="vn ct">click → forEach tabs → classList.remove('active')</div><div class="va">↓<div class="val">reset</div></div><div class="vn cy">this.classList.add('active')</div><div class="va">↓<div class="val">active l'onglet</div></div><div class="vn cg">filterProducts('apple')</div><div class="va">↓<div class="val"></div></div><div class="vn cp">dataset.category === 'apple' → display:flex / display:none</div></div></div>
+<h3>Les 2 fonctions — rôle et déclencheur</h3>
+<p><b>filterProducts(filter)</b> — Cœur du module. Boucle sur toutes les cards, compare les catégories. Déclenchée par : le listener de clic, l'appel initial, le MutationObserver.<br><br><b>MutationObserver callback</b> — Surveillance passive. Lit l'onglet actif courant, rappelle filterProducts. Déclenchée par : tout ajout d'enfant dans <ic>#products-grid</ic>.</p>
+<div class="box ok"><span class="bi">✓</span><div>filtre.js est un exemple de <b>séparation des responsabilités</b> : il ne s'occupe que du filtrage visuel. La génération des cards est dans <ic>product_grid.js</ic>. La connexion entre les deux est le MutationObserver — il surveille sans couplage direct entre les deux fichiers.</div></div>
+
+<h3>Le code complet de filtre.js — 55 lignes commentées</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre>(<span class="kw">function</span>() {
+    <span class="s">'use strict'</span>;
+    document.addEventListener(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {
+
+        <span class="cm">// 1. Récupération</span>
+        <span class="kw">const</span> tabs = document.querySelectorAll(<span class="s">'.tab'</span>);
+        <span class="kw">if</span> (tabs.length === 0) <span class="kw">return</span>; <span class="cm">// guard</span>
+
+        <span class="cm">// 2. Listeners sur chaque onglet</span>
+        tabs.forEach(tab =&gt; {
+            tab.addEventListener(<span class="s">'click'</span>, <span class="kw">function</span>() {
+                tabs.forEach(t =&gt; t.classList.remove(<span class="s">'active'</span>));
+                <span class="kw">this</span>.classList.add(<span class="s">'active'</span>);
+                filterProducts(<span class="kw">this</span>.dataset.filter);
+            });
+        });
+
+        <span class="cm">// 3. Fonction centrale</span>
+        <span class="kw">function</span> filterProducts(filter) {
+            document.querySelectorAll(<span class="s">'.product-card'</span>).forEach(card =&gt; {
+                <span class="kw">const</span> show = filter === <span class="s">'tous'</span> || card.dataset.category === filter;
+                card.style.display = show ? <span class="s">'flex'</span> : <span class="s">'none'</span>;
+                <span class="kw">if</span> (show) card.style.opacity = <span class="s">'1'</span>;
+            });
+        }
+
+        <span class="cm">// 4. Appel initial</span>
+        filterProducts(<span class="s">'tous'</span>);
+
+        <span class="cm">// 5. Surveillance des cards injectées dynamiquement</span>
+        <span class="kw">const</span> grid = document.getElementById(<span class="s">'products-grid'</span>);
+        <span class="kw">if</span> (grid) {
+            <span class="kw">new</span> MutationObserver(() =&gt; {
+                <span class="kw">const</span> active = document.querySelector(<span class="s">'.tab.active'</span>);
+                filterProducts(active ? active.dataset.filter : <span class="s">'tous'</span>);
+            }).observe(grid, { childList: <span class="kw">true</span> });
+        }
+    });
+})();</pre></div>
+<div class="box ok"><span class="bi">✓</span><div>filtre.js est intentionnellement court. Sa force est sa <b>minimalité</b> : 1 fonction centrale, 1 observer, 0 dépendance externe. Il peut être compris en entier en 2 minutes et debuggé en 30 secondes.</div></div>
+<h3>Comparaison filtre.js vs approches alternatives</h3>
+<div class="schema-grid">
+<div class="schema-card green"><div class="tag tag-green">filtre.js (actuel)</div><h4>Display hide/show</h4><p>Toutes les cards restent dans le DOM. Filtrage = toggle <ic>display:none</ic>. Simple, rapide, pas de re-rendu.</p></div>
+<div class="schema-card blue"><div class="tag tag-blue">Alternative : re-render</div><h4>Injection HTML</h4><p>À chaque filtre, vide le container et réinjecte les cards filtrées depuis PearTechDB. Plus propre mais plus lent.</p></div>
+<div class="schema-card yellow"><div class="tag tag-yellow">Alternative : CSS only</div><h4>Sélecteurs CSS</h4><p><ic>.filter-apple .product-card:not([data-category=apple])</ic>. Aucun JS mais HTML complexe.</p></div>
+<div class="schema-card red"><div class="tag tag-red">Alternative : URL params</div><h4>Navigation</h4><p><ic>?filter=apple</ic> → rechargement de page. Bookmarkable mais lent.</p></div>
+</div>
+<h3>Comparaison filtre.js vs approches alternatives</h3>
+<div class="schema-grid">
+<div class="schema-card green"><div class="tag tag-green">filtre.js (actuel)</div><h4>Display hide/show</h4><p>Toutes les cards restent dans le DOM. Filtrage = toggle <ic>display:none</ic>. Simple, rapide, pas de re-rendu.</p></div>
+<div class="schema-card blue"><div class="tag tag-blue">Alternative : re-render</div><h4>Injection HTML</h4><p>À chaque filtre, vide le container et réinjecte les cards filtrées depuis PearTechDB. Plus propre mais plus lent.</p></div>
+<div class="schema-card yellow"><div class="tag tag-yellow">Alternative : CSS only</div><h4>Sélecteurs CSS</h4><p><ic>.filter-apple .product-card:not([data-category=apple])</ic>. Aucun JS mais HTML complexe.</p></div>
+<div class="schema-card red"><div class="tag tag-red">Alternative : URL params</div><h4>Navigation</h4><p><ic>?filter=apple</ic> → rechargement de page. Bookmarkable mais lent.</p></div>
+</div>
+</div>
+
+<hr>
+<div class="sec" id="ordre"><div class="slabel">04 — Ordre du code</div><h2>Pourquoi chaque bloc est placé là où il est <a class="anchor-link" href="#ordre" title="Lien direct">¶</a></h2><p>filtre.js est court mais précis : <b>vérifier → logique → écouter → état initial → surveiller le futur</b>. Le MutationObserver est systématiquement en dernier dans tout le projet.</p><div class="ordre-seq"><div class="os-bloc"><div class="os-num">1</div><div class="os-card"><div class="os-head"><span class="os-pill guard">Condition d'existence</span><span class="os-name">document.querySelectorAll('.tab') + if (tabs.length === 0) return</span></div><div class="os-body"><div class="os-why"><b>Le module n'a de sens que si des onglets existent.</b> filtre.js est chargé sur toutes les pages. Sur les pages sans onglets, la NodeList est vide. L'avantage du <ic>return</ic> immédiat sur un <ic>if (tabs.length) { … tout le code … }</ic> : le corps principal n'est pas indenté, la lecture est plus fluide, et l'intention est claire — 'si pas d'onglets, on sort'.</div><div class="os-err">Sans guard : <ic>tabs.forEach(…)</ic> s'exécute 0 fois (pas d'erreur), mais <ic>filterProducts('tous')</ic> est appelée quand même → <ic>querySelectorAll('.product-card')</ic> sur une page sans cards → boucle vide → CPU gaspillé. Pas d'erreur visible, mais du code inutile s'exécute.</div></div></div></div><div class="os-arrow">↓ la logique avant les événements qui la déclenchent</div><div class="os-bloc"><div class="os-num">2</div><div class="os-card"><div class="os-head"><span class="os-pill util">Logique de filtrage</span><span class="os-name">function filterProducts(filter) { … }</span></div><div class="os-body"><div class="os-why"><b>Définie avant les listeners qui l'appellent — le 'quoi' avant le 'quand'.</b> <ic>filterProducts()</ic> est le cœur fonctionnel : elle cache/montre les <ic>.product-card</ic> en comparant leur <ic>dataset.category</ic> au filtre actif. La placer avant les listeners suit la convention : on comprend d'abord ce que fait le système, puis on voit quand il se déclenche. Elle est hoistée, donc techniquement l'ordre n'a pas d'importance.</div><div class="os-dep">Lit : <ic>tabs</ic> (pour l'onglet actif), <ic>.product-card</ic> (éléments à filtrer). Appelée par : listeners des onglets (étape 3), <ic>filterProducts('tous')</ic> (étape 4), MutationObserver (étape 5).</div></div></div></div><div class="os-arrow">↓ connecter l'UI à la logique</div><div class="os-bloc"><div class="os-num">3</div><div class="os-card"><div class="os-head"><span class="os-pill event">Listeners onglets</span><span class="os-name">tabs.forEach(tab => tab.addEventListener('click', …))</span></div><div class="os-body"><div class="os-why"><b>Après <ic>filterProducts()</ic> — ce bloc connecte les onglets à la logique de filtrage.</b> Chaque clic : (1) désactive tous les onglets (<ic>forEach removeClass active</ic>), (2) active celui cliqué (<ic>this.classList.add active</ic>), (3) appelle <ic>filterProducts(filter)</ic> avec la valeur du <ic>data-filter</ic> du bouton. L'ordre interne est impératif : d'abord réinitialiser tous les états, puis en activer un seul.</div></div></div></div><div class="os-arrow">↓ état initial après configuration des interactions</div><div class="os-bloc"><div class="os-num">4</div><div class="os-card"><div class="os-head"><span class="os-pill init">État initial</span><span class="os-name">filterProducts('tous') — affichage initial de toutes les cards</span></div><div class="os-body"><div class="os-why"><b>Après les listeners — configure l'état de départ après avoir configuré les changements d'état.</b> Cet appel affiche toutes les cards au premier chargement (onglet 'Tous' actif par défaut). Pourrait techniquement être avant les listeners (pas de dépendance directe), mais l'ordre choisi suit la convention : configurer les règles du jeu, puis définir l'état de départ.</div><div class="os-rule">L'état initial est défini <em>après</em> les handlers qui le modifieront — on configure d'abord comment le système réagit, puis on le place dans son état de départ.</div></div></div></div><div class="os-arrow">↓ surveiller les futures injections de cards (MutationObserver toujours en dernier)</div><div class="os-bloc"><div class="os-num">5</div><div class="os-card"><div class="os-head"><span class="os-pill event">Surveillance future</span><span class="os-name">new MutationObserver(…).observe(productsGrid, { childList: true })</span></div><div class="os-body"><div class="os-why"><b>En tout dernier — surveille les ajouts futurs, pas l'état présent.</b> Sans ce MutationObserver, les cards injectées par <ic>product_grid.js</ic> ou <ic>catalogue.js</ic> après le chargement initial ignoreraient le filtre actif — elles s'afficheraient toutes même si l'onglet 'Apple' était sélectionné. Il re-applique le filtre actif à chaque injection de nouvelles cards.</div><div class="os-dep">Appelle <ic>filterProducts(currentFilter)</ic> où <ic>currentFilter</ic> est lu depuis l'onglet actuellement actif via <ic>querySelector('.tab.active')?.dataset.filter</ic>.</div></div></div></div></div></div><div class="os-synthese"><div class="os-synthese-title">Règle générale de ce fichier</div><p>filtre.js illustre le pattern complet en miniature : guard → logique → events → init → mutation observer. Le MutationObserver en dernier est une convention du projet entier : il surveille passivement le futur sans bloquer le présent.</p><div class="os-grid"><div class="os-grid-item"><div class="og-num">01</div><div class="og-name">Guard clause</div><div class="og-why">Sortie si inutile</div></div><div class="os-grid-item"><div class="og-num">02</div><div class="og-name">filterProducts()</div><div class="og-why">Logique centrale</div></div><div class="os-grid-item"><div class="og-num">03</div><div class="og-name">Listeners onglets</div><div class="og-why">UI → logique</div></div><div class="os-grid-item"><div class="og-num">04</div><div class="og-name">filterProducts('tous')</div><div class="og-why">État initial</div></div><div class="os-grid-item"><div class="og-num">05</div><div class="og-name">MutationObserver</div><div class="og-why">Futur</div></div></div></div>
+
+<hr>
 <!-- GLOSSAIRE -->
 <div class="sec" id="glossaire">
   <div class="slabel">Glossaire</div>
-  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <h2>Concepts et termes techniques utilisés dans ce fichier <a class="anchor-link" href="#glossaire" title="Lien direct">¶</a></h2>
   <p>Définitions des termes importants rencontrés dans cette documentation.</p>
   <div class="glos-grid">
     <div class="glos-item">
@@ -290,5 +1539,459 @@ gridObserver.<span class="fn">observe</span>(productsGrid, { childList: <span cl
     </div>
   </div>
 </div>
+
+<hr class="sep">
+<div class="sec" id="plus-loin">
+  <div class="slabel">✦ Pour aller plus loin</div>
+  <h2>Filtres multi-critères : état, combinaison et URL <a class="anchor-link" href="#plus-loin" title="Lien direct">¶</a></h2>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — les filtres comme un tamis multicouche :</b> Chaque filtre actif est un tamis. Les produits passent en cascade — d'abord le tamis "catégorie", puis "prix", puis "marque". Seuls les produits qui passent tous les tamis arrivent à l'affichage. Ajouter un filtre, c'est ajouter un tamis dans la chaîne.</div></div>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — l'objet filtres actifs :</b> L'objet <ic>activeFilters</ic> est comme un formulaire de commande. Chaque case cochée ajoute une ligne. Quand tu soumets, le système ne regarde que les lignes remplies. Si aucune ligne, tous les produits passent.</div></div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Appliquer les filtres séquentiellement en modifiant le DOM</div>
+    <div class="gotcha-body">
+      Ne jamais cacher/montrer les éléments DOM un par un pour filtrer. Toujours filtrer le tableau de données JS (<ic>PearTechDB.products</ic>), puis régénérer tout le HTML en une seule injection. Le DOM est une sortie, pas un filtre.
+    </div>
+  </div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Réinitialiser tous les filtres quand un seul change</div>
+    <div class="gotcha-body">
+      Chaque modification de filtre doit mettre à jour seulement la clé concernée dans <ic>activeFilters</ic> et relancer l'affichage. Pas tout réinitialiser. L'utilisateur a défini les autres filtres pour une raison — les préserver.
+    </div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Sérialise les filtres actifs dans l'URL (<ic>?cat=audio&max=200</ic>) avec <ic>URLSearchParams</ic>. L'utilisateur peut partager un lien avec ses filtres appliqués, et le retour arrière restaure l'état.</div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Affiche un compteur de résultats mis à jour en temps réel : "12 produits". Si 0 résultat, affiche un message et une suggestion de réinitialiser les filtres. Ne laisse jamais l'utilisateur face à une page vide sans explication.</div>
+  </div>
+
+  <div class="schema-grid">
+    <div class="schema-card yellow"><h4>activeFilters</h4><p>Objet unique centralisant tous les filtres actifs. La seule source de vérité de l'état de filtrage.</p></div>
+    <div class="schema-card green"><h4>every() pour AND</h4><p><ic>filters.every(f => f(product))</ic> — un produit passe si <em>tous</em> les filtres retournent true.</p></div>
+    <div class="schema-card blue"><h4>Données → DOM</h4><p>Filtrer JS d'abord, régénérer le HTML ensuite. Jamais l'inverse.</p></div>
+    <div class="schema-card purple"><h4>URL state</h4><p>Filtres persistés en URL. Partageables, historisables, restaurables au rechargement.</p></div>
+  </div>
+
+  <h3>Code source — <ic>filtre.js</ic></h3>
+
+  <div class="file-stats">
+    <div class="fstat">
+      <div class="fstat-val">58</div>
+      <div class="fstat-label">Lignes</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">5</div>
+      <div class="fstat-label">Fonctions</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">8</div>
+      <div class="fstat-label">const / let</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">10</div>
+      <div class="fstat-label">Commentaires</div>
+    </div>
+  </div>
+  <div style="margin:.8rem 0 1.2rem;"><span class="pattern-tag" style="background:rgba(79,142,255,.15);border-color:rgba(79,142,255,.4);color:#7eb5ff;">🔍 Pattern : MutationObserver re-apply + CustomEvent</span></div>
+  <div class="src-block">
+    <div class="src-header">
+      <div class="src-dots">
+        <div class="src-dot r"></div>
+        <div class="src-dot y"></div>
+        <div class="src-dot g"></div>
+      </div>
+      <div class="src-fname">filtre.js</div>
+      <div class="src-badge">58 lignes</div>
+    </div>
+    <div class="src-body">
+      <pre><span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"><span class="cmt">// filtre.js - Filtrage par onglets sur la page d'accueil</span></span>
+<span class="ln"><span class="cmt">// Affiche/cache les product-cards selon la catégorie</span></span>
+<span class="ln"><span class="cmt">// sélectionnée via les onglets (tabs)</span></span>
+<span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"></span>
+<span class="ln">(<span class="kw">function</span>() {</span>
+<span class="ln">    <span class="s">'use strict'</span>; <span class="cmt">// Mode strict activé</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="bi">document</span>.<span class="fn">addEventListener</span>(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {</span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">const</span> tabs = <span class="bi">document</span>.<span class="fn">querySelectorAll</span>(<span class="s">'.tab'</span>); <span class="cmt">// Tous les onglets de filtre (Tous, Apple, Android...)</span></span>
+<span class="ln">        <span class="kw">if</span> (tabs.length === <span class="n">0</span>) <span class="kw">return</span>; <span class="cmt">// Pas d'onglets sur cette page : on arrête</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Fonction de filtrage des cards ────────────────────────</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">function</span> <span class="fn">filterProducts</span>(filter) {</span>
+<span class="ln">            <span class="kw">const</span> productCards = <span class="bi">document</span>.<span class="fn">querySelectorAll</span>(<span class="s">'.product-card'</span>); <span class="cmt">// Toutes les cards de la grille</span></span>
+<span class="ln">            productCards.<span class="fn">forEach</span>(card =&gt; {</span>
+<span class="ln">                <span class="kw">const</span> category = card.dataset.category; <span class="cmt">// Catégorie de la card (ex: "apple", "android")</span></span>
+<span class="ln">                <span class="kw">if</span> (filter === <span class="s">'tous'</span> || category === filter) {</span>
+<span class="ln">                    <span class="cmt">// L'onglet "tous" accepte toutes les catégories</span></span>
+<span class="ln">                    card.style.display = <span class="s">'flex'</span>; <span class="cmt">// Réaffiche la card (flex car les cards utilisent flex)</span></span>
+<span class="ln">                    card.style.opacity = <span class="s">'1'</span>;    <span class="cmt">// Assure la visibilité complète</span></span>
+<span class="ln">                } <span class="kw">else</span> {</span>
+<span class="ln">                    card.style.display = <span class="s">'none'</span>; <span class="cmt">// Cache les cards qui ne correspondent pas au filtre</span></span>
+<span class="ln">                }</span>
+<span class="ln">            });</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Événements sur les onglets ────────────────────────────</span></span>
+<span class="ln"></span>
+<span class="ln">        tabs.<span class="fn">forEach</span>(tab =&gt; {</span>
+<span class="ln">            tab.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {</span>
+<span class="ln">                tabs.<span class="fn">forEach</span>(t =&gt; t.classList.<span class="fn">remove</span>(<span class="s">'active'</span>)); <span class="cmt">// Désactive tous les onglets</span></span>
+<span class="ln">                <span class="kw">this</span>.classList.<span class="fn">add</span>(<span class="s">'active'</span>);                    <span class="cmt">// Active l'onglet cliqué</span></span>
+<span class="ln">                <span class="kw">const</span> filter = <span class="kw">this</span>.dataset.filter;             <span class="cmt">// Récupère le filtre ("tous", "apple"...)</span></span>
+<span class="ln">                <span class="fn">filterProducts</span>(filter);                         <span class="cmt">// Applique le filtre</span></span>
+<span class="ln">                <span class="bi">console</span>.<span class="fn">log</span>(<span class="s">'Filtre appliqué :'</span>, filter);</span>
+<span class="ln">            });</span>
+<span class="ln">        });</span>
+<span class="ln"></span>
+<span class="ln">        <span class="fn">filterProducts</span>(<span class="s">'tous'</span>); <span class="cmt">// Affiche toutes les cards au chargement initial</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── MutationObserver : re-applique le filtre actif si la grille est rechargée ──</span></span>
+<span class="ln">        <span class="cmt">// Nécessaire car product_grid.js peut injecter des cards après le chargement</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">const</span> productsGrid = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'products-grid'</span>);</span>
+<span class="ln">        <span class="kw">if</span> (productsGrid) {</span>
+<span class="ln">            <span class="kw">const</span> gridObserver = <span class="kw">new</span> <span class="bi">MutationObserver</span>(<span class="kw">function</span>() {</span>
+<span class="ln">                <span class="kw">const</span> activeTab = <span class="bi">document</span>.<span class="fn">querySelector</span>(<span class="s">'.tab.active'</span>); <span class="cmt">// Onglet actuellement actif</span></span>
+<span class="ln">                <span class="kw">const</span> currentFilter = activeTab ? activeTab.dataset.filter : <span class="s">'tous'</span>; <span class="cmt">// Filtre courant</span></span>
+<span class="ln">                <span class="fn">filterProducts</span>(currentFilter); <span class="cmt">// Re-applique le filtre sur les nouvelles cards</span></span>
+<span class="ln">            });</span>
+<span class="ln">            gridObserver.<span class="fn">observe</span>(productsGrid, { childList: <span class="kw">true</span> }); <span class="cmt">// Surveille les enfants directs de la grille</span></span>
+<span class="ln">        }</span>
+<span class="ln">    });</span>
+<span class="ln">})();</span></pre>
+    </div>
+  </div>
+
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="decryptage">
+  <div class="slabel">⌨ Patterns clés du code</div>
+  <h2>filtre.js — les patterns essentiels <a class="anchor-link" href="#decryptage" title="Lien direct">¶</a></h2>
+
+  <h3>Guard clause — protection systématique</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Pattern universel dans tous les modules PearTech</span>
+<span class="cmt">// Récupérer les éléments DOM nécessaires</span>
+<span class="kw">const</span> el = document.<span class="fn">getElementById</span>(<span class="str">'mon-element'</span>);
+
+<span class="cmt">// Guard immédiat — si l'élément est absent de la page, stop</span>
+<span class="cmt">// Ce module peut être chargé sur des pages où l'élément n'existe pas</span>
+<span class="kw">if</span> (!el) {
+  console.<span class="fn">warn</span>(<span class="str">'filtre.js : élément introuvable'</span>);
+  <span class="kw">return</span>; <span class="cmt">// sortie propre, pas de TypeError en cascade</span>
+}</pre></div>
+
+  <h3>Délégation d'événements</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Plutôt que d'attacher un listener sur chaque bouton...</span>
+<span class="cmt">// On attache UN seul listener sur le container parent</span>
+container.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>(e) {
+
+  <span class="cmt">// matches() vérifie si l'élément cliqué correspond au sélecteur</span>
+  <span class="kw">if</span> (e.target.<span class="fn">matches</span>(<span class="str">'.btn-action'</span>)) {
+    <span class="kw">const</span> id = e.target.dataset.id; <span class="cmt">// lire data-id="..."</span>
+    <span class="fn">handleAction</span>(id);
+  }
+
+  <span class="cmt">// closest() remonte l'arbre DOM — utile si le clic est sur un enfant</span>
+  <span class="kw">const</span> card = e.target.<span class="fn">closest</span>(<span class="str">'.card'</span>);
+  <span class="kw">if</span> (card) <span class="fn">handleCard</span>(card.dataset.id);
+});</pre></div>
+
+  <h3>Persistance localStorage avec try/catch</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Lire depuis localStorage de façon sécurisée</span>
+<span class="kw">function</span> <span class="fn">load</span>(key) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> raw = localStorage.<span class="fn">getItem</span>(key);
+    <span class="kw">return</span> raw ? JSON.<span class="fn">parse</span>(raw) : <span class="kw">null</span>;
+  } <span class="kw">catch</span> { <span class="kw">return</span> <span class="kw">null</span>; } <span class="cmt">// corrompu → null</span>
+}
+
+<span class="cmt">// Écrire dans localStorage</span>
+<span class="kw">function</span> <span class="fn">save</span>(key, data) {
+  localStorage.<span class="fn">setItem</span>(key, JSON.<span class="fn">stringify</span>(data));
+  <span class="cmt">// JSON.stringify : tableau/objet JS → string stockable</span>
+}</pre></div>
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="code-annote">
+  <div class="slabel">⟨/⟩ Code annoté — filtre.js complet</div>
+  <h2>Chaque ligne décortiquée <a class="anchor-link" href="#code-annote" title="Lien direct">¶</a></h2>
+
+  <h3>① L'état central des filtres</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> <span class="vr">activeFilters</span> = {
+  category: <span class="kw">null</span>,    <span class="cmt">// null = pas de filtre catégorie</span>
+  minPrice: <span class="nm">0</span>,
+  maxPrice: <span class="nm">Infinity</span>, <span class="cmt">// Infinity : tous les prix passent par défaut</span>
+  marque: <span class="kw">null</span>,
+  inStock: <span class="kw">false</span>,     <span class="cmt">// false = afficher aussi les ruptures de stock</span>
+  search: <span class="str">''</span>
+};
+<span class="cmt">// Cet objet est la SEULE source de vérité de l'état de filtrage.
+// Toutes les fonctions lisent depuis ici, jamais depuis le DOM.
+// Modifier activeFilters → appeler renderCatalogue() → DOM mis à jour.</span></pre></div>
+
+  <h3>② Mise à jour d'un filtre — pattern setFilter</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">setFilter</span>(key, value) {
+  <span class="vr">activeFilters</span>[key] = value;
+  <span class="cmt">// Bracket notation : permet d'utiliser une variable comme clé.
+  // setFilter('category', 'audio') → activeFilters.category = 'audio'</span>
+
+  <span class="fn">renderCatalogue</span>(); <span class="cmt">// Re-render immédiat</span>
+  <span class="fn">updateURL</span>();        <span class="cmt">// Sérialise les filtres dans l'URL</span>
+  <span class="fn">updateActiveCount</span>(); <span class="cmt">// Met à jour le badge "3 filtres actifs"</span>
+}
+
+<span class="cmt">// Usage :
+// setFilter('category', 'audio')  → filtre catégorie audio
+// setFilter('maxPrice', 500)       → filtre prix max 500€
+// setFilter('category', null)      → retire le filtre catégorie</span></pre></div>
+
+  <h3>③ Application des filtres — every() pour le AND logique</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">applyFilters</span>(products) {
+  <span class="cmt">// On construit un tableau de fonctions-filtres actives.</span>
+  <span class="kw">const</span> <span class="vr">filters</span> = [];
+
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.category) {
+    <span class="vr">filters</span>.<span class="fn">push</span>(<span class="vr">p</span> => <span class="vr">p</span>.category === <span class="vr">activeFilters</span>.category);
+  }
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.minPrice > <span class="nm">0</span>) {
+    <span class="vr">filters</span>.<span class="fn">push</span>(<span class="vr">p</span> => <span class="vr">p</span>.price >= <span class="vr">activeFilters</span>.minPrice);
+  }
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.maxPrice < <span class="fn">Infinity</span>) {
+    <span class="vr">filters</span>.<span class="fn">push</span>(<span class="vr">p</span> => <span class="vr">p</span>.price <= <span class="vr">activeFilters</span>.maxPrice);
+  }
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.inStock) {
+    <span class="vr">filters</span>.<span class="fn">push</span>(<span class="vr">p</span> => <span class="vr">p</span>.stock > <span class="nm">0</span>);
+  }
+  <span class="cmt">// Seulement les filtres ACTIFS sont dans le tableau.
+  // Si aucun filtre : filters = [] → every sur [] → true → tous les produits passent.</span>
+
+  <span class="kw">return</span> products.<span class="fn">filter</span>(<span class="vr">p</span> =>
+    <span class="vr">filters</span>.<span class="fn">every</span>(<span class="vr">fn</span> => <span class="fn">fn</span>(<span class="vr">p</span>))
+  );
+  <span class="cmt">// every(fn => fn(p)) : un produit passe si CHAQUE filtre retourne true.
+  // C'est le AND logique : catégorie ET prix ET stock ET …
+  //
+  // Exemple : filters = [catFn, priceFn]
+  // p = {category:'audio', price:150, stock:5}
+  //   catFn(p)   → true  (c'est de l'audio)
+  //   priceFn(p) → true  (150 <= maxPrice)
+  //   every → true → produit inclus ✓</span>
+}</pre></div>
+
+  <h3>④ Sérialisation des filtres dans l'URL</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">updateURL</span>() {
+  <span class="kw">const</span> <span class="vr">params</span> = <span class="kw">new</span> <span class="fn">URLSearchParams</span>();
+  <span class="cmt">// URLSearchParams gère l'encodage des valeurs automatiquement.
+  // Pas besoin de encodeURIComponent manuellement.</span>
+
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.category) <span class="vr">params</span>.<span class="fn">set</span>(<span class="str">'cat'</span>, <span class="vr">activeFilters</span>.category);
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.maxPrice < <span class="fn">Infinity</span>) <span class="vr">params</span>.<span class="fn">set</span>(<span class="str">'max'</span>, <span class="vr">activeFilters</span>.maxPrice);
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.inStock) <span class="vr">params</span>.<span class="fn">set</span>(<span class="str">'stock'</span>, <span class="str">'1'</span>);
+  <span class="kw">if</span> (<span class="vr">activeFilters</span>.search) <span class="vr">params</span>.<span class="fn">set</span>(<span class="str">'q'</span>, <span class="vr">activeFilters</span>.search);
+
+  <span class="kw">const</span> <span class="vr">query</span> = <span class="vr">params</span>.<span class="fn">toString</span>();
+  <span class="cmt">// Ex : 'cat=audio&max=500&stock=1'</span>
+
+  history.<span class="fn">pushState</span>({}, <span class="str">''</span>, query ? <span class="str">`?${query}`</span> : location.pathname);
+  <span class="cmt">// pushState : modifie l'URL sans recharger la page.
+  // L'utilisateur peut copier l'URL, la partager, ou naviguer en arrière.
+  // location.pathname (ex: '/catalogue.html') efface les paramètres si aucun filtre.</span>
+}
+
+<span class="kw">function</span> <span class="fn">restoreFromURL</span>() {
+  <span class="kw">const</span> <span class="vr">params</span> = <span class="kw">new</span> <span class="fn">URLSearchParams</span>(location.search);
+  <span class="cmt">// location.search = '?cat=audio&max=500' (la partie après ?)
+  // URLSearchParams le parse automatiquement.</span>
+
+  <span class="kw">if</span> (<span class="vr">params</span>.<span class="fn">has</span>(<span class="str">'cat'</span>))   <span class="vr">activeFilters</span>.category = <span class="vr">params</span>.<span class="fn">get</span>(<span class="str">'cat'</span>);
+  <span class="kw">if</span> (<span class="vr">params</span>.<span class="fn">has</span>(<span class="str">'max'</span>))   <span class="vr">activeFilters</span>.maxPrice  = +<span class="vr">params</span>.<span class="fn">get</span>(<span class="str">'max'</span>);
+  <span class="kw">if</span> (<span class="vr">params</span>.<span class="fn">has</span>(<span class="str">'stock'</span>)) <span class="vr">activeFilters</span>.inStock   = <span class="kw">true</span>;
+  <span class="cmt">// + devant params.get : convertit string → number ('500' → 500)</span>
+
+  <span class="fn">renderCatalogue</span>(); <span class="cmt">// Applique les filtres restaurés</span>
+  <span class="fn">syncUIWithFilters</span>(); <span class="cmt">// Coche les cases et curseurs correspondants</span>
+}</pre></div>
+
+</div>
+
+<script>
+
+(function() {
+  'use strict';
+
+  /* ───────────────────────────────────────────────
+     BARRE DE PROGRESSION DE LECTURE
+  ─────────────────────────────────────────────── */
+  var bar = document.createElement('div');
+  bar.id = 'read-progress';
+  document.body.prepend(bar);
+
+  function updateProgress() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docH      = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (docH > 0 ? Math.min(100, (scrollTop / docH) * 100) : 0) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* ───────────────────────────────────────────────
+     NAV ACTIVE AU SCROLL
+  ─────────────────────────────────────────────── */
+  var navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (navLinks.length > 0) {
+    var secs = navLinks.reduce(function(acc, a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) acc.push({ el: el, a: a });
+      return acc;
+    }, []);
+
+    if (secs.length > 0) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            navLinks.forEach(function(a) { a.classList.remove('active'); });
+            var hit = secs.find(function(s) { return s.el === entry.target; });
+            if (hit) hit.a.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-56px 0px -55% 0px', threshold: 0 });
+      secs.forEach(function(s) { io.observe(s.el); });
+    }
+  }
+
+  /* ───────────────────────────────────────────────
+     BOUTON COPIER
+  ─────────────────────────────────────────────── */
+  var COPY_SVG  = '<svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6z"/><path d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h7a1 1 0 0 0 0-2H3V6a1 1 0 0 0-1-1z"/></svg>';
+  var CHECK_SVG = '<svg viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/></svg>';
+
+  function makeBtn(extraClass) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn' + (extraClass ? ' ' + extraClass : '');
+    btn.innerHTML = COPY_SVG + ' Copier';
+    btn.setAttribute('aria-label', 'Copier le code');
+    return btn;
+  }
+
+  function attachCopy(btn, getCode) {
+    btn.addEventListener('click', function() {
+      var code = getCode();
+      if (!code) return;
+      var finish = function() {
+        btn.innerHTML = CHECK_SVG + ' Copié !';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.innerHTML = COPY_SVG + ' Copier';
+          btn.classList.remove('copied');
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(finish).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          finish();
+        } catch(e) {}
+      }
+    });
+  }
+
+  /* Inline code-blocks */
+  document.querySelectorAll('.code-block').forEach(function(block) {
+    var pre = block.querySelector('pre');
+    if (!pre) return;
+    block.style.position = 'relative';
+    var btn = makeBtn('abs');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    block.appendChild(btn);
+  });
+
+  /* Src-blocks (code source complet) */
+  document.querySelectorAll('.src-block').forEach(function(block) {
+    var header = block.querySelector('.src-header');
+    var pre    = block.querySelector('pre');
+    if (!header || !pre) return;
+    var btn = makeBtn('');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    header.appendChild(btn);
+  });
+
+  /* ───────────────────────────────────────────────
+     EXPAND / COLLAPSE code source
+  ─────────────────────────────────────────────── */
+  document.querySelectorAll('.src-expand-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var block   = this.closest('.src-block');
+      if (!block) return;
+      var body    = block.querySelector('.src-body');
+      var fade    = block.querySelector('.src-fade');
+      if (!body) return;
+      var expanded = body.classList.toggle('expanded');
+      if (fade) fade.style.opacity = expanded ? '0' : '1';
+      this.innerHTML = expanded
+        ? '<span>▲</span> Réduire'
+        : '<span>▼</span> Voir tout (' + (this.dataset.lines || '?') + ' lignes)';
+    });
+  });
+
+
+  /* ── Wrapper responsive pour les tables ── */
+  document.querySelectorAll('table').forEach(function(tbl) {
+    if (tbl.closest('.tbl-wrap')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tbl-wrap';
+    tbl.parentNode.insertBefore(wrap, tbl);
+    wrap.appendChild(tbl);
+  });
+
+})();
+
+</script>
+<!-- DOCS-FOOTER -->
+<div class="docs-footer"><div class="docs-footer-title">📚 Tous les modules PearTech</div><div class="docs-grid">
+    <a href="animation_docs.html" class="docs-link"><span class="docs-link-icon">✨</span>animation.js</a>
+    <a href="carousel_docs.html" class="docs-link"><span class="docs-link-icon">🎠</span>carousel.js</a>
+    <a href="cart_docs.html" class="docs-link"><span class="docs-link-icon">🛒</span>cart.js</a>
+    <a href="catalogue_docs.html" class="docs-link"><span class="docs-link-icon">📦</span>catalogue.js</a>
+    <a href="confirmation_docs.html" class="docs-link"><span class="docs-link-icon">✅</span>confirmation.js</a>
+    <a href="contact_docs.html" class="docs-link"><span class="docs-link-icon">📬</span>contact.js</a>
+    <a href="darkmode_docs.html" class="docs-link"><span class="docs-link-icon">🌙</span>darkmode.js</a>
+    <a href="data_docs.html" class="docs-link"><span class="docs-link-icon">🗄️</span>data.js</a>
+    <a href="dropdown_docs.html" class="docs-link"><span class="docs-link-icon">📋</span>dropdown.js</a>
+    <a href="faq_docs.html" class="docs-link"><span class="docs-link-icon">❓</span>faq.js</a>
+    <a href="favoris_docs.html" class="docs-link"><span class="docs-link-icon">❤️</span>favoris.js</a>
+    <a href="#" class="docs-link current"><span class="docs-link-icon">🔍</span>filtre.js</a>
+    <a href="main_docs.html" class="docs-link"><span class="docs-link-icon">🚀</span>main.js</a>
+    <a href="menu_burger_docs.html" class="docs-link"><span class="docs-link-icon">🍔</span>menu_burger.js</a>
+    <a href="paiement_docs.html" class="docs-link"><span class="docs-link-icon">💳</span>paiement.js</a>
+    <a href="panier_docs.html" class="docs-link"><span class="docs-link-icon">🛍️</span>panier.js</a>
+    <a href="product_detail_docs.html" class="docs-link"><span class="docs-link-icon">📱</span>product_detail.js</a>
+    <a href="profil_docs.html" class="docs-link"><span class="docs-link-icon">👤</span>profil.js</a>
+    <a href="recherche_docs.html" class="docs-link"><span class="docs-link-icon">🔎</span>recherche.js</a>
+  </div></div>
 </body>
 </html>

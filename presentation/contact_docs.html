@@ -2,123 +2,1097 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Validation client-side du formulaire contact — champs requis, format email, envoi simulé avec feedback visuel et messages d'état.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Documentation — contact.js">
+<meta property="og:description" content="Validation client-side du formulaire contact — champs requis, format email, envoi simulé avec feedback visuel et messages d'état.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — contact.js</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#38bdf8;--a2:#ff6b6b;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
-.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-nav a:hover{background:var(--bg3);color:var(--t);}
-.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-.hero h1 span{color:var(--a);}
-.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+<style>/* ═══════════════════════════════════════════════════════════════════
+   PEARTECH DOCS — CSS MASTER (réécriture complète)
+   Couvre les 268 classes utilisées dans les 20 fichiers
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── VARIABLES ──────────────────────────────────────────────────── */
+:root {
+  --bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
+  --accent:#f5c542; --accent2:#ff6b6b; --accent3:#56d19e;
+  --accent4:#4f8eff; --accent5:#c084fc;
+  --text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+  /* Alias courts utilisés dans les styles inline générés */
+  --t:var(--text); --t2:var(--text2); --t3:var(--text3);
+  --a:var(--accent);
+}
+
+/* ── RESET & BASE ───────────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+/* ── NAV ────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--accent);white-space:nowrap;}
+.nav-links{display:flex;gap:.15rem;flex-wrap:wrap;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+.nav-links a:hover,.nav-links a.active{background:var(--bg3);color:var(--text);}
+.nav-dropdown,.dropdown-menu,.mobile-menu,.burger-btn{display:none;}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+.page{max-width:1040px;margin:0 auto;padding:80px 1.5rem 5rem;}
+
+/* ── HERO ───────────────────────────────────────────────────────── */
+.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.28rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1.2rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
+.hero h1 span{color:var(--accent);}
+.hero p{color:var(--text2);font-size:1rem;max-width:640px;line-height:1.8;}
+.file-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.38rem 1rem;border-radius:8px;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.35rem .9rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0;}
+
+/* ── SECTION ────────────────────────────────────────────────────── */
+.section,.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.section h2,.sec h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.section h3,.sec h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+.section h4,.sec h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
+.section p,.sec p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
+.section p b,.sec p b{color:var(--text);font-weight:600;}
+.section p code,.sec p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
 .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#7dd3fc;white-space:nowrap;}
-.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-.vc{display:flex;flex-direction:column;align-items:center;}
-.vn{width:100%;max-width:600px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;}
-.vn.w{max-width:720px;}
-.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-.cb{background:rgba(56,189,248,.11);border:1px solid rgba(56,189,248,.4);color:#7dd3fc;}
-.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-.fork.f3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;width:100%;}
-.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-.fc .vn{width:100%;max-width:100%;}
-.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-.flr{background:rgba(255,107,107,.15);color:#ff9090;}
-.fli{background:rgba(56,189,248,.15);color:#7dd3fc;}
-.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-.box .bi{font-size:1.25rem;flex-shrink:0;}
-.box.info{background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);color:#7dd3fc;}
+.nl{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);margin-bottom:.4rem;}
+.sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800;background:var(--bg3);border:1px solid var(--border);color:var(--text3);margin-right:.5rem;flex-shrink:0;vertical-align:middle;}
+
+/* ── INLINE CODE (balise personnalisée) ─────────────────────────── */
+
+/* ── CODE BLOCK ─────────────────────────────────────────────────── */
+.code-block{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.code-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent4),var(--accent5),transparent);border-radius:12px 12px 0 0;opacity:.5;}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+.cb-lang{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);}
+/* Coloration syntaxique */
+.kw{color:#c084fc}
+
+/* ── COLORATION SYNTAXIQUE — toutes les classes ─────────────────── */
+/* Classes du coloriseur manuel (sections annotées) */
+.cm  { color: #555e74; font-style: italic; }   /* commentaire alt    */
+.str { color: #7ee8b8; }                        /* string alt         */
+.vr  { color: #ffb3a0; }                        /* variable           */
+/* Classes du coloriseur automatique (code source complet) */
+.s   { color: #7ee8b8; }                        /* string             */
+.bi  { color: #56d19e; font-weight: 600; }      /* builtin            */
+.n   { color: #f7d97a; }                        /* nombre             */
+.rx  { color: #ff9090; }                        /* regex              */
+
+/* ── BARRE DE PROGRESSION DE LECTURE ─────────────────────────────── */
+#read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--accent4), var(--accent5), var(--accent3));
+  z-index: 200;
+  transition: width .1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── BOUTON COPIER ────────────────────────────────────────────────── */
+.copy-btn {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  padding: .22rem .6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  transition: all .18s;
+  z-index: 2;
+  white-space: nowrap;
+}
+.copy-btn:hover {
+  background: rgba(79,142,255,.12);
+  border-color: rgba(79,142,255,.4);
+  color: #7eb5ff;
+}
+.copy-btn.copied {
+  background: rgba(86,209,158,.12);
+  border-color: rgba(86,209,158,.4);
+  color: #7ee8b8;
+}
+.copy-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+/* ── CODE-BLOCK INLINE — mini barre titre ────────────────────────── */
+.code-block {
+  font-size: .81rem; /* légèrement augmenté */
+}
+.code-block pre {
+  font-size: .81rem;
+}
+
+/* ── SRC-BLOCK — bouton copier dans le header ────────────────────── */
+.src-header .copy-btn {
+  position: static;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── NAV ACTIVE ──────────────────────────────────────────────────── */
+.nav-links a.active {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+/* ── COLORATION SYNTAXIQUE — classes complètes ──────────────────── */
+.s  { color: #7ee8b8; }                          /* strings          */
+.bi { color: #56d19e; font-weight: 600; }        /* builtins         */
+.n  { color: #f7d97a; }                          /* numbers          */
+.rx { color: #ff9090; }                          /* regex            */
+
+/* ── BLOC CODE COMPLET — style IDE ──────────────────────────────── */
+.src-block {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  position: relative;
+}
+.src-header {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .65rem 1.2rem;
+  background: rgba(255,255,255,.03);
+  border-bottom: 1px solid var(--border);
+}
+.src-dots { display: flex; gap: .38rem; }
+.src-dot  { width: 11px; height: 11px; border-radius: 50%; }
+.src-dot.r { background: #ff5f57; }
+.src-dot.y { background: #ffbd2e; }
+.src-dot.g { background: #27c93f; }
+.src-fname {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: var(--text2);
+  flex: 1;
+  text-align: center;
+  margin-right: 3rem;
+}
+.src-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  color: var(--text3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .18rem .6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.src-body {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: 520px;
+  transition: max-height .4s ease;
+  position: relative;
+}
+.src-body.expanded { max-height: none; }
+.src-body pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .77rem;
+  line-height: 1.8;
+  padding: 1rem 0;
+  counter-reset: ln;
+  white-space: pre;
+  tab-size: 2;
+}
+.ln {
+  display: block;
+  padding: 0 1.2rem 0 0;
+  white-space: pre;
+}
+.ln:hover { background: rgba(255,255,255,.025); }
+.ln::before {
+  counter-increment: ln;
+  content: counter(ln);
+  display: inline-block;
+  width: 3.2rem;
+  text-align: right;
+  padding-right: 1.2rem;
+  color: var(--text3);
+  font-size: .7rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+.src-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, var(--code));
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.src-body.expanded + .src-fade { opacity: 0; }
+.src-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .65rem;
+  background: rgba(255,255,255,.025);
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.src-expand-btn:hover { background: rgba(255,255,255,.05); color: var(--text); }
+
+/* ── BANDEAU DE STATS FICHIER ──────────────────────────────────── */
+.file-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: .8rem;
+  margin: 1.5rem 0;
+}
+.fstat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.fstat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.fstat-label {
+  font-size: .72rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── PATTERN TAG ────────────────────────────────────────────────── */
+.pattern-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem 1rem;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  margin: .3rem .2rem;
+  border: 1px solid transparent;
+}
+.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
+.cb{background:var(--bg3);border-radius:4px;padding:.05rem .35rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#7eb5ff;}
+
+/* ── COULEURS NŒUDS (partagées : vnode, state, kbox, schema-card…) */
+.c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+/* Variantes courtes (utilisées en inline et via vn/kbox) */
+.ca{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cb.c{background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.cg{background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cr{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cp{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+.cy{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.co{background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;}
+.ct{background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.35);color:#5eead4;}
+.cbl{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:#7dd3fc;}
+.cpi{background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.35);color:#f9a8d4;}
+.cm{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.25);color:var(--text2);}
+.fc{background:rgba(163,230,53,.12);border:1px solid rgba(163,230,53,.35);color:#bef264;}
+.w{max-width:680px;}
+.wide{max-width:720px!important;}
+
+/* ── CALLOUT ────────────────────────────────────────────────────── */
+.callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
+.callout b{font-weight:700;}
+.callout 
+/* Modificateurs callout */
+.callout.info,.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+.callout.warn,.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.success,.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.danger,.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.callout.beginner,.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.callout.analogy,.analogy{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.ok,.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.ana,.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+
+/* ── BOX (callout compact sans icône obligatoire) ───────────────── */
+.box{display:flex;gap:.8rem;padding:.9rem 1.1rem;border-radius:11px;margin:1rem 0;font-size:.86rem;line-height:1.75;}
+.box.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
 .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-.box b{font-weight:700;}
-.box ic{background:rgba(255,255,255,.09);border:none;}
-.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;}
-.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-.kw{color:#c084fc}.fn{color:#7dd3fc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-.sni{font-size:.95rem;flex-shrink:0;}
-hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-@media(max-width:600px){.fork.f2,.fork.f3{grid-template-columns:1fr;}}
-/* ─── CARTE INTERNE ─── */
+.box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+.box.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.bi{font-size:1.1rem;flex-shrink:0;margin-top:.05rem;}
+
+/* ── SIDE NOTE ──────────────────────────────────────────────────── */
+.sn{display:flex;align-items:flex-start;gap:.7rem;padding:.75rem 1rem;border-radius:9px;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;margin:.8rem 0;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+.side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
+.side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+/* ── GOTCHA / PROTIP ────────────────────────────────────────────── */
+.gotcha{background:rgba(255,107,107,.05);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;}
+.gotcha-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#ff9090;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;}
+.gotcha-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.gotcha-body 
+.protip{background:linear-gradient(135deg,rgba(245,197,66,.07),rgba(86,209,158,.05));border:1px solid rgba(245,197,66,.25);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;display:flex;gap:.8rem;align-items:flex-start;}
+.protip-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;color:var(--accent);background:rgba(245,197,66,.15);padding:.2rem .55rem;border-radius:5px;letter-spacing:.08em;white-space:nowrap;margin-top:.15rem;flex-shrink:0;}
+.protip div{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.protip 
+
+/* ── DIAGRAMME (container générique) ───────────────────────────── */
+.diagram,.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.5rem 0;overflow-x:auto;}
+.diagram-title,.dtitle{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.4rem;}
+
+/* ── CHAÎNE VERTICALE (vchain / vnode / varrow) ─────────────────── */
+.vchain{display:flex;flex-direction:column;align-items:center;}
+.vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vnode.wide,.vnode.w{max-width:700px;}
+.varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
+.varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
+/* Chaîne verticale simplifiée (vc/vn/va/val) */
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{padding:.65rem 1.2rem;border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:.77rem;font-weight:600;text-align:center;line-height:1.5;width:100%;max-width:560px;word-break:break-word;}
+.vn.w,.vn.wide{max-width:680px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--text3);font-size:1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:center;}
+
+/* ── FORK (bifurcation) ─────────────────────────────────────────── */
+.fork{display:grid;gap:1rem;width:100%;max-width:700px;}
+.fork.f2,.f2{grid-template-columns:1fr 1fr;}
+.fork.f3,.f3{grid-template-columns:1fr 1fr 1fr;}
+.fork.f4,.f4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
+.fork-col .vnode,.fork-col .vn{max-width:100%;width:100%;}
+.fork-col .varrow,.fork-col .va{width:100%;}
+.fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
+.fl{display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;}
+.fl-green,.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.fl-red,.flr  {background:rgba(255,107,107,.15);color:#ff9090;}
+.flo          {background:rgba(251,146,60,.15);color:#fdba74;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+
+/* ── FLOW (boîtes de flux horizontal) ───────────────────────────── */
+.flow-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.4rem 0;}
+.flow-box{padding:.5rem .9rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.77rem;border:1px solid var(--border);background:var(--bg2);}
+.flow-arr{color:var(--text3);font-size:.9rem;flex-shrink:0;}
+
+/* ── TIMELINE ───────────────────────────────────────────────────── */
+.timeline{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+.timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:1.8rem;}
+.tl-dot{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+.tl-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.tl-step{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);}
+.tl-title{font-size:.95rem;font-weight:700;}
+.tl-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.tl-body 
+
+/* ── SÉQUENCE ───────────────────────────────────────────────────── */
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--text3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--text2);line-height:1.65;}
+.seq-arrow{color:var(--text3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+
+/* ── STATE MACHINE ──────────────────────────────────────────────── */
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;margin:1rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--text3);}
+.trans-line{width:28px;height:1px;background:var(--text3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--text3);text-align:center;max-width:70px;line-height:1.3;}
+
+/* ── KBOX GRID ──────────────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+/* Les couleurs viennent de .c-blue, .c-green etc. appliquées en plus */
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--text2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+
+/* ── SP-ROW (barres de progression) ────────────────────────────── */
+.sp-row{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.sp-step{display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+
+/* ── OBJ SCHEMA ─────────────────────────────────────────────────── */
+.obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
+.obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
+.obj-row:last-child{border-bottom:none;}
+.obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
+.obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
+.obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
+.obj-req {font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.65rem;min-width:14px;}
+/* Variante ancienne (or/ok2/oty/od/oreq) */
+.osc{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;margin:1rem 0;}
+.ost{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;}
+.or{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:1px solid rgba(35,40,53,.7);flex-wrap:wrap;}
+.or:last-child{border-bottom:none;}
+.ok2{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.77rem;min-width:140px;font-weight:600;}
+.oty{font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:.7rem;min-width:70px;}
+.od{font-size:.8rem;color:var(--text2);flex:1;line-height:1.6;min-width:180px;}
+.oreq{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent2);min-width:14px;}
+
+/* ── SCHEMA GRID ────────────────────────────────────────────────── */
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
+.schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
+.schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.schema-card.yellow::before{background:linear-gradient(to right,var(--accent),transparent);}
+.schema-card.green::before {background:linear-gradient(to right,var(--accent3),transparent);}
+.schema-card.blue::before  {background:linear-gradient(to right,var(--accent4),transparent);}
+.schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
+.schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
+/* Couleur de teinte légère par card */
+.schema-card.yellow{border-color:rgba(245,197,66,.2);}
+.schema-card.green {border-color:rgba(86,209,158,.2);}
+.schema-card.blue  {border-color:rgba(79,142,255,.2);}
+.schema-card.red   {border-color:rgba(255,107,107,.2);}
+.schema-card.purple{border-color:rgba(192,132,252,.2);}
+.schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
+.schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.schema-card 
+/* Couleur tags standalone */
+.yellow{color:#f7d97a;}.green{color:#7ee8b8;}.blue{color:#7eb5ff;}.red{color:#ff9090;}.purple{color:#d3a8ff;}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
+.tag-yellow{background:rgba(245,197,66,.15);color:var(--accent);}
+.tag-green {background:rgba(86,209,158,.15);color:var(--accent3);}
+.tag-blue  {background:rgba(79,142,255,.15);color:var(--accent4);}
+.tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
+
+/* ── DATA TABLE ─────────────────────────────────────────────────── */
+.data-table,.recap-table,.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
+.data-table th,.recap-table th,.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.data-table td,.recap-table td,.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
+.data-table tr:last-child td,.recap-table tr:last-child td,.tbl tr:last-child td{border-bottom:none;}
+.data-table tr:hover td,.tbl tr:hover td{background:rgba(255,255,255,.015);}
+.td-code,.fn-cell,.tc{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+.td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
+/* Tableau (tc-card) — carte table */
+.tc-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.2rem;margin:.6rem 0;}
+.tc-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.6rem;}
+
+/* ── TERM BOX ───────────────────────────────────────────────────── */
+.term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
+.term-row:last-child{border-bottom:none;}
+.term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
+.term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
+
+/* ── GLOSSAIRE ──────────────────────────────────────────────────── */
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin:1.2rem 0;}
+.glos-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;}
+.glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.4rem;}
+.glos-def {font-size:.83rem;color:var(--text2);line-height:1.65;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+/* Variantes (grow/gterm/gdef) */
+.grow{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;margin:.5rem 0;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.35rem;}
+.gdef{font-size:.83rem;color:var(--text2);line-height:1.65;}
+
+/* ── TABS DEMO ──────────────────────────────────────────────────── */
+.tabs-demo{display:flex;gap:.5rem;flex-wrap:wrap;padding:1.2rem;background:var(--bg3);border-radius:12px;margin:1rem 0;border:1px solid var(--border);}
+.tab-demo{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.4rem .9rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:default;}
+.tab-demo.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.tab{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.35rem .8rem;border-radius:7px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);display:inline-block;margin:.15rem;}
+.tab.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.active{opacity:1;}
+
+/* ── CARTE (colonne 3) ──────────────────────────────────────────── */
 .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
 .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
 .carte-col{display:flex;flex-direction:column;gap:.5rem;}
 .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-.carte-item b{color:var(--t);font-weight:700;}
-.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-/* ─── SCHEMAS PASS 2 ─── */
+.carte-item{font-size:.76rem;color:var(--text2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--text);font-weight:700;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--text3);font-size:1.1rem;}
+
+/* ── SCHEMA 2 ───────────────────────────────────────────────────── */
 .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
 .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
 .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
 .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-.kbox{border-radius:11px;padding:.9rem 1rem;}
-.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.kbox-item:last-child{border-bottom:none;}
-.sp-row{display:flex;flex-direction:column;gap:.3rem;}
-.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-.seq{display:flex;flex-direction:column;gap:.3rem;}
-.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-.trans-line{width:28px;height:1px;background:var(--t3);}
-.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
+.arr{color:var(--text3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);}
 
-  .glos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.75rem;margin-top:.8rem}
-  .glos-item{background:var(--bg2);border:1px solid var(--border);border-left:3px solid var(--a);border-radius:6px;padding:.75rem 1rem}
-  .glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--a);margin-bottom:.35rem}
-  .glos-def{font-size:.78rem;color:var(--t2);line-height:1.65}
-  .glos-def ic{font-family:'JetBrains Mono',monospace;font-size:.75rem;background:var(--bg3);border:1px solid var(--border);padding:.02rem .3rem;border-radius:3px;color:#bef264}
-  </style>
+/* ── ORDRE DU CODE ──────────────────────────────────────────────── */
+.ordre-seq{display:flex;flex-direction:column;margin:1.8rem 0;position:relative;}
+.ordre-seq::before{content:'';position:absolute;left:20px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,var(--accent) 0%,rgba(132,204,22,.1) 100%);z-index:0;}
+.os-bloc{display:flex;gap:1rem;align-items:flex-start;margin-bottom:.5rem;position:relative;z-index:1;}
+.os-num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:800;color:var(--accent);box-shadow:0 0 0 4px var(--bg);}
+.os-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:.3rem;}
+.os-head{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.os-pill{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .65rem;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+/* Variantes os-pill */
+.os-pill.init,.init{background:rgba(132,204,22,.15);color:#bef264;border:1px solid rgba(132,204,22,.4);}
+.os-pill.data,.data{background:rgba(56,189,248,.12);color:#7dd3fc;border:1px solid rgba(56,189,248,.35);}
+.os-pill.util,.util{background:rgba(245,197,66,.12);color:#fde68a;border:1px solid rgba(245,197,66,.35);}
+.os-pill.dom,.dom{background:rgba(192,132,252,.12);color:#d3a8ff;border:1px solid rgba(192,132,252,.35);}
+.os-pill.event,.event{background:rgba(251,146,60,.12);color:#fdba74;border:1px solid rgba(251,146,60,.35);}
+.os-pill.guard,.guard{background:rgba(244,63,94,.12);color:#fda4af;border:1px solid rgba(244,63,94,.35);}
+.os-pill.expose,.expose{background:rgba(86,209,158,.12);color:#7ee8b8;border:1px solid rgba(86,209,158,.35);}
+.os-pill.render,.render{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.35);}
+.os-name{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:700;color:var(--text);}
+.os-body{padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.65rem;}
+.os-why{font-size:.84rem;color:var(--text2);line-height:1.85;}
+.os-why b{color:var(--text);font-weight:700;}
+.os-why ic,.os-dep ic,.os-err 
+.os-err 
+.os-dep 
+.os-err{display:flex;gap:.6rem;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.22);border-left:3px solid rgba(244,63,94,.6);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#fda4af;line-height:1.7;}
+.os-err::before{content:'✗';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-dep{display:flex;gap:.6rem;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.2);border-left:3px solid rgba(56,189,248,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#7dd3fc;line-height:1.7;}
+.os-dep::before{content:'→';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-rule{display:flex;gap:.6rem;background:rgba(132,204,22,.06);border:1px solid rgba(132,204,22,.2);border-left:3px solid rgba(132,204,22,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#bef264;line-height:1.7;}
+.os-rule::before{content:'✓';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-arrow{padding:.15rem 0 .15rem 1.4rem;font-size:.69rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.os-synthese{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:14px;padding:1.3rem 1.5rem;margin-top:2rem;}
+.os-synthese-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:800;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.os-synthese-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.os-synthese p{font-size:.85rem;color:var(--text2);line-height:1.85;margin:0;}
+.os-synthese p b{color:var(--text);}
+.os-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.6rem;margin-top:1rem;}
+.os-grid-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;}
+.og-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent);font-weight:800;margin-bottom:.3rem;}
+.og-name{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.2rem;}
+.og-why{font-size:.7rem;color:var(--text3);line-height:1.55;}
+
+/* ── DIFF VIEW ──────────────────────────────────────────────────── */
+.diff-view{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.2rem 0;}
+.diff-col{border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.diff-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.45rem 1rem;letter-spacing:.07em;text-transform:uppercase;}
+.diff-label-bad {background:rgba(255,107,107,.12);color:#ff9090;}
+.diff-label-good{background:rgba(86,209,158,.12);color:#7ee8b8;}
+.diff-col pre{font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.75;padding:.9rem 1rem;background:var(--code);white-space:pre-wrap;word-break:break-word;}
+.diff-note{font-size:.82rem;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.65rem 1rem;margin-top:.5rem;line-height:1.7;}
+.diff-bad {color:#ff9090;}.diff-good{color:#7ee8b8;}
+
+/* ── METRIC ROW ─────────────────────────────────────────────────── */
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.75rem;margin:1.3rem 0;}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;text-align:center;}
+.metric-val{font-family:'JetBrains Mono',monospace;font-size:1.65rem;font-weight:800;line-height:1;margin-bottom:.35rem;}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;}
+
+/* ── TIMING VIZ ─────────────────────────────────────────────────── */
+.timing-wrap{margin:1.2rem 0;display:flex;flex-direction:column;gap:.35rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.timing-bar{border-radius:6px;padding:.3rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.4;}
+
+/* ── DÉBOUNCE VIZ ───────────────────────────────────────────────── */
+.debounce-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.dbv-scenario{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.dbv-track{display:flex;flex-direction:column;gap:.4rem;}
+.dbv-line{display:flex;align-items:center;gap:.5rem;}
+.dbv-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);min-width:55px;}
+.dbv-window{flex:1;position:relative;height:28px;background:rgba(139,147,168,.05);border-radius:6px;overflow:hidden;}
+.dbv-dot{position:absolute;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;}
+.dbv-event{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 .4rem;font-size:.6rem;font-family:'JetBrains Mono',monospace;border-radius:4px;}
+.dbv-top{background:rgba(255,107,107,.25);color:#ff9090;}
+.dbv-bot{background:rgba(86,209,158,.25);color:#7ee8b8;}
+
+/* ── CHAIN SEQ (héritage) ───────────────────────────────────────── */
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.cs-row{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;flex-wrap:wrap;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--text3);}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0;}
+.cs-desc{font-size:.8rem;color:var(--text2);line-height:1.65;flex:1;}
+.cs-arrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text3);padding-left:1.8rem;display:block;margin:.1rem 0;}
+.chain-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--text3);width:20px;text-align:right;flex-shrink:0;}
+
+/* ── DIVERS COMPOSANTS ──────────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0;}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0;}
+.cmp-box{border-radius:12px;padding:1.1rem 1.2rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;margin-bottom:.7rem;}
+.cmp-item{font-size:.82rem;color:var(--text2);line-height:1.65;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+.effect-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin:1rem 0;}
+.effect-card{border-radius:12px;padding:1rem 1.1rem;}
+.effect-icon{font-size:1.3rem;margin-bottom:.5rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;margin-bottom:.3rem;}
+.effect-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.mini-box{border-radius:10px;padding:.9rem 1rem;margin:.5rem 0;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.5rem;}
+.mini-item{font-size:.8rem;color:var(--text2);line-height:1.65;padding:.15rem 0;}
+.key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1rem 0;}
+.key-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;}
+.key-badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.18rem .5rem;border-radius:5px;margin-bottom:.5rem;display:inline-block;}
+.key-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;}
+.slide{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin:.5rem 0;}
+.def{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin:.6rem 0;}
+.prow{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid rgba(35,40,53,.6);flex-wrap:wrap;}
+.prow:last-child{border-bottom:none;}
+.pnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:800;flex-shrink:0;}
+.pcond{font-family:'JetBrains Mono',monospace;font-size:.77rem;min-width:200px;flex:1;color:var(--text);}
+.pbadge{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.15rem .5rem;border-radius:5px;white-space:nowrap;flex-shrink:0;}
+.pnote{font-size:.78rem;color:var(--text3);font-style:italic;min-width:100%;padding-top:.2rem;}
+.prio{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin:1rem 0;}
+.active-filter{font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(245,197,66,.15);color:var(--accent);border:1px solid rgba(245,197,66,.3);padding:.2rem .6rem;border-radius:5px;display:inline-flex;align-items:center;gap:.3rem;margin:.2rem;}
+.product-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+.fav-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.6rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text);z-index:1000;}
+.btn-fav{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.3rem .7rem;border-radius:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;}
+
+/* ── INLINE HIGHLIGHTS ──────────────────────────────────────────── */
+.hl-y{background:rgba(245,197,66,.15);color:#f7d97a;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-g{background:rgba(86,209,158,.15);color:#7ee8b8;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-b{background:rgba(79,142,255,.15);color:#7eb5ff;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-r{background:rgba(255,107,107,.15);color:#ff9090;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+
+/* ── FILE STATS ─────────────────────────────────────────────────── */
+.file-stats{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0;}
+.fs-pill{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.3rem .75rem;border-radius:100px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);}
+.fs-pill b{color:var(--text);}
+.complexity{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;margin-left:.6rem;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── BADGES PRODUIT ─────────────────────────────────────────────── */
+.badge-new  {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(86,209,158,.2);color:#7ee8b8;border:1px solid rgba(86,209,158,.4);}
+.badge-bs   {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(255,107,107,.2);color:#ff9090;border:1px solid rgba(255,107,107,.4);}
+.badge-promo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(245,197,66,.2);color:#f7d97a;border:1px solid rgba(245,197,66,.4);}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .fork.f2,.f2{grid-template-columns:1fr;}
+  .fork.f3,.f3{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .diff-view{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .carte-body{grid-template-columns:1fr;}
+  .carte-arrow{display:none;}
+  nav{padding:0 1rem;}
+  .schema-grid{grid-template-columns:1fr;}
+  .compare-grid,.effect-grid,.key-grid,.os-grid{grid-template-columns:1fr;}
+  .timing-row{grid-template-columns:60px 1fr;}
+  .or{flex-direction:column;}
+  .prow{flex-direction:column;}
+}
+@media(max-width:480px){
+  .page{padding:70px 1rem 3rem;}
+  .obj-row{flex-direction:column;}
+  .term-row{flex-direction:column;}
+}
+
+/* ── NAV AMÉLIORÉ ───────────────────────────────────────────────── */
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;color:var(--text2);white-space:nowrap;text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;flex-shrink:0;}
+.nav-logo:hover{background:var(--bg3);color:var(--text);}
+.nav-file{flex-shrink:0;}
+.nav-links{display:flex;gap:.1rem;flex-wrap:wrap;flex:1;overflow:hidden;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text2);text-decoration:none;padding:.28rem .55rem;border-radius:5px;transition:all .15s;white-space:nowrap;}
+.nav-links a:hover{background:var(--bg3);color:var(--text);}
+.nav-links a.active{background:rgba(245,197,66,.12);color:var(--accent);}
+/* ── HERO AMÉLIORÉ ──────────────────────────────────────────────── */
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.25rem .75rem;border-radius:100px;letter-spacing:.07em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:.5rem;}
+.complexity{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── INLINE CODE <ic> — définition unique canonique ─────────────── */
+ic {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8em;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .05rem .38rem;
+  border-radius: 4px;
+  color: #7eb5ff;
+  white-space: nowrap;
+  display: inline;
+}
+/* Overrides contextuels */
+.gotcha-body ic { color: #ffb0b0; background: rgba(255,107,107,.1); }
+.protip ic      { color: #f7d97a; background: rgba(245,197,66,.1);  }
+.callout.warn ic, .callout.analogy ic { color: #f7d97a; }
+.callout.ok ic, .callout.success ic   { color: #7ee8b8; }
+
+
+/* ── CODE-BLOCK inline — header barre avec bouton copier ─────────── */
+.code-block {
+  padding-top: 2.4rem !important; /* espace pour la barre de titre */
+}
+.code-block .cb-lang {
+  top: .55rem;
+  left: .9rem;
+  right: auto;
+}
+
+/* ── SRC-BLOCK mobile ────────────────────────────────────────────── */
+.src-body {
+  overflow-x: auto;
+}
+.src-body pre {
+  white-space: pre;
+  min-width: max-content;
+}
+
+/* ── LIENS ANCRE sur h2 ──────────────────────────────────────────── */
+.sec h2 .anchor-link {
+  opacity: 0;
+  font-size: .65em;
+  color: var(--text3);
+  text-decoration: none;
+  margin-left: .5rem;
+  transition: opacity .2s;
+  vertical-align: middle;
+  font-weight: 400;
+}
+.sec h2:hover .anchor-link { opacity: 1; }
+.sec h2:hover .anchor-link:hover { color: var(--accent4); }
+
+/* ── FOOTER NAVIGATION INTER-DOCS ──────────────────────────────── */
+.docs-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+.docs-footer-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 1rem;
+}
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: .5rem;
+}
+.docs-link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .8rem;
+  border-radius: 8px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  color: var(--text2);
+  transition: all .18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docs-link:hover {
+  background: var(--bg3);
+  border-color: rgba(79,142,255,.3);
+  color: var(--text);
+}
+.docs-link.current {
+  border-color: rgba(245,197,66,.35);
+  background: rgba(245,197,66,.06);
+  color: var(--accent);
+  pointer-events: none;
+}
+.docs-link-icon { flex-shrink: 0; font-size: .9rem; }
+
+
+/* ╔═══════════════════════════════════════════════════════════════╗
+   ║  CANONICAL OVERRIDES — résolution de tous les conflits CSS    ║
+   ╚═══════════════════════════════════════════════════════════════╝ */
+
+/* ── 1. scroll-padding-top (nav fixe 56px + 12px marge) ────────── */
+html {
+  scroll-padding-top: 68px;
+}
+
+/* ── 2a. .bi conflit : syntaxe JS vs icône-emoji dans .box ──────── */
+/* Dans les blocs de code, .bi = builtin JS (vert) */
+pre .bi, code .bi, .src-body .bi {
+  color: #56d19e;
+  font-weight: 600;
+  font-size: inherit;
+  flex-shrink: unset;
+  margin-top: 0;
+  line-height: inherit;
+}
+/* Dans les box/listes, .bi = icône emoji */
+.box .bi, .kbox-item .bi, .list-item .bi,
+.callout .bi, .protip .bi, .gotcha-body .bi {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  margin-top: .1rem;
+  color: inherit;
+  font-weight: normal;
+  line-height: 1;
+}
+
+/* ── 2b. .cm conflit : commentaire de code vs kbox-card ─────────── */
+/* Dans les blocs de code, .cm = commentaire gris italique */
+pre .cm, code .cm, .src-body .cm {
+  color: #555e74;
+  font-style: italic;
+  background: none;
+  border: none;
+}
+/* .cm comme container (hors code) garde le style card si présent */
+div.cm, .cm-card {
+  background: rgba(139,147,168,.08);
+  border: 1px solid rgba(139,147,168,.25);
+  color: var(--text2);
+}
+
+/* ── 2c. .nav-links a.active — version canonique unique ─────────── */
+.nav-links a.active {
+  background: rgba(245,197,66,.15) !important;
+  color: var(--accent) !important;
+  border-radius: 6px;
+}
+
+/* ── 2d. .file-stats — layout grid canonique ────────────────────── */
+.file-stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+  gap: .8rem !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* ── 2e. .code-block pre — taille canonique ─────────────────────── */
+.code-block pre {
+  font-size: .81rem !important;
+  line-height: 1.82 !important;
+}
+
+/* ── 2f. .src-body — overflow canonique ─────────────────────────── */
+.src-body {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-height: 520px !important;
+  transition: max-height .4s ease !important;
+}
+.src-body.expanded {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* ── 3. Safari : -webkit-backdrop-filter ──────────────────────────
+   (injecté directement dans la règle nav via Python)               */
+
+/* ── 4. prefers-reduced-motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #read-progress { display: none !important; }
+  .src-body       { transition: none !important; }
+}
+
+/* ── 5. Tables responsive ───────────────────────────────────────── */
+.tbl-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 1.2rem 0;
+}
+.tbl-wrap table,
+.tbl-wrap .data-table,
+.tbl-wrap .recap-table,
+.tbl-wrap .tbl {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0;
+  width: 100%;
+}
+
+/* ── 6. :focus-visible (navigation clavier) ─────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.copy-btn:focus-visible,
+.src-expand-btn:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 2px;
+}
+.nav-links a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── 8. Nav active — meilleur contraste ─────────────────────────── */
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: left .2s, right .2s;
+}
+.nav-links a { position: relative; }
+
+/* ── 9. code-block mobile ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .code-block {
+    padding-top: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: .76rem !important;
+  }
+  .code-block .cb-lang {
+    display: none;
+  }
+  .copy-btn.abs {
+    top: .45rem;
+    right: .45rem;
+    padding: .18rem .45rem;
+    font-size: .58rem;
+  }
+  .src-header .src-fname {
+    display: none;
+  }
+  .ln::before {
+    width: 2rem;
+    padding-right: .6rem;
+  }
+}
+
+/* ── 11. @media print ───────────────────────────────────────────── */
+@media print {
+  #read-progress,
+  nav,
+  .copy-btn,
+  .src-expand-btn,
+  .src-fade,
+  .docs-footer {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 11pt !important;
+  }
+  .page {
+    padding: 1cm !important;
+    max-width: 100% !important;
+  }
+  .hero {
+    padding: 1rem 0 !important;
+  }
+  .sec {
+    break-inside: avoid;
+  }
+  .code-block, .src-block {
+    background: #f4f4f4 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    break-inside: avoid;
+  }
+  .code-block pre, .src-body pre {
+    color: #111 !important;
+    font-size: 8pt !important;
+  }
+  .kw    { color: #7b2fbe !important; }
+  .fn    { color: #0550ae !important; }
+  .s, .str { color: #0a7c42 !important; }
+  .cmt, .cm { color: #666 !important; }
+  .n     { color: #b07d00 !important; }
+  ic {
+    background: #eee !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+  }
+  a { color: #333 !important; text-decoration: none !important; }
+  .schema-card, .vnode, .gotcha, .protip, .callout {
+    border: 1px solid #ccc !important;
+    background: #f9f9f9 !important;
+    color: #111 !important;
+    break-inside: avoid;
+  }
+}
+
+</style>
 </head>
 <body>
-<nav> <div class="nl">contact.js</div> <a href="#intro">Intro</a> <a href="#validation">Validation</a> <a href="#envoi">Envoi simulé</a> <a href="#messages">Messages</a> <a href="#recap">Récap</a>
-<a href="#glossaire">Glossaire</a>
+<nav>
+  <a class="nav-logo" href="index.html">← PearTech Docs</a>
+  <div class="nav-file" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#56d19e;padding:.25rem .7rem;border-radius:6px;background:rgba(86,209,158,.15);border:1px solid #56d19e44;white-space:nowrap;flex-shrink:0;">contact.js</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#validation">Validation</a>
+    <a href="#envoi">Envoi</a>
+    <a href="#messages">Messages</a>
+    <a href="#recap">Récap</a>
+    <a href="#ordre">Ordre</a>
+    <a href="#glossaire">Glossaire</a>
+    <a href="#plus-loin">✦ Plus loin</a>
+    <a href="#decryptage">⌨ Décryptage</a>
+    <a href="#code-annote">⟨/⟩ Annoté</a>
+  </div>
 </nav>
-<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
-<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
+<div class="page"> <div class="hero">
+  <div class="hero-tag">Formulaire · Contact</div>
+  <h1>Comprendre<br><span style="color:#56d19e">contact.js</span></h1>
+  <p style="color:var(--text2);font-size:.97rem;max-width:680px;line-height:1.85;margin-top:.6rem;">Validation client-side du formulaire contact — champs requis, format email, envoi simulé avec feedback visuel et messages d'état.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem;align-items:center;">
+    <div class="file-badge"><span class="dot" style="background:#56d19e;"></span>contact.js</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text2);">~80 lignes</span>
+    <span class="complexity cx-low" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;">Débutant</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Dépendances : Aucune dépendance</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Pages : contact.html</span>
+  </div>
+  <div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>Submit du formulaire</b><br><span style="color:var(--t3);font-size:.71rem;">preventDefault()</span></div>
 <div class="carte-item"><b>Input events</b><br><span style="color:var(--t3);font-size:.71rem;">validation temps réel</span></div>
 </div> <div class="carte-arrow"></div> <div class="carte-col"><div class="carte-col-title" style="background:#38bdf822;color:#38bdf8;border:1px solid #38bdf844;"> TRAITEMENTS</div>
@@ -134,10 +1108,10 @@ hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
 </div>
 <!-- END CARTE --> <h1>Comprendre<br><span>contact.js</span></h1> <p>Ce fichier gère le formulaire de contact de <ic>page_contact.html</ic>. Il intercepte la soumission, valide tous les champs (y compris la checkbox RGPD et le format email), simule un envoi avec un délai d'une seconde, puis affiche un message de retour coloré selon le résultat.</p> <div class="fbadge"><div class="dot"></div>contact.js · ~70 lignes · 3 fonctions · page_contact.html · aucune dépendance</div>
 </div> <!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Validation, simulation réseau et feedback visuel</h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> contact.js est comme un employé de guichet : il vérifie d'abord que tous les documents sont présents et correctement remplis, affiche un panneau "traitement en cours", puis confirme que le message est bien parti (en réalité, rien n'est envoyé côté serveur — c'est une simulation).</div></div> <div class="diag"> <div class="dtitle">Structure du fichier — 3 blocs</div> <div class="fork f3"> <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">1 — Écoute</div> <div style="font-size:.77rem;color:var(--t2);">addEventListener('submit') intercepte le formulaire avant son envoi natif</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">2 — Validation</div> <div style="font-size:.77rem;color:var(--t2);">Vérifie champs vides + checkbox + format email. Arrête si erreur.</div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">3 — Feedback</div> <div style="font-size:.77rem;color:var(--t2);">Affiche "envoi…" puis "envoyé !" après 1s. Reset du formulaire.</div> </div> </div> </div>
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Validation, simulation réseau et feedback visuel <a class="anchor-link" href="#intro" title="Lien direct">¶</a></h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> contact.js est comme un employé de guichet : il vérifie d'abord que tous les documents sont présents et correctement remplis, affiche un panneau "traitement en cours", puis confirme que le message est bien parti (en réalité, rien n'est envoyé côté serveur — c'est une simulation).</div></div> <div class="diag"> <div class="dtitle">Structure du fichier — 3 blocs</div> <div class="fork f3"> <div style="background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.4rem;">1 — Écoute</div> <div style="font-size:.77rem;color:var(--t2);">addEventListener('submit') intercepte le formulaire avant son envoi natif</div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#f7d97a;margin-bottom:.4rem;">2 — Validation</div> <div style="font-size:.77rem;color:var(--t2);">Vérifie champs vides + checkbox + format email. Arrête si erreur.</div> </div> <div style="background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);border-radius:11px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.4rem;">3 — Feedback</div> <div style="font-size:.77rem;color:var(--t2);">Affiche "envoi…" puis "envoyé !" après 1s. Reset du formulaire.</div> </div> </div> </div>
 </div>
 <hr> <!-- ══ 01 VALIDATION ══ -->
-<div class="sec" id="validation"> <div class="slabel">01 — Validation des champs</div> <h2>Deux niveaux de vérification</h2> <div class="cb2"><span class="cbl2">javascript</span><pre>contactForm.<span class="fn">addEventListener</span>(<span class="s">'submit'</span>, <span class="kw">function</span>(e) {
+<div class="sec" id="validation"> <div class="slabel">01 — Validation des champs</div> <h2>Deux niveaux de vérification <a class="anchor-link" href="#validation" title="Lien direct">¶</a></h2> <div class="code-block"><span class="cb-lang">javascript</span><pre>contactForm.<span class="fn">addEventListener</span>(<span class="s">'submit'</span>, <span class="kw">function</span>(e) {
 e.<span class="fn">preventDefault</span>(); <span class="cm">// Bloque le rechargement de page</span> <span class="kw">const</span> <span class="vr">name</span> = document.<span class="fn">getElementById</span>(<span class="s">'name'</span>).value.<span class="fn">trim</span>();
 <span class="kw">const</span> <span class="vr">email</span> = document.<span class="fn">getElementById</span>(<span class="s">'email'</span>).value.<span class="fn">trim</span>();
 <span class="kw">const</span> <span class="vr">subject</span> = document.<span class="fn">getElementById</span>(<span class="s">'subject'</span>).value.<span class="fn">trim</span>();
@@ -150,7 +1124,7 @@ e.<span class="fn">preventDefault</span>(); <span class="cm">// Bloque le rechar
 <span class="kw">return</span>;
 }
 <span class="cm">//  Si on arrive ici, tout est valide  envoi simulé</span>
-});</pre></div> <div class="diag"> <div class="dtitle">Arbre de validation — chemins possibles</div> <div class="vc"> <div class="vn w cgr">Soumission du formulaire</div> <div class="va"><div class="val">e.preventDefault()</div></div> <div class="vn w cb">Lecture des 5 champs : name, email, subject, message, consent</div> <div class="va"><div class="val">Champs vides ou checkbox décochée ?</div></div> </div> <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flr">OUI</div> <div class="vn cr" style="font-size:.72rem;">showMessage(…, 'error')<br>return — arrêt</div> </div> <div class="fc"> <div class="fl flg">NON</div> <div class="vn cgr" style="font-size:.72rem;">validateEmail(email) ?</div> <div class="fork f2" style="margin:.3rem 0;"> <div class="fc"> <div class="fl flr" style="font-size:.58rem;">Format invalide</div> <div class="vn cr" style="font-size:.68rem;">showMessage error<br>return</div> </div> <div class="fc"> <div class="fl flg" style="font-size:.58rem;">Format valide</div> <div class="vn cg" style="font-size:.68rem;"> Envoi simulé</div> </div> </div> </div> </div> </div> <h3>validateEmail() — la regex expliquée caractère par caractère</h3> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">validateEmail</span>(email) {
+});</pre></div> <div class="diag"> <div class="dtitle">Arbre de validation — chemins possibles</div> <div class="vc"> <div class="vn w cgr">Soumission du formulaire</div> <div class="va"><div class="val">e.preventDefault()</div></div> <div class="vn w cb">Lecture des 5 champs : name, email, subject, message, consent</div> <div class="va"><div class="val">Champs vides ou checkbox décochée ?</div></div> </div> <div class="fork f2" style="max-width:700px;margin:.3rem auto 0;"> <div class="fc"> <div class="fl flr">OUI</div> <div class="vn cr" style="font-size:.72rem;">showMessage(…, 'error')<br>return — arrêt</div> </div> <div class="fc"> <div class="fl flg">NON</div> <div class="vn cgr" style="font-size:.72rem;">validateEmail(email) ?</div> <div class="fork f2" style="margin:.3rem 0;"> <div class="fc"> <div class="fl flr" style="font-size:.58rem;">Format invalide</div> <div class="vn cr" style="font-size:.68rem;">showMessage error<br>return</div> </div> <div class="fc"> <div class="fl flg" style="font-size:.58rem;">Format valide</div> <div class="vn cg" style="font-size:.68rem;"> Envoi simulé</div> </div> </div> </div> </div> </div> <h3>validateEmail() — la regex expliquée caractère par caractère</h3> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">validateEmail</span>(email) {
 <span class="kw">const</span> <span class="vr">re</span> = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 <span class="kw">return</span> re.<span class="fn">test</span>(email); <span class="cm">// true si valide</span>
 }
@@ -160,82 +1134,324 @@ e.<span class="fn">preventDefault</span>(); <span class="cm">// Bloque le rechar
 // [^\s@]+      1+ caractères (le domaine)
 // \.           un point littéral (échappé avec \ car . seul = "n'importe quel char")
 // [^\s@]+      1+ caractères (l'extension : fr, com, org…)
-// $            fin de la chaîne</span></pre></div> <div class="diag"> <div class="dtitle">/ Tests de la regex</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd97989c93bd99888d929389d39b8f">[email&#160;protected]</a></span><span style="color:#7ee8b8;"></span><span style="color:var(--t3);">Format correct</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4237312730023137206c262d2f232b2c6c212d2f">[email&#160;protected]</a></span><span style="color:#7ee8b8;"></span><span style="color:var(--t3);">Sous-domaine autorisé</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#ff9090;">jean <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f09485809f9e84b0959d91999cde9682">[email&#160;protected]</a></span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Espace interdit avant @</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#ff9090;">jeanATdupont.fr</span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Pas de @</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75sym;"> <span style="color:#ff9090;">jean@dupont</span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Pas de point dans le domaine</span> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span>Cette regex est une validation de <b>format</b>, pas d'existence. <ic><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2c2b3f320a2c2b3f32642c2b3f32">[email&#160;protected]</a></ic> passerait la validation. En production, une vérification côté serveur (ou un envoi de confirmation) est nécessaire pour valider l'existence réelle.</span></div> </div>
+// $            fin de la chaîne</span></pre></div> <div class="diag"> <div class="dtitle">/ Tests de la regex</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd97989c93bd99888d929389d39b8f">[email&#160;protected]</a></span><span style="color:#7ee8b8;"></span><span style="color:var(--t3);">Format correct</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#86efac;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4237312730023137206c262d2f232b2c6c212d2f">[email&#160;protected]</a></span><span style="color:#7ee8b8;"></span><span style="color:var(--t3);">Sous-domaine autorisé</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#ff9090;">jean <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f09485809f9e84b0959d91999cde9682">[email&#160;protected]</a></span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Espace interdit avant @</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;"> <span style="color:#ff9090;">jeanATdupont.fr</span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Pas de @</span> </div> <div style="display:grid;grid-template-columns:180px 50px 1fr;gap:.6rem;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.75sym;"> <span style="color:#ff9090;">jean@dupont</span><span style="color:#ff6b6b;"></span><span style="color:var(--t3);">Pas de point dans le domaine</span> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span>Cette regex est une validation de <b>format</b>, pas d'existence. <ic>&lt;a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2c2b3f320a2c2b3f32642c2b3f32"&gt;[email&#160;protected]&lt;/a&gt;</ic> passerait la validation. En production, une vérification côté serveur (ou un envoi de confirmation) est nécessaire pour valider l'existence réelle.</span></div> </div>
+<h3>La double validation — cascade et court-circuit</h3>
+<div class="seq" style="margin:1rem 0">
+<div class="seq-row"><span class="seq-n">1</span><div class="seq-body"><b>Collecte des 5 champs</b> — <ic>name, email, subject, message, consent</ic> — tous avec <ic>.trim()</ic> sauf checkbox</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">2</span><div class="seq-body"><b>Validation niveau 1 : présence</b> — <ic>if (!name || !email || !subject || !message || !consent)</ic> → erreur immédiate</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">3</span><div class="seq-body"><b>Validation niveau 2 : format email</b> — <ic>if (!validateEmail(email))</ic> — regex RFC 5322 simplifiée</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">4</span><div class="seq-body"><b>Simulation d'envoi</b> — <ic>setTimeout(1000ms)</ic> → success + <ic>contactForm.reset()</ic></div></div>
+</div>
+<h3>validateEmail() — La regex décortiquée</h3>
+<table class="data-table">
+<thead><tr><th>Partie regex</th><th>Signification</th><th>Valide</th><th>Invalide</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>/^[^\s@]+/</ic></td><td>1+ chars sans espace ni @</td><td><ic>jean.dupont</ic></td><td><ic>jean dupont</ic></td></tr>
+<tr><td class="td-code"><ic>/@/</ic></td><td>Un seul @</td><td><ic>@</ic></td><td><ic>pas-d-arobase</ic></td></tr>
+<tr><td class="td-code"><ic>/[^\s@]+/</ic></td><td>Domaine sans espace</td><td><ic>gmail</ic></td><td><ic>gm ail</ic></td></tr>
+<tr><td class="td-code"><ic>/\./</ic></td><td>Un point</td><td><ic>.</ic></td><td><ic>gmail-sans-point</ic></td></tr>
+<tr><td class="td-code"><ic>/[^\s@]+$/</ic></td><td>Extension finale</td><td><ic>com</ic></td><td><ic>com espace</ic></td></tr>
+</tbody></table>
 </div>
 <hr> <div class="schema2"> <div class="s2t">validateEmail() — anatomie de la regex</div> <div style="display:flex;flex-direction:column;gap:.6rem;max-width:580px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.74rem;background:var(--bg3);border-radius:8px;padding:.6rem .9rem;line-height:2;word-break:break-all;"> <span style="color:#f9a8d4;">/^</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#7dd3fc;">@</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#7dd3fc;">\.</span><span style="color:#fde68a;">[^\s@]+</span><span style="color:#f9a8d4;">$/</span> </div> <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;text-align:center;font-size:.69rem;"> <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#f9a8d4;margin-bottom:.3rem;">^</div><div style="color:var(--t2);">début de chaîne</div></div> <div style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#fde68a;margin-bottom:.3rem;">[^\s@]+</div><div style="color:var(--t2);">1+ chars<br>ni espace ni @</div></div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#7dd3fc;margin-bottom:.3rem;">@[^\s@]+\.</div><div style="color:var(--t2);">@ · domaine · point</div></div> <div style="background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#fde68a;margin-bottom:.3rem;">[^\s@]+</div><div style="color:var(--t2);">extension<br>(fr, com…)</div></div> <div style="background:rgba(244,114,182,.08);border:1px solid rgba(244,114,182,.25);border-radius:7px;padding:.5rem .4rem;"><div style="font-family:'JetBrains Mono',monospace;color:#f9a8d4;margin-bottom:.3rem;">$</div><div style="color:var(--t2);">fin de chaîne</div></div> </div> </div>
 </div>
 <hr> <!-- ══ 02 ENVOI SIMULÉ ══ -->
-<div class="sec" id="envoi"> <div class="slabel">02 — Envoi simulé</div> <h2>setTimeout — simuler un délai réseau</h2>
+<div class="sec" id="envoi"> <div class="slabel">02 — Envoi simulé</div> <h2>setTimeout — simuler un délai réseau <a class="anchor-link" href="#envoi" title="Lien direct">¶</a></h2>
 <div class="diag"> <div class="dtitle">Simulation vs production — ce qui change</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:var(--t3);margin-bottom:.6rem;">Version simulée (actuelle)</div> <div style="display:flex;flex-direction:column;gap:.25rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">showMessage('Envoi...', 'info')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);"> setTimeout 1000ms</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7ee8b8;">showMessage('Envoyé', 'success')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:#7dd3fc;">contactForm.reset()</div> </div> </div> <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7dd3fc;margin-bottom:.6rem;">Version production</div> <div style="display:flex;flex-direction:column;gap:.25rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">showMessage('Envoi...', 'info')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);"> fetch('/api/contact', {method:'POST',...})</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);">.then(r => r.ok ?</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;padding-left:.8rem;color:#7ee8b8;">showMessage('Envoyé', 'success')</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;padding-left:.8rem;color:#fda4af;">: showMessage('Erreur', 'error')</div> </div> </div> </div> <div style="margin-top:.6rem;font-size:.73rem;color:var(--t3);">La structure showMessage  action asynchrone  showMessage(résultat) est identique dans les deux cas. Seul le mécanisme d'attente change : setTimeout remplacé par fetch().then().</div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="fn">showMessage</span>(<span class="s">'Envoi en cours...'</span>, <span class="s">'info'</span>); <span class="cm">// Feedback immédiat</span> <span class="fn">setTimeout</span>(() => {
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="fn">showMessage</span>(<span class="s">'Envoi en cours...'</span>, <span class="s">'info'</span>); <span class="cm">// Feedback immédiat</span> <span class="fn">setTimeout</span>(() => {
 <span class="fn">showMessage</span>(
 <span class="s">'Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.'</span>,
 <span class="s">'success'</span> );
 contactForm.<span class="fn">reset</span>(); <span class="cm">// Vide tous les champs d'un coup</span>
 }, <span class="nm">1000</span>); <span class="cm">// 1000ms = 1 seconde</span></pre></div> <div class="box warn"><span class="bi"></span><div><b>En production :</b> Le <ic>setTimeout</ic> serait remplacé par un <ic>fetch()</ic> vers une API backend. Le <ic>showMessage</ic> "Envoi en cours..." resterait, et le message "succès" ou "erreur" serait affiché selon la réponse du serveur. La structure resterait identique — seule la partie "simulation" change.</div></div> <div class="diag"> <div class="dtitle">Ligne de temps de la soumission</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7dd3fc;">showMessage('Envoi en cours...', 'info') — zone de message passe en bleu</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1000ms</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">showMessage('Votre message a bien été envoyé.', 'success') — zone passe en vert</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.7rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t = 1000ms</div> <div style="background:rgba(139,147,168,.06);border:1px solid var(--border);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:var(--t2);">contactForm.reset() — tous les champs vidés automatiquement</div> </div> </div> </div>
+<h3>La simulation d'envoi — pourquoi setTimeout</h3>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">Simulation (actuel)</div>
+<div class="kbox-item"><ic>setTimeout(callback, 1000)</ic></div>
+<div class="kbox-item">Simule 1s de latence réseau</div>
+<div class="kbox-item">Montre l'UX de l'état 'envoi en cours'</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">Production (remplacement)</div>
+<div class="kbox-item"><ic>fetch('/api/contact', {method:'POST', body: JSON.stringify(data)})</ic></div>
+<div class="kbox-item"><ic>.then(r => r.json())</ic></div>
+<div class="kbox-item"><ic>.then(() => showMessage('Envoyé !', 'success'))</ic></div>
+</div>
+</div>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 8px #f5c54255"></div><div class="tl-head"><span class="tl-step">Soumission</span><span class="tl-title">e.preventDefault()</span></div><div class="tl-body">Formulaire intercepté — pas de rechargement</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 8px #56d19e55"></div><div class="tl-head"><span class="tl-step">Validation</span><span class="tl-title">2 niveaux</span></div><div class="tl-body">Présence + format email → erreur immédiate si raté</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 8px #4f8eff55"></div><div class="tl-head"><span class="tl-step">Feedback 'en cours'</span><span class="tl-title"><ic>showMessage('Envoi en cours...', 'info')</ic></span></div><div class="tl-body">L'utilisateur sait que quelque chose se passe</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 8px #ff6b6b55"></div><div class="tl-head"><span class="tl-step">Délai simulé</span><span class="tl-title"><ic>setTimeout(1000ms)</ic></span></div><div class="tl-body">Simulation de la latence réseau</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 8px #c084fc55"></div><div class="tl-head"><span class="tl-step">Succès</span><span class="tl-title"><ic>showMessage('Envoyé !', 'success') + reset()</ic></span></div><div class="tl-body">Confirmation visuelle + formulaire vidé</div></div>
+</div>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Clic 'Envoyer'</span><span class="tl-title">e.preventDefault()</span></div><div class="tl-body">Empêche le rechargement de page — on prend le contrôle</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Collecte</span><span class="tl-title">5 champs récupérés</span></div><div class="tl-body"><ic>name, email, subject, message</ic> + <ic>consent.checked</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">Validation 1</span><span class="tl-title">Champs présents</span></div><div class="tl-body">Fail-fast sur le premier champ vide — return immédiat</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">Validation 2</span><span class="tl-title">Format email</span></div><div class="tl-body">Regex sur l'email — return si invalide</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">Envoi simulé</span><span class="tl-title">showMessage('Envoi...', 'info')</span></div><div class="tl-body">Feedback immédiat — l'utilisateur sait que ça traite</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#f7d97a;border-color:#f7d97a;box-shadow:0 0 6px #f7d97a44"></div><div class="tl-head"><span class="tl-step">Délai 1s</span><span class="tl-title">setTimeout(1000ms)</span></div><div class="tl-body">Simule la latence réseau d'une vraie API</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Succès</span><span class="tl-title">showMessage('Envoyé!', 'success') + reset()</span></div><div class="tl-body">Feedback de confirmation + formulaire vidé</div></div>
+</div>
+<h3>La simulation d'envoi — ce qui changerait en production</h3>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">Version actuelle (demo)</div>
+<div class="kbox-item"><ic>setTimeout(() => success + reset, 1000)</ic></div>
+<div class="kbox-item">Delai de 1s simule</div>
+<div class="kbox-item">Toujours succes — aucune erreur possible</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Version production</div>
+<div class="kbox-item"><ic>fetch('/api/contact', { method:'POST', ... })</ic></div>
+<div class="kbox-item"><ic>.then(r => r.ok ? success : error)</ic></div>
+<div class="kbox-item"><ic>.catch(() => showMessage(erreur))</ic></div>
+</div>
+</div>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Structure de remplacement pour une vraie API</span>
+showMessage(<span class="str">'Envoi en cours...'</span>, <span class="str">'info'</span>);
+
+fetch(<span class="str">'/api/contact'</span>, {
+    method: <span class="str">'POST'</span>,
+    headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+    body: JSON.stringify({ name, email, subject, message })
+})
+.then(response =&gt; {
+    <span class="kw">if</span> (!response.ok) <span class="kw">throw</span> <span class="kw">new</span> Error(<span class="str">'Erreur serveur'</span>);
+    <span class="kw">return</span> response.json();
+})
+.then(() =&gt; {
+    showMessage(<span class="str">'Message envoye avec succes !'</span>, <span class="str">'success'</span>);
+    contactForm.reset();
+})
+.<span class="kw">catch</span>(() =&gt; {
+    showMessage(<span class="str">'Erreur envoi. Reessayez.'</span>, <span class="str">'error'</span>);
+});</pre></div>
+<h3>La simulation d'envoi — ce qui changerait en production</h3>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">Version actuelle (demo)</div>
+<div class="kbox-item"><ic>setTimeout(() => success + reset, 1000)</ic></div>
+<div class="kbox-item">Delai de 1s simule</div>
+<div class="kbox-item">Toujours succes — aucune erreur possible</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Version production</div>
+<div class="kbox-item"><ic>fetch('/api/contact', { method:'POST', ... })</ic></div>
+<div class="kbox-item"><ic>.then(r => r.ok ? success : error)</ic></div>
+<div class="kbox-item"><ic>.catch(() => showMessage(erreur))</ic></div>
+</div>
+</div>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Structure de remplacement pour une vraie API</span>
+showMessage(<span class="str">'Envoi en cours...'</span>, <span class="str">'info'</span>);
+
+fetch(<span class="str">'/api/contact'</span>, {
+    method: <span class="str">'POST'</span>,
+    headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+    body: JSON.stringify({ name, email, subject, message })
+})
+.then(response =&gt; {
+    <span class="kw">if</span> (!response.ok) <span class="kw">throw</span> <span class="kw">new</span> Error(<span class="str">'Erreur serveur'</span>);
+    <span class="kw">return</span> response.json();
+})
+.then(() =&gt; {
+    showMessage(<span class="str">'Message envoye avec succes !'</span>, <span class="str">'success'</span>);
+    contactForm.reset();
+})
+.<span class="kw">catch</span>(() =&gt; {
+    showMessage(<span class="str">'Erreur envoi. Reessayez.'</span>, <span class="str">'error'</span>);
+});</pre></div>
+<h3>La simulation d'envoi — ce qui changerait en production</h3>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">Version actuelle (demo)</div>
+<div class="kbox-item"><ic>setTimeout(() => success + reset, 1000)</ic></div>
+<div class="kbox-item">Delai de 1s simule</div>
+<div class="kbox-item">Toujours succes — aucune erreur possible</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Version production</div>
+<div class="kbox-item"><ic>fetch('/api/contact', { method:'POST', ... })</ic></div>
+<div class="kbox-item"><ic>.then(r => r.ok ? success : error)</ic></div>
+<div class="kbox-item"><ic>.catch(() => showMessage(erreur))</ic></div>
+</div>
+</div>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Structure de remplacement pour une vraie API</span>
+showMessage(<span class="str">'Envoi en cours...'</span>, <span class="str">'info'</span>);
+
+fetch(<span class="str">'/api/contact'</span>, {
+    method: <span class="str">'POST'</span>,
+    headers: { <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+    body: JSON.stringify({ name, email, subject, message })
+})
+.then(response =&gt; {
+    <span class="kw">if</span> (!response.ok) <span class="kw">throw</span> <span class="kw">new</span> Error(<span class="str">'Erreur serveur'</span>);
+    <span class="kw">return</span> response.json();
+})
+.then(() =&gt; {
+    showMessage(<span class="str">'Message envoye avec succes !'</span>, <span class="str">'success'</span>);
+    contactForm.reset();
+})
+.<span class="kw">catch</span>(() =&gt; {
+    showMessage(<span class="str">'Erreur envoi. Reessayez.'</span>, <span class="str">'error'</span>);
+});</pre></div>
 </div>
 <hr> <!-- ══ 03 MESSAGES ══ -->
-<div class="sec" id="messages"> <div class="slabel">03 — Affichage des messages</div> <h2>showMessage() — 3 types de feedback</h2>
+<div class="sec" id="messages"> <div class="slabel">03 — Affichage des messages</div> <h2>showMessage() — 3 types de feedback <a class="anchor-link" href="#messages" title="Lien direct">¶</a></h2>
 <div class="diag"> <div class="dtitle">Les 3 états visuels de formMessage</div> <div style="display:flex;flex-direction:column;gap:.5rem;max-width:480px;"> <div style="background:rgba(56,189,248,.08);border-left:3px solid #7dd3fc;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7dd3fc;margin-bottom:.2rem;">type = 'info'</div> <div style="font-size:.73rem;color:var(--t2);">Envoi en cours...</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">transitoire</div> </div> <div style="background:rgba(244,63,94,.08);border-left:3px solid #fda4af;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#fda4af;margin-bottom:.2rem;">type = 'error'</div> <div style="font-size:.73rem;color:var(--t2);">Champ requis manquant ou email invalide</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">persistant</div> </div> <div style="background:rgba(86,209,158,.08);border-left:3px solid #7ee8b8;border-radius:0 8px 8px 0;padding:.6rem .9rem;display:flex;justify-content:space-between;align-items:center;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#7ee8b8;margin-bottom:.2rem;">type = 'success'</div> <div style="font-size:.73rem;color:var(--t2);">Message envoyé. Nous vous répondrons.</div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);">persistant</div> </div> </div> <div style="margin-top:.6rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">formMessage.className = "form-message " + type  une seule ligne écrase la classe précédente. Pas de classList.add/remove à gérer.</div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">function</span> <span class="fn">showMessage</span>(text, type) {
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> <span class="fn">showMessage</span>(text, type) {
 <span class="kw">if</span> (!formMessage) <span class="kw">return</span>; <span class="cm">// Sécurité si élément absent</span> formMessage.textContent = text;
 formMessage.className   = <span class="s">`form-message ${type}`</span>; <span class="cm">// 'success', 'error', ou 'info'</span> formMessage.<span class="fn">scrollIntoView</span>({ behavior: <span class="s">'smooth'</span>, block: <span class="s">'nearest'</span> });
 }</pre></div> <div class="diag"> <div class="dtitle">Les 3 types de messages et leurs classes CSS</div> <div class="fork f3"> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#ff9090;margin-bottom:.3rem;">'error'</div> <div style="font-size:.77rem;color:var(--t2);">Champ manquant ou email invalide. Fond rouge atténué.</div> </div> <div style="background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7dd3fc;margin-bottom:.3rem;">'info'</div> <div style="font-size:.77rem;color:var(--t2);">"Envoi en cours..." Fond bleu atténué. Transitoire.</div> </div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.3);border-radius:10px;padding:.9rem;text-align:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:#7ee8b8;margin-bottom:.3rem;">'success'</div> <div style="font-size:.77rem;color:var(--t2);">Message envoyé avec succès. Fond vert atténué.</div> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span><ic>formMessage.className = `form-message ${type}`</ic> <b>remplace</b> toute la classe à chaque appel. Cela évite d'accumuler les classes <ic>error info success</ic> après plusieurs soumissions. À chaque call, l'état visuel est proprement réinitialisé.</span></div> </div>
+<h3>Les 3 états de showMessage()</h3>
+<p>La fonction <ic>showMessage(text, type)</ic> gère les 3 états du feedback formulaire : <b>'error'</b> (rouge — champ manquant ou email invalide), <b>'success'</b> (vert — message envoyé), <b>'info'</b> (neutre — envoi en cours). Le type contrôle la classe CSS appliquée à <ic>formMessage</ic>.</p>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">function</span> showMessage(text, type) {
+    formMessage.textContent = text;          <span class="cm">// texte brut (pas innerHTML — protection XSS)</span>
+    formMessage.className   = <span class="s">'form-message '</span> + type; <span class="cm">// ex: <span class="s">'form-message error'</span></span>
+    formMessage.style.display = <span class="s">'block'</span>;     <span class="cm">// rend visible</span>
+
+    <span class="kw">if</span> (type === <span class="s">'success'</span>) {
+        setTimeout(() =&gt; {
+            formMessage.style.display = <span class="s">'none'</span>; <span class="cm">// auto-masque après 5s</span>
+        }, 5000);
+    }
+}</pre></div>
+<h3>textContent vs innerHTML pour le message</h3>
+<p><ic>formMessage.textContent = text</ic> écrit le texte comme du contenu brut — pas d'interprétation HTML. Si <ic>text</ic> contenait <ic>&lt;script&gt;</ic> ou <ic><b></ic>, ce serait affiché comme du texte littéral, pas exécuté ni rendu. C'est la protection minimale contre le XSS : ne jamais écrire de données utilisateur via <ic>innerHTML</ic>.</p>
+<h3>Auto-masquage uniquement pour 'success'</h3>
+<p>Le <ic>setTimeout</ic> de 5s ne s'applique qu'au type <ic>'success'</ic>. Les erreurs restent affichées jusqu'à la prochaine soumission — si on les masquait automatiquement, l'utilisateur pourrait rater le message d'erreur sur un formulaire long. Le succès en revanche peut disparaître seul : la confirmation a été vue.</p>
+<div class="box info"><span class="bi">💡</span><div><ic>formMessage.className = 'form-message ' + type</ic> réécrit la <b>classe entière</b> plutôt qu'ajouter/retirer. Si on avait fait <ic>classList.add(type)</ic> sans retirer l'ancien type, un message 'error' suivi d'un 'success' aurait les deux classes — le style CSS serait imprévisible. Réécrire la classe entière garantit un état propre.</div></div>
+<h3>showMessage() — Les 3 types de feedback</h3>
+<table class="data-table">
+<thead><tr><th>Type</th><th>Classe CSS</th><th>Quand utilisé</th><th>Icône</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>'info'</ic></td><td><ic>.msg-info</ic></td><td>Envoi en cours — feedback intermédiaire</td><td>ℹ️</td></tr>
+<tr><td class="td-code"><ic>'success'</ic></td><td><ic>.msg-success</ic></td><td>Message envoyé — opération réussie</td><td>✓</td></tr>
+<tr><td class="td-code"><ic>'error'</ic></td><td><ic>.msg-error</ic></td><td>Validation échouée — action requise</td><td>✗</td></tr>
+</tbody></table>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">Comportement</div>
+<div class="kbox-item"><ic>messageDiv.className = 'message ' + type</ic></div>
+<div class="kbox-item"><ic>messageDiv.textContent = text</ic></div>
+<div class="kbox-item"><ic>messageDiv.style.display = 'block'</ic></div>
+<div class="kbox-item">Le message précédent est écrasé</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">Pas d'auto-hide</div>
+<div class="kbox-item">Les messages d'erreur restent visibles</div>
+<div class="kbox-item">L'utilisateur doit corriger et re-soumettre</div>
+<div class="kbox-item">Seul le succès persiste — puis disparaît au reset</div>
+</div>
+</div>
 </div>
 <hr> <!-- ══ RECAP ══ -->
-<div class="sec" id="recap"> <div class="slabel">04 — Récapitulatif</div> <h2>Vue d'ensemble — tout le fichier en un schéma</h2>
+<div class="sec" id="recap"> <div class="slabel">04 — Récapitulatif</div> <h2>Vue d'ensemble — tout le fichier en un schéma <a class="anchor-link" href="#recap" title="Lien direct">¶</a></h2>
+<p>contact.js est un module de formulaire complet : collecte, double validation, envoi simulé et feedback. Voici l'intégralité de son architecture.</p>
+<h3>Flux d'exécution complet</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cm">// 1. Récupération + guard</span>
+<span class="kw">const</span> contactForm = document.getElementById(<span class="s">'contact-form'</span>);
+<span class="kw">if</span> (!contactForm) <span class="kw">return</span>;
 
-<div class="diag">
-  <div class="dtitle">Séquence complète d'une soumission réussie</div>
-  <div style="display:flex;flex-direction:column;gap:.3rem">
-    <div class="flow-row"><span class="chain-title">1</span><span style="font-size:.78rem;color:var(--t2)">Clic "Envoyer" → <code>e.preventDefault()</code> — stop rechargement page</span></div>
-    <div class="flow-row"><span class="chain-title">2</span><span style="font-size:.78rem;color:var(--t2)">Lecture des 5 champs : name · email · subject · message · consent</span></div>
-    <div class="flow-row"><span class="chain-title">3</span><span style="font-size:.78rem;color:var(--t2)">Validation présence → si un champ vide : <code>showMessage('erreur', 'error')</code> + return</span></div>
-    <div class="flow-row"><span class="chain-title">4</span><span style="font-size:.78rem;color:var(--t2)">Validation email → <code>validateEmail()</code> → si invalide : erreur + return</span></div>
-    <div class="flow-row"><span class="chain-title">5</span><span style="font-size:.78rem;color:var(--t2)"><code>showMessage('Envoi en cours...', 'info')</code></span></div>
-    <div class="flow-row"><span class="chain-title">6</span><span style="font-size:.78rem;color:var(--t2)"><code>setTimeout(1000ms)</code> → <code>showMessage('succès', 'success')</code> + <code>form.reset()</code></span></div>
-  </div>
-</div>
+<span class="cm">// 2. addEventListener(<span class="s">'submit'</span>) — point d<span class="s">'entrée unique</span>
+contactForm.addEventListener('</span>submit<span class="s">', <span class="kw">function</span>(e) {
+    e.preventDefault();
 
-<div class="diag">
-  <div class="dtitle">Les 3 états de showMessage()</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.7rem;font-size:.79rem;text-align:center">
-    <div style="background:var(--bg);border:1px solid #fda4af;border-radius:8px;padding:.7rem .9rem;border-left:4px solid #fda4af">
-      <div style="color:#fda4af;font-weight:600;margin-bottom:.3rem">error</div>
-      <div style="color:var(--t3);font-size:.75rem">Champ vide<br>Email invalide<br>Consent manquant</div>
-    </div>
-    <div style="background:var(--bg);border:1px solid #7dd3fc;border-radius:8px;padding:.7rem .9rem;border-left:4px solid #7dd3fc">
-      <div style="color:#7dd3fc;font-weight:600;margin-bottom:.3rem">info</div>
-      <div style="color:var(--t3);font-size:.75rem">Envoi en cours...<br>setTimeout actif<br>Spinner implicite</div>
-    </div>
-    <div style="background:var(--bg);border:1px solid #7ee8b8;border-radius:8px;padding:.7rem .9rem;border-left:4px solid #7ee8b8">
-      <div style="color:#7ee8b8;font-weight:600;margin-bottom:.3rem">success</div>
-      <div style="color:var(--t3);font-size:.75rem">Message envoyé<br>form.reset() appelé<br>Champs vidés</div>
-    </div>
-  </div>
+    <span class="cm">// 3. Collecte des valeurs des 5 champs</span>
+    <span class="kw">const</span> { name, email, subject, message, consent } = getFieldValues();
+
+    <span class="cm">// 4. Validation niveau 1 : tous les champs remplis</span>
+    <span class="kw">if</span> (!name || !email || !subject || !message || !consent) {
+        showMessage('</span>Remplissez tous les champs...<span class="s">', '</span>error<span class="s">');
+        <span class="kw">return</span>;
+    }
+
+    <span class="cm">// 5. Validation niveau 2 : format email</span>
+    <span class="kw">if</span> (!validateEmail(email)) {
+        showMessage('</span>Email invalide<span class="s">', '</span>error<span class="s">');
+        <span class="kw">return</span>;
+    }
+
+    <span class="cm">// 6. Envoi simulé avec délai</span>
+    showMessage('</span>Envoi en cours...<span class="s">', '</span>info<span class="s">');
+    setTimeout(() =&gt; {
+        showMessage('</span>Message envoyé !<span class="s">', '</span>success');
+        contactForm.reset();
+    }, 1000);
+});
+
+<span class="cm">// Fonctions auxiliaires (hoistées)</span>
+<span class="kw">function</span> showMessage(text, type) { ... }
+<span class="kw">function</span> validateEmail(email) { ... }</pre></div>
+<h3>e.preventDefault() sur submit — Interception du formulaire</h3>
+<p>Le comportement natif d'un formulaire HTML à la soumission est d'envoyer une requête HTTP (GET ou POST) vers l'URL définie dans <ic>action</ic>, ce qui recharge la page. <ic>e.preventDefault()</ic> annule ce comportement entièrement pour prendre le contrôle en JS.</p>
+<h3>La cascade de validations</h3>
+<p>Les deux niveaux de validation sont intentionnellement séparés et ordonnés : <b>simple avant complexe</b>. La vérification <ic>!name || !email || ...</ic> (niveau 1) est en O(1) — simple comparaison. La validation regex de l'email (niveau 2) est plus coûteuse. Valider d'abord que le champ n'est pas vide, puis valider son format, évite d'exécuter la regex sur une chaîne vide.</p>
+<h3>contactForm.reset() — Vider le formulaire proprement</h3>
+<p><ic>contactForm.reset()</ic> est une méthode native HTML qui réinitialise tous les champs du formulaire à leurs valeurs initiales (vides pour les inputs text, false pour les checkboxes). C'est plus fiable que de vider manuellement chaque champ avec <ic>input.value = ''</ic> — on n'a pas à connaître les noms de tous les champs.</p>
+<div class="box info"><span class="bi">💡</span><div>Le <ic>setTimeout(() => {...}, 1000)</ic> simule un délai réseau de 1 seconde. En production réelle, ce bloc serait remplacé par un <ic>fetch('https://api.example.com/contact', { method: 'POST', body: ... })</ic> suivi d'un <ic>.then()</ic> pour gérer la réponse. La structure du code ne changerait pas — seul le contenu du setTimeout serait remplacé par la promesse fetch.</div></div>
+<h3>Architecture simplifiée de contact.js</h3>
+<div class="seq" style="margin:1rem 0">
+<div class="seq-row"><span class="seq-n">1</span><div class="seq-body"><b>getElementById × 2</b> — contactForm + formMessage — les 2 points de contact DOM</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">2</span><div class="seq-body"><b>Guard <ic>if (!contactForm) return</ic></b> — Sécurité multi-pages — pas d'erreur si hors /contact.html</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">3</span><div class="seq-body"><b>addEventListener('submit')</b> — Point d'entrée unique — toute la logique dans ce listener</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">4</span><div class="seq-body"><b>Collecte + double validation</b> — 5 champs → présence → format email</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">5</span><div class="seq-body"><b>showMessage('info') + setTimeout</b> — UX d'envoi simulé</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">6</span><div class="seq-body"><b>showMessage('success') + reset()</b> — Confirmation + nettoyage du formulaire</div></div>
 </div>
-<div class="diag" style="margin-top:.8rem">
-  <div class="dtitle">Validation en 2 passes — ordre important</div>
-  <div style="font-size:.8rem;display:flex;flex-direction:column;gap:.4rem">
-    <div style="display:flex;gap:.7rem;align-items:center">
-      <div style="min-width:22px;height:22px;border-radius:50%;background:#f7d97a;color:#0a0b0e;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700">1</div>
-      <div style="color:var(--t2)">Champs vides + checkbox → si invalide : <span style="color:#fda4af">return</span> (arrêt immédiat)</div>
-    </div>
-    <div style="display:flex;gap:.7rem;align-items:center">
-      <div style="min-width:22px;height:22px;border-radius:50%;background:#7dd3fc;color:#0a0b0e;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700">2</div>
-      <div style="color:var(--t2)">Format email regex → si invalide : <span style="color:#fda4af">return</span></div>
-    </div>
-    <div style="display:flex;gap:.7rem;align-items:center">
-      <div style="min-width:22px;height:22px;border-radius:50%;background:#7ee8b8;color:#0a0b0e;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700">3</div>
-      <div style="color:var(--t2)">Tout valide → showMessage info + setTimeout 1000ms → success + form.reset()</div>
-    </div>
-  </div>
+<div class="schema-grid">
+<div class="schema-card blue"><div class="tag tag-blue">COLLECTE</div><h4>5 champs + trim()</h4><p>Tous récupérés avant toute validation — pas de lecture partielle</p></div>
+<div class="schema-card yellow"><div class="tag tag-yellow">VALIDATION</div><h4>2 niveaux en cascade</h4><p>Présence d'abord, format email ensuite — fail-fast à chaque niveau</p></div>
+<div class="schema-card green"><div class="tag tag-green">FEEDBACK</div><h4>showMessage(text, type)</h4><p>3 états : error (rouge), info (neutre), success (vert) — auto-masqué pour success</p></div>
+<div class="schema-card red"><div class="tag tag-red">RESET</div><h4>contactForm.reset()</h4><p>Vide tous les champs après succès — prêt pour un nouveau message</p></div>
 </div>
- <div class="diag"> <div class="dtitle">Flux complet de contact.js</div> <div class="vc"> <div class="vn w cgr">DOMContentLoaded  getElementById('contact-form')</div> <div class="va"><div class="val">si absent  return (page sans formulaire)</div></div> <div class="vn w cb">addEventListener('submit') installé — attente</div> <div class="va"><div class="val">Utilisateur clique "Envoyer"</div></div> <div class="vn w cgr">e.preventDefault() + lecture des 5 valeurs</div> <div class="va"><div class="val">Validation niveau 1 : vide + consent</div></div> <div class="vn w cr">Si invalide  showMessage error  return</div> <div class="va"><div class="val">Validation niveau 2 : regex email</div></div> <div class="vn w cr">Si invalide  showMessage error  return</div> <div class="va"><div class="val">Tout valide</div></div> <div class="vn w cb">showMessage('Envoi en cours...', 'info')</div> <div class="va"><div class="val">setTimeout 1000ms</div></div> <div class="vn w cg">showMessage('Envoyé !', 'success') + form.reset()</div> </div> 
+<div class="sp-row" style="margin:1rem 0">
+<div class="sp-step"><span class="sp-t">Collecte</span><div class="sp-bar" style="background:rgba(79,142,255,.4);width:15%;min-width:40px">~1ms</div></div>
+<div class="sp-step"><span class="sp-t">Validation</span><div class="sp-bar" style="background:rgba(245,197,66,.4);width:10%;min-width:40px">~1ms</div></div>
+<div class="sp-step"><span class="sp-t">Feedback immédiat</span><div class="sp-bar" style="background:rgba(86,209,158,.4);width:5%;min-width:40px">~0ms</div></div>
+<div class="sp-step"><span class="sp-t">Délai simulé</span><div class="sp-bar" style="background:rgba(192,132,252,.4);width:100%;min-width:40px">1000ms ← la plus longue</div></div>
+<div class="sp-step"><span class="sp-t">Reset + succès</span><div class="sp-bar" style="background:rgba(255,107,107,.4);width:5%;min-width:40px">~0ms</div></div>
+</div>
+<h3>contact.js — flux complet</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Init</span><span class="tl-title">Guard + getElementById × 2</span></div><div class="tl-body"><ic>if (!contactForm) return</ic> — la page peut ne pas avoir de formulaire</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Submit</span><span class="tl-title"><ic>e.preventDefault()</ic></span></div><div class="tl-body">Bloque le rechargement de page natif</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">Collecte</span><span class="tl-title">5 champs + trim()</span></div><div class="tl-body">name, email, subject, message, consent — espaces retirés</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">Validation 1</span><span class="tl-title">Présence des champs</span></div><div class="tl-body">6 conditions en une ligne — return si manquant</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">Validation 2</span><span class="tl-title">Format email</span></div><div class="tl-body"><ic>validateEmail()</ic> — regex — return si invalide</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Feedback</span><span class="tl-title"><ic>showMessage('Envoi en cours...', 'info')</ic></span></div><div class="tl-body">Message intermédiaire pendant le délai</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Succès</span><span class="tl-title"><ic>showMessage(ok, 'success')</ic> + <ic>contactForm.reset()</ic></span></div><div class="tl-body">Confirmation + nettoyage du formulaire</div></div>
+</div>
+<h3>contact.js — flux complet</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Init</span><span class="tl-title">Guard + getElementById × 2</span></div><div class="tl-body"><ic>if (!contactForm) return</ic> — la page peut ne pas avoir de formulaire</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Submit</span><span class="tl-title"><ic>e.preventDefault()</ic></span></div><div class="tl-body">Bloque le rechargement de page natif</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">Collecte</span><span class="tl-title">5 champs + trim()</span></div><div class="tl-body">name, email, subject, message, consent — espaces retirés</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">Validation 1</span><span class="tl-title">Présence des champs</span></div><div class="tl-body">6 conditions en une ligne — return si manquant</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">Validation 2</span><span class="tl-title">Format email</span></div><div class="tl-body"><ic>validateEmail()</ic> — regex — return si invalide</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Feedback</span><span class="tl-title"><ic>showMessage('Envoi en cours...', 'info')</ic></span></div><div class="tl-body">Message intermédiaire pendant le délai</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Succès</span><span class="tl-title"><ic>showMessage(ok, 'success')</ic> + <ic>contactForm.reset()</ic></span></div><div class="tl-body">Confirmation + nettoyage du formulaire</div></div>
+</div>
+<h3>contact.js — flux complet</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Init</span><span class="tl-title">Guard + getElementById × 2</span></div><div class="tl-body"><ic>if (!contactForm) return</ic> — la page peut ne pas avoir de formulaire</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Submit</span><span class="tl-title"><ic>e.preventDefault()</ic></span></div><div class="tl-body">Bloque le rechargement de page natif</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">Collecte</span><span class="tl-title">5 champs + trim()</span></div><div class="tl-body">name, email, subject, message, consent — espaces retirés</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">Validation 1</span><span class="tl-title">Présence des champs</span></div><div class="tl-body">6 conditions en une ligne — return si manquant</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">Validation 2</span><span class="tl-title">Format email</span></div><div class="tl-body"><ic>validateEmail()</ic> — regex — return si invalide</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">Feedback</span><span class="tl-title"><ic>showMessage('Envoi en cours...', 'info')</ic></span></div><div class="tl-body">Message intermédiaire pendant le délai</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Succès</span><span class="tl-title"><ic>showMessage(ok, 'success')</ic> + <ic>contactForm.reset()</ic></span></div><div class="tl-body">Confirmation + nettoyage du formulaire</div></div>
+</div>
+</div> 
+<hr>
+
+
+<hr>
+<div class="sec" id="ordre"><div class="slabel">05 — Ordre du code</div><h2>Pourquoi chaque bloc est placé là où il est <a class="anchor-link" href="#ordre" title="Lien direct">¶</a></h2><p>contact.js exploite le <b>hoisting JS</b> pour placer les helpers en bas et le comportement principal en haut. La validation suit une cascade d'early returns : simple → complexe.</p><div class="ordre-seq"><div class="os-bloc"><div class="os-num">1</div><div class="os-card"><div class="os-head"><span class="os-pill dom">Récupération DOM</span><span class="os-name">getElementById('contact-form') + getElementById('form-message')</span></div><div class="os-body"><div class="os-why"><b>Un seul accès DOM par élément, partagé dans tout le scope.</b> <ic>contactForm</ic> est utilisé dans le guard clause, dans le listener submit, et indirectement dans <ic>showMessage()</ic>. <ic>formMessage</ic> est utilisé dans <ic>showMessage()</ic>. Les récupérer une fois en tête de scope économise N × 2 <ic>getElementById</ic> (où N = nombre de soumissions de formulaire). Plus lisible, plus efficace.</div><div class="os-dep"><ic>contactForm</ic> → guard clause (étape 2) + listener submit (étape 3). <ic>formMessage</ic> → <ic>showMessage()</ic> (étape 7).</div></div></div></div><div class="os-arrow">↓ vérifier immédiatement après récupération</div><div class="os-bloc"><div class="os-num">2</div><div class="os-card"><div class="os-head"><span class="os-pill guard">Sortie rapide</span><span class="os-name">if (!contactForm) { return; }</span></div><div class="os-body"><div class="os-why"><b>Pattern fail-fast — stoppe tout si le formulaire est absent.</b> <ic>contact.js</ic> est chargé sur toutes les pages du projet. Sur les pages sans formulaire (accueil, catalogue, profil…), <ic>contactForm</ic> vaut <ic>null</ic>. Sans ce <ic>return</ic>, <ic>contactForm.addEventListener('submit', …)</ic> lèverait un <ic>TypeError</ic> qui pourrait faire crasher tout le JS de la page selon la configuration du gestionnaire d'erreurs global.</div><div class="os-err">Sans guard : sur page_accueil.html (sans formulaire), <ic>contactForm.addEventListener</ic> → <ic>TypeError: Cannot read properties of null</ic>. Impact : tous les scripts qui s'exécutent après dans la même page peuvent être affectés.</div></div></div></div><div class="os-arrow">↓ le comportement principal — hoisting permet de l'écrire avant les helpers</div><div class="os-bloc"><div class="os-num">3</div><div class="os-card"><div class="os-head"><span class="os-pill event">Écoute soumission</span><span class="os-name">contactForm.addEventListener('submit', function(e) { … })</span></div><div class="os-body"><div class="os-why"><b>Écrit avant <ic>showMessage()</ic> et <ic>validateEmail()</ic> grâce au hoisting.</b> Ces deux fonctions sont des <ic>function</ic> declarations — le moteur JS les remonte (<em>hoist</em>) au sommet du scope avant toute exécution. Le listener peut donc les appeler même si elles sont physiquement plus bas dans le fichier. Ce choix de style place le 'quoi' (comportement principal) avant le 'comment' (détails des helpers).</div><div class="os-dep">Appelle <ic>showMessage()</ic> et <ic>validateEmail()</ic> — hoistées depuis les étapes 6 et 7.</div></div></div></div><div class="os-arrow">↓ à l'intérieur du callback submit : lire avant valider</div><div class="os-bloc"><div class="os-num">4</div><div class="os-card"><div class="os-head"><span class="os-pill data">Collecte des valeurs</span><span class="os-name">const name = …value.trim() × 5 champs + checkbox</span></div><div class="os-body"><div class="os-why"><b>Toujours collecter avant de valider.</b> On ne peut pas valider des données qu'on n'a pas encore lues. Les 5 valeurs sont lues et stockées dans des variables locales — évite de relire <ic>.value</ic> plusieurs fois pendant les validations. La méthode <ic>.trim()</ic> est appliquée immédiatement pour normaliser : les espaces de début/fin ne doivent pas passer la validation comme du contenu valide.</div></div></div></div><div class="os-arrow">↓ validation en cascade : la moins coûteuse d'abord</div><div class="os-bloc"><div class="os-num">5</div><div class="os-card"><div class="os-head"><span class="os-pill guard">Double validation</span><span class="os-name">if (!name || !email || …) → if (!validateEmail(email))</span></div><div class="os-body"><div class="os-why"><b>Deux niveaux dans l'ordre du moins coûteux au plus coûteux.</b> (1) Vérification 'champs vides' : simple comparaison booléenne, quasi-instantanée, couvre le cas le plus fréquent d'erreur. (2) Validation email avec RegExp : légèrement plus coûteuse. Le premier <ic>if</ic> court-circuite le second dans 80% des cas d'erreur — on n'exécute la regex que si tous les champs sont remplis.</div><div class="os-rule"><b>Validation en cascade (early return)</b> : chaque vérification échoue vite et remonte un message précis. Le code de succès n'est atteint que si toutes les vérifications ont passé.</div></div></div></div><div class="os-arrow">↓ envoi simulé — uniquement si tout est valide</div><div class="os-bloc"><div class="os-num">6</div><div class="os-card"><div class="os-head"><span class="os-pill init">Envoi simulé</span><span class="os-name">showMessage('Envoi en cours…') + setTimeout(1000) → succès</span></div><div class="os-body"><div class="os-why"><b>Après toutes les validations — jamais avant.</b> Ce bloc ne s'exécute que si les deux guard clauses de l'étape 5 ont été passés avec succès. Le message 'Envoi en cours…' donne un feedback immédiat à l'utilisateur. Le <ic>setTimeout(1000)</ic> simule un appel réseau — en production il serait remplacé par <ic>fetch('/api/contact', {method:'POST', body:formData})</ic>.</div></div></div></div><div class="os-arrow">↓ helpers en bas — accessibles dès le début grâce au hoisting</div><div class="os-bloc"><div class="os-num">7</div><div class="os-card"><div class="os-head"><span class="os-pill util">Helpers hoistés</span><span class="os-name">function showMessage(text, type) + function validateEmail(email)</span></div><div class="os-body"><div class="os-why"><b>Écrits en dernier — accessibles en premier grâce au hoisting JS.</b> Le moteur JS remonte toutes les <ic>function</ic> declarations au sommet de leur scope avant d'exécuter la première ligne. Écrire ces helpers en bas est un choix de style délibéré : le lecteur voit d'abord le comportement principal (le listener et les validations), puis les détails d'implémentation. C'est le pattern 'top-down' : du haut niveau vers le bas niveau.</div><div class="os-dep"><ic>showMessage()</ic> utilise <ic>formMessage</ic> récupéré à l'étape 1. <ic>validateEmail()</ic> est une fonction pure (pas de dépendance externe).</div></div></div></div></div></div><div class="os-synthese"><div class="os-synthese-title">Règle générale de ce fichier</div><p>Le hoisting permet d'écrire le listener <ic>submit</ic> avant <ic>showMessage()</ic> et <ic>validateEmail()</ic>. C'est un choix de lisibilité : on voit d'abord le flux principal (écouter → collecter → valider → envoyer), puis les détails d'implémentation des helpers.</p><div class="os-grid"><div class="os-grid-item"><div class="og-num">01</div><div class="og-name">Récupération DOM</div><div class="og-why">Une fois, partagé</div></div><div class="os-grid-item"><div class="og-num">02</div><div class="og-name">Guard clause</div><div class="og-why">Fail fast</div></div><div class="os-grid-item"><div class="og-num">03</div><div class="og-name">Listener submit</div><div class="og-why">Comportement principal</div></div><div class="os-grid-item"><div class="og-num">04</div><div class="og-name">Collecte valeurs</div><div class="og-why">Lire avant valider</div></div><div class="os-grid-item"><div class="og-num">05</div><div class="og-name">Double validation</div><div class="og-why">Simple → complexe</div></div><div class="os-grid-item"><div class="og-num">06</div><div class="og-name">Envoi simulé</div><div class="og-why">Après validation</div></div><div class="os-grid-item"><div class="og-num">07</div><div class="og-name">Helpers hoistés</div><div class="og-why">Détails en bas</div></div></div></div>
 <hr>
 <div class="sec" id="glossaire">
   <div class="slabel">Glossaire</div>
-  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <h2>Concepts et termes techniques utilisés dans ce fichier <a class="anchor-link" href="#glossaire" title="Lien direct">¶</a></h2>
   <p>Définitions des termes importants rencontrés dans cette documentation.</p>
   <div class="glos-grid">
     <div class="glos-item"><div class="glos-term">Document Object Model</div><div class="glos-def">Représentation en mémoire de la page HTML sous forme d'arbre. Chaque balise devient un nœud. JavaScript modifie cet arbre via <ic>getElementById()</ic>, <ic>querySelector()</ic>, <ic>innerHTML</ic>. Modifier le DOM = modifier ce que l'utilisateur voit en temps réel.</div></div>
@@ -246,3 +1462,466 @@ formMessage.className   = <span class="s">`form-message ${type}`</span>; <span c
     <div class="glos-item"><div class="glos-term">Callback</div><div class="glos-def">Fonction passée comme argument pour être appelée plus tard. <ic>addEventListener('click', callback)</ic> — le callback est invoqué lors du clic. Mécanisme de base de l'asynchronisme JS — le code continue, le callback est exécuté quand l'événement se produit.</div></div>
   </div>
 </div>
+
+<hr class="sep">
+<div class="sec" id="plus-loin">
+  <div class="slabel">✦ Pour aller plus loin</div>
+  <h2>Formulaire de contact : validation, feedback et sécurité <a class="anchor-link" href="#plus-loin" title="Lien direct">¶</a></h2>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — la validation :</b> Valider un formulaire avant envoi, c'est comme un contrôleur de billets à l'entrée du train. Il vérifie avant que le train parte — pas après. Si le billet est invalide, l'utilisateur reste sur le quai (la page) avec un message clair.</div></div>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — preventDefault :</b> Sans <ic>e.preventDefault()</ic>, soumettre un formulaire, c'est comme appuyer sur un bouton éjectable dans un avion. La page se recharge immédiatement, effaçant tout. <ic>preventDefault()</ic> débranche le comportement par défaut et te laisse le contrôle.</div></div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Valider uniquement côté client</div>
+    <div class="gotcha-body">
+      La validation JS peut être contournée en désactivant JavaScript ou en envoyant une requête directement. La validation côté client est une UX amélioration — jamais une sécurité. Dans un vrai projet, le serveur doit valider à nouveau toutes les données reçues.
+    </div>
+  </div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Afficher le message de succès sans vider le formulaire</div>
+    <div class="gotcha-body">
+      Après une soumission réussie, vider les champs du formulaire avec <ic>form.reset()</ic> ou en vidant chaque <ic>.value</ic>. Sinon l'utilisateur peut soumettre deux fois accidentellement en croyant que la première tentative avait échoué.
+    </div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Utilise l'attribut HTML <ic>novalidate</ic> sur le formulaire pour désactiver la validation native du navigateur et garder le contrôle total du feedback visuel (styles, messages d'erreur personnalisés).</div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Valide en temps réel sur l'événement <ic>blur</ic> (perte de focus) plutôt que sur <ic>input</ic>. L'utilisateur voit l'erreur quand il quitte le champ, pas pendant qu'il tape — moins frustrant.</div>
+  </div>
+
+  <div class="schema-grid">
+    <div class="schema-card yellow"><h4>preventDefault()</h4><p>Bloque le rechargement de page natif. Obligatoire pour gérer la soumission en JS.</p></div>
+    <div class="schema-card green"><h4>Validation client</h4><p>UX uniquement. Jamais suffisant seul — le serveur doit re-valider.</p></div>
+    <div class="schema-card blue"><h4>États du bouton</h4><p>Désactiver pendant l'envoi évite les doubles soumissions. Réactiver après réponse.</p></div>
+    <div class="schema-card purple"><h4>Feedback utilisateur</h4><p>Message de succès visible, erreurs en rouge sous chaque champ concerné.</p></div>
+  </div>
+
+  <h3>Code source — <ic>contact.js</ic></h3>
+
+  <div class="file-stats">
+    <div class="fstat">
+      <div class="fstat-val">82</div>
+      <div class="fstat-label">Lignes</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">5</div>
+      <div class="fstat-label">Fonctions</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">8</div>
+      <div class="fstat-label">const / let</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">17</div>
+      <div class="fstat-label">Commentaires</div>
+    </div>
+  </div>
+  <div style="margin:.8rem 0 1.2rem;"><span class="pattern-tag" style="background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:#f7d97a;">📬 Pattern : regex email + setTimeout simulate</span></div>
+  <div class="src-block">
+    <div class="src-header">
+      <div class="src-dots">
+        <div class="src-dot r"></div>
+        <div class="src-dot y"></div>
+        <div class="src-dot g"></div>
+      </div>
+      <div class="src-fname">contact.js</div>
+      <div class="src-badge">82 lignes</div>
+    </div>
+    <div class="src-body">
+      <pre><span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"><span class="cmt">// contact.js - Formulaire de contact</span></span>
+<span class="ln"><span class="cmt">// Gère la validation des champs et l'envoi simulé</span></span>
+<span class="ln"><span class="cmt">// du message de contact</span></span>
+<span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"></span>
+<span class="ln">(<span class="kw">function</span>() {</span>
+<span class="ln">    <span class="s">'use strict'</span>; <span class="cmt">// Mode strict activé</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="bi">document</span>.<span class="fn">addEventListener</span>(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Récupération des éléments du formulaire ───────────────</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">const</span> contactForm = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'contact-form'</span>); <span class="cmt">// Le formulaire HTML</span></span>
+<span class="ln">        <span class="kw">const</span> formMessage = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'form-message'</span>); <span class="cmt">// Zone d'affichage des messages de retour</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">if</span> (!contactForm) <span class="kw">return</span>; <span class="cmt">// Si le formulaire n'existe pas sur cette page, on arrête</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Gestion de la soumission du formulaire ─────────────────</span></span>
+<span class="ln"></span>
+<span class="ln">        contactForm.<span class="fn">addEventListener</span>(<span class="s">'submit'</span>, <span class="kw">function</span>(e) {</span>
+<span class="ln">            e.<span class="fn">preventDefault</span>(); <span class="cmt">// Empêche le rechargement de page lors de la soumission</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="cmt">// ── Récupération des valeurs des champs ────────────────</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="kw">const</span> name    = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'name'</span>).value.<span class="fn">trim</span>();    <span class="cmt">// Nom complet (espaces retirés)</span></span>
+<span class="ln">            <span class="kw">const</span> email   = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'email'</span>).value.<span class="fn">trim</span>();   <span class="cmt">// Adresse email</span></span>
+<span class="ln">            <span class="kw">const</span> subject = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'subject'</span>).value.<span class="fn">trim</span>(); <span class="cmt">// Sujet du message</span></span>
+<span class="ln">            <span class="kw">const</span> message = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'message'</span>).value.<span class="fn">trim</span>(); <span class="cmt">// Corps du message</span></span>
+<span class="ln">            <span class="kw">const</span> consent = <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'consent'</span>).checked;      <span class="cmt">// Checkbox RGPD cochée ou non</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="cmt">// ── Validation : tous les champs doivent être remplis ──</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="kw">if</span> (!name || !email || !subject || !message || !consent) {</span>
+<span class="ln">                <span class="cmt">// Au moins un champ est vide ou la checkbox n'est pas cochée</span></span>
+<span class="ln">                <span class="fn">showMessage</span>(</span>
+<span class="ln">                    <span class="s">'Veuillez remplir tous les champs obligatoires et accepter le traitement des données.'</span>,</span>
+<span class="ln">                    <span class="s">'error'</span> <span class="cmt">// Type 'error' pour afficher en rouge</span></span>
+<span class="ln">                );</span>
+<span class="ln">                <span class="kw">return</span>; <span class="cmt">// Arrête la soumission</span></span>
+<span class="ln">            }</span>
+<span class="ln"></span>
+<span class="ln">            <span class="cmt">// ── Validation du format de l'email ───────────────────</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="kw">if</span> (!<span class="fn">validateEmail</span>(email)) { <span class="cmt">// Vérifie que l'email a un format valide</span></span>
+<span class="ln">                <span class="fn">showMessage</span>(<span class="s">'Veuillez saisir une adresse email valide.'</span>, <span class="s">'error'</span>);</span>
+<span class="ln">                <span class="kw">return</span>;</span>
+<span class="ln">            }</span>
+<span class="ln"></span>
+<span class="ln">            <span class="cmt">// ── Envoi simulé avec délai ────────────────────────────</span></span>
+<span class="ln">            <span class="cmt">// En production, remplacer par un vrai fetch() vers une API backend</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="fn">showMessage</span>(<span class="s">'Envoi en cours...'</span>, <span class="s">'info'</span>); <span class="cmt">// Message pendant le "chargement"</span></span>
+<span class="ln"></span>
+<span class="ln">            <span class="bi">setTimeout</span>(() =&gt; { <span class="cmt">// Simule un délai réseau de 1 seconde</span></span>
+<span class="ln">                <span class="fn">showMessage</span>(</span>
+<span class="ln">                    <span class="s">'Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.'</span>,</span>
+<span class="ln">                    <span class="s">'success'</span> <span class="cmt">// Type 'success' pour afficher en vert</span></span>
+<span class="ln">                );</span>
+<span class="ln">                contactForm.<span class="fn">reset</span>(); <span class="cmt">// Vide tous les champs du formulaire après succès</span></span>
+<span class="ln">            }, <span class="n">1000</span>); <span class="cmt">// 1000ms = 1 seconde de délai simulé</span></span>
+<span class="ln">        });</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Fonction d'affichage des messages de retour ───────────</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">function</span> <span class="fn">showMessage</span>(text, type) {</span>
+<span class="ln">            <span class="kw">if</span> (!formMessage) <span class="kw">return</span>; <span class="cmt">// Sécurité : ne fait rien si l'élément n'existe pas</span></span>
+<span class="ln">            formMessage.textContent = text; <span class="cmt">// Définit le texte du message</span></span>
+<span class="ln">            formMessage.className = <span class="s">`form-message ${type}`</span>; <span class="cmt">// Ajoute la classe CSS (success, error, info)</span></span>
+<span class="ln">            <span class="cmt">// Fait défiler la page jusqu'au message pour que l'utilisateur le voie</span></span>
+<span class="ln">            formMessage.<span class="fn">scrollIntoView</span>({ behavior: <span class="s">'smooth'</span>, block: <span class="s">'nearest'</span> });</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// ── Fonction de validation de l'email ─────────────────────</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">function</span> <span class="fn">validateEmail</span>(email) {</span>
+<span class="ln">            <span class="cmt">// Expression régulière : vérifie la présence de @ et d'un domaine valide</span></span>
+<span class="ln">            <span class="kw">const</span> re = <span class="rx">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>;</span>
+<span class="ln">            <span class="kw">return</span> re.<span class="fn">test</span>(email); <span class="cmt">// Retourne true si l'email est valide, false sinon</span></span>
+<span class="ln">        }</span>
+<span class="ln">    });</span>
+<span class="ln">})(); <span class="cmt">// Fin de l'IIFE</span></span></pre>
+    </div><div class="src-fade"></div>
+<button class="src-expand-btn" data-lines="82"><span>▼</span> Voir tout le code (82 lignes)</button>
+  </div>
+
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="decryptage">
+  <div class="slabel">⌨ Patterns clés du code</div>
+  <h2>contact.js — les patterns essentiels <a class="anchor-link" href="#decryptage" title="Lien direct">¶</a></h2>
+
+  <h3>Guard clause — protection systématique</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Pattern universel dans tous les modules PearTech</span>
+<span class="cmt">// Récupérer les éléments DOM nécessaires</span>
+<span class="kw">const</span> el = document.<span class="fn">getElementById</span>(<span class="str">'mon-element'</span>);
+
+<span class="cmt">// Guard immédiat — si l'élément est absent de la page, stop</span>
+<span class="cmt">// Ce module peut être chargé sur des pages où l'élément n'existe pas</span>
+<span class="kw">if</span> (!el) {
+  console.<span class="fn">warn</span>(<span class="str">'contact.js : élément introuvable'</span>);
+  <span class="kw">return</span>; <span class="cmt">// sortie propre, pas de TypeError en cascade</span>
+}</pre></div>
+
+  <h3>Délégation d'événements</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Plutôt que d'attacher un listener sur chaque bouton...</span>
+<span class="cmt">// On attache UN seul listener sur le container parent</span>
+container.<span class="fn">addEventListener</span>(<span class="str">'click'</span>, <span class="kw">function</span>(e) {
+
+  <span class="cmt">// matches() vérifie si l'élément cliqué correspond au sélecteur</span>
+  <span class="kw">if</span> (e.target.<span class="fn">matches</span>(<span class="str">'.btn-action'</span>)) {
+    <span class="kw">const</span> id = e.target.dataset.id; <span class="cmt">// lire data-id="..."</span>
+    <span class="fn">handleAction</span>(id);
+  }
+
+  <span class="cmt">// closest() remonte l'arbre DOM — utile si le clic est sur un enfant</span>
+  <span class="kw">const</span> card = e.target.<span class="fn">closest</span>(<span class="str">'.card'</span>);
+  <span class="kw">if</span> (card) <span class="fn">handleCard</span>(card.dataset.id);
+});</pre></div>
+
+  <h3>Persistance localStorage avec try/catch</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cmt">// Lire depuis localStorage de façon sécurisée</span>
+<span class="kw">function</span> <span class="fn">load</span>(key) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> raw = localStorage.<span class="fn">getItem</span>(key);
+    <span class="kw">return</span> raw ? JSON.<span class="fn">parse</span>(raw) : <span class="kw">null</span>;
+  } <span class="kw">catch</span> { <span class="kw">return</span> <span class="kw">null</span>; } <span class="cmt">// corrompu → null</span>
+}
+
+<span class="cmt">// Écrire dans localStorage</span>
+<span class="kw">function</span> <span class="fn">save</span>(key, data) {
+  localStorage.<span class="fn">setItem</span>(key, JSON.<span class="fn">stringify</span>(data));
+  <span class="cmt">// JSON.stringify : tableau/objet JS → string stockable</span>
+}</pre></div>
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="code-annote">
+  <div class="slabel">⟨/⟩ Code annoté — contact.js complet</div>
+  <h2>Chaque ligne décortiquée <a class="anchor-link" href="#code-annote" title="Lien direct">¶</a></h2>
+
+  <h3>① Validation champ par champ — retour d'erreur structuré</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> <span class="vr">validators</span> = {
+  name: (<span class="vr">v</span>) => {
+    <span class="kw">if</span> (!<span class="vr">v</span>.<span class="fn">trim</span>()) <span class="kw">return</span> <span class="str">'Le nom est requis'</span>;
+    <span class="kw">if</span> (<span class="vr">v</span>.<span class="fn">trim</span>().length < <span class="nm">2</span>) <span class="kw">return</span> <span class="str">'Minimum 2 caractères'</span>;
+    <span class="kw">return</span> <span class="kw">null</span>; <span class="cmt">// null = pas d'erreur</span>
+  },
+  email: (<span class="vr">v</span>) => {
+    <span class="kw">if</span> (!<span class="vr">v</span>.<span class="fn">trim</span>()) <span class="kw">return</span> <span class="str">'L\'email est requis'</span>;
+    <span class="kw">if</span> (!<span class="str">/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>.<span class="fn">test</span>(<span class="vr">v</span>)) <span class="kw">return</span> <span class="str">'Email invalide'</span>;
+    <span class="cmt">// Regex email minimaliste. Vérifie : texte@texte.texte
+    // Pas parfaite (RFC 5322 est complexe) mais couvre 99% des cas.</span>
+    <span class="kw">return</span> <span class="kw">null</span>;
+  },
+  message: (<span class="vr">v</span>) => {
+    <span class="kw">if</span> (!<span class="vr">v</span>.<span class="fn">trim</span>()) <span class="kw">return</span> <span class="str">'Le message est requis'</span>;
+    <span class="kw">if</span> (<span class="vr">v</span>.<span class="fn">trim</span>().length < <span class="nm">10</span>) <span class="kw">return</span> <span class="str">'Minimum 10 caractères'</span>;
+    <span class="kw">return</span> <span class="kw">null</span>;
+  }
+};
+<span class="cmt">// Objet de fonctions : chaque clé = nom du champ, valeur = fonction de validation.
+// validators['email']('test') → 'Email invalide'
+// validators['email']('a@b.com') → null (valide)</span>
+
+<span class="kw">function</span> <span class="fn">validateAll</span>(data) {
+  <span class="kw">const</span> <span class="vr">errors</span> = {};
+  <span class="kw">let</span> <span class="vr">isValid</span>  = <span class="kw">true</span>;
+
+  <span class="fn">Object</span>.<span class="fn">keys</span>(<span class="vr">validators</span>).<span class="fn">forEach</span>(<span class="vr">field</span> => {
+    <span class="kw">const</span> <span class="vr">error</span> = <span class="vr">validators</span>[<span class="vr">field</span>](<span class="vr">data</span>[<span class="vr">field</span>] || <span class="str">''</span>);
+    <span class="kw">if</span> (<span class="vr">error</span>) {
+      <span class="vr">errors</span>[<span class="vr">field</span>] = <span class="vr">error</span>;
+      <span class="vr">isValid</span> = <span class="kw">false</span>;
+    }
+  });
+
+  <span class="kw">return</span> { <span class="vr">isValid</span>, <span class="vr">errors</span> };
+  <span class="cmt">// Retourne { isValid: false, errors: { email: 'Email invalide' } }
+  // ou { isValid: true, errors: {} } si tout va bien.</span>
+}</pre></div>
+
+  <h3>② Soumission avec états du bouton</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre>form.<span class="fn">addEventListener</span>(<span class="str">'submit'</span>, <span class="kw">async function</span>(e) {
+  e.<span class="fn">preventDefault</span>(); <span class="cmt">// Bloque le rechargement natif. Obligatoire.</span>
+
+  <span class="kw">const</span> <span class="vr">data</span> = {
+    name:    form.name.value,
+    email:   form.email.value,
+    message: form.message.value
+  };
+  <span class="cmt">// form.name est un raccourci pour form.elements['name'].
+  // Fonctionne avec les inputs ayant un attribut name="…".</span>
+
+  <span class="kw">const</span> { <span class="vr">isValid</span>, <span class="vr">errors</span> } = <span class="fn">validateAll</span>(<span class="vr">data</span>);
+  <span class="kw">if</span> (!<span class="vr">isValid</span>) {
+    <span class="fn">showErrors</span>(<span class="vr">errors</span>); <span class="cmt">// Affiche les erreurs sous chaque champ</span>
+    <span class="kw">return</span>;
+  }
+
+  <span class="cmt">// ── États du bouton pendant l'envoi ───────────────────────────────</span>
+  submitBtn.disabled     = <span class="kw">true</span>;   <span class="cmt">// Désactive → empêche double-clic</span>
+  submitBtn.textContent  = <span class="str">'Envoi...'</span>;
+
+  <span class="kw">try</span> {
+    <span class="kw">await</span> <span class="fn">sendMessage</span>(<span class="vr">data</span>); <span class="cmt">// Simulation : setTimeout(resolve, 1500)</span>
+    form.<span class="fn">reset</span>();               <span class="cmt">// Vide tous les champs</span>
+    <span class="fn">showSuccess</span>();
+  } <span class="kw">catch</span> (<span class="vr">err</span>) {
+    <span class="fn">showError</span>(<span class="str">'Échec de l\'envoi. Réessayez.'</span>);
+  } <span class="kw">finally</span> {
+    submitBtn.disabled    = <span class="kw">false</span>; <span class="cmt">// Toujours réactiver, succès ou erreur</span>
+    submitBtn.textContent = <span class="str">'Envoyer'</span>;
+    <span class="cmt">// finally : s'exécute TOUJOURS, même si catch a eu lieu.
+    // Garantit que le bouton est réactivé quoi qu'il arrive.</span>
+  }
+});</pre></div>
+
+</div>
+
+<script>
+
+(function() {
+  'use strict';
+
+  /* ───────────────────────────────────────────────
+     BARRE DE PROGRESSION DE LECTURE
+  ─────────────────────────────────────────────── */
+  var bar = document.createElement('div');
+  bar.id = 'read-progress';
+  document.body.prepend(bar);
+
+  function updateProgress() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docH      = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (docH > 0 ? Math.min(100, (scrollTop / docH) * 100) : 0) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* ───────────────────────────────────────────────
+     NAV ACTIVE AU SCROLL
+  ─────────────────────────────────────────────── */
+  var navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (navLinks.length > 0) {
+    var secs = navLinks.reduce(function(acc, a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) acc.push({ el: el, a: a });
+      return acc;
+    }, []);
+
+    if (secs.length > 0) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            navLinks.forEach(function(a) { a.classList.remove('active'); });
+            var hit = secs.find(function(s) { return s.el === entry.target; });
+            if (hit) hit.a.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-56px 0px -55% 0px', threshold: 0 });
+      secs.forEach(function(s) { io.observe(s.el); });
+    }
+  }
+
+  /* ───────────────────────────────────────────────
+     BOUTON COPIER
+  ─────────────────────────────────────────────── */
+  var COPY_SVG  = '<svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6z"/><path d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h7a1 1 0 0 0 0-2H3V6a1 1 0 0 0-1-1z"/></svg>';
+  var CHECK_SVG = '<svg viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/></svg>';
+
+  function makeBtn(extraClass) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn' + (extraClass ? ' ' + extraClass : '');
+    btn.innerHTML = COPY_SVG + ' Copier';
+    btn.setAttribute('aria-label', 'Copier le code');
+    return btn;
+  }
+
+  function attachCopy(btn, getCode) {
+    btn.addEventListener('click', function() {
+      var code = getCode();
+      if (!code) return;
+      var finish = function() {
+        btn.innerHTML = CHECK_SVG + ' Copié !';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.innerHTML = COPY_SVG + ' Copier';
+          btn.classList.remove('copied');
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(finish).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          finish();
+        } catch(e) {}
+      }
+    });
+  }
+
+  /* Inline code-blocks */
+  document.querySelectorAll('.code-block').forEach(function(block) {
+    var pre = block.querySelector('pre');
+    if (!pre) return;
+    block.style.position = 'relative';
+    var btn = makeBtn('abs');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    block.appendChild(btn);
+  });
+
+  /* Src-blocks (code source complet) */
+  document.querySelectorAll('.src-block').forEach(function(block) {
+    var header = block.querySelector('.src-header');
+    var pre    = block.querySelector('pre');
+    if (!header || !pre) return;
+    var btn = makeBtn('');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    header.appendChild(btn);
+  });
+
+  /* ───────────────────────────────────────────────
+     EXPAND / COLLAPSE code source
+  ─────────────────────────────────────────────── */
+  document.querySelectorAll('.src-expand-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var block   = this.closest('.src-block');
+      if (!block) return;
+      var body    = block.querySelector('.src-body');
+      var fade    = block.querySelector('.src-fade');
+      if (!body) return;
+      var expanded = body.classList.toggle('expanded');
+      if (fade) fade.style.opacity = expanded ? '0' : '1';
+      this.innerHTML = expanded
+        ? '<span>▲</span> Réduire'
+        : '<span>▼</span> Voir tout (' + (this.dataset.lines || '?') + ' lignes)';
+    });
+  });
+
+
+  /* ── Wrapper responsive pour les tables ── */
+  document.querySelectorAll('table').forEach(function(tbl) {
+    if (tbl.closest('.tbl-wrap')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tbl-wrap';
+    tbl.parentNode.insertBefore(wrap, tbl);
+    wrap.appendChild(tbl);
+  });
+
+})();
+
+</script>
+</div>
+<!-- DOCS-FOOTER -->
+<div class="docs-footer"><div class="docs-footer-title">📚 Tous les modules PearTech</div><div class="docs-grid">
+    <a href="animation_docs.html" class="docs-link"><span class="docs-link-icon">✨</span>animation.js</a>
+    <a href="carousel_docs.html" class="docs-link"><span class="docs-link-icon">🎠</span>carousel.js</a>
+    <a href="cart_docs.html" class="docs-link"><span class="docs-link-icon">🛒</span>cart.js</a>
+    <a href="catalogue_docs.html" class="docs-link"><span class="docs-link-icon">📦</span>catalogue.js</a>
+    <a href="confirmation_docs.html" class="docs-link"><span class="docs-link-icon">✅</span>confirmation.js</a>
+    <a href="#" class="docs-link current"><span class="docs-link-icon">📬</span>contact.js</a>
+    <a href="darkmode_docs.html" class="docs-link"><span class="docs-link-icon">🌙</span>darkmode.js</a>
+    <a href="data_docs.html" class="docs-link"><span class="docs-link-icon">🗄️</span>data.js</a>
+    <a href="dropdown_docs.html" class="docs-link"><span class="docs-link-icon">📋</span>dropdown.js</a>
+    <a href="faq_docs.html" class="docs-link"><span class="docs-link-icon">❓</span>faq.js</a>
+    <a href="favoris_docs.html" class="docs-link"><span class="docs-link-icon">❤️</span>favoris.js</a>
+    <a href="filtre_docs.html" class="docs-link"><span class="docs-link-icon">🔍</span>filtre.js</a>
+    <a href="main_docs.html" class="docs-link"><span class="docs-link-icon">🚀</span>main.js</a>
+    <a href="menu_burger_docs.html" class="docs-link"><span class="docs-link-icon">🍔</span>menu_burger.js</a>
+    <a href="paiement_docs.html" class="docs-link"><span class="docs-link-icon">💳</span>paiement.js</a>
+    <a href="panier_docs.html" class="docs-link"><span class="docs-link-icon">🛍️</span>panier.js</a>
+    <a href="product_detail_docs.html" class="docs-link"><span class="docs-link-icon">📱</span>product_detail.js</a>
+    <a href="profil_docs.html" class="docs-link"><span class="docs-link-icon">👤</span>profil.js</a>
+    <a href="recherche_docs.html" class="docs-link"><span class="docs-link-icon">🔎</span>recherche.js</a>
+  </div></div>
+</body>
+</html>

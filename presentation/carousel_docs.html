@@ -2,143 +2,1099 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="description" content="Carrousel CSS-only piloté par des inputs radio, avec défilement automatique via setInterval et navigation par modulo.">
+<meta name="color-scheme" content="dark">
+<meta property="og:title" content="Documentation — carousel.js">
+<meta property="og:description" content="Carrousel CSS-only piloté par des inputs radio, avec défilement automatique via setInterval et navigation par modulo.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation — carousel.js</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style> :root{--bg:#0a0b0e;--bg2:#111318;--bg3:#181c24;--border:#232835;--a:#e879f9;--a2:#ff6b6b;--a3:#7ee8b8;--a4:#f5c542;--a5:#c084fc;--t:#e4e8f0;--t2:#8b93a8;--t3:#555e74;--code:#1a1f2e;}
-*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--t);font-family:'Syne',sans-serif;line-height:1.75;overflow-x:hidden;}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.2rem;height:56px;overflow-x:auto;}
-.nl{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--a);white-space:nowrap;}
-nav a{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--t2);text-decoration:none;padding:.3rem .55rem;border-radius:6px;transition:all .2s;white-space:nowrap;}
-nav a:hover{background:var(--bg3);color:var(--t);}
-.page{max-width:1020px;margin:0 auto;padding:76px 1.5rem 5rem;}
-.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
-.htag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a);background:rgba(232,121,249,.1);border:1px solid rgba(232,121,249,.3);padding:.25rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1rem;}
-.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:.9rem;}
-.hero h1 span{color:var(--a);}
-.hero>p{color:var(--t2);font-size:.98rem;max-width:640px;line-height:1.8;}
-.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.4rem;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--t2);background:var(--bg3);border:1px solid var(--border);padding:.35rem 1rem;border-radius:8px;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--a);flex-shrink:0;}
-.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
-.slabel{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--a2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;}
+<style>/* ═══════════════════════════════════════════════════════════════════
+   PEARTECH DOCS — CSS MASTER (réécriture complète)
+   Couvre les 268 classes utilisées dans les 20 fichiers
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── VARIABLES ──────────────────────────────────────────────────── */
+:root {
+  --bg:#0a0b0e; --bg2:#111318; --bg3:#181c24; --border:#232835;
+  --accent:#f5c542; --accent2:#ff6b6b; --accent3:#56d19e;
+  --accent4:#4f8eff; --accent5:#c084fc;
+  --text:#e4e8f0; --text2:#8b93a8; --text3:#555e74; --code:#1a1f2e;
+  /* Alias courts utilisés dans les styles inline générés */
+  --t:var(--text); --t2:var(--text2); --t3:var(--text3);
+  --a:var(--accent);
+}
+
+/* ── RESET & BASE ───────────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;line-height:1.7;overflow-x:hidden;}
+
+/* ── NAV ────────────────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,11,14,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1.5rem;height:56px;}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;color:var(--accent);white-space:nowrap;}
+.nav-links{display:flex;gap:.15rem;flex-wrap:wrap;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text2);text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;}
+.nav-links a:hover,.nav-links a.active{background:var(--bg3);color:var(--text);}
+.nav-dropdown,.dropdown-menu,.mobile-menu,.burger-btn{display:none;}
+
+/* ── LAYOUT ─────────────────────────────────────────────────────── */
+.page{max-width:1040px;margin:0 auto;padding:80px 1.5rem 5rem;}
+
+/* ── HERO ───────────────────────────────────────────────────────── */
+.hero{padding:3.5rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.28rem .8rem;border-radius:100px;letter-spacing:.08em;margin-bottom:1.2rem;}
+.hero h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem;}
+.hero h1 span{color:var(--accent);}
+.hero p{color:var(--text2);font-size:1rem;max-width:640px;line-height:1.8;}
+.file-badge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.38rem 1rem;border-radius:8px;}
+.fbadge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);padding:.35rem .9rem;border-radius:8px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);flex-shrink:0;}
+
+/* ── SECTION ────────────────────────────────────────────────────── */
+.section,.sec{margin-bottom:4.5rem;scroll-margin-top:70px;}
+.section-label{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
+.section h2,.sec h2{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.section h3,.sec h3{font-size:1.05rem;font-weight:700;margin:2rem 0 .8rem;color:var(--text);}
+.section h4,.sec h4{font-size:.92rem;font-weight:700;margin:1.4rem 0 .5rem;color:var(--text2);}
+.section p,.sec p{color:var(--text2);line-height:1.85;margin-bottom:1rem;font-size:.95rem;}
+.section p b,.sec p b{color:var(--text);font-weight:600;}
+.section p code,.sec p code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:var(--bg3);padding:.1rem .35rem;border-radius:4px;color:#7eb5ff;}
+.slabel{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--accent2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
 .slabel::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--border),transparent);}
-.sec h2{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;}
-.sec h3{font-size:1.02rem;font-weight:700;margin:2rem 0 .7rem;padding-left:.9rem;border-left:3px solid var(--a);color:var(--t);}
-.sec p{color:var(--t2);line-height:1.85;margin-bottom:.9rem;font-size:.94rem;}
-.sec p b{color:var(--t);font-weight:700;}
-ic{font-family:'JetBrains Mono',monospace;font-size:.81rem;background:var(--bg3);border:1px solid var(--border);padding:.05rem .35rem;border-radius:4px;color:#f0abfc;white-space:nowrap;}
-.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.4rem 0;}
-.dtitle{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.6rem;}
-.vc{display:flex;flex-direction:column;align-items:center;}
-.vn{width:100%;max-width:580px;padding:.72rem 1.2rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
-.vn.w{max-width:720px;}
-.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--t3);font-size:1.1rem;}
-.val{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-top:.06rem;text-align:center;}
-.cpi{background:rgba(232,121,249,.11);border:1px solid rgba(232,121,249,.4);color:#f0abfc;}
-.cr{background:rgba(255,107,107,.11);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
-.cg{background:rgba(86,209,158,.11);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
-.cy{background:rgba(245,197,66,.11);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
-.cp{background:rgba(192,132,252,.11);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
-.cgr{background:rgba(139,147,168,.07);border:1px solid rgba(139,147,168,.3);color:var(--t2);}
-.fork.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;width:100%;max-width:720px;}
-.fc{display:flex;flex-direction:column;align-items:center;min-width:0;}
-.fl{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.16rem .5rem;border-radius:5px;margin-bottom:.22rem;}
-.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
-.flr{background:rgba(255,107,107,.15);color:#ff9090;}
-.fc .vn{width:100%;max-width:100%;}
-.box{display:flex;gap:.9rem;padding:1.1rem 1.3rem;border-radius:12px;margin:1.1rem 0;font-size:.88rem;line-height:1.8;}
-.box .bi{font-size:1.25rem;flex-shrink:0;}
-.box.info{background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);color:#f0abfc;}
+.nl{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);margin-bottom:.4rem;}
+.sep{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
+.sec-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:800;background:var(--bg3);border:1px solid var(--border);color:var(--text3);margin-right:.5rem;flex-shrink:0;vertical-align:middle;}
+
+/* ── INLINE CODE (balise personnalisée) ─────────────────────────── */
+
+/* ── CODE BLOCK ─────────────────────────────────────────────────── */
+.code-block{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.3rem 1.5rem;margin:1rem 0;overflow-x:auto;position:relative;}
+.code-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent4),var(--accent5),transparent);border-radius:12px 12px 0 0;opacity:.5;}
+.code-block pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+.cb-lang{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text3);}
+/* Coloration syntaxique */
+.kw{color:#c084fc}
+
+/* ── COLORATION SYNTAXIQUE — toutes les classes ─────────────────── */
+/* Classes du coloriseur manuel (sections annotées) */
+.cm  { color: #555e74; font-style: italic; }   /* commentaire alt    */
+.str { color: #7ee8b8; }                        /* string alt         */
+.vr  { color: #ffb3a0; }                        /* variable           */
+/* Classes du coloriseur automatique (code source complet) */
+.s   { color: #7ee8b8; }                        /* string             */
+.bi  { color: #56d19e; font-weight: 600; }      /* builtin            */
+.n   { color: #f7d97a; }                        /* nombre             */
+.rx  { color: #ff9090; }                        /* regex              */
+
+/* ── BARRE DE PROGRESSION DE LECTURE ─────────────────────────────── */
+#read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(to right, var(--accent4), var(--accent5), var(--accent3));
+  z-index: 200;
+  transition: width .1s linear;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── BOUTON COPIER ────────────────────────────────────────────────── */
+.copy-btn {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text3);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  padding: .22rem .6rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  transition: all .18s;
+  z-index: 2;
+  white-space: nowrap;
+}
+.copy-btn:hover {
+  background: rgba(79,142,255,.12);
+  border-color: rgba(79,142,255,.4);
+  color: #7eb5ff;
+}
+.copy-btn.copied {
+  background: rgba(86,209,158,.12);
+  border-color: rgba(86,209,158,.4);
+  color: #7ee8b8;
+}
+.copy-btn svg { width: 11px; height: 11px; fill: currentColor; flex-shrink: 0; }
+
+/* ── CODE-BLOCK INLINE — mini barre titre ────────────────────────── */
+.code-block {
+  font-size: .81rem; /* légèrement augmenté */
+}
+.code-block pre {
+  font-size: .81rem;
+}
+
+/* ── SRC-BLOCK — bouton copier dans le header ────────────────────── */
+.src-header .copy-btn {
+  position: static;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── NAV ACTIVE ──────────────────────────────────────────────────── */
+.nav-links a.active {
+  background: var(--bg3);
+  color: var(--text);
+}
+
+/* ── COLORATION SYNTAXIQUE — classes complètes ──────────────────── */
+.s  { color: #7ee8b8; }                          /* strings          */
+.bi { color: #56d19e; font-weight: 600; }        /* builtins         */
+.n  { color: #f7d97a; }                          /* numbers          */
+.rx { color: #ff9090; }                          /* regex            */
+
+/* ── BLOC CODE COMPLET — style IDE ──────────────────────────────── */
+.src-block {
+  background: var(--code);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  position: relative;
+}
+.src-header {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding: .65rem 1.2rem;
+  background: rgba(255,255,255,.03);
+  border-bottom: 1px solid var(--border);
+}
+.src-dots { display: flex; gap: .38rem; }
+.src-dot  { width: 11px; height: 11px; border-radius: 50%; }
+.src-dot.r { background: #ff5f57; }
+.src-dot.y { background: #ffbd2e; }
+.src-dot.g { background: #27c93f; }
+.src-fname {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: var(--text2);
+  flex: 1;
+  text-align: center;
+  margin-right: 3rem;
+}
+.src-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  color: var(--text3);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .18rem .6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+.src-body {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-height: 520px;
+  transition: max-height .4s ease;
+  position: relative;
+}
+.src-body.expanded { max-height: none; }
+.src-body pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .77rem;
+  line-height: 1.8;
+  padding: 1rem 0;
+  counter-reset: ln;
+  white-space: pre;
+  tab-size: 2;
+}
+.ln {
+  display: block;
+  padding: 0 1.2rem 0 0;
+  white-space: pre;
+}
+.ln:hover { background: rgba(255,255,255,.025); }
+.ln::before {
+  counter-increment: ln;
+  content: counter(ln);
+  display: inline-block;
+  width: 3.2rem;
+  text-align: right;
+  padding-right: 1.2rem;
+  color: var(--text3);
+  font-size: .7rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+.src-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(transparent, var(--code));
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.src-body.expanded + .src-fade { opacity: 0; }
+.src-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: .65rem;
+  background: rgba(255,255,255,.025);
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.src-expand-btn:hover { background: rgba(255,255,255,.05); color: var(--text); }
+
+/* ── BANDEAU DE STATS FICHIER ──────────────────────────────────── */
+.file-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: .8rem;
+  margin: 1.5rem 0;
+}
+.fstat {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: .85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+.fstat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+.fstat-label {
+  font-size: .72rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* ── PATTERN TAG ────────────────────────────────────────────────── */
+.pattern-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem 1rem;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  margin: .3rem .2rem;
+  border: 1px solid transparent;
+}
+.fn{color:#7eb5ff}.str{color:#7ee8b8}.cmt{color:#555e74;font-style:italic}.nm{color:#f7d97a}.op{color:#ff9090}.var{color:#ffb3a0}
+.cb{background:var(--bg3);border-radius:4px;padding:.05rem .35rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#7eb5ff;}
+
+/* ── COULEURS NŒUDS (partagées : vnode, state, kbox, schema-card…) */
+.c-blue  {background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.c-green {background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.c-yellow{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.c-red   {background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.c-purple{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.c-gray  {background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+/* Variantes courtes (utilisées en inline et via vn/kbox) */
+.ca{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.cb.c{background:rgba(79,142,255,.12);border:1px solid rgba(79,142,255,.4);color:#7eb5ff;}
+.cg{background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;}
+.cr{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ff9090;}
+.cp{background:rgba(192,132,252,.12);border:1px solid rgba(192,132,252,.4);color:#d3a8ff;}
+.cgr{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.3);color:var(--text2);}
+.cy{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);color:#f7d97a;}
+.co{background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.35);color:#fdba74;}
+.ct{background:rgba(20,184,166,.12);border:1px solid rgba(20,184,166,.35);color:#5eead4;}
+.cbl{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.35);color:#7dd3fc;}
+.cpi{background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.35);color:#f9a8d4;}
+.cm{background:rgba(139,147,168,.08);border:1px solid rgba(139,147,168,.25);color:var(--text2);}
+.fc{background:rgba(163,230,53,.12);border:1px solid rgba(163,230,53,.35);color:#bef264;}
+.w{max-width:680px;}
+.wide{max-width:720px!important;}
+
+/* ── CALLOUT ────────────────────────────────────────────────────── */
+.callout{display:flex;gap:.9rem;padding:1rem 1.2rem;border-radius:12px;margin:1.2rem 0;font-size:.88rem;line-height:1.75;}
+.callout-icon{font-size:1.2rem;flex-shrink:0;margin-top:.05rem;}
+.callout b{font-weight:700;}
+.callout 
+/* Modificateurs callout */
+.callout.info,.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
+.callout.warn,.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.success,.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.danger,.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.callout.beginner,.beginner{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.3);color:#d3a8ff;}
+.callout.analogy,.analogy{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
+.callout.ok,.ok{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.callout.ana,.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+
+/* ── BOX (callout compact sans icône obligatoire) ───────────────── */
+.box{display:flex;gap:.8rem;padding:.9rem 1.1rem;border-radius:11px;margin:1rem 0;font-size:.86rem;line-height:1.75;}
+.box.info{background:rgba(79,142,255,.07);border:1px solid rgba(79,142,255,.25);color:#a8c8ff;}
 .box.warn{background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);color:#f7d97a;}
-.box.ana{background:rgba(245,197,66,.06);border:1px solid rgba(245,197,66,.2);color:#f0d078;}
-.box b{font-weight:700;}
-.box ic{background:rgba(255,255,255,.09);border:none;}
-.cb2{background:var(--code);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;margin:1rem 0;overflow-x:auto;position:relative;}
-.cb2 pre{font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;color:var(--t);white-space:pre-wrap;word-break:break-word;}
-.cbl2{position:absolute;top:.7rem;right:.8rem;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);}
-.kw{color:#c084fc}.fn{color:#f0abfc}.s{color:#86efac}.cm{color:#555e74;font-style:italic}.nm{color:#f7d97a}.vr{color:#fde68a}
-.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:1.2rem 0;}
-.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:.7rem 1.2rem;background:var(--bg3);border-bottom:1px solid var(--border);}
-.grow{display:grid;grid-template-columns:auto 1fr;border-bottom:1px solid rgba(35,40,53,.7);}
-.grow:last-child{border-bottom:none;}
-.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;padding:.65rem 1.1rem;background:rgba(245,197,66,.04);white-space:nowrap;border-right:1px solid var(--border);}
-.gdef{font-size:.84rem;color:var(--t2);padding:.65rem 1.1rem;line-height:1.7;}
-.sn{display:flex;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin:.8rem 0;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--t2);line-height:1.65;}
-.sni{font-size:.95rem;flex-shrink:0;}
-hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
-@media(max-width:600px){.fork.f2{grid-template-columns:1fr;}}
-/* ─── CARTE INTERNE ─── */
+.box.ok  {background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.box.danger{background:rgba(255,107,107,.07);border:1px solid rgba(255,107,107,.25);color:#ff9090;}
+.box.ana{background:rgba(192,132,252,.07);border:1px solid rgba(192,132,252,.25);color:#d3a8ff;}
+.box.success{background:rgba(86,209,158,.07);border:1px solid rgba(86,209,158,.25);color:#8ee8c0;}
+.bi{font-size:1.1rem;flex-shrink:0;margin-top:.05rem;}
+
+/* ── SIDE NOTE ──────────────────────────────────────────────────── */
+.sn{display:flex;align-items:flex-start;gap:.7rem;padding:.75rem 1rem;border-radius:9px;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;margin:.8rem 0;}
+.sni{font-size:.95rem;flex-shrink:0;margin-top:.1rem;}
+.side-note{display:flex;align-items:flex-start;gap:.8rem;padding:.8rem 1rem;border-radius:10px;margin-top:1rem;background:rgba(139,147,168,.05);border:1px solid var(--border);font-size:.83rem;color:var(--text2);line-height:1.65;}
+.side-note-icon{font-size:1rem;flex-shrink:0;margin-top:.1rem;}
+
+/* ── GOTCHA / PROTIP ────────────────────────────────────────────── */
+.gotcha{background:rgba(255,107,107,.05);border:1px solid rgba(255,107,107,.3);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;}
+.gotcha-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#ff9090;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em;}
+.gotcha-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.gotcha-body 
+.protip{background:linear-gradient(135deg,rgba(245,197,66,.07),rgba(86,209,158,.05));border:1px solid rgba(245,197,66,.25);border-radius:12px;padding:1rem 1.2rem;margin:1.2rem 0;display:flex;gap:.8rem;align-items:flex-start;}
+.protip-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;color:var(--accent);background:rgba(245,197,66,.15);padding:.2rem .55rem;border-radius:5px;letter-spacing:.08em;white-space:nowrap;margin-top:.15rem;flex-shrink:0;}
+.protip div{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.protip 
+
+/* ── DIAGRAMME (container générique) ───────────────────────────── */
+.diagram,.diag{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.8rem;margin:1.5rem 0;overflow-x:auto;}
+.diagram-title,.dtitle{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.4rem;}
+
+/* ── CHAÎNE VERTICALE (vchain / vnode / varrow) ─────────────────── */
+.vchain{display:flex;flex-direction:column;align-items:center;}
+.vnode{width:100%;max-width:560px;padding:.75rem 1.3rem;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;text-align:center;line-height:1.5;word-break:break-word;}
+.vnode.wide,.vnode.w{max-width:700px;}
+.varrow{display:flex;flex-direction:column;align-items:center;padding:.28rem 0;color:var(--text3);font-size:1.1rem;line-height:1;}
+.varrow-label{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--text3);margin-top:.08rem;letter-spacing:.02em;text-align:center;}
+/* Chaîne verticale simplifiée (vc/vn/va/val) */
+.vc{display:flex;flex-direction:column;align-items:center;}
+.vn{padding:.65rem 1.2rem;border-radius:9px;font-family:'JetBrains Mono',monospace;font-size:.77rem;font-weight:600;text-align:center;line-height:1.5;width:100%;max-width:560px;word-break:break-word;}
+.vn.w,.vn.wide{max-width:680px;}
+.va{display:flex;flex-direction:column;align-items:center;padding:.22rem 0;color:var(--text3);font-size:1rem;}
+.val{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:center;}
+
+/* ── FORK (bifurcation) ─────────────────────────────────────────── */
+.fork{display:grid;gap:1rem;width:100%;max-width:700px;}
+.fork.f2,.f2{grid-template-columns:1fr 1fr;}
+.fork.f3,.f3{grid-template-columns:1fr 1fr 1fr;}
+.fork.f4,.f4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.fork-col{display:flex;flex-direction:column;align-items:center;gap:0;min-width:0;}
+.fork-col .vnode,.fork-col .vn{max-width:100%;width:100%;}
+.fork-col .varrow,.fork-col .va{width:100%;}
+.fork-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;white-space:nowrap;margin-bottom:.25rem;}
+.fl{display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;padding:.18rem .55rem;border-radius:5px;}
+.fl-green,.flg{background:rgba(86,209,158,.15);color:#7ee8b8;}
+.fl-red,.flr  {background:rgba(255,107,107,.15);color:#ff9090;}
+.flo          {background:rgba(251,146,60,.15);color:#fdba74;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+
+/* ── FLOW (boîtes de flux horizontal) ───────────────────────────── */
+.flow-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin:.4rem 0;}
+.flow-box{padding:.5rem .9rem;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.77rem;border:1px solid var(--border);background:var(--bg2);}
+.flow-arr{color:var(--text3);font-size:.9rem;flex-shrink:0;}
+
+/* ── TIMELINE ───────────────────────────────────────────────────── */
+.timeline{position:relative;padding-left:2.2rem;margin:1.5rem 0;}
+.timeline::before{content:'';position:absolute;left:.6rem;top:.5rem;bottom:.5rem;width:2px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:1.8rem;}
+.tl-dot{position:absolute;left:-1.75rem;top:.5rem;width:12px;height:12px;border-radius:50%;border:2px solid var(--bg);}
+.tl-head{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
+.tl-step{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text3);}
+.tl-title{font-size:.95rem;font-weight:700;}
+.tl-body{font-size:.86rem;color:var(--text2);line-height:1.75;}
+.tl-body 
+
+/* ── SÉQUENCE ───────────────────────────────────────────────────── */
+.seq{display:flex;flex-direction:column;gap:.3rem;}
+.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
+.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--text3);text-align:right;padding-top:.32rem;}
+.seq-body{font-size:.77rem;color:var(--text2);line-height:1.65;}
+.seq-arrow{color:var(--text3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
+
+/* ── STATE MACHINE ──────────────────────────────────────────────── */
+.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;margin:1rem 0;}
+.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
+.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--text3);}
+.trans-line{width:28px;height:1px;background:var(--text3);}
+.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--text3);text-align:center;max-width:70px;line-height:1.3;}
+
+/* ── KBOX GRID ──────────────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
+.kbox{border-radius:11px;padding:.9rem 1rem;}
+/* Les couleurs viennent de .c-blue, .c-green etc. appliquées en plus */
+.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
+.kbox-item{font-size:.76rem;color:var(--text2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.kbox-item:last-child{border-bottom:none;}
+
+/* ── SP-ROW (barres de progression) ────────────────────────────── */
+.sp-row{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.sp-step{display:grid;grid-template-columns:60px 1fr;gap:.5rem;align-items:center;}
+.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
+
+/* ── OBJ SCHEMA ─────────────────────────────────────────────────── */
+.obj-schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.obj-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;font-weight:600;}
+.obj-row{display:flex;align-items:flex-start;gap:.8rem;padding:.45rem 0;border-bottom:1px solid rgba(35,40,53,.8);flex-wrap:wrap;}
+.obj-row:last-child{border-bottom:none;}
+.obj-key {font-family:'JetBrains Mono',monospace;color:#7eb5ff;min-width:160px;font-size:.78rem;}
+.obj-type{font-family:'JetBrains Mono',monospace;color:var(--accent4);min-width:70px;font-size:.7rem;opacity:.85;}
+.obj-desc{color:var(--text2);font-size:.8rem;flex:1;min-width:180px;line-height:1.6;}
+.obj-req {font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.65rem;min-width:14px;}
+/* Variante ancienne (or/ok2/oty/od/oreq) */
+.osc{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;margin:1rem 0;}
+.ost{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.7rem;}
+.or{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;border-bottom:1px solid rgba(35,40,53,.7);flex-wrap:wrap;}
+.or:last-child{border-bottom:none;}
+.ok2{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.77rem;min-width:140px;font-weight:600;}
+.oty{font-family:'JetBrains Mono',monospace;color:var(--text3);font-size:.7rem;min-width:70px;}
+.od{font-size:.8rem;color:var(--text2);flex:1;line-height:1.6;min-width:180px;}
+.oreq{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--accent2);min-width:14px;}
+
+/* ── SCHEMA GRID ────────────────────────────────────────────────── */
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.5rem 0;}
+.schema-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem;position:relative;overflow:hidden;}
+.schema-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.schema-card.yellow::before{background:linear-gradient(to right,var(--accent),transparent);}
+.schema-card.green::before {background:linear-gradient(to right,var(--accent3),transparent);}
+.schema-card.blue::before  {background:linear-gradient(to right,var(--accent4),transparent);}
+.schema-card.red::before   {background:linear-gradient(to right,var(--accent2),transparent);}
+.schema-card.purple::before{background:linear-gradient(to right,var(--accent5),transparent);}
+/* Couleur de teinte légère par card */
+.schema-card.yellow{border-color:rgba(245,197,66,.2);}
+.schema-card.green {border-color:rgba(86,209,158,.2);}
+.schema-card.blue  {border-color:rgba(79,142,255,.2);}
+.schema-card.red   {border-color:rgba(255,107,107,.2);}
+.schema-card.purple{border-color:rgba(192,132,252,.2);}
+.schema-card h4{font-size:.9rem;font-weight:700;margin-bottom:.6rem;}
+.schema-card p{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.schema-card 
+/* Couleur tags standalone */
+.yellow{color:#f7d97a;}.green{color:#7ee8b8;}.blue{color:#7eb5ff;}.red{color:#ff9090;}.purple{color:#d3a8ff;}
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:.15rem .45rem;border-radius:4px;margin-bottom:.5rem;font-weight:600;}
+.tag-yellow{background:rgba(245,197,66,.15);color:var(--accent);}
+.tag-green {background:rgba(86,209,158,.15);color:var(--accent3);}
+.tag-blue  {background:rgba(79,142,255,.15);color:var(--accent4);}
+.tag-red   {background:rgba(255,107,107,.15);color:var(--accent2);}
+
+/* ── DATA TABLE ─────────────────────────────────────────────────── */
+.data-table,.recap-table,.tbl{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.82rem;}
+.data-table th,.recap-table th,.tbl th{text-align:left;padding:.6rem .9rem;background:var(--bg3);font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.data-table td,.recap-table td,.tbl td{padding:.55rem .9rem;border-bottom:1px solid rgba(35,40,53,.6);vertical-align:top;color:var(--text2);line-height:1.65;}
+.data-table tr:last-child td,.recap-table tr:last-child td,.tbl tr:last-child td{border-bottom:none;}
+.data-table tr:hover td,.tbl tr:hover td{background:rgba(255,255,255,.015);}
+.td-code,.fn-cell,.tc{font-family:'JetBrains Mono',monospace;color:#7eb5ff;font-size:.76rem;}
+.td-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.13rem .45rem;border-radius:100px;}
+/* Tableau (tc-card) — carte table */
+.tc-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:1rem 1.2rem;margin:.6rem 0;}
+.tc-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.6rem;}
+
+/* ── TERM BOX ───────────────────────────────────────────────────── */
+.term-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.term-box-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.term-row{display:flex;gap:1rem;padding:.6rem 0;border-bottom:1px solid rgba(35,40,53,.8);align-items:flex-start;flex-wrap:wrap;}
+.term-row:last-child{border-bottom:none;}
+.term-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#f7d97a;font-weight:700;min-width:170px;flex-shrink:0;}
+.term-def{font-size:.85rem;color:var(--text2);line-height:1.65;flex:1;min-width:200px;}
+
+/* ── GLOSSAIRE ──────────────────────────────────────────────────── */
+.glos{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin:1.2rem 0;}
+.glos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.8rem;margin:1.2rem 0;}
+.glos-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;}
+.glos-term{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.4rem;}
+.glos-def {font-size:.83rem;color:var(--text2);line-height:1.65;}
+.glos-head{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+/* Variantes (grow/gterm/gdef) */
+.grow{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;margin:.5rem 0;}
+.gterm{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);font-weight:700;margin-bottom:.35rem;}
+.gdef{font-size:.83rem;color:var(--text2);line-height:1.65;}
+
+/* ── TABS DEMO ──────────────────────────────────────────────────── */
+.tabs-demo{display:flex;gap:.5rem;flex-wrap:wrap;padding:1.2rem;background:var(--bg3);border-radius:12px;margin:1rem 0;border:1px solid var(--border);}
+.tab-demo{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.4rem .9rem;border-radius:8px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);cursor:default;}
+.tab-demo.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.tab{font-family:'JetBrains Mono',monospace;font-size:.75rem;padding:.35rem .8rem;border-radius:7px;background:var(--bg2);border:1px solid var(--border);color:var(--text2);display:inline-block;margin:.15rem;}
+.tab.active{background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:var(--accent);}
+.active{opacity:1;}
+
+/* ── CARTE (colonne 3) ──────────────────────────────────────────── */
 .carte{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:1.8rem 2rem;margin:2rem 0;}
-.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.carte-title{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .carte-title::after{content:'';flex:1;height:1px;background:var(--border);}
 .carte-body{display:grid;grid-template-columns:1fr 32px 1fr 32px 1fr;gap:0;align-items:start;}
 .carte-col{display:flex;flex-direction:column;gap:.5rem;}
 .carte-col-title{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .6rem;border-radius:6px;margin-bottom:.3rem;text-align:center;}
-.carte-item{font-size:.76rem;color:var(--t2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
-.carte-item b{color:var(--t);font-weight:700;}
-.carte-item ic{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(255,255,255,.07);border:none;padding:.02rem .3rem;border-radius:3px;color:inherit;}
-.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--t3);font-size:1.1rem;}
-@media(max-width:700px){.carte-body{grid-template-columns:1fr;}.carte-arrow{display:none;padding:0;}}
-/* ─── SCHEMAS PASS 2 ─── */
+.carte-item{font-size:.76rem;color:var(--text2);padding:.5rem .75rem;border-radius:8px;line-height:1.55;border:1px solid var(--border);background:var(--bg3);}
+.carte-item b{color:var(--text);font-weight:700;}
+.carte-arrow{display:flex;align-items:center;justify-content:center;padding-top:2.2rem;color:var(--text3);font-size:1.1rem;}
+
+/* ── SCHEMA 2 ───────────────────────────────────────────────────── */
 .schema2{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.6rem 1.8rem;margin:1.3rem 0;overflow-x:auto;}
-.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--t3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
+.s2t{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem;}
 .s2t::after{content:'';flex:1;height:1px;background:var(--border);}
 .pill{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;white-space:nowrap;}
 .pill-sm{font-size:.6rem;padding:.14rem .42rem;border-radius:5px;}
 .row-mid{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;}
-.arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-.arr-down{text-align:center;color:var(--t3);font-size:1rem;padding:.2rem 0;}
-.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem;}
-.kbox{border-radius:11px;padding:.9rem 1rem;}
-.kbox-h{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-.kbox-item{font-size:.76rem;color:var(--t2);line-height:1.7;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
-.kbox-item:last-child{border-bottom:none;}
-.sp-row{display:flex;flex-direction:column;gap:.3rem;}
-.sp-step{display:grid;grid-template-columns:55px 1fr;gap:.5rem;align-items:center;}
-.sp-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);text-align:right;}
-.sp-bar{border-radius:5px;padding:.28rem .65rem;font-size:.69rem;line-height:1.4;}
-.seq{display:flex;flex-direction:column;gap:.3rem;}
-.seq-row{display:grid;grid-template-columns:28px 1fr;gap:.5rem;align-items:start;}
-.seq-n{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:var(--t3);text-align:right;padding-top:.32rem;}
-.seq-body{font-size:.77rem;color:var(--t2);line-height:1.65;}
-.seq-arrow{color:var(--t3);font-size:.72rem;padding-left:1.8rem;display:block;margin:.05rem 0;}
-.state-machine{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;justify-content:center;padding:.6rem 0;}
-.state{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:.4rem 1rem;border-radius:9px;text-align:center;}
-.trans{display:flex;flex-direction:column;align-items:center;gap:.05rem;color:var(--t3);}
-.trans-line{width:28px;height:1px;background:var(--t3);}
-.trans-label{font-family:'JetBrains Mono',monospace;font-size:.54rem;color:var(--t3);text-align:center;max-width:70px;line-height:1.3;}
-@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr;}}
-/* pass3 */
-.recap-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.8rem 0;}
-.recap-table th{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);color:var(--t3);}
-.recap-table td{padding:.5rem .8rem;border:1px solid var(--border);color:var(--t2);line-height:1.55;vertical-align:top;}
-.recap-table tr:hover td{background:rgba(255,255,255,.02);}
-.recap-table .fn-cell{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:#fde68a;white-space:nowrap;}
-.flow-row{display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;padding:.3rem 0;}
-.flow-box{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;padding:.3rem .8rem;border-radius:8px;text-align:center;white-space:nowrap;}
-.flow-arr{color:var(--t3);font-size:.85rem;flex-shrink:0;}
-.effect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:.8rem 0;}
-@media(max-width:700px){.effect-grid{grid-template-columns:1fr 1fr;}}
-.effect-card{border-radius:12px;padding:.9rem;text-align:center;}
-.effect-icon{font-size:1.5rem;margin-bottom:.4rem;}
-.effect-name{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;margin-bottom:.25rem;}
-.effect-desc{font-size:.7rem;color:var(--t2);line-height:1.55;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
-.mini-box{border-radius:9px;padding:.75rem .9rem;}
-.mini-title{font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.5rem;}
-.mini-item{font-size:.75rem;color:var(--t2);line-height:1.7;padding:.15rem 0;}
+.arr{color:var(--text3);font-size:.85rem;flex-shrink:0;}
+.arr-down{text-align:center;color:var(--text3);font-size:1rem;padding:.2rem 0;}
+.arr-label{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--text3);}
+
+/* ── ORDRE DU CODE ──────────────────────────────────────────────── */
+.ordre-seq{display:flex;flex-direction:column;margin:1.8rem 0;position:relative;}
+.ordre-seq::before{content:'';position:absolute;left:20px;top:28px;bottom:28px;width:2px;background:linear-gradient(to bottom,var(--accent) 0%,rgba(132,204,22,.1) 100%);z-index:0;}
+.os-bloc{display:flex;gap:1rem;align-items:flex-start;margin-bottom:.5rem;position:relative;z-index:1;}
+.os-num{flex-shrink:0;width:42px;height:42px;border-radius:50%;background:var(--bg3);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:800;color:var(--accent);box-shadow:0 0 0 4px var(--bg);}
+.os-card{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:.3rem;}
+.os-head{display:flex;align-items:center;gap:.7rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.os-pill{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .65rem;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+/* Variantes os-pill */
+.os-pill.init,.init{background:rgba(132,204,22,.15);color:#bef264;border:1px solid rgba(132,204,22,.4);}
+.os-pill.data,.data{background:rgba(56,189,248,.12);color:#7dd3fc;border:1px solid rgba(56,189,248,.35);}
+.os-pill.util,.util{background:rgba(245,197,66,.12);color:#fde68a;border:1px solid rgba(245,197,66,.35);}
+.os-pill.dom,.dom{background:rgba(192,132,252,.12);color:#d3a8ff;border:1px solid rgba(192,132,252,.35);}
+.os-pill.event,.event{background:rgba(251,146,60,.12);color:#fdba74;border:1px solid rgba(251,146,60,.35);}
+.os-pill.guard,.guard{background:rgba(244,63,94,.12);color:#fda4af;border:1px solid rgba(244,63,94,.35);}
+.os-pill.expose,.expose{background:rgba(86,209,158,.12);color:#7ee8b8;border:1px solid rgba(86,209,158,.35);}
+.os-pill.render,.render{background:rgba(139,92,246,.12);color:#c4b5fd;border:1px solid rgba(139,92,246,.35);}
+.os-name{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:700;color:var(--text);}
+.os-body{padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.65rem;}
+.os-why{font-size:.84rem;color:var(--text2);line-height:1.85;}
+.os-why b{color:var(--text);font-weight:700;}
+.os-why ic,.os-dep ic,.os-err 
+.os-err 
+.os-dep 
+.os-err{display:flex;gap:.6rem;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.22);border-left:3px solid rgba(244,63,94,.6);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#fda4af;line-height:1.7;}
+.os-err::before{content:'✗';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-dep{display:flex;gap:.6rem;background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.2);border-left:3px solid rgba(56,189,248,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#7dd3fc;line-height:1.7;}
+.os-dep::before{content:'→';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-rule{display:flex;gap:.6rem;background:rgba(132,204,22,.06);border:1px solid rgba(132,204,22,.2);border-left:3px solid rgba(132,204,22,.5);border-radius:0 8px 8px 0;padding:.6rem .85rem;font-size:.79rem;color:#bef264;line-height:1.7;}
+.os-rule::before{content:'✓';font-weight:800;flex-shrink:0;margin-top:.05rem;}
+.os-arrow{padding:.15rem 0 .15rem 1.4rem;font-size:.69rem;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+.os-synthese{background:var(--bg2);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:14px;padding:1.3rem 1.5rem;margin-top:2rem;}
+.os-synthese-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:800;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.os-synthese-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.os-synthese p{font-size:.85rem;color:var(--text2);line-height:1.85;margin:0;}
+.os-synthese p b{color:var(--text);}
+.os-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.6rem;margin-top:1rem;}
+.os-grid-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;}
+.og-num{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--accent);font-weight:800;margin-bottom:.3rem;}
+.og-name{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--text);margin-bottom:.2rem;}
+.og-why{font-size:.7rem;color:var(--text3);line-height:1.55;}
+
+/* ── DIFF VIEW ──────────────────────────────────────────────────── */
+.diff-view{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1.2rem 0;}
+.diff-col{border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.diff-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.45rem 1rem;letter-spacing:.07em;text-transform:uppercase;}
+.diff-label-bad {background:rgba(255,107,107,.12);color:#ff9090;}
+.diff-label-good{background:rgba(86,209,158,.12);color:#7ee8b8;}
+.diff-col pre{font-family:'JetBrains Mono',monospace;font-size:.74rem;line-height:1.75;padding:.9rem 1rem;background:var(--code);white-space:pre-wrap;word-break:break-word;}
+.diff-note{font-size:.82rem;color:var(--text2);background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.65rem 1rem;margin-top:.5rem;line-height:1.7;}
+.diff-bad {color:#ff9090;}.diff-good{color:#7ee8b8;}
+
+/* ── METRIC ROW ─────────────────────────────────────────────────── */
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:.75rem;margin:1.3rem 0;}
+.metric-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;text-align:center;}
+.metric-val{font-family:'JetBrains Mono',monospace;font-size:1.65rem;font-weight:800;line-height:1;margin-bottom:.35rem;}
+.metric-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.09em;}
+
+/* ── TIMING VIZ ─────────────────────────────────────────────────── */
+.timing-wrap{margin:1.2rem 0;display:flex;flex-direction:column;gap:.35rem;}
+.timing-row{display:grid;grid-template-columns:70px 1fr;gap:.5rem;align-items:center;}
+.timing-t{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);text-align:right;}
+.timing-bar{border-radius:6px;padding:.3rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;line-height:1.4;}
+
+/* ── DÉBOUNCE VIZ ───────────────────────────────────────────────── */
+.debounce-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.dbv-scenario{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.8rem;}
+.dbv-track{display:flex;flex-direction:column;gap:.4rem;}
+.dbv-line{display:flex;align-items:center;gap:.5rem;}
+.dbv-label{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text3);min-width:55px;}
+.dbv-window{flex:1;position:relative;height:28px;background:rgba(139,147,168,.05);border-radius:6px;overflow:hidden;}
+.dbv-dot{position:absolute;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;}
+.dbv-event{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 .4rem;font-size:.6rem;font-family:'JetBrains Mono',monospace;border-radius:4px;}
+.dbv-top{background:rgba(255,107,107,.25);color:#ff9090;}
+.dbv-bot{background:rgba(86,209,158,.25);color:#7ee8b8;}
+
+/* ── CHAIN SEQ (héritage) ───────────────────────────────────────── */
+.chain-seq{display:flex;flex-direction:column;gap:.3rem;margin:1rem 0;}
+.cs-row{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem 0;flex-wrap:wrap;}
+.cs-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:800;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--text3);}
+.cs-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:6px;white-space:nowrap;flex-shrink:0;}
+.cs-desc{font-size:.8rem;color:var(--text2);line-height:1.65;flex:1;}
+.cs-arrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text3);padding-left:1.8rem;display:block;margin:.1rem 0;}
+.chain-title{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;color:var(--text3);width:20px;text-align:right;flex-shrink:0;}
+
+/* ── DIVERS COMPOSANTS ──────────────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.2rem 0;}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1.2rem 0;}
+.cmp-box{border-radius:12px;padding:1.1rem 1.2rem;}
+.cmp-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;margin-bottom:.7rem;}
+.cmp-item{font-size:.82rem;color:var(--text2);line-height:1.65;padding:.2rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.cmp-item:last-child{border-bottom:none;}
+.effect-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem;margin:1rem 0;}
+.effect-card{border-radius:12px;padding:1rem 1.1rem;}
+.effect-icon{font-size:1.3rem;margin-bottom:.5rem;}
+.effect-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;margin-bottom:.3rem;}
+.effect-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.mini-box{border-radius:10px;padding:.9rem 1rem;margin:.5rem 0;}
+.mini-title{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;margin-bottom:.5rem;}
+.mini-item{font-size:.8rem;color:var(--text2);line-height:1.65;padding:.15rem 0;}
+.key-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin:1rem 0;}
+.key-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;padding:.9rem 1rem;}
+.key-badge{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.18rem .5rem;border-radius:5px;margin-bottom:.5rem;display:inline-block;}
+.key-desc{font-size:.8rem;color:var(--text2);line-height:1.6;}
+.schema{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin:1.2rem 0;}
+.schema-title{font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;}
+.slide{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin:.5rem 0;}
+.def{font-size:.83rem;color:var(--text2);line-height:1.65;}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;margin:.6rem 0;}
+.prow{display:flex;align-items:flex-start;gap:.6rem;padding:.5rem 0;border-bottom:1px solid rgba(35,40,53,.6);flex-wrap:wrap;}
+.prow:last-child{border-bottom:none;}
+.pnum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:800;flex-shrink:0;}
+.pcond{font-family:'JetBrains Mono',monospace;font-size:.77rem;min-width:200px;flex:1;color:var(--text);}
+.pbadge{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;padding:.15rem .5rem;border-radius:5px;white-space:nowrap;flex-shrink:0;}
+.pnote{font-size:.78rem;color:var(--text3);font-style:italic;min-width:100%;padding-top:.2rem;}
+.prio{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin:1rem 0;}
+.active-filter{font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(245,197,66,.15);color:var(--accent);border:1px solid rgba(245,197,66,.3);padding:.2rem .6rem;border-radius:5px;display:inline-flex;align-items:center;gap:.3rem;margin:.2rem;}
+.product-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+.fav-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:.6rem 1.2rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text);z-index:1000;}
+.btn-fav{font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:.3rem .7rem;border-radius:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);cursor:pointer;display:inline-flex;align-items:center;gap:.3rem;}
+
+/* ── INLINE HIGHLIGHTS ──────────────────────────────────────────── */
+.hl-y{background:rgba(245,197,66,.15);color:#f7d97a;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-g{background:rgba(86,209,158,.15);color:#7ee8b8;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-b{background:rgba(79,142,255,.15);color:#7eb5ff;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+.hl-r{background:rgba(255,107,107,.15);color:#ff9090;padding:.05rem .3rem;border-radius:3px;font-weight:600;}
+
+/* ── FILE STATS ─────────────────────────────────────────────────── */
+.file-stats{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0;}
+.fs-pill{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.3rem .75rem;border-radius:100px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);}
+.fs-pill b{color:var(--text);}
+.complexity{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;margin-left:.6rem;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── BADGES PRODUIT ─────────────────────────────────────────────── */
+.badge-new  {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(86,209,158,.2);color:#7ee8b8;border:1px solid rgba(86,209,158,.4);}
+.badge-bs   {display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(255,107,107,.2);color:#ff9090;border:1px solid rgba(255,107,107,.4);}
+.badge-promo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;padding:.15rem .5rem;border-radius:4px;background:rgba(245,197,66,.2);color:#f7d97a;border:1px solid rgba(245,197,66,.4);}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .fork.f2,.f2{grid-template-columns:1fr;}
+  .fork.f3,.f3{grid-template-columns:1fr;}
+  .grid2,.grid3{grid-template-columns:1fr;}
+  .diff-view{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
+  .carte-body{grid-template-columns:1fr;}
+  .carte-arrow{display:none;}
+  nav{padding:0 1rem;}
+  .schema-grid{grid-template-columns:1fr;}
+  .compare-grid,.effect-grid,.key-grid,.os-grid{grid-template-columns:1fr;}
+  .timing-row{grid-template-columns:60px 1fr;}
+  .or{flex-direction:column;}
+  .prow{flex-direction:column;}
+}
+@media(max-width:480px){
+  .page{padding:70px 1rem 3rem;}
+  .obj-row{flex-direction:column;}
+  .term-row{flex-direction:column;}
+}
+
+/* ── NAV AMÉLIORÉ ───────────────────────────────────────────────── */
+.nav-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.78rem;color:var(--text2);white-space:nowrap;text-decoration:none;padding:.3rem .65rem;border-radius:6px;transition:all .2s;flex-shrink:0;}
+.nav-logo:hover{background:var(--bg3);color:var(--text);}
+.nav-file{flex-shrink:0;}
+.nav-links{display:flex;gap:.1rem;flex-wrap:wrap;flex:1;overflow:hidden;}
+.nav-links a{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text2);text-decoration:none;padding:.28rem .55rem;border-radius:5px;transition:all .15s;white-space:nowrap;}
+.nav-links a:hover{background:var(--bg3);color:var(--text);}
+.nav-links a.active{background:rgba(245,197,66,.12);color:var(--accent);}
+/* ── HERO AMÉLIORÉ ──────────────────────────────────────────────── */
+.hero{padding:3rem 0 2.5rem;border-bottom:1px solid var(--border);margin-bottom:3rem;}
+.hero-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600;color:var(--accent);background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);padding:.25rem .75rem;border-radius:100px;letter-spacing:.07em;margin-bottom:1rem;}
+.hero h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;margin-bottom:.5rem;}
+.complexity{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;}
+.cx-low  {background:rgba(86,209,158,.15);color:#7ee8b8;}
+.cx-med  {background:rgba(245,197,66,.15);color:#f7d97a;}
+.cx-high {background:rgba(255,107,107,.15);color:#ff9090;}
+.cx-vhigh{background:rgba(192,132,252,.15);color:#d3a8ff;}
+
+/* ── INLINE CODE <ic> — définition unique canonique ─────────────── */
+ic {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8em;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: .05rem .38rem;
+  border-radius: 4px;
+  color: #7eb5ff;
+  white-space: nowrap;
+  display: inline;
+}
+/* Overrides contextuels */
+.gotcha-body ic { color: #ffb0b0; background: rgba(255,107,107,.1); }
+.protip ic      { color: #f7d97a; background: rgba(245,197,66,.1);  }
+.callout.warn ic, .callout.analogy ic { color: #f7d97a; }
+.callout.ok ic, .callout.success ic   { color: #7ee8b8; }
+
+
+/* ── CODE-BLOCK inline — header barre avec bouton copier ─────────── */
+.code-block {
+  padding-top: 2.4rem !important; /* espace pour la barre de titre */
+}
+.code-block .cb-lang {
+  top: .55rem;
+  left: .9rem;
+  right: auto;
+}
+
+/* ── SRC-BLOCK mobile ────────────────────────────────────────────── */
+.src-body {
+  overflow-x: auto;
+}
+.src-body pre {
+  white-space: pre;
+  min-width: max-content;
+}
+
+/* ── LIENS ANCRE sur h2 ──────────────────────────────────────────── */
+.sec h2 .anchor-link {
+  opacity: 0;
+  font-size: .65em;
+  color: var(--text3);
+  text-decoration: none;
+  margin-left: .5rem;
+  transition: opacity .2s;
+  vertical-align: middle;
+  font-weight: 400;
+}
+.sec h2:hover .anchor-link { opacity: 1; }
+.sec h2:hover .anchor-link:hover { color: var(--accent4); }
+
+/* ── FOOTER NAVIGATION INTER-DOCS ──────────────────────────────── */
+.docs-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+.docs-footer-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 1rem;
+}
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: .5rem;
+}
+.docs-link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .55rem .8rem;
+  border-radius: 8px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  color: var(--text2);
+  transition: all .18s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.docs-link:hover {
+  background: var(--bg3);
+  border-color: rgba(79,142,255,.3);
+  color: var(--text);
+}
+.docs-link.current {
+  border-color: rgba(245,197,66,.35);
+  background: rgba(245,197,66,.06);
+  color: var(--accent);
+  pointer-events: none;
+}
+.docs-link-icon { flex-shrink: 0; font-size: .9rem; }
+
+
+/* ╔═══════════════════════════════════════════════════════════════╗
+   ║  CANONICAL OVERRIDES — résolution de tous les conflits CSS    ║
+   ╚═══════════════════════════════════════════════════════════════╝ */
+
+/* ── 1. scroll-padding-top (nav fixe 56px + 12px marge) ────────── */
+html {
+  scroll-padding-top: 68px;
+}
+
+/* ── 2a. .bi conflit : syntaxe JS vs icône-emoji dans .box ──────── */
+/* Dans les blocs de code, .bi = builtin JS (vert) */
+pre .bi, code .bi, .src-body .bi {
+  color: #56d19e;
+  font-weight: 600;
+  font-size: inherit;
+  flex-shrink: unset;
+  margin-top: 0;
+  line-height: inherit;
+}
+/* Dans les box/listes, .bi = icône emoji */
+.box .bi, .kbox-item .bi, .list-item .bi,
+.callout .bi, .protip .bi, .gotcha-body .bi {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+  margin-top: .1rem;
+  color: inherit;
+  font-weight: normal;
+  line-height: 1;
+}
+
+/* ── 2b. .cm conflit : commentaire de code vs kbox-card ─────────── */
+/* Dans les blocs de code, .cm = commentaire gris italique */
+pre .cm, code .cm, .src-body .cm {
+  color: #555e74;
+  font-style: italic;
+  background: none;
+  border: none;
+}
+/* .cm comme container (hors code) garde le style card si présent */
+div.cm, .cm-card {
+  background: rgba(139,147,168,.08);
+  border: 1px solid rgba(139,147,168,.25);
+  color: var(--text2);
+}
+
+/* ── 2c. .nav-links a.active — version canonique unique ─────────── */
+.nav-links a.active {
+  background: rgba(245,197,66,.15) !important;
+  color: var(--accent) !important;
+  border-radius: 6px;
+}
+
+/* ── 2d. .file-stats — layout grid canonique ────────────────────── */
+.file-stats {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+  gap: .8rem !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* ── 2e. .code-block pre — taille canonique ─────────────────────── */
+.code-block pre {
+  font-size: .81rem !important;
+  line-height: 1.82 !important;
+}
+
+/* ── 2f. .src-body — overflow canonique ─────────────────────────── */
+.src-body {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-height: 520px !important;
+  transition: max-height .4s ease !important;
+}
+.src-body.expanded {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
+
+/* ── 3. Safari : -webkit-backdrop-filter ──────────────────────────
+   (injecté directement dans la règle nav via Python)               */
+
+/* ── 4. prefers-reduced-motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  #read-progress { display: none !important; }
+  .src-body       { transition: none !important; }
+}
+
+/* ── 5. Tables responsive ───────────────────────────────────────── */
+.tbl-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin: 1.2rem 0;
+}
+.tbl-wrap table,
+.tbl-wrap .data-table,
+.tbl-wrap .recap-table,
+.tbl-wrap .tbl {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0;
+  width: 100%;
+}
+
+/* ── 6. :focus-visible (navigation clavier) ─────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.copy-btn:focus-visible,
+.src-expand-btn:focus-visible {
+  outline: 2px solid var(--accent4);
+  outline-offset: 2px;
+}
+.nav-links a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── 8. Nav active — meilleur contraste ─────────────────────────── */
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: left .2s, right .2s;
+}
+.nav-links a { position: relative; }
+
+/* ── 9. code-block mobile ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .code-block {
+    padding-top: 2rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    font-size: .76rem !important;
+  }
+  .code-block .cb-lang {
+    display: none;
+  }
+  .copy-btn.abs {
+    top: .45rem;
+    right: .45rem;
+    padding: .18rem .45rem;
+    font-size: .58rem;
+  }
+  .src-header .src-fname {
+    display: none;
+  }
+  .ln::before {
+    width: 2rem;
+    padding-right: .6rem;
+  }
+}
+
+/* ── 11. @media print ───────────────────────────────────────────── */
+@media print {
+  #read-progress,
+  nav,
+  .copy-btn,
+  .src-expand-btn,
+  .src-fade,
+  .docs-footer {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 11pt !important;
+  }
+  .page {
+    padding: 1cm !important;
+    max-width: 100% !important;
+  }
+  .hero {
+    padding: 1rem 0 !important;
+  }
+  .sec {
+    break-inside: avoid;
+  }
+  .code-block, .src-block {
+    background: #f4f4f4 !important;
+    border: 1px solid #ccc !important;
+    border-radius: 6px !important;
+    break-inside: avoid;
+  }
+  .code-block pre, .src-body pre {
+    color: #111 !important;
+    font-size: 8pt !important;
+  }
+  .kw    { color: #7b2fbe !important; }
+  .fn    { color: #0550ae !important; }
+  .s, .str { color: #0a7c42 !important; }
+  .cmt, .cm { color: #666 !important; }
+  .n     { color: #b07d00 !important; }
+  ic {
+    background: #eee !important;
+    border: 1px solid #ccc !important;
+    color: #333 !important;
+  }
+  a { color: #333 !important; text-decoration: none !important; }
+  .schema-card, .vnode, .gotcha, .protip, .callout {
+    border: 1px solid #ccc !important;
+    background: #f9f9f9 !important;
+    color: #111 !important;
+    break-inside: avoid;
+  }
+}
+
 </style>
 </head>
 <body>
-<nav> <div class="nl">carousel.js</div> <a href="#intro">Intro</a> <a href="#technique">La technique radio</a> <a href="#intervalle">setInterval</a> <a href="#modulo">Modulo</a> <a href="#pause">Pause au survol</a> <a href="#reset">Reset au clic</a> <a href="#recap">Récap</a>
-<a href="#glossaire">Glossaire</a>
+<nav>
+  <a class="nav-logo" href="index.html">← PearTech Docs</a>
+  <div class="nav-file" style="font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:#c084fc;padding:.25rem .7rem;border-radius:6px;background:rgba(192,132,252,.15);border:1px solid #c084fc44;white-space:nowrap;flex-shrink:0;">carousel.js</div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#technique">Radio CSS</a>
+    <a href="#intervalle">setInterval</a>
+    <a href="#modulo">Modulo</a>
+    <a href="#pause">Pause</a>
+    <a href="#reset">Reset</a>
+    <a href="#recap">Récap</a>
+    <a href="#ordre">Ordre</a>
+    <a href="#glossaire">Glossaire</a>
+    <a href="#plus-loin">✦ Plus loin</a>
+    <a href="#decryptage">⌨ Décryptage</a>
+    <a href="#code-annote">⟨/⟩ Annoté</a>
+  </div>
 </nav>
-<div class="page"> <div class="hero"> <!-- CARTE INTERNE DIAGRAM -->
-<div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
+<div class="page"> <div class="hero">
+  <div class="hero-tag">UI · Carrousel</div>
+  <h1>Comprendre<br><span style="color:#c084fc">carousel.js</span></h1>
+  <p style="color:var(--text2);font-size:.97rem;max-width:680px;line-height:1.85;margin-top:.6rem;">Carrousel CSS-only piloté par des inputs radio, avec défilement automatique via setInterval et navigation par modulo.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem;align-items:center;">
+    <div class="file-badge"><span class="dot" style="background:#c084fc;"></span>carousel.js</div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text2);">~95 lignes</span>
+    <span class="complexity cx-med" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;padding:.22rem .65rem;border-radius:6px;">Intermédiaire</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Dépendances : Aucune dépendance</span>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);padding:.25rem .7rem;border-radius:6px;color:var(--text3);">Pages : index.html</span>
+  </div>
+  <div class="carte"> <div class="carte-title"> Carte interne du fichier — entrées, traitements, sorties</div> <div class="carte-body"> <div class="carte-col"><div class="carte-col-title" style="background:#7dd3fc22;color:#7dd3fc;border:1px solid #7dd3fc44;"> ENTRÉES</div>
 <div class="carte-item"><b>DOMContentLoaded</b><br><span style="color:var(--t3);font-size:.71rem;">déclencheur</span></div>
 <div class="carte-item"><b>input[type=radio]</b><br><span style="color:var(--t3);font-size:.71rem;">coches de navigation</span></div>
 <div class="carte-item"><b>mouseenter / mouseleave</b><br><span style="color:var(--t3);font-size:.71rem;">pause au survol</span></div>
@@ -154,17 +1110,17 @@ hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
 </div>
 <!-- END CARTE --> <h1>Comprendre<br><span>carousel.js</span></h1> <p>Ce fichier gère le <b>défilement automatique</b> du carrousel de la page d'accueil. Il change de slide toutes les 5 secondes en cochant des <ic>input[type="radio"]</ic> HTML — une approche CSS-first où c'est le CSS qui anime les slides, et le JS qui pilote simplement les cases à cocher.</p> <div class="fbadge"><div class="dot"></div>carousel.js · 55 lignes · 1 intervalle · 3 slides · page_accueil.html uniquement</div>
 </div> <!-- ══ 00 INTRO ══ -->
-<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Le principe : JS pilote, CSS anime</h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> Le carrousel fonctionne comme un juke-box à boutons. Chaque slide correspond à un bouton radio. Appuyer sur un bouton (cocher le radio) change la chanson (affiche la slide). carousel.js est le mécanisme automatique qui appuie sur le bouton suivant toutes les 5 secondes — mais si quelqu'un appuie manuellement, le chronomètre repart de zéro.</div></div> <div class="diag"> <div class="dtitle">Répartition des responsabilités CSS vs JS</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:11px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">CSS — tout ce qui est visuel</div> <div style="font-size:.8rem;color:var(--t2);line-height:1.85;"> Positionnement des slides<br> Transition de glissement<br> <ic>#slide1:checked ~ .slide-1 { opacity:1 }</ic><br> Points indicateurs actifs<br> Durée de la transition
+<div class="sec" id="intro"> <div class="slabel">00 — Avant de commencer</div> <h2>Le principe : JS pilote, CSS anime <a class="anchor-link" href="#intro" title="Lien direct">¶</a></h2> <div class="box ana"><span class="bi"></span><div><b>Analogie :</b> Le carrousel fonctionne comme un juke-box à boutons. Chaque slide correspond à un bouton radio. Appuyer sur un bouton (cocher le radio) change la chanson (affiche la slide). carousel.js est le mécanisme automatique qui appuie sur le bouton suivant toutes les 5 secondes — mais si quelqu'un appuie manuellement, le chronomètre repart de zéro.</div></div> <div class="diag"> <div class="dtitle">Répartition des responsabilités CSS vs JS</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:11px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">CSS — tout ce qui est visuel</div> <div style="font-size:.8rem;color:var(--t2);line-height:1.85;"> Positionnement des slides<br> Transition de glissement<br> <ic>#slide1:checked ~ .slide-1 { opacity:1 }</ic><br> Points indicateurs actifs<br> Durée de la transition
 </div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.25);border-radius:11px;padding:1rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">JS — uniquement la logique</div> <div style="font-size:.8rem;color:var(--t2);line-height:1.85;"> Avancer au slide suivant (modulo)<br> Démarrer/arrêter l'intervalle<br> Pause au survol de la souris<br> Réinitialiser au clic manuel<br> Sync de <ic>currentIndex</ic> </div> </div> </div> <div class="sn" style="margin-top:.8rem;"><span class="sni"></span><span><b>Avantage de cette approche :</b> Le carrousel fonctionne même sans JavaScript (CSS pur). Si JS est désactivé ou plante, les slides restent visibles et navigables manuellement via les labels liés aux radios.</span></div> </div> <div class="glos"> <div class="glos-head"> Termes essentiels</div> <div class="grow"><div class="gterm">setInterval</div><div class="gdef">Exécute une fonction de façon répétée à un intervalle fixe (en millisecondes). <ic>setInterval(fn, 5000)</ic> appelle <ic>fn</ic> toutes les 5 secondes. Retourne un identifiant numérique utilisé par <ic>clearInterval</ic> pour arrêter.</div></div> <div class="grow"><div class="gterm">clearInterval</div><div class="gdef">Annule l'intervalle dont l'identifiant est passé en paramètre. Sans ça, l'intervalle continue indéfiniment même après avoir appelé <ic>startAutoSlide()</ic> une deuxième fois — ce qui doublerait la vitesse.</div></div>
 <div class="schema2"> <div class="s2t">Sans clearInterval — l'empilement des intervalles</div> <div class="grid2"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;"> startAutoSlide() appelé 3 fois sans clearInterval</div> <div class="sp-row"> <div class="sp-step"><div class="sp-t">Appel 1</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #1  tick toutes les 5s</div></div> <div class="sp-step"><div class="sp-t">Appel 2</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #2  tick toutes les 5s (2e)</div></div> <div class="sp-step"><div class="sp-t">Appel 3</div><div class="sp-bar" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.2);color:#fda4af;">Intervalle #3  tick toutes les 5s (3e)</div></div> <div class="sp-step"><div class="sp-t">Résultat</div><div class="sp-bar" style="background:rgba(244,63,94,.18);border:1px solid rgba(244,63,94,.4);color:#fda4af;font-weight:700;">3 nextSlide()/5s = 1 slide/1.67s </div></div> </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;"> Avec clearInterval avant chaque setInterval</div> <div class="sp-row"> <div class="sp-step"><div class="sp-t">Appel 1</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(undefined)  rien · Intervalle #1</div></div> <div class="sp-step"><div class="sp-t">Appel 2</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(#1)  tué · Intervalle #2</div></div> <div class="sp-step"><div class="sp-t">Appel 3</div><div class="sp-bar" style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);color:#7ee8b8;">clearInterval(#2)  tué · Intervalle #3</div></div> <div class="sp-step"><div class="sp-t">Résultat</div><div class="sp-bar" style="background:rgba(86,209,158,.15);border:1px solid rgba(86,209,158,.4);color:#7ee8b8;font-weight:700;">1 seul intervalle actif — 1 slide/5s </div></div> </div> </div> </div>
 </div> <div class="grow"><div class="gterm">opérateur modulo %</div><div class="gdef"><ic>n % m</ic> retourne le reste de la division. <ic>2 % 3 = 2</ic>, <ic>3 % 3 = 0</ic>. Utilisé ici pour revenir au début : quand on atteint le dernier slide, le slide suivant est le premier (<ic>(2+1) % 3 = 0</ic>).</div></div> <div class="grow"><div class="gterm">radio.checked = true</div><div class="gdef">Cocher programmatiquement un <ic>input[type="radio"]</ic>. Le CSS qui surveille <ic>:checked</ic> réagit instantanément comme si l'utilisateur avait cliqué — déclenchant la transition CSS vers ce slide.</div></div> <div class="grow"><div class="gterm">mouseenter / mouseleave</div><div class="gdef">Deux événements de survol. <ic>mouseenter</ic> se déclenche quand la souris entre dans l'élément, <ic>mouseleave</ic> quand elle sort. Contrairement à <ic>mouseover/mouseout</ic>, ils ne se propagent pas aux éléments enfants.</div></div> <div class="grow"><div class="gterm">.filter(r => r !== null)</div><div class="gdef">Crée un nouveau tableau en excluant les valeurs <ic>null</ic>. Nécessaire car <ic>getElementById</ic> retourne <ic>null</ic> si l'élément n'existe pas. Sans ce filtre, un <ic>null</ic> dans le tableau ferait planter <ic>radio.checked = true</ic>.</div></div> </div>
 </div>
 <hr> <!-- ══ 01 TECHNIQUE RADIO ══ -->
-<div class="sec" id="technique"> <div class="slabel">01 — La technique "radio as state"</div> <h2>Pourquoi utiliser des inputs radio pour un carrousel</h2> <p>C'est une technique CSS classique : les boutons radio stockent l'état actif du carrousel. Le sélecteur CSS <ic>:checked</ic> permet d'appliquer des styles conditionnels en fonction du radio sélectionné — sans JavaScript, ni variable, ni classe.</p>
+<div class="sec" id="technique"> <div class="slabel">01 — La technique "radio as state"</div> <h2>Pourquoi utiliser des inputs radio pour un carrousel <a class="anchor-link" href="#technique" title="Lien direct">¶</a></h2> <p>C'est une technique CSS classique : les boutons radio stockent l'état actif du carrousel. Le sélecteur CSS <ic>:checked</ic> permet d'appliquer des styles conditionnels en fonction du radio sélectionné — sans JavaScript, ni variable, ni classe.</p>
 <div class="diag"> <div class="dtitle">Mécanisme CSS :checked — pas de JavaScript pour la visibilité</div> <div style="display:flex;flex-direction:column;gap:.5rem;max-width:560px;"> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f0abfc;margin-bottom:.5rem;">HTML — 3 radios + 3 slides</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.9;"> &lt;input type="radio" id="slide1" checked&gt;<br> &lt;input type="radio" id="slide2"&gt;<br> &lt;div class="slide"&gt;Slide 1&lt;/div&gt;<br> &lt;div class="slide"&gt;Slide 2&lt;/div&gt;
 </div> </div> <div style="background:rgba(245,197,66,.07);border:1px solid rgba(245,197,66,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#f7d97a;margin-bottom:.5rem;">CSS — sélecteur :checked + sibling ~</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.9;"> <span style="color:#fda4af;">#slide1:checked</span> ~ .slides .slide:nth-child(1) {<br> <span style="padding-left:1rem;"></span>opacity: 1; transform: translateX(0);<br> }<br> <span style="color:#fda4af;">#slide2:checked</span> ~ .slides .slide:nth-child(2) {<br> <span style="padding-left:1rem;"></span>opacity: 1; transform: translateX(0);<br> }
 </div> </div> <div style="font-size:.73rem;color:var(--t3);">JS fait uniquement : <code style="font-family:'JetBrains Mono',monospace;font-size:.67rem;">radios[1].checked = true</code> — le CSS prend le relais pour masquer/afficher les slides via la transition.</div> </div>
-</div> <div class="cb2"><span class="cbl2">HTML — structure invisible dans le DOM</span><pre><span class="cm">&lt;!-- Les radios sont cachés visuellement mais fonctionnels --&gt;</span>
+</div> <div class="code-block"><span class="cb-lang">HTML — structure invisible dans le DOM</span><pre><span class="cm">&lt;!-- Les radios sont cachés visuellement mais fonctionnels --&gt;</span>
 &lt;input type=<span class="s">"radio"</span> name=<span class="s">"carousel"</span> id=<span class="s">"slide1"</span> checked&gt;
 &lt;input type=<span class="s">"radio"</span> name=<span class="s">"carousel"</span> id=<span class="s">"slide2"</span>&gt;
 &lt;input type=<span class="s">"radio"</span> name=<span class="s">"carousel"</span> id=<span class="s">"slide3"</span>&gt;
@@ -172,21 +1128,139 @@ hr{border:none;border-top:1px solid var(--border);margin:3.5rem 0;}
 &lt;label for=<span class="s">"slide1"</span> class=<span class="s">"indicator"</span>&gt;&lt;/label&gt;
 &lt;label for=<span class="s">"slide2"</span> class=<span class="s">"indicator"</span>&gt;&lt;/label&gt;
 &lt;label for=<span class="s">"slide3"</span> class=<span class="s">"indicator"</span>&gt;&lt;/label&gt;
-</pre></div> <div class="cb2"><span class="cbl2">CSS — le sélecteur :checked pilote l'affichage</span><pre><span class="cm">/* Quand slide1 est coché  affiche .slide-1 */</span>
+</pre></div> <div class="code-block"><span class="cb-lang">CSS — le sélecteur :checked pilote l'affichage</span><pre><span class="cm">/* Quand slide1 est coché  affiche .slide-1 */</span>
 #slide1:checked ~ .carousel-wrapper .slide-1 { opacity: 1; transform: translateX(0); }
 #slide2:checked ~ .carousel-wrapper .slide-2 { opacity: 1; transform: translateX(0); }
 #slide3:checked ~ .carousel-wrapper .slide-3 { opacity: 1; transform: translateX(0); }
 <span class="cm">/* Le point indicateur devient actif */</span>
 #slide2:checked ~ .indicators .indicator:nth-child(2) { background: white; }
-</pre></div> <div class="cb2"><span class="cbl2">javascript — carousel.js coche simplement le bon radio</span><pre><span class="kw">const</span> <span class="vr">radios</span> = [
+</pre></div> <div class="code-block"><span class="cb-lang">javascript — carousel.js coche simplement le bon radio</span><pre><span class="kw">const</span> <span class="vr">radios</span> = [
 document.<span class="fn">getElementById</span>(<span class="s">'slide1'</span>), <span class="cm">//  &lt;input id="slide1"&gt;</span> document.<span class="fn">getElementById</span>(<span class="s">'slide2'</span>),
 document.<span class="fn">getElementById</span>(<span class="s">'slide3'</span>)
 ].<span class="fn">filter</span>(r => r !== <span class="kw">null</span>); <span class="cm">// Retire les null si un radio est absent</span> <span class="cm">// Pour passer au slide 2 :</span>
 radios[<span class="nm">1</span>].checked = <span class="kw">true</span>; <span class="cm">// Coche #slide2  CSS affiche .slide-2 instantanément</span>
 </pre></div> <div class="diag"> <div class="dtitle">Chaîne causale — une seule ligne déclenche tout</div> <div class="vc"> <div class="vn w cpi">radios[1].checked = true</div> <div class="va"><div class="val">le navigateur met à jour l'état de l'input radio</div></div> <div class="vn w cy">#slide2:checked devient vrai dans le CSS</div> <div class="va"><div class="val">le moteur CSS réévalue les sélecteurs :checked</div></div> <div class="vn w cg">La slide 2 devient opacity:1 + translateX(0)</div> <div class="va"><div class="val">transition CSS 0.5s</div></div> <div class="vn w cgr">L'utilisateur voit l'animation de glissement — sans une seule ligne de JS supplémentaire</div> </div> </div>
+<h3>La technique radio-as-state expliquée visuellement</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-yellow"><div class="kbox-h">HTML — Structure</div>
+<div class="kbox-item"><ic>&lt;input type="radio" name="carousel" id="slide1"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" name="carousel" id="slide2"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" name="carousel" id="slide3"&gt;</ic></div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">CSS — Sélection</div>
+<div class="kbox-item"><ic>#slide1:checked ~ .slide-1 { display:block }</ic></div>
+<div class="kbox-item"><ic>#slide2:checked ~ .slide-2 { display:block }</ic></div>
+<div class="kbox-item">Le CSS réagit automatiquement à l'état du radio</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">JS — Contrôle</div>
+<div class="kbox-item"><ic>radios[currentIndex].checked = true</ic></div>
+<div class="kbox-item">1 ligne = changer de slide</div>
+<div class="kbox-item">Tout l'affichage est géré par le CSS</div>
+</div>
+</div>
+<div class="obj-schema">
+<div class="obj-title">État interne du carousel</div>
+<div class="obj-row"><span class="obj-key"><ic>currentIndex</ic></span><span class="obj-type">number</span><span class="obj-desc">Indice de la slide active — entre 0 et radios.length-1</span></div>
+<div class="obj-row"><span class="obj-key"><ic>interval</ic></span><span class="obj-type">number|null</span><span class="obj-desc">ID retourné par setInterval — null quand pausé</span></div>
+<div class="obj-row"><span class="obj-key"><ic>intervalTime</ic></span><span class="obj-type">number</span><span class="obj-desc">5000ms — délai entre chaque avance automatique</span></div>
+<div class="obj-row"><span class="obj-key"><ic>radios[]</ic></span><span class="obj-type">HTMLInputElement[]</span><span class="obj-desc">Les 3 inputs radio — cocher l'un affiche la slide CSS correspondante</span></div>
+</div>
+<h3>Pourquoi des inputs radio pour les slides ?</h3>
+<div class="grid2" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">Avantages radio</div>
+<div class="kbox-item">Exclusion mutuelle native du navigateur</div>
+<div class="kbox-item">Pas de JS pour masquer les autres slides</div>
+<div class="kbox-item">CSS pur via <ic>:checked ~ .slide</ic> sélecteur</div>
+</div>
+<div class="kbox c-red"><div class="kbox-h">Inconvénients</div>
+<div class="kbox-item">Difficile à animer (transitions entre slides)</div>
+<div class="kbox-item">Moins flexible qu'une approche 100% JS</div>
+<div class="kbox-item">IDs de radio figés dans le HTML</div>
+</div>
+</div>
+<h3>La technique radio-as-state — CSS fait tout</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">HTML — Structure</div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide1" name="carousel"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide2" name="carousel"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide3" name="carousel"&gt;</ic></div>
+<div class="kbox-item">3 inputs radio, mutuellement exclusifs</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">CSS — Affichage</div>
+<div class="kbox-item"><ic>#slide1:checked ~ .slide-1 { display:block }</ic></div>
+<div class="kbox-item"><ic>#slide2:checked ~ .slide-2 { display:block }</ic></div>
+<div class="kbox-item">Le sélecteur ~ (sibling) relie radio et slide</div>
+<div class="kbox-item">Aucun JS pour l'affichage</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">JS — État</div>
+<div class="kbox-item">Coche/décoche les radios uniquement</div>
+<div class="kbox-item"><ic>radios[currentIndex].checked = true</ic></div>
+<div class="kbox-item">1 ligne pour changer de slide</div>
+<div class="kbox-item">Le CSS fait le reste automatiquement</div>
+</div>
+</div>
+<div class="callout success"><span class="callout-icon">✓</span><div><b>Séparation des responsabilités parfaite</b> : HTML = structure, CSS = affichage conditionnel, JS = logique d'état. Si le JS échoue à charger, le carousel reste utilisable via les labels des radios (cliquables nativement). C'est de l'amélioration progressive.</div></div>
+<h3>La technique radio-as-state — CSS fait tout</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">HTML — Structure</div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide1" name="carousel"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide2" name="carousel"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide3" name="carousel"&gt;</ic></div>
+<div class="kbox-item">3 inputs radio, mutuellement exclusifs</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">CSS — Affichage</div>
+<div class="kbox-item"><ic>#slide1:checked ~ .slide-1 { display:block }</ic></div>
+<div class="kbox-item"><ic>#slide2:checked ~ .slide-2 { display:block }</ic></div>
+<div class="kbox-item">Le sélecteur ~ (sibling) relie radio et slide</div>
+<div class="kbox-item">Aucun JS pour l'affichage</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">JS — État</div>
+<div class="kbox-item">Coche/décoche les radios uniquement</div>
+<div class="kbox-item"><ic>radios[currentIndex].checked = true</ic></div>
+<div class="kbox-item">1 ligne pour changer de slide</div>
+<div class="kbox-item">Le CSS fait le reste automatiquement</div>
+</div>
+</div>
+<div class="callout success"><span class="callout-icon">✓</span><div><b>Séparation des responsabilités parfaite</b> : HTML = structure, CSS = affichage conditionnel, JS = logique d'état. Si le JS échoue à charger, le carousel reste utilisable via les labels des radios (cliquables nativement). C'est de l'amélioration progressive.</div></div>
+<h3>La technique radio-as-state — CSS fait tout</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">HTML — Structure</div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide1" name="carousel"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide2" name="carousel"&gt;</ic></div>
+<div class="kbox-item"><ic>&lt;input type="radio" id="slide3" name="carousel"&gt;</ic></div>
+<div class="kbox-item">3 inputs radio, mutuellement exclusifs</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">CSS — Affichage</div>
+<div class="kbox-item"><ic>#slide1:checked ~ .slide-1 { display:block }</ic></div>
+<div class="kbox-item"><ic>#slide2:checked ~ .slide-2 { display:block }</ic></div>
+<div class="kbox-item">Le sélecteur ~ (sibling) relie radio et slide</div>
+<div class="kbox-item">Aucun JS pour l'affichage</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">JS — État</div>
+<div class="kbox-item">Coche/décoche les radios uniquement</div>
+<div class="kbox-item"><ic>radios[currentIndex].checked = true</ic></div>
+<div class="kbox-item">1 ligne pour changer de slide</div>
+<div class="kbox-item">Le CSS fait le reste automatiquement</div>
+</div>
+</div>
+<div class="callout success"><span class="callout-icon">✓</span><div><b>Séparation des responsabilités parfaite</b> : HTML = structure, CSS = affichage conditionnel, JS = logique d'état. Si le JS échoue à charger, le carousel reste utilisable via les labels des radios (cliquables nativement). C'est de l'amélioration progressive.</div></div>
+<div class="code-block"><span class="cb-lang">css</span><pre>/* Radio caché pour chaque slide */
+&lt;input type="radio" name="carousel" id="slide-0" checked&gt;
+&lt;input type="radio" name="carousel" id="slide-1"&gt;
+
+/* CSS sélectionne la slide selon le radio coché */
+#slide-0:checked ~ .slides .slide-0 { display: block; }
+#slide-1:checked ~ .slides .slide-1 { display: block; }
+
+/* JS ne fait que cocher le bon radio */
+<span class="kw">function</span> goToSlide(index) {
+    document.getElementById(<span class="str">'slide-'</span> + index).checked = <span class="kw">true</span>;
+    <span class="cmt">// 1 ligne — CSS gère tout le reste</span>
+}</pre></div>
+<div class="protip"><div class="protip-label">PRO TIP</div><div><ic>document.querySelectorAll('input[name=carousel]')</ic> dans DevTools → voir quel <ic>checked</ic> est <ic>true</ic>. L'état du carousel est <b>littéralement l'état des radios</b>.</div></div>
 </div>
 <hr> <!-- ══ 02 SETINTERVAL ══ -->
-<div class="sec" id="intervalle"> <div class="slabel">02 — Défilement automatique</div> <h2>setInterval — le moteur de l'automatisme</h2>
+<div class="sec" id="intervalle"> <div class="slabel">02 — Défilement automatique</div> <h2>setInterval — le moteur de l'automatisme <a class="anchor-link" href="#intervalle" title="Lien direct">¶</a></h2>
 
 <div class="diag">
   <div class="dtitle">stopAutoSlide + startAutoSlide — reset complet de l'intervalle</div>
@@ -245,7 +1319,7 @@ radios[<span class="nm">1</span>].checked = <span class="kw">true</span>; <span 
 </div>
 
 <div class="diag"> <div class="dtitle">Cycle de vie de l'intervalle — de l'init au premier changement</div> <div style="display:flex;flex-direction:column;gap:.3rem;max-width:560px;"> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 0ms</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#7ee8b8;">startAutoSlide()  interval = setInterval(nextSlide, 5000)</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 5000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide()  currentIndex = (0+1)%3 = 1  radios[1].checked = true</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 10000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide()  currentIndex = (1+1)%3 = 2  radios[2].checked = true</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">t = 15000ms</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#f7d97a;">nextSlide()  currentIndex = (2+1)%3 = 0  retour slide 1</div> </div> <div style="display:grid;grid-template-columns:80px 1fr;gap:.5rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--t3);">mouseenter</div> <div style="background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);border-radius:7px;padding:.3rem .6rem;font-size:.73rem;color:#fda4af;">stopAutoSlide()  clearInterval(interval) · interval = null</div> </div> </div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">let</span> <span class="vr">currentIndex</span> = <span class="nm">0</span>;  <span class="cm">// 0 = slide 1, 1 = slide 2, 2 = slide 3</span>
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">let</span> <span class="vr">currentIndex</span> = <span class="nm">0</span>;  <span class="cm">// 0 = slide 1, 1 = slide 2, 2 = slide 3</span>
 <span class="kw">let</span> <span class="vr">interval</span>;          <span class="cm">// Stocke l'identifiant de l'intervalle actif (ou undefined)</span>
 <span class="kw">const</span> <span class="vr">intervalTime</span> = <span class="nm">5000</span>; <span class="cm">// 5 000 ms = 5 secondes</span> <span class="kw">function</span> <span class="fn">nextSlide</span>() {
 currentIndex = (currentIndex + <span class="nm">1</span>) % radios.length; <span class="cm">// Avance avec retour au début (modulo)</span> radios[currentIndex].checked = <span class="kw">true</span>;              <span class="cm">// Coche le radio  CSS change la slide</span>
@@ -260,9 +1334,29 @@ interval = <span class="kw">null</span>; <span class="cm">// Remet à null pour 
 }
 <span class="fn">startAutoSlide</span>(); <span class="cm">// Lance dès le chargement</span>
 </pre></div> <div class="box warn"><span class="bi"></span><div><b>Pourquoi le <ic>clearInterval</ic> dans startAutoSlide ?</b> Sans lui, appeler <ic>startAutoSlide()</ic> deux fois créerait deux intervalles parallèles qui se chevauchent. Le carrousel s'emballerait — changer de slide toutes les 2.5s, puis 1.67s, etc. Le <ic>clearInterval(interval)</ic> garantit qu'il n'existe jamais plus d'un intervalle actif.</div></div>
+<h3>Gestion du timer — 3 cas critiques</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-green"><div class="kbox-h">startAutoSlide()</div>
+<div class="kbox-item"><ic>clearInterval(interval)</ic> avant de créer</div>
+<div class="kbox-item">Évite l'accumulation de timers</div>
+<div class="kbox-item">Appelé au init + mouseleave</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">stopAutoSlide()</div>
+<div class="kbox-item"><ic>clearInterval(interval)</ic></div>
+<div class="kbox-item"><ic>interval = null</ic> — état propre</div>
+<div class="kbox-item">Appelé au mouseenter + clic manuel</div>
+</div>
+<div class="kbox c-blue"><div class="kbox-h">Clic utilisateur</div>
+<div class="kbox-item">stop + start immédiat</div>
+<div class="kbox-item">Repart de 0 après clic — évite le saut brusque</div>
+<div class="kbox-item">L'utilisateur contrôle le rythme</div>
+</div>
+</div>
+<h3>Pourquoi clearInterval avant setInterval</h3>
+<p>Sans <ic>clearInterval</ic> avant de créer un nouveau <ic>setInterval</ic> : au premier mouseleave après mouseenter, 2 timers tournent → la slide avance 2x plus vite. Au 5ème cycle, 6 timers → la slide avance 6x plus vite. Le <ic>clearInterval</ic> au début de <ic>startAutoSlide()</ic> garantit qu'il n'existe toujours qu'un seul timer actif.</p>
 </div>
 <hr> <!-- ══ 03 MODULO ══ -->
-<div class="sec" id="modulo"> <div class="slabel">03 — La rotation circulaire</div> <h2>L'opérateur % (modulo) — revenir au début</h2>
+<div class="sec" id="modulo"> <div class="slabel">03 — La rotation circulaire</div> <h2>L'opérateur % (modulo) — revenir au début <a class="anchor-link" href="#modulo" title="Lien direct">¶</a></h2>
 
 <div class="diag">
   <div class="dtitle">currentIndex sans modulo vs avec — ce qui se passe à la slide 3</div>
@@ -300,7 +1394,7 @@ interval = <span class="kw">null</span>; <span class="cm">// Remet à null pour 
     </div>
   </div>
 </div>
- <div class="cb2"><span class="cbl2">javascript — pourquoi (currentIndex + 1) % radios.length</span><pre><span class="cm">// radios.length = 3 (slides 0, 1, 2)</span> <span class="cm">// Sans modulo — l'index dépasse le tableau :</span>
+ <div class="code-block"><span class="cb-lang">javascript — pourquoi (currentIndex + 1) % radios.length</span><pre><span class="cm">// radios.length = 3 (slides 0, 1, 2)</span> <span class="cm">// Sans modulo — l'index dépasse le tableau :</span>
 <span class="cm">// 0  1  2  3  4  5  ...  tableau[3] = undefined  plantage</span> <span class="cm">// Avec modulo :</span>
 <span class="cm">// (0 + 1) % 3 = 1 </span>
 <span class="cm">// (1 + 1) % 3 = 2 </span>
@@ -308,21 +1402,129 @@ interval = <span class="kw">null</span>; <span class="cm">// Remet à null pour 
 currentIndex = (currentIndex + <span class="nm">1</span>) % radios.length; <span class="cm">// Jamais > 2</span> radios[currentIndex].checked = <span class="kw">true</span>;
 }
 </pre></div> <div class="diag"> <div class="dtitle">Cycle circulaire avec 3 slides</div> <div style="display:flex;justify-content:center;align-items:center;gap:1rem;flex-wrap:wrap;padding:.8rem 0;"> <div style="background:rgba(232,121,249,.12);border:1px solid rgba(232,121,249,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#f0abfc;text-align:center;">slide<br>0</div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(0+1)%3<br>=1 </div> <div style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#f7d97a;text-align:center;">slide<br>1</div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(1+1)%3<br>=2 </div> <div style="background:rgba(86,209,158,.12);border:1px solid rgba(86,209,158,.4);border-radius:50%;width:70px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;color:#7ee8b8;text-align:center;">slide<br>2</div> <div style="color:var(--t3);font-family:'JetBrains Mono',monospace;font-size:.65rem;text-align:center;">(2+1)%3<br>=0 ↩</div> </div> <div style="font-size:.8rem;color:var(--t2);text-align:center;">Le modulo crée une boucle infinie sans condition <ic>if</ic>. Élégant et extensible à N slides.</div> </div>
+<h3>La rotation circulaire — visualisation</h3>
+<table class="data-table">
+<thead><tr><th><ic>currentIndex</ic></th><th>Action</th><th>Calcul</th><th>Résultat</th></tr></thead>
+<tbody>
+<tr><td class="td-code">0</td><td>Next</td><td><ic>(0+1) % 3</ic></td><td>1 → slide 2</td></tr>
+<tr><td class="td-code">1</td><td>Next</td><td><ic>(1+1) % 3</ic></td><td>2 → slide 3</td></tr>
+<tr><td class="td-code">2</td><td>Next</td><td><ic>(2+1) % 3</ic></td><td>0 → retour slide 1 ✓</td></tr>
+<tr><td class="td-code">2</td><td>Sans modulo</td><td><ic>2+1 = 3</ic></td><td><ic>radios[3]</ic> = <ic>undefined</ic> → erreur</td></tr>
+</tbody></table>
+<div class="callout info"><span class="callout-icon">💡</span><div>L'opérateur <ic>%</ic> est la clé de toute navigation circulaire en JS. Applicable aux carrousels, aux galleries, aux menus cycliques — partout où la fin doit revenir au début.</div></div>
+<h3>L'opérateur modulo — rotation circulaire</h3>
+<table class="data-table">
+<thead><tr><th><ic>currentIndex</ic></th><th>Opération</th><th>Résultat</th><th>Slide affichée</th></tr></thead>
+<tbody>
+<tr><td class="td-code">0</td><td><ic>(0+1) % 3</ic></td><td>1</td><td>Slide 2</td></tr>
+<tr><td class="td-code">1</td><td><ic>(1+1) % 3</ic></td><td>2</td><td>Slide 3</td></tr>
+<tr><td class="td-code">2</td><td><ic>(2+1) % 3</ic></td><td>0</td><td>Slide 1 (retour au début)</td></tr>
+<tr><td class="td-code">n</td><td><ic>(n+1) % 3</ic></td><td><ic>0..2</ic></td><td>Toujours dans les bornes</td></tr>
+</tbody></table>
+<div class="callout warn"><span class="callout-icon">⚠️</span><div>Sans modulo : <ic>currentIndex++</ic> atteindrait 3, puis <ic>radios[3]</ic> = <ic>undefined</ic> → <ic>TypeError: Cannot set property 'checked' of undefined</ic>. Le modulo est la protection mathématique contre le dépassement de tableau.</div></div>
+<h3>L'opérateur modulo — rotation circulaire</h3>
+<table class="data-table">
+<thead><tr><th><ic>currentIndex</ic></th><th>Opération</th><th>Résultat</th><th>Slide affichée</th></tr></thead>
+<tbody>
+<tr><td class="td-code">0</td><td><ic>(0+1) % 3</ic></td><td>1</td><td>Slide 2</td></tr>
+<tr><td class="td-code">1</td><td><ic>(1+1) % 3</ic></td><td>2</td><td>Slide 3</td></tr>
+<tr><td class="td-code">2</td><td><ic>(2+1) % 3</ic></td><td>0</td><td>Slide 1 (retour au début)</td></tr>
+<tr><td class="td-code">n</td><td><ic>(n+1) % 3</ic></td><td><ic>0..2</ic></td><td>Toujours dans les bornes</td></tr>
+</tbody></table>
+<div class="callout warn"><span class="callout-icon">⚠️</span><div>Sans modulo : <ic>currentIndex++</ic> atteindrait 3, puis <ic>radios[3]</ic> = <ic>undefined</ic> → <ic>TypeError: Cannot set property 'checked' of undefined</ic>. Le modulo est la protection mathématique contre le dépassement de tableau.</div></div>
+<h3>L'opérateur modulo — rotation circulaire</h3>
+<table class="data-table">
+<thead><tr><th><ic>currentIndex</ic></th><th>Opération</th><th>Résultat</th><th>Slide affichée</th></tr></thead>
+<tbody>
+<tr><td class="td-code">0</td><td><ic>(0+1) % 3</ic></td><td>1</td><td>Slide 2</td></tr>
+<tr><td class="td-code">1</td><td><ic>(1+1) % 3</ic></td><td>2</td><td>Slide 3</td></tr>
+<tr><td class="td-code">2</td><td><ic>(2+1) % 3</ic></td><td>0</td><td>Slide 1 (retour au début)</td></tr>
+<tr><td class="td-code">n</td><td><ic>(n+1) % 3</ic></td><td><ic>0..2</ic></td><td>Toujours dans les bornes</td></tr>
+</tbody></table>
+<div class="callout warn"><span class="callout-icon">⚠️</span><div>Sans modulo : <ic>currentIndex++</ic> atteindrait 3, puis <ic>radios[3]</ic> = <ic>undefined</ic> → <ic>TypeError: Cannot set property 'checked' of undefined</ic>. Le modulo est la protection mathématique contre le dépassement de tableau.</div></div>
 </div>
 <hr> <!-- ══ 04 PAUSE SURVOL ══ -->
-<div class="sec" id="pause"> <div class="slabel">04 — Pause au survol</div> <h2>mouseenter / mouseleave — UX de courtoisie</h2> <p>Arrêter le défilement quand la souris survole le carrousel est une convention UX : l'utilisateur qui s'attarde sur une slide ne veut pas qu'elle change subitement sous son regard.</p>
+<div class="sec" id="pause"> <div class="slabel">04 — Pause au survol</div> <h2>mouseenter / mouseleave — UX de courtoisie <a class="anchor-link" href="#pause" title="Lien direct">¶</a></h2> <p>Arrêter le défilement quand la souris survole le carrousel est une convention UX : l'utilisateur qui s'attarde sur une slide ne veut pas qu'elle change subitement sous son regard.</p>
 <div class="diag"> <div class="dtitle">Danger de setInterval sans clearInterval — pourquoi interval est vérifié</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:520px;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#fda4af;margin-bottom:.5rem;">Sans vérification</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;"> startAutoSlide() x3<br> <span style="color:#fda4af;"> 3 intervalles actifs</span><br> nextSlide() appelé<br> <span style="color:#fda4af;">3× par tick de 5s</span><br> <span style="color:#fda4af;">slide change 3× trop vite</span> </div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:9px;padding:.8rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;color:#7ee8b8;margin-bottom:.5rem;">Avec vérification</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t2);line-height:1.8;"> if (interval)<br> <span style="padding-left:.7rem;">clearInterval(interval)</span><br> interval = setInterval(...)<br> <span style="color:#7ee8b8;"> 1 seul actif à la fois</span><br> <span style="color:#7ee8b8;">comportement stable</span> </div> </div> </div>
 </div> <div class="diag"> <div class="dtitle">Cycle circulaire — (index + 1) % 3</div> <div style="display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;"> <div style="display:flex;flex-direction:column;gap:.3rem;min-width:220px;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--t3);margin-bottom:.2rem;">Calcul étape par étape</div> <div style="display:grid;grid-template-columns:110px 80px 1fr;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;align-items:center;"> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(0 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">1</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(1 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">2</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:6px;padding:.3rem .6rem;color:#f7d97a;">(2 + 1) % 3</div><div style="color:var(--t3);text-align:center;">=</div><div style="color:#7ee8b8;font-weight:700;">0  retour début</div> </div> </div> <div style="position:relative;width:130px;height:130px;flex-shrink:0;"> <svg viewBox="0 0 130 130" style="width:130px;height:130px;overflow:visible;"> <circle cx="65" cy="65" r="50" fill="none" stroke="rgba(245,197,66,.2)" stroke-width="1.5" stroke-dasharray="4 3"/> <text x="65" y="20" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">0</text> <text x="113" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">1</text> <text x="17" y="90" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="11" fill="#f0abfc" font-weight="700">2</text> <path d="M72 22 Q108 22 110 72" fill="none" stroke="rgba(245,197,66,.5)" stroke-width="1.5" marker-end="url(#arr)"/> <path d="M108 80 Q108 112 65 112" fill="none" stroke="rgba(245,197,66,.5)" stroke-width="1.5" marker-end="url(#arr)"/> <path d="M55 112 Q18 112 22 65" fill="none" stroke="rgba(86,209,158,.6)" stroke-width="1.5" stroke-dasharray="3 2" marker-end="url(#arr2)"/> <text x="65" y="68" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="8" fill="var(--t3)">% 3</text> <defs> <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(245,197,66,.7)"/></marker> <marker id="arr2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(86,209,158,.7)"/></marker> </defs> </svg> <div style="position:absolute;bottom:-22px;width:100%;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:#7ee8b8;">20 = retour au début</div> </div> </div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">if</span> (carouselContainer) {
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">if</span> (carouselContainer) {
 carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseenter'</span>, <span class="fn">stopAutoSlide</span>);
 carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseleave'</span>, <span class="fn">startAutoSlide</span>);
 }
 </pre></div> <div class="diag"> <div class="dtitle">Ligne de temps — interaction souris</div> <div style="display:flex;flex-direction:column;gap:.4rem;"> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=0s</div> <div style="background:rgba(232,121,249,.08);border:1px solid rgba(232,121,249,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f0abfc;">startAutoSlide() — intervalle de 5s actif</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=5s</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f7d97a;">nextSlide()  slide 2</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=7s</div> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#ff9090;">mouseenter  stopAutoSlide() — défilement figé</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=9s</div> <div style="background:rgba(255,107,107,.08);border:1px solid rgba(255,107,107,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#ff9090;">toujours stoppé — l'utilisateur lit la slide</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=11s</div> <div style="background:rgba(86,209,158,.08);border:1px solid rgba(86,209,158,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#7ee8b8;">mouseleave  startAutoSlide() — repart de 0</div> </div> <div style="display:grid;grid-template-columns:90px 1fr;gap:.6rem;align-items:center;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">t=16s</div> <div style="background:rgba(245,197,66,.08);border:1px solid rgba(245,197,66,.2);border-radius:7px;padding:.35rem .7rem;font-size:.75rem;color:#f7d97a;">nextSlide()  slide 3 (5s après le mouseleave)</div> </div> </div> </div>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">mouseenter</span><span class="tl-title">stopAutoSlide()</span></div><div class="tl-body"><ic>clearInterval(interval)</ic> + <ic>interval = null</ic> — le carousel se fige</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">Lecture</span><span class="tl-title">L'utilisateur lit à son rythme</span></div><div class="tl-body">Aucune avance automatique — UX respectueuse</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">mouseleave</span><span class="tl-title">startAutoSlide()</span></div><div class="tl-body"><ic>clearInterval(null)</ic> (no-op) + nouveau <ic>setInterval</ic> — repart de 0</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">Clic manuel</span><span class="tl-title">stopAutoSlide() + startAutoSlide()</span></div><div class="tl-body">Reset complet — évite le saut brusque dans 0.5s</div></div>
+</div>
+<div class="callout warn"><span class="callout-icon">⚠️</span><div><b>Règle d'or des carousels</b> : toujours <b>pausez l'autoplay au survol</b>. Un carousel qui avance pendant la lecture est une mauvaise pratique UX — l'utilisateur perd le contenu. Cette implémentation respecte ce principe via les events <ic>mouseenter/mouseleave</ic>.</div></div>
+<h3>Machine d'état du timer</h3>
+<div class="state-machine">
+<div class="state c-green">En cours</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">mouseenter / clic</div></div>
+<div class="state c-yellow">Pausé</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">mouseleave</div></div>
+<div class="state c-green">En cours</div>
+</div>
+<h3>Diagramme d'interaction utilisateur</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">0s</span><span class="tl-title">Page chargée — startAutoSlide()</span></div><div class="tl-body"><ic>setInterval(nextSlide, 5000)</ic> démarre</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">+5s</span><span class="tl-title">nextSlide() — slide 2</span></div><div class="tl-body"><ic>currentIndex = (0+1) % 3 = 1</ic> → <ic>radios[1].checked = true</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">+8s</span><span class="tl-title">Utilisateur survole</span></div><div class="tl-body">mouseenter → stopAutoSlide() — <ic>clearInterval(interval)</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">+12s</span><span class="tl-title">Quitte le hover</span></div><div class="tl-body">mouseleave → startAutoSlide() — nouveau <ic>setInterval</ic> depuis 0</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">+17s</span><span class="tl-title">nextSlide() — slide 3</span></div><div class="tl-body">Repart depuis là où l'utilisateur s'était arrêté</div></div>
+</div>
+<h3>Machine d'état du timer</h3>
+<div class="state-machine">
+<div class="state c-green">En cours</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">mouseenter / clic</div></div>
+<div class="state c-yellow">Pausé</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">mouseleave</div></div>
+<div class="state c-green">En cours</div>
+</div>
+<h3>Diagramme d'interaction utilisateur</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">0s</span><span class="tl-title">Page chargée — startAutoSlide()</span></div><div class="tl-body"><ic>setInterval(nextSlide, 5000)</ic> démarre</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">+5s</span><span class="tl-title">nextSlide() — slide 2</span></div><div class="tl-body"><ic>currentIndex = (0+1) % 3 = 1</ic> → <ic>radios[1].checked = true</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">+8s</span><span class="tl-title">Utilisateur survole</span></div><div class="tl-body">mouseenter → stopAutoSlide() — <ic>clearInterval(interval)</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">+12s</span><span class="tl-title">Quitte le hover</span></div><div class="tl-body">mouseleave → startAutoSlide() — nouveau <ic>setInterval</ic> depuis 0</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">+17s</span><span class="tl-title">nextSlide() — slide 3</span></div><div class="tl-body">Repart depuis là où l'utilisateur s'était arrêté</div></div>
+</div>
+<h3>Machine d'état du timer</h3>
+<div class="state-machine">
+<div class="state c-green">En cours</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">mouseenter / clic</div></div>
+<div class="state c-yellow">Pausé</div>
+<div class="trans"><div class="trans-line"></div><div class="trans-label">mouseleave</div></div>
+<div class="state c-green">En cours</div>
+</div>
+<h3>Diagramme d'interaction utilisateur</h3>
+<div class="timeline">
+<div class="tl-item"><div class="tl-dot" style="background:#f5c542;border-color:#f5c542;box-shadow:0 0 6px #f5c54244"></div><div class="tl-head"><span class="tl-step">0s</span><span class="tl-title">Page chargée — startAutoSlide()</span></div><div class="tl-body"><ic>setInterval(nextSlide, 5000)</ic> démarre</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#56d19e;border-color:#56d19e;box-shadow:0 0 6px #56d19e44"></div><div class="tl-head"><span class="tl-step">+5s</span><span class="tl-title">nextSlide() — slide 2</span></div><div class="tl-body"><ic>currentIndex = (0+1) % 3 = 1</ic> → <ic>radios[1].checked = true</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#4f8eff;border-color:#4f8eff;box-shadow:0 0 6px #4f8eff44"></div><div class="tl-head"><span class="tl-step">+8s</span><span class="tl-title">Utilisateur survole</span></div><div class="tl-body">mouseenter → stopAutoSlide() — <ic>clearInterval(interval)</ic></div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#ff6b6b;border-color:#ff6b6b;box-shadow:0 0 6px #ff6b6b44"></div><div class="tl-head"><span class="tl-step">+12s</span><span class="tl-title">Quitte le hover</span></div><div class="tl-body">mouseleave → startAutoSlide() — nouveau <ic>setInterval</ic> depuis 0</div></div>
+<div class="tl-item"><div class="tl-dot" style="background:#c084fc;border-color:#c084fc;box-shadow:0 0 6px #c084fc44"></div><div class="tl-head"><span class="tl-step">+17s</span><span class="tl-title">nextSlide() — slide 3</span></div><div class="tl-body">Repart depuis là où l'utilisateur s'était arrêté</div></div>
+</div>
+<div class="diff-view">
+<div class="diff-col diff-bad"><div class="diff-label diff-label-bad">❌ Sans pause (UX frustrante)</div><pre><span class="cmt">// L<span class="str">'utilisateur survole pour lire</span>
+<span class="cmt">// Le carousel continue de défiler</span>
+<span class="cmt">// L'</span>image change sous ses yeux en pleine lecture</span>
+<span class="cmt">// Pratique abandonnée dans les guidelines UX</span></pre></div>
+<div class="diff-col diff-good"><div class="diff-label diff-label-good">✓ Avec pause au hover (standard WCAG 2.1)</div><pre>carouselEl.addEventListener(<span class="str">'mouseenter'</span>, () =&gt; {
+    stopAutoSlide(); <span class="cmt">// pause immédiate</span>
+});
+carouselEl.addEventListener(<span class="str">'mouseleave'</span>, () =&gt; {
+    startAutoSlide(); <span class="cmt">// reprend</span>
+});
+<span class="cmt">// Critère WCAG 2.2.2 : Pause, Stop, Hide</span></pre></div>
+</div>
 </div>
 <hr> <!-- ══ 05 RESET CLIC ══ -->
-<div class="sec" id="reset"> <div class="slabel">05 — Reset au clic manuel</div> <h2>Réinitialiser l'intervalle après une action utilisateur</h2> <p>Quand l'utilisateur clique sur un point indicateur ou une flèche, le chronomètre repart de zéro. Sans ça, la prochaine transition automatique pourrait arriver une fraction de seconde après le clic — une expérience désagréable.</p>
+<div class="sec" id="reset"> <div class="slabel">05 — Reset au clic manuel</div> <h2>Réinitialiser l'intervalle après une action utilisateur <a class="anchor-link" href="#reset" title="Lien direct">¶</a></h2> <p>Quand l'utilisateur clique sur un point indicateur ou une flèche, le chronomètre repart de zéro. Sans ça, la prochaine transition automatique pourrait arriver une fraction de seconde après le clic — une expérience désagréable.</p>
 <div class="diag"> <div class="dtitle">Pourquoi clearInterval avant setInterval — le problème de l'accumulation</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.8rem;"> <div style="background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#fda4af;margin-bottom:.6rem;">Sans clearInterval — accumulation</div> <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;"> <div style="color:var(--t3);">t=0 : startAutoSlide()  intervalle #1</div> <div style="color:var(--t3);">t=2 : clic manuel  startAutoSlide()</div> <div style="color:#fda4af;"> intervalle #2 créé, #1 toujours actif</div> <div style="color:var(--t3);">t=3 : clic  intervalle #3...</div> <div style="color:#fda4af;margin-top:.3rem;">Résultat : slides changent 3× plus vite</div> </div> </div> <div style="background:rgba(86,209,158,.06);border:1px solid rgba(86,209,158,.2);border-radius:10px;padding:.9rem;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;margin-bottom:.6rem;">Avec clearInterval — un seul intervalle</div> <div style="display:flex;flex-direction:column;gap:.25rem;font-family:'JetBrains Mono',monospace;font-size:.67rem;"> <div style="color:var(--t3);">t=0 : startAutoSlide()  intervalle #1</div> <div style="color:var(--t3);">t=2 : clic  clearInterval(#1) d'abord</div> <div style="color:#7ee8b8;"> puis startAutoSlide()  intervalle #2</div> <div style="color:var(--t3);">Un seul actif à tout moment</div> <div style="color:#7ee8b8;margin-top:.3rem;">Résultat : 5s exactes depuis le dernier clic</div> </div> </div> </div> <div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--t3);">if (interval) clearInterval(interval); · interval = setInterval(nextSlide, 5000);</div>
-</div> <div class="cb2"><span class="cbl2">javascript</span><pre><span class="kw">const</span> <span class="vr">controls</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.indicator, .carousel-prev, .carousel-next'</span>);
+</div> <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> <span class="vr">controls</span> = document.<span class="fn">querySelectorAll</span>(<span class="s">'.indicator, .carousel-prev, .carousel-next'</span>);
 controls.<span class="fn">forEach</span>(control => {
 control.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {
 <span class="fn">stopAutoSlide</span>();  <span class="cm">// Annule l'intervalle en cours</span> <span class="fn">startAutoSlide</span>(); <span class="cm">// En recrée un nouveau (repart de 5s)</span> });
@@ -337,21 +1539,166 @@ currentIndex = index; <span class="cm">// Met à jour l'index pour que nextSlide
 </pre></div> <div class="diag"> <div class="dtitle">Sans synchronisation de currentIndex — le bug</div> <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;"> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#ff9090;text-align:center;margin-bottom:.4rem;"> Sans addEventListener 'change'</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);"> état actif CSS : slide 3<br> currentIndex : <span style="color:#f7d97a;">0</span> (pas mis à jour)<br> nextSlide() : (0+1)%3 = 1<br> <span style="color:#ff9090;">passe à la slide 2, pas à la 1</span><br> comportement imprévisible
 </div> </div> <div> <div style="font-family:'JetBrains Mono',monospace;font-size:.63rem;font-weight:700;color:#7ee8b8;text-align:center;margin-bottom:.4rem;"> Avec addEventListener 'change'</div> <div style="font-family:'JetBrains Mono',monospace;font-size:.64rem;background:var(--code);border-radius:8px;padding:.8rem;line-height:2;color:var(--t2);"> état actif CSS : slide 3<br> currentIndex : <span style="color:#7ee8b8;">2</span> (mis à jour)<br> nextSlide() : (2+1)%3 = 0<br> passe à la slide 1<br> séquence correcte 
 </div> </div> </div> </div>
+<h3>Reset après clic manuel — pourquoi c'est important</h3>
+<div class="seq" style="margin:1rem 0">
+<div class="seq-row"><span class="seq-n">1</span><div class="seq-body"><b>Utilisateur clique sur dot/flèche</b> — Change la slide manuellement</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">2</span><div class="seq-body"><b><ic>stopAutoSlide()</ic></b> — Annule le timer en cours</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">3</span><div class="seq-body"><b><ic>startAutoSlide()</ic></b> — Repart de 0 — le prochain auto-advance est dans 5s</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">4</span><div class="seq-body"><b>Synchronisation <ic>currentIndex</ic></b> — Le listener <ic>change</ic> sur les radios met à jour <ic>currentIndex</ic></div></div>
+</div>
+<div class="callout info"><span class="callout-icon">💡</span><div>Sans le reset, si l'utilisateur clique 2s après un auto-advance, la prochaine auto-advance arrive 3s après son clic — déstabilisant. Avec le reset, chaque clic manuel relance le compte à rebours de 5s. L'utilisateur garde le contrôle du rythme.</div></div>
+<h3>Reset après clic manuel — pourquoi c'est important</h3>
+<div class="seq" style="margin:1rem 0">
+<div class="seq-row"><span class="seq-n">1</span><div class="seq-body"><b>Utilisateur clique sur dot/flèche</b> — Change la slide manuellement</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">2</span><div class="seq-body"><b><ic>stopAutoSlide()</ic></b> — Annule le timer en cours</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">3</span><div class="seq-body"><b><ic>startAutoSlide()</ic></b> — Repart de 0 — le prochain auto-advance est dans 5s</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">4</span><div class="seq-body"><b>Synchronisation <ic>currentIndex</ic></b> — Le listener <ic>change</ic> sur les radios met à jour <ic>currentIndex</ic></div></div>
+</div>
+<div class="callout info"><span class="callout-icon">💡</span><div>Sans le reset, si l'utilisateur clique 2s après un auto-advance, la prochaine auto-advance arrive 3s après son clic — déstabilisant. Avec le reset, chaque clic manuel relance le compte à rebours de 5s. L'utilisateur garde le contrôle du rythme.</div></div>
+<h3>Reset après clic manuel — pourquoi c'est important</h3>
+<div class="seq" style="margin:1rem 0">
+<div class="seq-row"><span class="seq-n">1</span><div class="seq-body"><b>Utilisateur clique sur dot/flèche</b> — Change la slide manuellement</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">2</span><div class="seq-body"><b><ic>stopAutoSlide()</ic></b> — Annule le timer en cours</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">3</span><div class="seq-body"><b><ic>startAutoSlide()</ic></b> — Repart de 0 — le prochain auto-advance est dans 5s</div></div>
+<span class="seq-arrow">↓</span>
+<div class="seq-row"><span class="seq-n">4</span><div class="seq-body"><b>Synchronisation <ic>currentIndex</ic></b> — Le listener <ic>change</ic> sur les radios met à jour <ic>currentIndex</ic></div></div>
+</div>
+<div class="callout info"><span class="callout-icon">💡</span><div>Sans le reset, si l'utilisateur clique 2s après un auto-advance, la prochaine auto-advance arrive 3s après son clic — déstabilisant. Avec le reset, chaque clic manuel relance le compte à rebours de 5s. L'utilisateur garde le contrôle du rythme.</div></div>
 </div>
 <hr> <!-- ══ RECAP ══ -->
-<div class="sec" id="recap"> <div class="slabel">06 — Récapitulatif</div> <h2>Le film complet — variables et fonctions</h2>
-<div class="diag" style="margin-top:.8rem;"> <div class="dtitle">Les 3 variables d'état — valeurs selon le contexte</div> <table style="width:100%;border-collapse:collapse;font-size:.75rem;"> <thead><tr> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);text-align:left;">Variable</th> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Au chargement</th> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Après nextSlide()</th> <th style="padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);">Pendant hover</th> </tr></thead> <tbody> <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#f0abfc;">radios</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">NodeList[3], inchangé</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé (lecture seule)</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé</td></tr> <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#fde68a;">currentIndex</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">0</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:#7ee8b8;">(prev+1) % 3</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Gelé (stopAutoSlide)</td></tr> <tr><td style="padding:.45rem .8rem;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:.7rem;color:#7dd3fc;">interval</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">ID setInterval</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:var(--t2);">Inchangé</td><td style="padding:.45rem .8rem;border:1px solid var(--border);color:#fda4af;">null (clearInterval)</td></tr> </tbody> </table>
-</div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.08em;margin-bottom:1rem;">Variables d'état</div> <div style="display:flex;flex-direction:column;gap:.5rem;"> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">radios</div> <div style="color:var(--t2);">Tableau des 3 inputs radio. Jamais modifié. Sert d'index à <ic>radios[currentIndex].checked</ic>.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f7d97a;">currentIndex</div> <div style="color:var(--t2);">Index 0-2 du slide actif. Mis à jour par <ic>nextSlide()</ic> et par le listener <ic>change</ic> des radios manuels.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#7ee8b8;">interval</div> <div style="color:var(--t2);">Identifiant retourné par <ic>setInterval</ic>. <ic>null</ic> si arrêté. Vérifié avant chaque <ic>clearInterval</ic>.</div> </div> </div> </div> <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1.5rem;margin:1.2rem 0;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;color:var(--t3);letter-spacing:.08em;margin-bottom:1rem;">Fonctions</div> <div style="display:flex;flex-direction:column;gap:.7rem;"> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">nextSlide()</div> <div style="color:var(--t2);">Incrémente <ic>currentIndex</ic> avec modulo, coche le radio. Appelée par l'intervalle toutes les 5s.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">startAutoSlide()</div> <div style="color:var(--t2);">Annule l'intervalle existant (si présent) puis en crée un nouveau. Garantit un seul intervalle actif.</div> </div> <div style="display:grid;grid-template-columns:160px 1fr;gap:.8rem;font-size:.82rem;align-items:start;"> <div style="font-family:'JetBrains Mono',monospace;color:#f0abfc;">stopAutoSlide()</div> <div style="color:var(--t2);"><ic>clearInterval</ic> + <ic>interval = null</ic>. Appelée au mouseenter et au clic manuel (avant reset).</div> </div> </div> </div> <div style="background:rgba(232,121,249,.07);border:1px solid rgba(232,121,249,.25);border-radius:12px;padding:1.1rem;font-size:.83rem;color:var(--t2);line-height:1.9;"> <b style="color:#f0abfc;">Dépendances :</b>
-<div class="schema2" style="margin-top:1.2rem;"> <div class="s2t">Machine à états — les 3 états possibles du carrousel</div> <div class="state-machine"> <div style="text-align:center;"> <div class="state" style="background:rgba(86,209,158,.1);border:1px solid rgba(86,209,158,.35);color:#7ee8b8;">RUNNING<br><span style="font-weight:400;font-size:.6rem;">interval actif</span></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">état initial</div> </div> <div class="trans" style="flex-direction:column;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-bottom:.1rem;">mouseenter</div> <div style="display:flex;align-items:center;gap:0;"><div class="trans-line"></div><div style="color:var(--t3);"></div></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-top:.1rem;">mouseleave</div> <div style="display:flex;align-items:center;gap:0;flex-direction:row-reverse;"><div class="trans-line"></div><div style="color:var(--t3);transform:scaleX(-1);"></div></div> </div> <div style="text-align:center;"> <div class="state" style="background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.35);color:#fda4af;">PAUSED<br><span style="font-weight:400;font-size:.6rem;">interval=null</span></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">survol souris</div> </div> <div class="trans" style="flex-direction:column;"> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-bottom:.1rem;">clic manuel</div> <div style="display:flex;align-items:center;gap:0;"><div class="trans-line"></div><div style="color:var(--t3);"></div></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.55rem;color:var(--t3);text-align:center;margin-top:.1rem;">reset complet</div> <div style="display:flex;align-items:center;gap:0;flex-direction:row-reverse;"><div class="trans-line"></div><div style="color:var(--t3);transform:scaleX(-1);"></div></div> </div> <div style="text-align:center;"> <div class="state" style="background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.35);color:#f7d97a;">RESET<br><span style="font-weight:400;font-size:.6rem;">stop + start</span></div> <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--t3);margin-top:.3rem;">après clic indicateur</div> </div> </div> <div style="text-align:center;font-size:.74rem;color:var(--t2);margin-top:.5rem;">RESET revient à RUNNING immédiatement — c'est stop() suivi de start() en une seule opération</div>
-</div> aucune. carousel.js est <b>entièrement autonome</b> — pas de PearTechDB, pas de localStorage, pas d'événement personnalisé. Il interagit uniquement avec le DOM HTML de la page d'accueil via des IDs et classes CSS.
+<div class="sec" id="recap"> <div class="slabel">06 — Récapitulatif</div> <h2>Le film complet — variables et fonctions <a class="anchor-link" href="#recap" title="Lien direct">¶</a></h2>
+<p>carousel.js implémente un carrousel automatique basé sur les inputs radio HTML — une technique CSS-first où JS ne fait que cocher/décocher des boutons radio.</p>
+<h3>Le flux complet</h3>
+<div class="code-block"><span class="cb-lang">javascript</span><pre><span class="cm">// 1. Récupération des 3 radios + guard</span>
+<span class="kw">const</span> radios = [getElementById(<span class="s">'slide1'</span>), getElementById(<span class="s">'slide2'</span>), getElementById(<span class="s">'slide3'</span>)]
+    .filter(r =&gt; r !== <span class="kw">null</span>);
+<span class="kw">if</span> (radios.length !== 3) <span class="kw">return</span>;
+
+<span class="cm">// 2. État partagé</span>
+<span class="kw">let</span> currentIndex = 0;
+<span class="kw">let</span> interval;
+<span class="kw">const</span> intervalTime = 5000;
+
+<span class="cm">// 3. Fonctions</span>
+<span class="kw">function</span> nextSlide()     { currentIndex = (currentIndex + 1) % radios.length; radios[currentIndex].checked = <span class="kw">true</span>; }
+<span class="kw">function</span> startAutoSlide(){ <span class="kw">if</span> (interval) clearInterval(interval); interval = setInterval(nextSlide, 5000); }
+<span class="kw">function</span> stopAutoSlide() { clearInterval(interval); interval = <span class="kw">null</span>; }
+
+<span class="cm">// 4. Démarrage</span>
+startAutoSlide();
+
+<span class="cm">// 5. Pause au survol</span>
+carouselContainer.addEventListener(<span class="s">'mouseenter'</span>, stopAutoSlide);
+carouselContainer.addEventListener(<span class="s">'mouseleave'</span>, startAutoSlide);
+
+<span class="cm">// 6. Reset après clic manuel</span>
+controls.forEach(c =&gt; c.addEventListener(<span class="s">'click'</span>, () =&gt; { stopAutoSlide(); startAutoSlide(); }));
+
+<span class="cm">// 7. Sync état après clic radio direct</span>
+radios.forEach((radio, i) =&gt; radio.addEventListener(<span class="s">'change'</span>, <span class="kw">function</span>() {
+    <span class="kw">if</span> (<span class="kw">this</span>.checked) currentIndex = i;
+}));</pre></div>
+<h3>La technique radio-as-state</h3>
+<p>Les inputs radio avec <ic>name='carousel'</ic> sont mutuellement exclusifs : cocher l'un décoche les autres. Le CSS utilise le sélecteur <ic>#slide1:checked ~ .slide-1</ic> pour afficher uniquement la slide correspondant au radio coché. JS ne gère que <b>quel radio est coché</b> — l'affichage est entièrement CSS. C'est la séparation des responsabilités : état (radio), logique (JS), affichage (CSS).</p>
+<h3>(currentIndex + 1) % radios.length — La rotation circulaire</h3>
+<p>L'opérateur modulo <ic>%</ic> garantit que l'index revient à 0 après la dernière slide. Pour 3 slides : <ic>(2+1)%3 = 0</ic> → retour au début. Sans modulo, l'index passerait à 3 (inexistant) → <ic>radios[3]</ic> = <ic>undefined</ic> → erreur.</p>
+<div class="box ok"><span class="bi">✓</span><div>Le <ic>if (interval) clearInterval(interval)</ic> dans <ic>startAutoSlide()</ic> avant de créer un nouvel intervalle est essentiel. Sans lui, chaque appel à <ic>startAutoSlide()</ic> (au mouseleave par exemple) créerait un intervalle supplémentaire — après 3 survols, le carrousel avancerait 4 fois plus vite.</div></div>
+<h3>Architecture complète en un coup d'œil</h3>
+<table class="data-table">
+<thead><tr><th>Variable/Fonction</th><th>Rôle</th><th>Valeur initiale</th></tr></thead>
+<tbody>
+<tr><td class="td-code"><ic>radios[]</ic></td><td>Référence aux 3 inputs radio</td><td>QuerySelector au démarrage</td></tr>
+<tr><td class="td-code"><ic>currentIndex</ic></td><td>Index actif (0-2)</td><td>0</td></tr>
+<tr><td class="td-code"><ic>interval</ic></td><td>Référence au setInterval actif</td><td><ic>null</ic></td></tr>
+<tr><td class="td-code"><ic>intervalTime</ic></td><td>Délai entre slides</td><td>5000ms</td></tr>
+<tr><td class="td-code"><ic>nextSlide()</ic></td><td>Avance d'un pas + modulo</td><td>Appelée par setInterval</td></tr>
+<tr><td class="td-code"><ic>startAutoSlide()</ic></td><td>clearInterval + setInterval</td><td>Init + mouseleave</td></tr>
+<tr><td class="td-code"><ic>stopAutoSlide()</ic></td><td>clearInterval + null</td><td>mouseenter + clic</td></tr>
+</tbody></table>
+<div class="schema-grid">
+<div class="schema-card yellow"><div class="tag tag-yellow">RADIO INPUT</div><h4>État CSS natif</h4><p>Les inputs radio <ic>#slide1/2/3</ic> contrôlent quelle slide est visible via CSS <ic>:checked ~ .slide</ic></p></div>
+<div class="schema-card blue"><div class="tag tag-blue">setInterval</div><h4>Avance automatique</h4><p><ic>nextSlide()</ic> toutes les 5s — <ic>(index+1) % 3</ic> pour la rotation circulaire</p></div>
+<div class="schema-card green"><div class="tag tag-green">mouseenter/leave</div><h4>Pause intelligente</h4><p>Arrêt au survol, reprise au départ — l'utilisateur garde le contrôle</p></div>
+<div class="schema-card red"><div class="tag tag-red">MutationObserver sync</div><h4>Cohérence d'état</h4><p>Clic direct sur radio → <ic>currentIndex = i</ic> pour garder JS et DOM synchronisés</p></div>
 </div>
-</div> </div>
+<h3>Architecture complète de carousel.js</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">État (3 variables)</div>
+<div class="kbox-item"><ic>let currentIndex = 0</ic> — slide courante</div>
+<div class="kbox-item"><ic>let interval</ic> — référence au setInterval</div>
+<div class="kbox-item"><ic>const intervalTime = 5000</ic> — délai entre slides</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">Fonctions (4)</div>
+<div class="kbox-item"><ic>nextSlide()</ic> — avance + modulo</div>
+<div class="kbox-item"><ic>startAutoSlide()</ic> — clearInterval + setInterval</div>
+<div class="kbox-item"><ic>stopAutoSlide()</ic> — clearInterval + null</div>
+<div class="kbox-item"><ic>syncIndex()</ic> — sync currentIndex après clic radio</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">Events (4)</div>
+<div class="kbox-item"><ic>mouseenter</ic> → stop</div>
+<div class="kbox-item"><ic>mouseleave</ic> → start</div>
+<div class="kbox-item"><ic>click</ic> sur controls → stop + start</div>
+<div class="kbox-item"><ic>change</ic> sur radios → sync currentIndex</div>
+</div>
+</div>
+<h3>Architecture complète de carousel.js</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">État (3 variables)</div>
+<div class="kbox-item"><ic>let currentIndex = 0</ic> — slide courante</div>
+<div class="kbox-item"><ic>let interval</ic> — référence au setInterval</div>
+<div class="kbox-item"><ic>const intervalTime = 5000</ic> — délai entre slides</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">Fonctions (4)</div>
+<div class="kbox-item"><ic>nextSlide()</ic> — avance + modulo</div>
+<div class="kbox-item"><ic>startAutoSlide()</ic> — clearInterval + setInterval</div>
+<div class="kbox-item"><ic>stopAutoSlide()</ic> — clearInterval + null</div>
+<div class="kbox-item"><ic>syncIndex()</ic> — sync currentIndex après clic radio</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">Events (4)</div>
+<div class="kbox-item"><ic>mouseenter</ic> → stop</div>
+<div class="kbox-item"><ic>mouseleave</ic> → start</div>
+<div class="kbox-item"><ic>click</ic> sur controls → stop + start</div>
+<div class="kbox-item"><ic>change</ic> sur radios → sync currentIndex</div>
+</div>
+</div>
+<h3>Architecture complète de carousel.js</h3>
+<div class="grid3" style="margin:1.2rem 0">
+<div class="kbox c-blue"><div class="kbox-h">État (3 variables)</div>
+<div class="kbox-item"><ic>let currentIndex = 0</ic> — slide courante</div>
+<div class="kbox-item"><ic>let interval</ic> — référence au setInterval</div>
+<div class="kbox-item"><ic>const intervalTime = 5000</ic> — délai entre slides</div>
+</div>
+<div class="kbox c-yellow"><div class="kbox-h">Fonctions (4)</div>
+<div class="kbox-item"><ic>nextSlide()</ic> — avance + modulo</div>
+<div class="kbox-item"><ic>startAutoSlide()</ic> — clearInterval + setInterval</div>
+<div class="kbox-item"><ic>stopAutoSlide()</ic> — clearInterval + null</div>
+<div class="kbox-item"><ic>syncIndex()</ic> — sync currentIndex après clic radio</div>
+</div>
+<div class="kbox c-green"><div class="kbox-h">Events (4)</div>
+<div class="kbox-item"><ic>mouseenter</ic> → stop</div>
+<div class="kbox-item"><ic>mouseleave</ic> → start</div>
+<div class="kbox-item"><ic>click</ic> sur controls → stop + start</div>
+<div class="kbox-item"><ic>change</ic> sur radios → sync currentIndex</div>
+</div>
+</div>
+</div>
+
+<hr>
+<div class="sec" id="ordre"><div class="slabel">07 — Ordre du code</div><h2>Pourquoi chaque bloc est placé là où il est <a class="anchor-link" href="#ordre" title="Lien direct">¶</a></h2><p>carousel.js suit la séquence <b>ressources → état partagé → logique → démarrage → événements</b>. L'état (<ic>currentIndex</ic>, <ic>interval</ic>) doit être dans le bon scope pour être partagé entre toutes les fonctions.</p><div class="ordre-seq"><div class="os-bloc"><div class="os-num">1</div><div class="os-card"><div class="os-head"><span class="os-pill init">Isolation + attente DOM</span><span class="os-name">IIFE + DOMContentLoaded</span></div><div class="os-body"><div class="os-why"><b>Les 3 radios HTML doivent exister avant toute récupération.</b> Les éléments <ic>id="slide1/2/3"</ic> font partie du HTML — ils n'existent que quand le DOM est parsé. Toute tentative de les récupérer avant DOMContentLoaded retournerait <ic>null</ic>, le garde clause stopperait tout, et le carrousel ne s'initialiserait jamais.</div><div class="os-err">Sans DOMContentLoaded : <ic>document.getElementById('slide1')</ic> → <ic>null</ic> → <ic>radios.filter(Boolean)</ic> → tableau vide → <ic>radios.length !== 3</ic> → return immédiat.</div></div></div></div><div class="os-arrow">↓ fail fast : vérifier avant d'aller plus loin</div><div class="os-bloc"><div class="os-num">2</div><div class="os-card"><div class="os-head"><span class="os-pill guard">Ressource + protection</span><span class="os-name">const radios = […].filter() + if (radios.length !== 3) return</span></div><div class="os-body"><div class="os-why"><b>Les radios sont la ressource centrale — le guard clause protège tout le code suivant.</b> Le filtre <ic>filter(Boolean)</ic> élimine les <ic>null</ic> si un radio était absent. Le guard clause <ic>if (radios.length !== 3)</ic> stoppe immédiatement si le HTML a été modifié (radio manquant, page différente). Pattern fail-fast : échouer tôt plutôt que propager l'erreur.</div><div class="os-err">Sans guard clause : <ic>radios[0].checked = true</ic> avec un tableau vide → <ic>TypeError: Cannot set properties of undefined</ic>. Difficile à déboguer car l'erreur surgit loin de la cause réelle.</div></div></div></div><div class="os-arrow">↓ état partagé entre nextSlide, startAutoSlide et stopAutoSlide</div><div class="os-bloc"><div class="os-num">3</div><div class="os-card"><div class="os-head"><span class="os-pill data">État partagé</span><span class="os-name">let currentIndex = 0 + let interval + const intervalTime = 5000</span></div><div class="os-body"><div class="os-why"><b>Ces 3 variables sont partagées entre toutes les fonctions — elles doivent être dans le scope commun.</b> <ic>currentIndex</ic> persiste entre les appels de <ic>nextSlide()</ic> pour se souvenir de la slide actuelle. <ic>interval</ic> est créé par <ic>startAutoSlide()</ic> et annulé par <ic>stopAutoSlide()</ic> — les deux fonctions doivent accéder à la même variable.</div><div class="os-err">Si <ic>let interval</ic> était dans <ic>startAutoSlide()</ic> : <ic>stopAutoSlide()</ic> ferait <ic>clearInterval(interval)</ic> sur une variable locale non définie → <ic>clearInterval(undefined)</ic> → le carrousel ne s'arrête jamais au survol. Bug invisible jusqu'aux tests.</div></div></div></div><div class="os-arrow">↓ nextSlide est passée comme callback à setInterval</div><div class="os-bloc"><div class="os-num">4</div><div class="os-card"><div class="os-head"><span class="os-pill util">Logique de rotation</span><span class="os-name">function nextSlide()</span></div><div class="os-body"><div class="os-why"><b>Définie avant <ic>startAutoSlide()</ic> qui la passe à <ic>setInterval</ic>.</b> <ic>startAutoSlide()</ic> fait <ic>setInterval(nextSlide, intervalTime)</ic> — elle référence <ic>nextSlide</ic> par son nom. Les <ic>function</ic> declarations sont hoistées (elles pourraient être écrites après), mais l'ordre logique — définir avant utiliser — est maintenu pour la lisibilité et pour éviter toute confusion si on refactorisait en arrow function (non hoistée).</div><div class="os-dep">Utilise : <ic>currentIndex</ic>, <ic>radios</ic>. Passée à <ic>setInterval()</ic> dans <ic>startAutoSlide()</ic>.</div></div></div></div><div class="os-arrow">↓ start avant stop : la chronologie reflète l'usage</div><div class="os-bloc"><div class="os-num">5</div><div class="os-card"><div class="os-head"><span class="os-pill util">Contrôle auto</span><span class="os-name">function startAutoSlide() + function stopAutoSlide()</span></div><div class="os-body"><div class="os-why"><b>start avant stop — elle crée l'intervalle que stop détruit.</b> <ic>startAutoSlide()</ic> commence par <ic>clearInterval(interval)</ic> pour éviter les doublons (pattern guard), puis crée un nouvel intervalle. <ic>stopAutoSlide()</ic> ne fait qu'annuler ce que <ic>startAutoSlide()</ic> a créé. L'ordre de définition reflète l'ordre de dépendance logique.</div><div class="os-dep">Les deux partagent la variable <ic>interval</ic> du scope englobant (étape 3).</div></div></div></div><div class="os-arrow">↓ lancer le carrousel avant d'attacher les événements de pause</div><div class="os-bloc"><div class="os-num">6</div><div class="os-card"><div class="os-head"><span class="os-pill init">Démarrage effectif</span><span class="os-name">startAutoSlide() — appel initial</span></div><div class="os-body"><div class="os-why"><b>Appelé après toutes les définitions, avant les listeners de pause.</b> Le carrousel doit tourner avant que les événements de pause puissent l'arrêter — on ne peut pas mettre en pause ce qui ne tourne pas encore. Placer cet appel avant les listeners garantit que <ic>interval</ic> est défini quand <ic>stopAutoSlide()</ic> essaiera de l'annuler.</div><div class="os-rule">L'état initial est toujours établi avant les handlers qui le modifient. Configurer, puis écouter.</div></div></div></div><div class="os-arrow">↓ pause au survol — nécessite que le carrousel soit actif</div><div class="os-bloc"><div class="os-num">7</div><div class="os-card"><div class="os-head"><span class="os-pill event">Pause survol</span><span class="os-name">mouseenter / mouseleave sur carouselContainer</span></div><div class="os-body"><div class="os-why"><b>Après le démarrage — la pause n'a de sens que si quelque chose tourne.</b> Ces listeners appellent <ic>stopAutoSlide()</ic> et <ic>startAutoSlide()</ic>, toutes deux déjà définies. C'est un comportement UX secondaire : empêcher qu'une slide change au moment où l'utilisateur la lit. Non critique au fonctionnement du carrousel.</div></div></div></div><div class="os-arrow">↓ clic manuel — synchroniser l'index interne</div><div class="os-bloc"><div class="os-num">8</div><div class="os-card"><div class="os-head"><span class="os-pill event">Contrôle manuel</span><span class="os-name">Controls click + radios change — synchronisation de currentIndex</span></div><div class="os-body"><div class="os-why"><b>En dernier — c'est le cas d'usage le moins fréquent (interaction volontaire).</b> Le listener <ic>change</ic> sur les radios synchronise <ic>currentIndex</ic> quand l'utilisateur clique directement sur un indicateur de slide. Sans cette synchronisation, après un clic sur la slide 3, le prochain défilement automatique repartirait depuis l'index interne (ex: 1) plutôt que depuis 3. Le reset de l'intervalle évite le 'double saut'.</div><div class="os-dep">Utilise : <ic>stopAutoSlide()</ic>, <ic>startAutoSlide()</ic>, <ic>currentIndex</ic>. Tous définis avant.</div></div></div></div></div></div><div class="os-synthese"><div class="os-synthese-title">Règle générale de ce fichier</div><p>La décision architecturale clé : <ic>let interval</ic> dans le scope commun (pas dans <ic>startAutoSlide</ic>) pour que <ic>stopAutoSlide</ic> puisse l'annuler. Les événements de pause et de clic manuel viennent toujours après le démarrage effectif du système.</p><div class="os-grid"><div class="os-grid-item"><div class="og-num">01</div><div class="og-name">IIFE+DOM</div><div class="og-why">Scope + timing</div></div><div class="os-grid-item"><div class="og-num">02</div><div class="og-name">Radios + guard</div><div class="og-why">Fail fast</div></div><div class="os-grid-item"><div class="og-num">03</div><div class="og-name">État partagé</div><div class="og-why">Scope commun</div></div><div class="os-grid-item"><div class="og-num">04</div><div class="og-name">nextSlide()</div><div class="og-why">Logique rotation</div></div><div class="os-grid-item"><div class="og-num">05</div><div class="og-name">start/stop</div><div class="og-why">Contrôle intervalle</div></div><div class="os-grid-item"><div class="og-num">06</div><div class="og-name">Démarrage</div><div class="og-why">Lance le système</div></div><div class="os-grid-item"><div class="og-num">07</div><div class="og-name">Pause survol</div><div class="og-why">UX secondaire</div></div><div class="os-grid-item"><div class="og-num">08</div><div class="og-name">Clic manuel</div><div class="og-why">Cas rare</div></div></div></div>
 
 <hr>
 <!-- GLOSSAIRE -->
 <div class="sec" id="glossaire">
   <div class="slabel">Glossaire</div>
-  <h2>Concepts et termes techniques utilisés dans ce fichier</h2>
+  <h2>Concepts et termes techniques utilisés dans ce fichier <a class="anchor-link" href="#glossaire" title="Lien direct">¶</a></h2>
   <p>Définitions des termes importants rencontrés dans cette documentation.</p>
   <div class="glos-grid">
     <div class="glos-item">
@@ -376,5 +1723,518 @@ currentIndex = index; <span class="cm">// Met à jour l'index pour que nextSlide
     </div>
   </div>
 </div>
+
+<hr class="sep">
+<div class="sec" id="plus-loin">
+  <div class="slabel">✦ Pour aller plus loin</div>
+  <h2>Carousels : gestion des états et de la navigation <a class="anchor-link" href="#plus-loin" title="Lien direct">¶</a></h2>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — l'index courant :</b> L'index du carousel est comme un marque-page dans un livre. Peu importe combien de pages il y a, tu sais toujours où tu en es. Passer à la suivante, c'est juste déplacer le marque-page — pas réécrire le livre.</div></div>
+
+  <div class="callout analogy"><span class="callout-icon">💡</span><div><b>Analogie — le modulo pour la boucle infinie :</b> <ic>(index + 1) % total</ic> est comme une horloge. Après 11h59, il est 12h00, pas 12h60. Le modulo remet le compteur à zéro automatiquement.</div></div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Modifier le DOM à chaque slide plutôt que déplacer un pointeur</div>
+    <div class="gotcha-body">
+      Cacher/montrer les slides en changeant <ic>display</ic> à chaque clic force un reflow. La bonne approche : garder tous les slides dans le DOM, déplacer seulement un <ic>currentIndex</ic> et changer la classe active. Le CSS fait le reste avec <ic>transition: transform</ic>.
+    </div>
+  </div>
+
+  <div class="gotcha">
+    <div class="gotcha-title">🚨 PIÈGE — Auto-play sans pause au hover</div>
+    <div class="gotcha-body">
+      Un carousel qui défile automatiquement pendant que l'utilisateur essaie de lire est une mauvaise UX. Toujours pauser l'auto-play sur <ic>mouseenter</ic> et reprendre sur <ic>mouseleave</ic>. Stocker l'ID de l'intervalle dans une variable pour pouvoir l'annuler avec <ic>clearInterval</ic>.
+    </div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Ajoute des attributs <ic>aria-label</ic> sur les boutons précédent/suivant et <ic>role="region" aria-label="carousel"</ic> sur le container. Les lecteurs d'écran peuvent alors naviguer correctement.</div>
+  </div>
+
+  <div class="protip">
+    <div class="protip-label">PRO TIP</div>
+    <div>Pour des transitions fluides, utilise <ic>transform: translateX(-${index * 100}%)</ic> sur un container qui englobe tous les slides plutôt que d'afficher/masquer chacun. Une seule propriété CSS animée = GPU uniquement.</div>
+  </div>
+
+  <div class="schema-grid">
+    <div class="schema-card yellow"><h4>currentIndex</h4><p>Le seul état à gérer. Toute la logique découle de ce nombre.</p></div>
+    <div class="schema-card green"><h4>Modulo %</h4><p>Rend la navigation circulaire sans if/else. <ic>(i+1) % n</ic> revient à 0 après le dernier.</p></div>
+    <div class="schema-card blue"><h4>Dots indicateurs</h4><p>Synchronisés avec currentIndex. Régénérés ou mis à jour à chaque changement de slide.</p></div>
+    <div class="schema-card purple"><h4>setInterval</h4><p>Auto-play. Toujours stocker l'ID dans une variable pour pouvoir <ic>clearInterval</ic> au besoin.</p></div>
+  </div>
+
+  <div class="diag">
+    <div class="dtitle">Cycle de navigation d'un slide</div>
+    <div class="vchain">
+      <div class="vnode c-gray wide">Clic sur ← ou → (ou swipe touch)</div>
+      <div class="varrow"></div>
+      <div class="vnode c-blue wide"><ic>currentIndex = (currentIndex ± 1 + total) % total</ic></div>
+      <div class="varrow"></div>
+      <div class="vnode c-yellow wide">Retirer la classe <ic>active</ic> de l'ancien slide et dot</div>
+      <div class="varrow"></div>
+      <div class="vnode c-green wide">Ajouter la classe <ic>active</ic> au nouveau slide et dot</div>
+      <div class="varrow"></div>
+      <div class="vnode c-purple wide">CSS <ic>transition: transform</ic> anime le déplacement automatiquement</div>
+    </div>
+  </div>
+
+  <h3>Code source — <ic>carousel.js</ic></h3>
+
+  <div class="file-stats">
+    <div class="fstat">
+      <div class="fstat-val">104</div>
+      <div class="fstat-label">Lignes</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">7</div>
+      <div class="fstat-label">Fonctions</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">4</div>
+      <div class="fstat-label">const / let</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-val">30</div>
+      <div class="fstat-label">Commentaires</div>
+    </div>
+  </div>
+  <div style="margin:.8rem 0 1.2rem;"><span class="pattern-tag" style="background:rgba(245,197,66,.15);border-color:rgba(245,197,66,.4);color:#f7d97a;">🎠 Pattern : setInterval + radio buttons CSS</span></div>
+  <div class="src-block">
+    <div class="src-header">
+      <div class="src-dots">
+        <div class="src-dot r"></div>
+        <div class="src-dot y"></div>
+        <div class="src-dot g"></div>
+      </div>
+      <div class="src-fname">carousel.js</div>
+      <div class="src-badge">104 lignes</div>
+    </div>
+    <div class="src-body">
+      <pre><span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"><span class="cmt">// carousel.js - Défilement automatique du carrousel</span></span>
+<span class="ln"><span class="cmt">// Gère le changement automatique des slides toutes</span></span>
+<span class="ln"><span class="cmt">// les 5 secondes via les boutons radio HTML</span></span>
+<span class="ln"><span class="cmt">// ============================================</span></span>
+<span class="ln"></span>
+<span class="ln"><span class="cmt">// Utilisation d'une IIFE (Immediately Invoked Function Expression) pour isoler le code</span></span>
+<span class="ln"><span class="cmt">// et éviter les conflits de variables avec d'autres scripts</span></span>
+<span class="ln">(<span class="kw">function</span>() {</span>
+<span class="ln">    <span class="s">'use strict'</span>; <span class="cmt">// Active le mode strict pour une meilleure sécurité et optimisation</span></span>
+<span class="ln"></span>
+<span class="ln">    <span class="cmt">// Attend que le DOM soit complètement chargé avant d'exécuter le code</span></span>
+<span class="ln">    <span class="bi">document</span>.<span class="fn">addEventListener</span>(<span class="s">'DOMContentLoaded'</span>, <span class="kw">function</span>() {</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Récupère les trois boutons radio du carrousel par leur ID</span></span>
+<span class="ln">        <span class="cmt">// Utilise un tableau et filtre les éventuels null si un élément est manquant</span></span>
+<span class="ln">        <span class="kw">const</span> radios = [</span>
+<span class="ln">            <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'slide1'</span>), <span class="cmt">// Premier bouton radio</span></span>
+<span class="ln">            <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'slide2'</span>), <span class="cmt">// Deuxième bouton radio</span></span>
+<span class="ln">            <span class="bi">document</span>.<span class="fn">getElementById</span>(<span class="s">'slide3'</span>)  <span class="cmt">// Troisième bouton radio</span></span>
+<span class="ln">        ].<span class="fn">filter</span>(r =&gt; r !== <span class="kw">null</span>); <span class="cmt">// Garde uniquement les éléments existants (supprime les null)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Vérifie qu'on a bien trois radios (si le HTML est correct)</span></span>
+<span class="ln">        <span class="kw">if</span> (radios.length !== <span class="n">3</span>) {</span>
+<span class="ln">            <span class="cmt">// Affiche un avertissement dans la console si les radios sont introuvables</span></span>
+<span class="ln">            <span class="bi">console</span>.<span class="fn">warn</span>(<span class="s">'Carrousel automatique : radios introuvables'</span>);</span>
+<span class="ln">            <span class="kw">return</span>; <span class="cmt">// Arrête l'exécution du script</span></span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="kw">let</span> currentIndex = <span class="n">0</span>; <span class="cmt">// Index de la slide actuellement affichée (commence à 0)</span></span>
+<span class="ln">        <span class="kw">let</span> interval; <span class="cmt">// Variable pour stocker l'identifiant du setInterval (pour pouvoir l'arrêter)</span></span>
+<span class="ln">        <span class="kw">const</span> carouselContainer = <span class="bi">document</span>.<span class="fn">querySelector</span>(<span class="s">'.carousel-container'</span>); <span class="cmt">// Récupère le conteneur du carrousel</span></span>
+<span class="ln">        <span class="kw">const</span> intervalTime = <span class="n">5000</span>; <span class="cmt">// Durée entre chaque slide (5000 ms = 5 secondes)</span></span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">/**</span>
+<span class="ln">         * Passe à la slide suivante</span>
+<span class="ln">         */</span></span>
+<span class="ln">        <span class="kw">function</span> <span class="fn">nextSlide</span>() {</span>
+<span class="ln">            <span class="cmt">// Calcule l'index suivant : (index actuel + 1) modulo le nombre total de slides</span></span>
+<span class="ln">            <span class="cmt">// Le modulo permet de revenir à 0 après la dernière slide</span></span>
+<span class="ln">            currentIndex = (currentIndex + <span class="n">1</span>) % radios.length;</span>
+<span class="ln">            <span class="cmt">// Coche le bouton radio correspondant à la nouvelle slide</span></span>
+<span class="ln">            <span class="cmt">// Ceci déclenche automatiquement le changement d'image via le CSS</span></span>
+<span class="ln">            radios[currentIndex].checked = <span class="kw">true</span>;</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">/**</span>
+<span class="ln">         * Démarre le défilement automatique</span>
+<span class="ln">         */</span></span>
+<span class="ln">        <span class="kw">function</span> <span class="fn">startAutoSlide</span>() {</span>
+<span class="ln">            <span class="cmt">// Si un intervalle existe déjà, on le nettoie pour éviter les doublons</span></span>
+<span class="ln">            <span class="kw">if</span> (interval) <span class="bi">clearInterval</span>(interval);</span>
+<span class="ln">            <span class="cmt">// Crée un nouvel intervalle qui appelle nextSlide toutes les intervalTime ms</span></span>
+<span class="ln">            interval = <span class="bi">setInterval</span>(nextSlide, intervalTime);</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">/**</span>
+<span class="ln">         * Arrête le défilement automatique</span>
+<span class="ln">         */</span></span>
+<span class="ln">        <span class="kw">function</span> <span class="fn">stopAutoSlide</span>() {</span>
+<span class="ln">            <span class="cmt">// Si un intervalle existe, on l'arrête et on remet la variable à null</span></span>
+<span class="ln">            <span class="kw">if</span> (interval) {</span>
+<span class="ln">                <span class="bi">clearInterval</span>(interval);</span>
+<span class="ln">                interval = <span class="kw">null</span>; <span class="cmt">// Indique qu'il n'y a plus d'intervalle actif</span></span>
+<span class="ln">            }</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Lance le défilement automatique au chargement de la page</span></span>
+<span class="ln">        <span class="fn">startAutoSlide</span>();</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Si le conteneur du carrousel existe, on ajoute des écouteurs pour la pause au survol</span></span>
+<span class="ln">        <span class="kw">if</span> (carouselContainer) {</span>
+<span class="ln">            <span class="cmt">// Quand la souris entre dans le carrousel, on arrête le défilement</span></span>
+<span class="ln">            carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseenter'</span>, stopAutoSlide);</span>
+<span class="ln">            <span class="cmt">// Quand la souris quitte le carrousel, on redémarre le défilement</span></span>
+<span class="ln">            carouselContainer.<span class="fn">addEventListener</span>(<span class="s">'mouseleave'</span>, startAutoSlide);</span>
+<span class="ln">        }</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Sélectionne tous les contrôles manuels : indicateurs (points), flèches précédent/suivant</span></span>
+<span class="ln">        <span class="kw">const</span> controls = <span class="bi">document</span>.<span class="fn">querySelectorAll</span>(<span class="s">'.indicator, .carousel-prev, .carousel-next'</span>);</span>
+<span class="ln">        <span class="cmt">// Pour chaque contrôle, on ajoute un écouteur de clic</span></span>
+<span class="ln">        controls.<span class="fn">forEach</span>(control =&gt; {</span>
+<span class="ln">            control.<span class="fn">addEventListener</span>(<span class="s">'click'</span>, <span class="kw">function</span>() {</span>
+<span class="ln">                <span class="cmt">// Lors d'un clic manuel, on réinitialise le minuteur :</span></span>
+<span class="ln">                <span class="cmt">// on arrête l'ancien intervalle et on en redémarre un nouveau</span></span>
+<span class="ln">                <span class="fn">stopAutoSlide</span>();</span>
+<span class="ln">                <span class="fn">startAutoSlide</span>();</span>
+<span class="ln">            });</span>
+<span class="ln">        });</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Pour chaque bouton radio, on surveille le changement d'état (lorsque l'utilisateur clique sur un indicateur)</span></span>
+<span class="ln">        radios.<span class="fn">forEach</span>((radio, index) =&gt; {</span>
+<span class="ln">            radio.<span class="fn">addEventListener</span>(<span class="s">'change'</span>, <span class="kw">function</span>() {</span>
+<span class="ln">                <span class="cmt">// Si ce bouton radio est maintenant coché, on met à jour l'index courant</span></span>
+<span class="ln">                <span class="kw">if</span> (<span class="kw">this</span>.checked) {</span>
+<span class="ln">                    currentIndex = index; <span class="cmt">// L'index devient celui de la slide affichée</span></span>
+<span class="ln">                }</span>
+<span class="ln">            });</span>
+<span class="ln">        });</span>
+<span class="ln"></span>
+<span class="ln">        <span class="cmt">// Message de confirmation dans la console pour le débogage</span></span>
+<span class="ln">        <span class="bi">console</span>.<span class="fn">log</span>(<span class="s">'Carrousel automatique activé (intervalle 5s)'</span>);</span>
+<span class="ln">    });</span>
+<span class="ln">})();</span></pre>
+    </div><div class="src-fade"></div>
+<button class="src-expand-btn" data-lines="104"><span>▼</span> Voir tout le code (104 lignes)</button>
+  </div>
+
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="decryptage">
+  <div class="slabel">⌨ Décryptage du code complet</div>
+  <h2>carousel.js — chaque ligne expliquée <a class="anchor-link" href="#decryptage" title="Lien direct">¶</a></h2>
+
+  <h3>Navigation et boucle infinie avec le modulo</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> slides  = document.<span class="fn">querySelectorAll</span>(<span class="str">'.carousel-slide'</span>);
+<span class="kw">const</span> total   = slides.length;
+<span class="kw">let</span>   current = <span class="nm">0</span>;
+
+<span class="kw">function</span> <span class="fn">goTo</span>(index) {
+
+  <span class="cmt">// ① Retirer l'état actif de l'ancien slide</span>
+  slides[current].classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+
+  <span class="cmt">// ② Modulo pour la navigation circulaire</span>
+  <span class="cmt">// goTo(5) sur 5 slides → 5 % 5 = 0 (retour au début)</span>
+  <span class="cmt">// goTo(-1) → (-1 % 5 + 5) % 5 = 4 (dernier slide)</span>
+  <span class="cmt">// Le +total évite les résultats négatifs en JS</span>
+  current = ((index % total) + total) % total;
+
+  <span class="cmt">// ③ Activer le nouveau slide</span>
+  slides[current].classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+}
+
+<span class="kw">function</span> <span class="fn">next</span>() { <span class="fn">goTo</span>(current + <span class="nm">1</span>); }
+<span class="kw">function</span> <span class="fn">prev</span>() { <span class="fn">goTo</span>(current - <span class="nm">1</span>); }</pre></div>
+
+  <h3>Auto-play avec pause au hover</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">let</span> timer = <span class="kw">null</span>;
+
+<span class="kw">function</span> <span class="fn">startAutoplay</span>() {
+  <span class="cmt">// Stocker l'ID est obligatoire pour pouvoir arrêter l'intervalle</span>
+  timer = <span class="fn">setInterval</span>(next, <span class="nm">4000</span>);
+}
+
+<span class="kw">function</span> <span class="fn">stopAutoplay</span>() {
+  <span class="fn">clearInterval</span>(timer);
+  timer = <span class="kw">null</span>; <span class="cmt">// réinitialise pour pouvoir vérifier si actif</span>
+}
+
+<span class="kw">const</span> container = document.<span class="fn">querySelector</span>(<span class="str">'.carousel'</span>);
+container.<span class="fn">addEventListener</span>(<span class="str">'mouseenter'</span>, stopAutoplay);
+container.<span class="fn">addEventListener</span>(<span class="str">'mouseleave'</span>, startAutoplay);
+<span class="fn">startAutoplay</span>();</pre></div>
+
+  <h3>Support swipe tactile</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">let</span> touchStartX = <span class="nm">0</span>;
+
+container.<span class="fn">addEventListener</span>(<span class="str">'touchstart'</span>, <span class="kw">function</span>(e) {
+  <span class="cmt">// e.touches[0] = premier doigt posé sur l'écran</span>
+  touchStartX = e.touches[<span class="nm">0</span>].clientX;
+});
+
+container.<span class="fn">addEventListener</span>(<span class="str">'touchend'</span>, <span class="kw">function</span>(e) {
+  <span class="kw">const</span> diff = touchStartX - e.changedTouches[<span class="nm">0</span>].clientX;
+
+  <span class="cmt">// Seuil 50px évite les micro-mouvements accidentels</span>
+  <span class="cmt">// diff > 0  : swipe gauche → slide suivante</span>
+  <span class="cmt">// diff < 0  : swipe droite → slide précédente</span>
+  <span class="kw">if</span> (Math.<span class="fn">abs</span>(diff) > <span class="nm">50</span>) {
+    diff > <span class="nm">0</span> ? <span class="fn">next</span>() : <span class="fn">prev</span>();
+  }
+});</pre></div>
+</div>
+
+
+<hr class="sep">
+<div class="sec" id="code-annote">
+  <div class="slabel">⟨/⟩ Code annoté — carousel.js complet</div>
+  <h2>Chaque ligne décortiquée <a class="anchor-link" href="#code-annote" title="Lien direct">¶</a></h2>
+
+  <h3>① Navigation et modulo — l'index circulaire</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">const</span> <span class="vr">slides</span>       = document.<span class="fn">querySelectorAll</span>(<span class="str">'.carousel-slide'</span>);
+<span class="kw">const</span> <span class="vr">total</span>        = <span class="vr">slides</span>.length;
+<span class="kw">let</span>   <span class="vr">currentIndex</span> = <span class="nm">0</span>;
+<span class="cmt">// Un seul état à gérer : currentIndex.
+// Tout le reste (classes active, dots, transform) découle de ce nombre.</span>
+
+<span class="kw">function</span> <span class="fn">goTo</span>(index) {
+  <span class="cmt">// ── Retire l'état actuel ──────────────────────────────────────────</span>
+  <span class="vr">slides</span>[<span class="vr">currentIndex</span>].classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+  <span class="vr">dots</span>[<span class="vr">currentIndex</span>].classList.<span class="fn">remove</span>(<span class="str">'active'</span>);
+
+  <span class="cmt">// ── Calcule le nouvel index ───────────────────────────────────────</span>
+  <span class="vr">currentIndex</span> = ((<span class="vr">index</span> % <span class="vr">total</span>) + <span class="vr">total</span>) % <span class="vr">total</span>;
+  <span class="cmt">// Double modulo pour gérer les négatifs :
+  // Si index = -1, total = 5 :
+  //   -1 % 5 = -1  (en JS, % peut être négatif)
+  //   (-1 + 5) % 5 = 4 % 5 = 4 ✓ (dernier slide)
+  // Si index = 5, total = 5 :
+  //   5 % 5 = 0  → revient au premier slide ✓</span>
+
+  <span class="cmt">// ── Applique le nouvel état ───────────────────────────────────────</span>
+  <span class="vr">slides</span>[<span class="vr">currentIndex</span>].classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+  <span class="vr">dots</span>[<span class="vr">currentIndex</span>].classList.<span class="fn">add</span>(<span class="str">'active'</span>);
+}
+
+<span class="kw">function</span> <span class="fn">next</span>() { <span class="fn">goTo</span>(<span class="vr">currentIndex</span> + <span class="nm">1</span>); }
+<span class="kw">function</span> <span class="fn">prev</span>() { <span class="fn">goTo</span>(<span class="vr">currentIndex</span> - <span class="nm">1</span>); }
+<span class="cmt">// next() et prev() passent des index potentiellement hors limites (5, -1).
+// goTo() les normalise avec le double modulo.</span></pre></div>
+
+  <h3>② Auto-play avec pause au hover</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">let</span> <span class="vr">autoplayInterval</span> = <span class="kw">null</span>;
+<span class="cmt">// Variable pour stocker l'ID de l'intervalle. null = auto-play arrêté.</span>
+
+<span class="kw">function</span> <span class="fn">startAutoplay</span>(delay = <span class="nm">4000</span>) {
+  <span class="fn">stopAutoplay</span>(); <span class="cmt">// Toujours stopper avant de relancer → évite les intervalles multiples</span>
+  <span class="vr">autoplayInterval</span> = <span class="fn">setInterval</span>(<span class="fn">next</span>, <span class="vr">delay</span>);
+}
+
+<span class="kw">function</span> <span class="fn">stopAutoplay</span>() {
+  <span class="fn">clearInterval</span>(<span class="vr">autoplayInterval</span>);
+  <span class="vr">autoplayInterval</span> = <span class="kw">null</span>;
+  <span class="cmt">// clearInterval sur null est silencieux (pas d'erreur).
+  // On remet à null pour indiquer clairement l'état "arrêté".</span>
+}
+
+carouselContainer.<span class="fn">addEventListener</span>(<span class="str">'mouseenter'</span>, <span class="fn">stopAutoplay</span>);
+carouselContainer.<span class="fn">addEventListener</span>(<span class="str">'mouseleave'</span>, () => <span class="fn">startAutoplay</span>());
+<span class="cmt">// L'utilisateur est en train de lire → on pause.
+// Il part → on reprend.
+// Pas de clearInterval manuel : stopAutoplay s'en charge.</span></pre></div>
+
+  <h3>③ Touch support — swipe gauche/droite</h3>
+  <div class="code-block"><span class="cb-lang">javascript</span><pre><span class="kw">let</span> <span class="vr">touchStartX</span> = <span class="nm">0</span>;
+
+carouselContainer.<span class="fn">addEventListener</span>(<span class="str">'touchstart'</span>, <span class="vr">e</span> => {
+  <span class="vr">touchStartX</span> = e.touches[<span class="nm">0</span>].clientX;
+  <span class="cmt">// e.touches[0] = premier doigt. clientX = position horizontale en pixels.</span>
+}, { passive: <span class="kw">true</span> });
+<span class="cmt">// { passive: true } : indique au navigateur qu'on n'appellera pas preventDefault().
+// Permet un scroll natif fluide (le navigateur n'attend pas notre JS pour scroller).</span>
+
+carouselContainer.<span class="fn">addEventListener</span>(<span class="str">'touchend'</span>, <span class="vr">e</span> => {
+  <span class="kw">const</span> <span class="vr">delta</span> = e.changedTouches[<span class="nm">0</span>].clientX - <span class="vr">touchStartX</span>;
+  <span class="cmt">// changedTouches : les doigts qui ont changé d'état (ici : levé).
+  // delta > 0 : swipe vers la droite → slide précédente.
+  // delta < 0 : swipe vers la gauche → slide suivante.</span>
+
+  <span class="kw">if</span> (Math.<span class="fn">abs</span>(<span class="vr">delta</span>) < <span class="nm">50</span>) <span class="kw">return</span>;
+  <span class="cmt">// Ignore les micro-mouvements (< 50px). Évite les faux swipes pendant un scroll.</span>
+
+  <span class="vr">delta</span> > <span class="nm">0</span> ? <span class="fn">prev</span>() : <span class="fn">next</span>();
+}, { passive: <span class="kw">true</span> });</pre></div>
+
+</div>
+
+<script>
+
+(function() {
+  'use strict';
+
+  /* ───────────────────────────────────────────────
+     BARRE DE PROGRESSION DE LECTURE
+  ─────────────────────────────────────────────── */
+  var bar = document.createElement('div');
+  bar.id = 'read-progress';
+  document.body.prepend(bar);
+
+  function updateProgress() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docH      = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (docH > 0 ? Math.min(100, (scrollTop / docH) * 100) : 0) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  /* ───────────────────────────────────────────────
+     NAV ACTIVE AU SCROLL
+  ─────────────────────────────────────────────── */
+  var navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  if (navLinks.length > 0) {
+    var secs = navLinks.reduce(function(acc, a) {
+      var el = document.getElementById(a.getAttribute('href').slice(1));
+      if (el) acc.push({ el: el, a: a });
+      return acc;
+    }, []);
+
+    if (secs.length > 0) {
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            navLinks.forEach(function(a) { a.classList.remove('active'); });
+            var hit = secs.find(function(s) { return s.el === entry.target; });
+            if (hit) hit.a.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-56px 0px -55% 0px', threshold: 0 });
+      secs.forEach(function(s) { io.observe(s.el); });
+    }
+  }
+
+  /* ───────────────────────────────────────────────
+     BOUTON COPIER
+  ─────────────────────────────────────────────── */
+  var COPY_SVG  = '<svg viewBox="0 0 16 16"><path d="M4 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V2zm2-1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6z"/><path d="M2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h7a1 1 0 0 0 0-2H3V6a1 1 0 0 0-1-1z"/></svg>';
+  var CHECK_SVG = '<svg viewBox="0 0 16 16"><path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/></svg>';
+
+  function makeBtn(extraClass) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn' + (extraClass ? ' ' + extraClass : '');
+    btn.innerHTML = COPY_SVG + ' Copier';
+    btn.setAttribute('aria-label', 'Copier le code');
+    return btn;
+  }
+
+  function attachCopy(btn, getCode) {
+    btn.addEventListener('click', function() {
+      var code = getCode();
+      if (!code) return;
+      var finish = function() {
+        btn.innerHTML = CHECK_SVG + ' Copié !';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.innerHTML = COPY_SVG + ' Copier';
+          btn.classList.remove('copied');
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(finish).catch(fallback);
+      } else {
+        fallback();
+      }
+      function fallback() {
+        try {
+          var ta = document.createElement('textarea');
+          ta.value = code;
+          ta.style.cssText = 'position:fixed;top:-9999px;opacity:0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          finish();
+        } catch(e) {}
+      }
+    });
+  }
+
+  /* Inline code-blocks */
+  document.querySelectorAll('.code-block').forEach(function(block) {
+    var pre = block.querySelector('pre');
+    if (!pre) return;
+    block.style.position = 'relative';
+    var btn = makeBtn('abs');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    block.appendChild(btn);
+  });
+
+  /* Src-blocks (code source complet) */
+  document.querySelectorAll('.src-block').forEach(function(block) {
+    var header = block.querySelector('.src-header');
+    var pre    = block.querySelector('pre');
+    if (!header || !pre) return;
+    var btn = makeBtn('');
+    attachCopy(btn, function() { return pre.innerText || pre.textContent || ''; });
+    header.appendChild(btn);
+  });
+
+  /* ───────────────────────────────────────────────
+     EXPAND / COLLAPSE code source
+  ─────────────────────────────────────────────── */
+  document.querySelectorAll('.src-expand-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var block   = this.closest('.src-block');
+      if (!block) return;
+      var body    = block.querySelector('.src-body');
+      var fade    = block.querySelector('.src-fade');
+      if (!body) return;
+      var expanded = body.classList.toggle('expanded');
+      if (fade) fade.style.opacity = expanded ? '0' : '1';
+      this.innerHTML = expanded
+        ? '<span>▲</span> Réduire'
+        : '<span>▼</span> Voir tout (' + (this.dataset.lines || '?') + ' lignes)';
+    });
+  });
+
+
+  /* ── Wrapper responsive pour les tables ── */
+  document.querySelectorAll('table').forEach(function(tbl) {
+    if (tbl.closest('.tbl-wrap')) return;
+    var wrap = document.createElement('div');
+    wrap.className = 'tbl-wrap';
+    tbl.parentNode.insertBefore(wrap, tbl);
+    wrap.appendChild(tbl);
+  });
+
+})();
+
+</script>
+</div>
+<!-- DOCS-FOOTER -->
+<div class="docs-footer"><div class="docs-footer-title">📚 Tous les modules PearTech</div><div class="docs-grid">
+    <a href="animation_docs.html" class="docs-link"><span class="docs-link-icon">✨</span>animation.js</a>
+    <a href="#" class="docs-link current"><span class="docs-link-icon">🎠</span>carousel.js</a>
+    <a href="cart_docs.html" class="docs-link"><span class="docs-link-icon">🛒</span>cart.js</a>
+    <a href="catalogue_docs.html" class="docs-link"><span class="docs-link-icon">📦</span>catalogue.js</a>
+    <a href="confirmation_docs.html" class="docs-link"><span class="docs-link-icon">✅</span>confirmation.js</a>
+    <a href="contact_docs.html" class="docs-link"><span class="docs-link-icon">📬</span>contact.js</a>
+    <a href="darkmode_docs.html" class="docs-link"><span class="docs-link-icon">🌙</span>darkmode.js</a>
+    <a href="data_docs.html" class="docs-link"><span class="docs-link-icon">🗄️</span>data.js</a>
+    <a href="dropdown_docs.html" class="docs-link"><span class="docs-link-icon">📋</span>dropdown.js</a>
+    <a href="faq_docs.html" class="docs-link"><span class="docs-link-icon">❓</span>faq.js</a>
+    <a href="favoris_docs.html" class="docs-link"><span class="docs-link-icon">❤️</span>favoris.js</a>
+    <a href="filtre_docs.html" class="docs-link"><span class="docs-link-icon">🔍</span>filtre.js</a>
+    <a href="main_docs.html" class="docs-link"><span class="docs-link-icon">🚀</span>main.js</a>
+    <a href="menu_burger_docs.html" class="docs-link"><span class="docs-link-icon">🍔</span>menu_burger.js</a>
+    <a href="paiement_docs.html" class="docs-link"><span class="docs-link-icon">💳</span>paiement.js</a>
+    <a href="panier_docs.html" class="docs-link"><span class="docs-link-icon">🛍️</span>panier.js</a>
+    <a href="product_detail_docs.html" class="docs-link"><span class="docs-link-icon">📱</span>product_detail.js</a>
+    <a href="profil_docs.html" class="docs-link"><span class="docs-link-icon">👤</span>profil.js</a>
+    <a href="recherche_docs.html" class="docs-link"><span class="docs-link-icon">🔎</span>recherche.js</a>
+  </div></div>
 </body>
 </html>
