@@ -95,7 +95,29 @@
             // sans crasher l'application (le panier reste fonctionnel en mémoire)
             showNotification('Impossible de sauvegarder le panier (stockage indisponible).', 'error');
         }
-        updateCartBadge(); // Met à jour le badge quoi qu'il arrive
+        updateCartBadge();  // Met à jour le badge quoi qu'il arrive
+        syncToServer();     // Mirroite le panier en base si connecté
+    }
+
+    // ── Synchronisation du panier avec le serveur ─────────────────
+    // Quand l'utilisateur est connecté, le panier local est recopié en base
+    // (on vide puis on ré-ajoute) pour qu'il soit conservé entre les appareils.
+    let syncEnCours = false;
+    async function syncToServer() {
+        if (!(window.PearTechAPI && PearTechAPI.isLoggedIn())) return;
+        if (syncEnCours) return; // évite les envois concurrents
+        syncEnCours = true;
+        const snapshot = JSON.parse(JSON.stringify(cart)); // copie figée
+        try {
+            await PearTechAPI.panierVider();
+            for (const item of snapshot) {
+                await PearTechAPI.panierAjouter(item.id, item.quantity, item.options || []);
+            }
+        } catch (e) {
+            console.warn('Sync panier échouée :', e.message);
+        } finally {
+            syncEnCours = false;
+        }
     }
 
     // ── Ajout d'un produit au panier ──────────────────────────────
@@ -148,7 +170,10 @@
     window.PearTechCart = {
         add:     addToCart,          // Méthode pour ajouter un produit
         getCart: () => cart,         // Retourne l'état actuel du panier
-        clear:   () => { cart = []; saveCart(); } // Vide complètement le panier
+        // Remplace tout le panier (utilisé par cart.js après +/-/suppression)
+        updateCart: (nouveauPanier) => { cart = nouveauPanier || []; saveCart(); },
+        clear:   () => { cart = []; saveCart(); }, // Vide complètement le panier
+        sync:    syncToServer        // Force la synchro serveur (après connexion)
     };
 
     // Initialise le badge au chargement du script

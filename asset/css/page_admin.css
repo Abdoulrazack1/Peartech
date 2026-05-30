@@ -1,0 +1,112 @@
+/* ============================================================
+   page_admin.css — Espace administrateur PearTech
+   Thème sombre autonome (la page admin ne charge pas le reste du site).
+   ============================================================ */
+
+:root {
+    --bg:       #0f172a;
+    --panel:    #1e293b;
+    --panel-2:  #273449;
+    --border:   #334155;
+    --text:     #e2e8f0;
+    --muted:    #94a3b8;
+    --primary:  #3b82f6;
+    --primary-d:#2563eb;
+    --danger:   #ef4444;
+    --ok:       #10b981;
+    --warn:     #f59e0b;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+h1 { font-size: 1.4rem; margin: 0 0 1.2rem; }
+h2 { font-size: 1.15rem; margin: 0 0 1rem; }
+a { color: var(--primary); }
+
+#admin-app > .loading,
+#admin-content .loading { color: var(--muted); }
+
+/* ── Écran de connexion ─────────────────────────────────── */
+.admin-login {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+}
+.admin-login-box {
+    width: 100%; max-width: 380px; background: var(--panel);
+    border: 1px solid var(--border); border-radius: 14px; padding: 2rem;
+}
+.admin-login-box h1 { text-align: center; }
+.admin-login-box .sub { color: var(--muted); text-align: center; margin: -.6rem 0 1.4rem; font-size: .9rem; }
+
+/* ── Structure générale ─────────────────────────────────── */
+.admin-shell { display: flex; min-height: 100vh; }
+.admin-side {
+    width: 230px; background: var(--panel); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 1.2rem; flex-shrink: 0;
+}
+.admin-brand { font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; }
+.admin-brand span { color: var(--primary); font-weight: 600; }
+.admin-side nav { display: flex; flex-direction: column; gap: .25rem; }
+.admin-side nav button {
+    text-align: left; background: none; border: none; color: var(--muted);
+    padding: .65rem .8rem; border-radius: 8px; cursor: pointer; font-size: .95rem;
+}
+.admin-side nav button:hover { background: var(--panel-2); color: var(--text); }
+.admin-side nav button.active { background: var(--primary); color: #fff; }
+.admin-foot { margin-top: auto; padding-top: 1.5rem; font-size: .85rem; color: var(--muted); display: flex; flex-direction: column; gap: .5rem; }
+.admin-foot button { background: none; border: 1px solid var(--border); color: var(--text); padding: .4rem; border-radius: 6px; cursor: pointer; }
+
+.admin-main { flex: 1; padding: 2rem; overflow-x: auto; }
+
+/* ── Cartes du tableau de bord ──────────────────────────── */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px,1fr)); gap: 1rem; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+.card-val { font-size: 1.7rem; font-weight: 700; }
+.card-lbl { color: var(--muted); font-size: .85rem; margin-top: .3rem; }
+
+/* ── Tableaux ───────────────────────────────────────────── */
+.head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.tbl { width: 100%; border-collapse: collapse; background: var(--panel); border-radius: 10px; overflow: hidden; }
+.tbl th, .tbl td { text-align: left; padding: .7rem .8rem; border-bottom: 1px solid var(--border); font-size: .9rem; vertical-align: top; }
+.tbl th { background: var(--panel-2); color: var(--muted); font-weight: 600; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl .actions { display: flex; gap: .4rem; }
+
+/* ── Boutons / badges ───────────────────────────────────── */
+.btn { background: var(--primary); color: #fff; border: none; padding: .55rem 1rem; border-radius: 8px; cursor: pointer; font-size: .9rem; }
+.btn:hover { background: var(--primary-d); }
+.tbl .actions button { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: .35rem .6rem; border-radius: 6px; cursor: pointer; font-size: .82rem; }
+.tbl .actions button.danger { color: var(--danger); border-color: var(--danger); }
+.badge { padding: .15rem .5rem; border-radius: 5px; font-size: .78rem; }
+.badge.admin { background: rgba(245,158,11,.15); color: var(--warn); }
+.badge.client { background: rgba(59,130,246,.15); color: var(--primary); }
+select { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: .35rem; }
+
+/* ── Messages ───────────────────────────────────────────── */
+.msg { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin-bottom: .8rem; }
+.msg-head { display: flex; justify-content: space-between; gap: 1rem; }
+.msg-head span { color: var(--muted); font-size: .82rem; }
+.msg-from { color: var(--muted); font-size: .85rem; margin: .2rem 0 .6rem; }
+.msg p { margin: 0; }
+
+/* ── Formulaire / modale ────────────────────────────────── */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; overflow-y: auto; z-index: 1000; }
+.modal-box { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 1.6rem; width: 100%; max-width: 560px; }
+form label { display: block; margin-bottom: .8rem; font-size: .88rem; color: var(--muted); }
+form input, form textarea, form select { width: 100%; margin-top: .25rem; background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 7px; padding: .5rem .6rem; font-size: .9rem; font-family: inherit; }
+form textarea { min-height: 70px; resize: vertical; }
+form .row { display: flex; gap: .8rem; }
+form .row label { flex: 1; }
+form label.chk { display: flex; align-items: center; gap: .4rem; margin-top: 1.5rem; }
+form label.chk input { width: auto; margin: 0; }
+details summary { cursor: pointer; color: var(--muted); margin-bottom: .6rem; }
+.modal-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1rem; }
+.modal-actions button:first-child { background: none; border: 1px solid var(--border); color: var(--text); padding: .55rem 1rem; border-radius: 8px; cursor: pointer; }
+.err, .err-box { color: var(--danger); background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 8px; padding: .6rem .8rem; font-size: .85rem; margin: .5rem 0; }
+
+/* ── Toast ──────────────────────────────────────────────── */
+.admin-toast { position: fixed; top: 20px; right: 20px; background: var(--ok); color: #fff; padding: .8rem 1.2rem; border-radius: 8px; z-index: 2000; box-shadow: 0 4px 14px rgba(0,0,0,.4); }

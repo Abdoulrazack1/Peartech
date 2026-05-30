@@ -53,6 +53,8 @@
     }
 
     function isLoggedIn() {
+        // L'authentification réelle repose sur le token JWT (via l'API).
+        if (window.PearTechAPI) return PearTechAPI.isLoggedIn();
         return !!localStorage.getItem(SESSION_KEY);
     }
 
@@ -112,18 +114,23 @@
         const email = getSessionEmail();
         if (!email) return null;
 
+        // Infos d'identité issues du compte (API) — source de vérité
+        const apiUser = (window.PearTechAPI && PearTechAPI.getUser()) || {};
+
+        let data = null;
         const stored = localStorage.getItem(userDataKey(email));
         if (stored) {
-            try { return JSON.parse(stored); } catch(e) {}
+            try { data = JSON.parse(stored); } catch(e) {}
+        }
+        if (!data) {
+            data = buildDefaultUserData(apiUser.prenom || '', apiUser.nom || '', email);
         }
 
-        const users   = getUsers();
-        const account = users[email] || {};
-        return buildDefaultUserData(
-            account.prenom || '',
-            account.nom    || '',
-            email
-        );
+        // Le compte serveur prime pour prénom / nom / email
+        if (apiUser.prenom) data.prenom = apiUser.prenom;
+        if (apiUser.nom)    data.nom    = apiUser.nom;
+        data.email = apiUser.email || email;
+        return data;
     }
 
     function saveUserData(user) {
@@ -536,15 +543,28 @@
                     return;
                 }
 
-                const users = getUsers();
-                if (!users[email] || users[email].password !== password) {
-                    showAuthError(errorEl, 'Email ou mot de passe incorrect.');
+                if (!window.PearTechAPI) {
+                    showAuthError(errorEl, 'Service indisponible (back-end non démarré ?).');
                     return;
                 }
 
-                localStorage.setItem(SESSION_KEY, email);
                 errorEl.hidden = true;
-                initProfile();
+                const submitBtn = loginForm.querySelector('.auth-submit');
+                if (submitBtn) submitBtn.disabled = true;
+
+                // Connexion réelle via l'API (vérifie le mot de passe haché, renvoie un JWT)
+                PearTechAPI.connexion(email, password)
+                    .then(rep => {
+                        localStorage.setItem(SESSION_KEY, rep.utilisateur.email);
+                        // On pousse les favoris et le panier locaux vers le compte
+                        if (window.Favoris && Favoris.pushAllToServer) Favoris.pushAllToServer();
+                        if (window.PearTechCart && PearTechCart.sync) PearTechCart.sync();
+                        initProfile();
+                    })
+                    .catch(err => {
+                        if (submitBtn) submitBtn.disabled = false;
+                        showAuthError(errorEl, err.message || 'Email ou mot de passe incorrect.');
+                    });
             });
         }
 
@@ -582,22 +602,31 @@
                     return;
                 }
 
-                const users = getUsers();
-                if (users[email]) {
-                    showAuthError(errorEl, 'Un compte existe déjà avec cet email.');
+                if (!window.PearTechAPI) {
+                    showAuthError(errorEl, 'Service indisponible (back-end non démarré ?).');
                     return;
                 }
 
-                users[email] = { password, prenom, nom };
-                saveUsers(users);
-
-                localStorage.setItem(SESSION_KEY, email);
-
-                const newUserData = buildDefaultUserData(prenom, nom, email);
-                localStorage.setItem(userDataKey(email), JSON.stringify(newUserData));
-
                 errorEl.hidden = true;
-                initProfile();
+                const submitBtn = registerForm.querySelector('.auth-submit');
+                if (submitBtn) submitBtn.disabled = true;
+
+                // Création du compte via l'API (mot de passe haché côté serveur)
+                PearTechAPI.inscription({ prenom: prenom, nom: nom, email: email, motDePasse: password })
+                    .then(rep => {
+                        localStorage.setItem(SESSION_KEY, rep.utilisateur.email);
+                        // Données de profil locales (préférences, paiements…)
+                        const newUserData = buildDefaultUserData(prenom, nom, email);
+                        localStorage.setItem(userDataKey(email), JSON.stringify(newUserData));
+                        // Pousse favoris + panier locaux vers le nouveau compte
+                        if (window.Favoris && Favoris.pushAllToServer) Favoris.pushAllToServer();
+                        if (window.PearTechCart && PearTechCart.sync) PearTechCart.sync();
+                        initProfile();
+                    })
+                    .catch(err => {
+                        if (submitBtn) submitBtn.disabled = false;
+                        showAuthError(errorEl, err.message || 'Création du compte impossible.');
+                    });
             });
         }
     }
@@ -621,9 +650,7 @@
 
         const sidebarTitle = document.querySelector('.sidebar-title');
         if (sidebarTitle) {
-            const users   = getUsers();
-            const email   = getSessionEmail();
-            const account = users[email] || {};
+            const account = (window.PearTechAPI && PearTechAPI.getUser()) || {};
             if (account.prenom) sidebarTitle.textContent = 'Bonjour, ' + account.prenom + ' !';
         }
 
@@ -686,6 +713,57 @@
         }
         contentDiv.innerHTML = html;
         attachSectionEvents(sectionId);
+
+        // Données provenant de la base de données (API)
+        if (sectionId === 'commandes') chargerCommandesAPI();
+        if (sectionId === 'adresses')  chargerAdressesAPI();
+    }
+
+    // ── Chargement des adresses depuis l'API ──────────────────────
+
+    function chargerAdressesAPI(messageSucces) {
+        if (!(window.PearTechAPI && PearTechAPI.isLoggedIn())) return;
+        PearTechAPI.adressesList()
+            .then(liste => {
+                userData.adresses = liste; // shape identique (id, nom, rue, codePostal, ville, pays, principale)
+                const active = document.querySelector('.sidebar-link.active');
+                if (active && active.dataset.section === 'adresses') {
+                    contentDiv.innerHTML = renderAdressesSection();
+                    attachAdressesEvents();
+                    if (messageSucces) showMessage(messageSucces, 'success');
+                }
+            })
+            .catch(e => console.warn('Chargement des adresses échoué :', e.message));
+    }
+
+    // ── Chargement des commandes depuis l'API ─────────────────────
+
+    // Transforme une commande de l'API vers le format attendu par l'affichage
+    function mapCommandeAPI(c) {
+        return {
+            id:       'CMD-' + c.id,
+            date:     c.creeLe,
+            total:    Number(c.total),
+            status:   c.statut, // 'en cours' | 'expédiée' | 'livré' | 'annulée'
+            articles: (c.articles || []).map(a => a.quantite + '× ' + a.nom),
+            suivi:    [{ date: c.creeLe, titre: 'Commande enregistrée',
+                         description: 'Votre commande a bien été reçue.' }]
+        };
+    }
+
+    function chargerCommandesAPI() {
+        if (!(window.PearTechAPI && PearTechAPI.isLoggedIn())) return;
+        PearTechAPI.commandesList()
+            .then(liste => {
+                userData.commandes = liste.map(mapCommandeAPI);
+                // Re-rend la section seulement si l'utilisateur y est toujours
+                const active = document.querySelector('.sidebar-link.active');
+                if (active && active.dataset.section === 'commandes') {
+                    contentDiv.innerHTML = renderCommandesSection();
+                    attachCommandesEvents();
+                }
+            })
+            .catch(e => console.warn('Chargement des commandes échoué :', e.message));
     }
 
     // ============================================
@@ -967,7 +1045,20 @@
                 userData.telephone = telephone;
                 userData.naissance = naissance;
                 saveUserData(userData);
-                showMessage('Informations mises à jour', 'success');
+
+                // Persistance en base via l'API (prénom, nom, téléphone, naissance)
+                if (window.PearTechAPI && PearTechAPI.isLoggedIn()) {
+                    PearTechAPI.modifierProfil({ prenom, nom, telephone, naissance: naissance || null })
+                        .then(() => {
+                            const u = PearTechAPI.getUser() || {};
+                            u.prenom = prenom; u.nom = nom;
+                            PearTechAPI.setUser(u);
+                            showMessage('Informations mises à jour', 'success');
+                        })
+                        .catch(err => showMessage(err.message || 'Échec de la mise à jour.', 'error'));
+                } else {
+                    showMessage('Informations mises à jour', 'success');
+                }
             });
         }
     }
@@ -1018,7 +1109,7 @@
         document.querySelectorAll('.edit-adresse').forEach(btn => {
             btn.addEventListener('click', function() {
                 const id   = this.closest('.adresse-card').dataset.id;
-                const addr = (userData.adresses || []).find(a => a.id === id);
+                const addr = (userData.adresses || []).find(a => String(a.id) === String(id));
                 if (addr) showAdresseForm(addr);
             });
         });
@@ -1026,22 +1117,22 @@
         document.querySelectorAll('.delete-adresse').forEach(btn => {
             btn.addEventListener('click', function() {
                 const id = this.closest('.adresse-card').dataset.id;
-                if (confirm('Supprimer cette adresse ?')) {
-                    userData.adresses = (userData.adresses || []).filter(a => a.id !== id);
-                    saveUserData(userData);
-                    showSection('adresses');
-                    showMessage('Adresse supprimée', 'success');
-                }
+                if (!confirm('Supprimer cette adresse ?')) return;
+                PearTechAPI.adresseSupprimer(id)
+                    .then(() => chargerAdressesAPI('Adresse supprimée'))
+                    .catch(err => showMessage(err.message || 'Suppression impossible.', 'error'));
             });
         });
 
         document.querySelectorAll('.set-principale').forEach(btn => {
             btn.addEventListener('click', function() {
-                const id = this.closest('.adresse-card').dataset.id;
-                (userData.adresses || []).forEach(a => a.principale = (a.id === id));
-                saveUserData(userData);
-                showSection('adresses');
-                showMessage('Adresse principale mise à jour', 'success');
+                const id   = this.closest('.adresse-card').dataset.id;
+                const addr = (userData.adresses || []).find(a => String(a.id) === String(id));
+                if (!addr) return;
+                // On renvoie l'adresse marquée principale ; le serveur retire le statut aux autres
+                PearTechAPI.adresseModifier(id, Object.assign({}, addr, { principale: true }))
+                    .then(() => chargerAdressesAPI('Adresse principale mise à jour'))
+                    .catch(err => showMessage(err.message || 'Mise à jour impossible.', 'error'));
             });
         });
 
@@ -1081,8 +1172,7 @@
 
         document.getElementById('adresse-form-detail').addEventListener('submit', function(e) {
             e.preventDefault();
-            const newAddr = {
-                id:         isEdit ? existing.id : 'addr' + Date.now(),
+            const data = {
                 nom:        document.getElementById('addr-nom').value.trim(),
                 rue:        document.getElementById('addr-rue').value.trim(),
                 complement: document.getElementById('addr-complement').value.trim(),
@@ -1092,27 +1182,19 @@
                 principale: document.getElementById('addr-principale').checked
             };
 
-            if (!newAddr.nom || !newAddr.rue || !newAddr.codePostal || !newAddr.ville) {
+            if (!data.nom || !data.rue || !data.codePostal || !data.ville) {
                 showMessage('Champs obligatoires manquants', 'error');
                 return;
             }
 
-            if (!userData.adresses) userData.adresses = [];
+            // Création ou mise à jour via l'API (le serveur gère l'adresse principale)
+            const action = isEdit
+                ? PearTechAPI.adresseModifier(existing.id, data)
+                : PearTechAPI.adresseAjouter(data);
 
-            if (isEdit) {
-                const idx = userData.adresses.findIndex(a => a.id === existing.id);
-                if (idx !== -1) userData.adresses[idx] = newAddr;
-            } else {
-                userData.adresses.push(newAddr);
-            }
-
-            if (newAddr.principale) {
-                userData.adresses.forEach(a => { if (a.id !== newAddr.id) a.principale = false; });
-            }
-
-            saveUserData(userData);
-            showSection('adresses');
-            showMessage(isEdit ? 'Adresse mise à jour' : 'Adresse ajoutée', 'success');
+            action
+                .then(() => chargerAdressesAPI(isEdit ? 'Adresse mise à jour' : 'Adresse ajoutée'))
+                .catch(err => showMessage(err.message || 'Enregistrement impossible.', 'error'));
         });
     }
 
@@ -1276,12 +1358,6 @@
                     return;
                 }
 
-                const users = getUsers();
-                const email = getSessionEmail();
-                if (!users[email] || users[email].password !== current) {
-                    showMessage('Mot de passe actuel incorrect', 'error');
-                    return;
-                }
                 if (newPass.length < 6) {
                     showMessage('Le nouveau mot de passe doit contenir au moins 6 caractères', 'error');
                     return;
@@ -1290,11 +1366,18 @@
                     showMessage('Les nouveaux mots de passe ne correspondent pas', 'error');
                     return;
                 }
+                if (!window.PearTechAPI) {
+                    showMessage('Service indisponible (back-end non démarré ?).', 'error');
+                    return;
+                }
 
-                users[email].password = newPass;
-                saveUsers(users);
-                showMessage('Mot de passe mis à jour avec succès', 'success');
-                form.reset();
+                // Changement de mot de passe via l'API (vérifie l'ancien, hache le nouveau)
+                PearTechAPI.motDePasse(current, newPass)
+                    .then(() => {
+                        showMessage('Mot de passe mis à jour avec succès', 'success');
+                        form.reset();
+                    })
+                    .catch(err => showMessage(err.message || 'Mot de passe actuel incorrect', 'error'));
             });
         }
     }
@@ -1308,6 +1391,7 @@
         if (btn) {
             btn.addEventListener('click', function() {
                 localStorage.removeItem(SESSION_KEY);
+                if (window.PearTechAPI) PearTechAPI.clearAuth(); // efface le token JWT
                 window.location.reload();
             });
         }

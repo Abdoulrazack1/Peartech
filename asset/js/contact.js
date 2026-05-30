@@ -47,18 +47,26 @@
                 return;
             }
 
-            // ── Envoi simulé avec délai ────────────────────────────
-            // En production, remplacer par un vrai fetch() vers une API backend
+            // ── Envoi réel vers l'API back-end ─────────────────────
 
-            showMessage('Envoi en cours...', 'info'); // Message pendant le "chargement"
+            showMessage('Envoi en cours...', 'info'); // Message pendant l'envoi
 
-            setTimeout(() => { // Simule un délai réseau de 1 seconde
-                showMessage(
-                    'Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.',
-                    'success' // Type 'success' pour afficher en vert
-                );
-                contactForm.reset(); // Vide tous les champs du formulaire après succès
-            }, 1000); // 1000ms = 1 seconde de délai simulé
+            if (!window.PearTechAPI) {
+                showMessage('Service indisponible. Réessayez plus tard.', 'error');
+                return;
+            }
+
+            PearTechAPI.contact({ nom: name, email: email, sujet: subject, message: message })
+                .then(() => {
+                    showMessage(
+                        'Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.',
+                        'success'
+                    );
+                    contactForm.reset(); // Vide le formulaire après succès
+                })
+                .catch(err => {
+                    showMessage(err.message || 'Échec de l\'envoi du message.', 'error');
+                });
         });
 
         // ── Fonction d'affichage des messages de retour ───────────

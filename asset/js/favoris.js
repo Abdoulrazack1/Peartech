@@ -45,14 +45,27 @@
         id = parseInt(id); // Force la conversion en entier
         const ids = load();         // Charge les favoris actuels
         const idx = ids.indexOf(id); // Cherche l'ID dans la liste (-1 si absent)
-        if (idx === -1) {
+        const added = idx === -1;
+        if (added) {
             ids.push(id); // Produit absent : on l'ajoute
         } else {
-            ids.splice(idx, 1); // Produit présent : on le retire (1 élément à partir de l'index)
+            ids.splice(idx, 1); // Produit présent : on le retire
         }
         save(ids);          // Sauvegarde la liste mise à jour
         updateAllBadges();  // Met à jour le compteur dans le header
-        return idx === -1;  // Retourne true si ajouté, false si retiré
+
+        // Synchronise avec le serveur si l'utilisateur est connecté (best-effort)
+        if (window.PearTechAPI && PearTechAPI.isLoggedIn()) {
+            const appel = added ? PearTechAPI.favorisAjouter(id) : PearTechAPI.favorisRetirer(id);
+            appel.catch(e => console.warn('Sync favori échouée :', e.message));
+        }
+        return added;       // true si ajouté, false si retiré
+    }
+
+    // Envoie tous les favoris locaux vers le serveur (appelé après connexion)
+    function pushAllToServer() {
+        if (!(window.PearTechAPI && PearTechAPI.isLoggedIn())) return;
+        load().forEach(id => PearTechAPI.favorisAjouter(id).catch(() => {}));
     }
 
     // Retourne tous les IDs favoris
@@ -407,7 +420,8 @@
         toggle,        // Ajoute/retire un favori
         getAll,        // Retourne tous les IDs favoris
         clear,         // Vide tous les favoris
-        updateHeartBtn // Met à jour visuellement un bouton cœur
+        updateHeartBtn,// Met à jour visuellement un bouton cœur
+        pushAllToServer // Pousse les favoris locaux vers le serveur (après connexion)
     };
 
     // ── Initialisation au chargement ──────────────────────────────

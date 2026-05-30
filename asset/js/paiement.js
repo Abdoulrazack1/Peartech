@@ -251,21 +251,49 @@
                 total:    subtotal - promoDiscount + shipping
             };
 
-            try {
-                sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData));
-            } catch (e) {
-                console.warn('sessionStorage indisponible, la confirmation utilisera les données de démo :', e);
+            // Finalise localement : mémorise la commande pour la page de confirmation,
+            // vide le panier (local + serveur) puis redirige.
+            function finaliser() {
+                try {
+                    sessionStorage.setItem('peartech-last-order', JSON.stringify(orderData));
+                } catch (e) {
+                    console.warn('sessionStorage indisponible, la confirmation utilisera les données de démo :', e);
+                }
+
+                if (window.PearTechCart) {
+                    window.PearTechCart.clear(); // vide le panier (et le serveur si connecté)
+                } else {
+                    storageRemove('peartech-cart');
+                    storageSet('peartech-cart-count', '0');
+                }
+
+                window.location.href = 'page_confirmation.html';
             }
 
-            // ── Nettoyage du panier via l'API centralisée ──
-            if (window.PearTechCart) {
-                window.PearTechCart.clear(); // méthode clear() doit exister
-            } else {
-                storageRemove('peartech-cart');
-                storageSet('peartech-cart-count', '0');
+            // ── Enregistrement en base si l'utilisateur est connecté ──
+            if (window.PearTechAPI && PearTechAPI.isLoggedIn()) {
+                // On envoie les articles : le serveur recalcule lui-même les prix.
+                const articles = cart.map(i => ({
+                    produitId: i.id,
+                    quantite:  i.quantity,
+                    options:   i.options || []
+                }));
+
+                showMessage('Traitement de la commande...', 'success');
+
+                PearTechAPI.commander(orderData.delivery.address, articles)
+                    .then(res => {
+                        orderData.commandeId = res.commandeId; // n° de commande réel (BDD)
+                        finaliser();
+                    })
+                    .catch(err => {
+                        showMessage(err.message || 'Échec de l\'enregistrement de la commande.', 'error');
+                    });
+                return;
             }
 
-            window.location.href = 'page_confirmation.html';
+            // ── Sinon (invité) : commande simulée comme avant ──
+            finaliser();
         }
 
         function showMessage(text, type) {
