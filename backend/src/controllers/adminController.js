@@ -13,12 +13,15 @@ const STATUTS = ['en cours', 'expédiée', 'livré', 'annulée'];
 
 // GET /api/admin/stats  -> chiffres clés du tableau de bord
 async function stats(req, res) {
-    const [[produits]]     = await pool.query('SELECT COUNT(*) AS n, COALESCE(SUM(stock),0) AS stock FROM produits');
-    const [[commandes]]    = await pool.query('SELECT COUNT(*) AS n, COALESCE(SUM(total),0) AS ca FROM commandes');
-    const [[utilisateurs]] = await pool.query("SELECT COUNT(*) AS n FROM utilisateurs WHERE role = 'client'");
-    const [[messages]]     = await pool.query('SELECT COUNT(*) AS n FROM messages_contact');
-    const [[stockBas]]     = await pool.query('SELECT COUNT(*) AS n FROM produits WHERE stock <= 5');
+    // Une requête d'agrégation par indicateur. [[x]] = première ligne du résultat.
+    // COALESCE(..,0) évite NULL si la table est vide.
+    const [[produits]]     = await pool.query('SELECT COUNT(*) AS n, COALESCE(SUM(stock),0) AS stock FROM produits'); // nb produits + stock cumulé
+    const [[commandes]]    = await pool.query('SELECT COUNT(*) AS n, COALESCE(SUM(total),0) AS ca FROM commandes');   // nb commandes + chiffre d'affaires
+    const [[utilisateurs]] = await pool.query("SELECT COUNT(*) AS n FROM utilisateurs WHERE role = 'client'");        // nb clients (hors admins)
+    const [[messages]]     = await pool.query('SELECT COUNT(*) AS n FROM messages_contact');                          // nb messages reçus
+    const [[stockBas]]     = await pool.query('SELECT COUNT(*) AS n FROM produits WHERE stock <= 5');                 // produits à réapprovisionner
 
+    // On renvoie un objet simple, prêt à afficher côté front
     res.json({
         nbProduits:      produits.n,
         stockTotal:      produits.stock,

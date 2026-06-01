@@ -5,7 +5,9 @@
 
 const pool = require('../config/db');
 
-// Colonnes renvoyées (on évite SELECT *)
+// Colonnes renvoyées (on évite SELECT *).
+// Le "AS xxx" renomme les colonnes snake_case de la base en camelCase
+// pour que le front les reçoive directement au bon format.
 const COLONNES = `id, nom, slug, categorie_id AS categorieId, prix, ancien_prix AS ancienPrix,
                   description, stock, est_nouveau AS estNouveau, est_bestseller AS estBestSeller,
                   note, nb_avis AS nbAvis, specs, options, images, tags`;
@@ -13,8 +15,10 @@ const COLONNES = `id, nom, slug, categorie_id AS categorieId, prix, ancien_prix 
 // Liste les produits, avec filtres optionnels.
 // filtres = { categorie, recherche, nouveaute, bestseller }
 async function lister(filtres = {}) {
+    // "WHERE 1 = 1" est une astuce : ça permet d'ajouter chaque filtre
+    // avec "AND ..." sans se soucier de savoir si c'est le premier.
     let sql = `SELECT ${COLONNES} FROM produits WHERE 1 = 1`;
-    const params = [];
+    const params = []; // valeurs des "?" (requête préparée = anti-injection)
 
     // Filtre par catégorie (via le slug de la catégorie)
     if (filtres.categorie) {
