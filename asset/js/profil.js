@@ -559,7 +559,12 @@
                         // On pousse les favoris et le panier locaux vers le compte
                         if (window.Favoris && Favoris.pushAllToServer) Favoris.pushAllToServer();
                         if (window.PearTechCart && PearTechCart.sync) PearTechCart.sync();
-                        initProfile();
+                        // Un administrateur est redirigé vers l'espace d'administration
+                        if (rep.utilisateur.role === 'admin') {
+                            window.location.href = 'page_admin.html';
+                            return;
+                        }
+                        initProfile(); // un client reste sur son espace profil
                     })
                     .catch(err => {
                         if (submitBtn) submitBtn.disabled = false;
@@ -642,6 +647,13 @@
     // ============================================
 
     function initProfile() {
+        // Un administrateur connecté est dirigé vers son espace dédié
+        const compte = (window.PearTechAPI && PearTechAPI.getUser()) || {};
+        if (compte.role === 'admin') {
+            window.location.href = 'page_admin.html';
+            return;
+        }
+
         const authScreen = document.getElementById('auth-screen');
         if (authScreen) authScreen.remove();
 
