@@ -92,16 +92,17 @@ async function remplir() {
         ['Admin', 'PearTech', 'admin@peartech.fr', hashAdmin]
     );
 
+    // Clients de test aux noms variés (français, africains, arabes)
     const clients = [
-        ['Jean', 'Dupont', 'demo@peartech.fr'],
-        ['Marie', 'Martin', 'marie.martin@example.com'],
-        ['Lucas', 'Bernard', 'lucas.bernard@example.com'],
-        ['Emma', 'Petit', 'emma.petit@example.com'],
-        ['Hugo', 'Robert', 'hugo.robert@example.com'],
-        ['Léa', 'Richard', 'lea.richard@example.com'],
-        ['Tom', 'Durand', 'tom.durand@example.com'],
-        ['Chloé', 'Moreau', 'chloe.moreau@example.com'],
-        ['Nathan', 'Simon', 'nathan.simon@example.com']
+        ['Jean', 'Dupont', 'demo@peartech.fr'],                       // compte démo
+        ['Aminata', 'Diallo', 'aminata.diallo@example.com'],
+        ['Mohammed', 'Cherif', 'mohammed.cherif@example.com'],
+        ['Fatou', 'Traoré', 'fatou.traore@example.com'],
+        ['Yasmine', 'Benali', 'yasmine.benali@example.com'],
+        ['Mamadou', 'Koné', 'mamadou.kone@example.com'],
+        ['Amina', 'Haddad', 'amina.haddad@example.com'],
+        ['Kwame', 'Mensah', 'kwame.mensah@example.com'],
+        ['Karim', 'Belkacem', 'karim.belkacem@example.com']
     ];
     const clientIds = [];
     for (const [prenom, nom, email] of clients) {

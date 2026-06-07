@@ -52,42 +52,63 @@ Peartech/
 
 ---
 
-## Lancer le projet (avec VS Code)
+## Lancer le projet — process complet (localhost)
 
-Le projet a **3 briques** à démarrer dans cet ordre : base MySQL → back-end → front.
+> Pré-requis : **Laragon** installé (fournit MySQL + HeidiSQL), **Node.js 18+**, **VS Code**.
+> Le projet a **3 briques** à démarrer DANS CET ORDRE : base MySQL → back-end (API) → front (site).
 
-### 1. Démarrer MySQL
-Ouvrir **Laragon** → bouton **« Démarrer tout »** (lance MySQL).
+### Étape 0 — Ouvrir le projet dans VS Code
+- VS Code → **Fichier → Ouvrir le dossier…** → choisir `C:\laragon\www\ordi`.
+- Ouvrir un terminal intégré : **Terminal → Nouveau terminal** (`Ctrl+ù`).
 
-### 2. Initialiser la base de données (la 1re fois seulement)
-1. Ouvrir **HeidiSQL** (fourni avec Laragon) et exécuter le script `backend/database/schema.sql`
-   → cela crée la base `peartech` et ses tables.
-2. Puis, dans un terminal VS Code (**Terminal → Nouveau terminal**) :
+### Étape 1 — Démarrer MySQL (la base)
+- Ouvrir **Laragon** → cliquer **« Démarrer tout »** (le bouton vert).
+- MySQL tourne alors sur `127.0.0.1:3306`. *(Sans ça, l'API affichera « Impossible de se connecter à la base de données ».)*
+
+### Étape 2 — Initialiser la base de données *(à faire une seule fois)*
+1. Dans **HeidiSQL** (lancé via Laragon → menu **Base de données / HeidiSQL**), ouvrir puis
+   exécuter le script **`backend/database/schema.sql`** (touche **F9** pour tout exécuter).
+   → crée la base `peartech` et toutes ses tables.
+2. Remplir les données de test, dans le terminal VS Code :
    ```bash
    cd backend
-   npm install      # installe les dépendances (1re fois)
-   npm run seed     # remplit le catalogue + crée les comptes
+   npm install      # installe les dépendances (1re fois uniquement)
+   npm run seed     # insère catégories, produits, utilisateurs, commandes, avis
    ```
+   *(Alternative au seed : exécuter `backend/database/seed.sql` dans HeidiSQL.)*
 
-### 3. Démarrer le back-end (l'API)
+### Étape 3 — Démarrer le back-end (l'API) → `http://localhost:3000`
+Dans le terminal VS Code :
 ```bash
-cd backend
-npm start          # API sur http://localhost:3000
+cd backend     # si tu n'y es pas déjà
+npm start
 ```
-Attendu :
+Tu dois voir :
 ```
 ✅ Connexion à la base de données réussie.
 🚀 Serveur PearTech démarré sur http://localhost:3000
 ```
-> Laisser ce terminal ouvert (l'API tourne tant qu'il l'est ; `Ctrl+C` pour arrêter).
+- Vérification : ouvre **http://localhost:3000** dans le navigateur → tu dois voir un message JSON « API PearTech opérationnelle ».
+- **Laisse ce terminal ouvert** (l'API tourne tant qu'il l'est ; `Ctrl+C` pour l'arrêter).
 
-### 4. Démarrer le front (le site)
-Avec l'extension **Live Server** (de Ritwick Dey) :
-1. Onglet **Extensions** (`Ctrl+Shift+X`) → installer **Live Server**.
-2. **Clic droit sur `page_accueil.html` → « Open with Live Server »**.
-3. Le site s'ouvre sur `http://127.0.0.1:5500/page_accueil.html`.
+### Étape 4 — Démarrer le front (le site) → `http://127.0.0.1:5500`
+Le site est en HTML : on le sert avec l'extension **Live Server**.
+1. Onglet **Extensions** (`Ctrl+Shift+X`) → chercher **« Live Server »** (Ritwick Dey) → **Install**.
+2. Dans l'explorateur de fichiers VS Code, **clic droit sur `page_accueil.html` → « Open with Live Server »**.
+3. Le navigateur s'ouvre sur **`http://127.0.0.1:5500/page_accueil.html`**. ✅
 
-> *Alternative :* démarrer **Apache** dans Laragon → site accessible sur `http://localhost/ordi/page_accueil.html`.
+> **Important :** garde le terminal de l'API (étape 3) ouvert pendant que tu utilises le site,
+> sinon les connexions/commandes afficheront « Serveur injoignable ».
+>
+> *Alternative sans Live Server :* dans Laragon, démarrer **Apache** → le site est servi sur
+> `http://localhost/ordi/page_accueil.html`.
+
+### Récap express (chaque session, une fois la BDD initialisée)
+| # | Action | Résultat |
+|---|---|---|
+| 1 | Laragon → **Démarrer tout** | MySQL en route |
+| 2 | Terminal VS Code : `cd backend` puis `npm start` | API sur `http://localhost:3000` |
+| 3 | Clic droit `page_accueil.html` → **Open with Live Server** | Site sur `http://127.0.0.1:5500` |
 
 ---
 
@@ -101,6 +122,10 @@ Comptes créés par `npm run seed` :
 | **Client (démo)** | `demo@peartech.fr` | `Demo1234` | Compte client (`page_profil.html`) |
 
 > ⚠️ L'espace admin (`page_admin.html`) n'est accessible qu'avec le compte **administrateur**.
+>
+> Le seed crée aussi 8 autres clients de test aux noms variés (ex : `aminata.diallo@example.com`,
+> `mohammed.cherif@example.com`, `fatou.traore@example.com`, `yasmine.benali@example.com`…),
+> tous avec le mot de passe **`Demo1234`**.
 
 ## Adresses utiles
 
