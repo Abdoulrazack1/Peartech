@@ -4,6 +4,15 @@ E-commerce téléphonie & high-tech, réalisé en autonomie dans le cadre de ma 
 Le projet est **full-stack** : un front en JavaScript natif (orienté composants, sans framework) et un
 **back-end Node.js / Express + MySQL** qui expose une API REST sécurisée (compétences du **CCP2**).
 
+## 🔑 Comptes de connexion
+
+| Rôle | Email | Mot de passe |
+|---|---|---|
+| **Administrateur** | `admin@peartech.fr` | `Admin1234` |
+| **Client (démo)** | `demo@peartech.fr` | `Demo1234` |
+
+> L'espace admin (`page_admin.html`) n'est accessible qu'avec le compte **administrateur**.
+
 ## Stack
 
 **Front-end** : HTML5 · CSS3 · JavaScript ES6+
