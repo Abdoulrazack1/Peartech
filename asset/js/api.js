@@ -12,8 +12,9 @@
     // Adresse de base de l'API. À adapter si le serveur tourne ailleurs.
     const BASE = 'http://localhost:3000/api';
 
-    const TOKEN_KEY = 'peartech-token'; // clé du jeton JWT dans localStorage
-    const USER_KEY  = 'peartech-user';  // clé des infos utilisateur (JSON)
+    const TOKEN_KEY   = 'peartech-token';         // clé du jeton JWT (access token)
+    const REFRESH_KEY = 'peartech-refresh-token'; // clé du refresh token
+    const USER_KEY    = 'peartech-user';          // clé des infos utilisateur (JSON)
 
     // ── Stockage local sécurisé ───────────────────────────────
     // Chaque accès à localStorage est encapsulé dans un try/catch
@@ -27,9 +28,15 @@
     function getUser()  { try { return JSON.parse(localStorage.getItem(USER_KEY)); } catch (e) { return null; } }
     // Enregistre l'utilisateur connecté (converti en texte JSON)
     function setUser(u) { try { localStorage.setItem(USER_KEY, JSON.stringify(u)); } catch (e) {} }
-    // Efface token + utilisateur (déconnexion)
+    function getRefreshToken() { try { return localStorage.getItem(REFRESH_KEY); } catch (e) { return null; } }
+    function setRefreshToken(t) { try { if (t) localStorage.setItem(REFRESH_KEY, t); } catch (e) {} }
+    // Efface tokens + utilisateur (déconnexion)
     function clearAuth() {
-        try { localStorage.removeItem(TOKEN_KEY); localStorage.removeItem(USER_KEY); } catch (e) {}
+        try {
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(REFRESH_KEY);
+            localStorage.removeItem(USER_KEY);
+        } catch (e) {}
     }
     // Vrai si un token est présent (donc utilisateur connecté)
     function isLoggedIn() { return !!getToken(); }
@@ -79,13 +86,17 @@
         // Outils de session
         isLoggedIn, getUser, setUser, getToken, clearAuth,
 
-        // Authentification — connexion/inscription enregistrent token + user
+        // Authentification — connexion/inscription enregistrent tokens + user
         inscription: (d) =>
             request('POST', '/auth/inscription', d, false)
-                .then(rep => { setToken(rep.token); setUser(rep.utilisateur); return rep; }),
+                .then(rep => { setToken(rep.token); setRefreshToken(rep.refreshToken); setUser(rep.utilisateur); return rep; }),
         connexion: (email, motDePasse) =>
             request('POST', '/auth/connexion', { email, motDePasse }, false)
-                .then(rep => { setToken(rep.token); setUser(rep.utilisateur); return rep; }),
+                .then(rep => { setToken(rep.token); setRefreshToken(rep.refreshToken); setUser(rep.utilisateur); return rep; }),
+        // Rafraîchit l'access token à partir du refresh token stocké
+        refresh: () =>
+            request('POST', '/auth/refresh', { refreshToken: getRefreshToken() }, false)
+                .then(rep => { setToken(rep.token); return rep; }),
         profil:          () => request('GET', '/auth/profil', undefined, true),       // mon profil
         modifierProfil:  (d) => request('PUT', '/auth/profil', d, true),              // modifier mes infos
         motDePasse:      (ancien, nouveau) =>                                          // changer mon mot de passe
@@ -123,6 +134,15 @@
             request('POST', '/commandes/depuis-panier', { adresseLivraison }, true),
         commandesList:         () => request('GET', '/commandes', undefined, true), // mes commandes
 
+        // Avis clients (lecture publique, écriture connectée)
+        avisProduit:   (produitId) => request('GET', '/produits/' + produitId + '/avis', undefined, false),
+        avisAjouter:   (d) => request('POST', '/reviews', d, true),
+        avisModifier:  (id, d) => request('PUT', '/reviews/' + id, d, true),
+        avisSupprimer: (id) => request('DELETE', '/reviews/' + id, undefined, true),
+
+        // Commande : annulation
+        commandeAnnuler: (id) => request('PUT', '/commandes/' + id + '/cancel', {}, true),
+
         // Contact (public)
         contact: (d) => request('POST', '/contact', d, false), // envoyer un message
 
@@ -133,9 +153,13 @@
 
         // Espace administrateur (réservé admin)
         adminStats:          () => request('GET', '/admin/stats', undefined, true),        // chiffres du dashboard
+        adminStatistiques:   () => request('GET', '/admin/statistics', undefined, true),   // agrégations (top produits, CA/mois)
+        adminLogs:           () => request('GET', '/admin/logs', undefined, true),         // logs applicatifs
         adminCommandes:      () => request('GET', '/admin/commandes', undefined, true),    // toutes les commandes
         adminCommandeStatut: (id, statut) => request('PUT', '/admin/commandes/' + id, { statut }, true), // changer un statut
         adminUtilisateurs:   () => request('GET', '/admin/utilisateurs', undefined, true), // liste des comptes
+        adminUtilisateurModifier: (id, d) => request('PUT', '/admin/utilisateurs/' + id, d, true),    // modifier un compte
+        adminUtilisateurSupprimer:(id) => request('DELETE', '/admin/utilisateurs/' + id, undefined, true), // supprimer
         adminMessages:       () => request('GET', '/admin/messages', undefined, true)      // messages de contact
     };
 })();

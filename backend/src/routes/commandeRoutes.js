@@ -20,6 +20,7 @@ router.get('/:id', a(commande.trouver));
 // Commander directement à partir du panier serveur (puis vide le panier)
 router.post('/depuis-panier', a(commande.creerDepuisPanier));
 
+// Commander à partir d'une liste d'articles envoyée par le client
 router.post('/',
     [
         body('articles').isArray({ min: 1 }).withMessage('Le panier doit contenir au moins un article.'),
@@ -29,5 +30,8 @@ router.post('/',
     valider,
     a(commande.creer)
 );
+
+// Annuler une commande (remet les produits en stock)
+router.put('/:id/cancel', a(commande.annuler));
 
 module.exports = router;

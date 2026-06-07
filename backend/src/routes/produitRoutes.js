@@ -7,13 +7,14 @@ const express = require('express');
 const { body } = require('express-validator');
 
 const produit = require('../controllers/produitController');
+const avisService = require('../services/avisService');
 const { verifierToken, verifierAdmin } = require('../middlewares/auth');
 const { valider } = require('../middlewares/erreur');
 const a = require('../middlewares/asyncHandler');
 
 const router = express.Router();
 
-// Règles de validation communes à la création / modification
+// Règles de validation communes (création / modification)
 const reglesProduit = [
     body('nom').trim().notEmpty().withMessage('Le nom est obligatoire.'),
     body('slug').trim().notEmpty().withMessage('Le slug est obligatoire.'),
@@ -23,8 +24,12 @@ const reglesProduit = [
 ];
 
 // --- Lecture (public) ---
-router.get('/', a(produit.lister));
-router.get('/:id', a(produit.trouver));
+router.get('/', a(produit.lister));               // liste (filtres, tri, pagination)
+router.get('/marques', a(produit.marques));       // liste des marques (avant /:id !)
+router.get('/:id', a(produit.trouver));           // détail par id ou slug
+router.get('/:id/avis', a(async (req, res) =>     // avis publics d'un produit
+    res.json(await avisService.listerParProduit(req.params.id))
+));
 
 // --- Écriture (admin uniquement) ---
 router.post('/', verifierToken, verifierAdmin, reglesProduit, valider, a(produit.creer));

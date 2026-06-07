@@ -1,56 +1,75 @@
 // ============================================================
-//  Accès aux données : panier.
-//  1 ligne = 1 produit dans le panier d'un utilisateur.
+//  Accès aux données : panier (tables cart + cart_items).
+//  1 panier (cart) par utilisateur, contenant N lignes (cart_items).
 // ============================================================
 
 const pool = require('../config/db');
 
-// Liste le contenu du panier avec les infos produit (jointure)
+// Récupère l'id du panier de l'utilisateur, en le créant s'il n'existe pas.
+async function getOrCreateCartId(utilisateurId) {
+    const [lignes] = await pool.query('SELECT id FROM cart WHERE utilisateur_id = ?', [utilisateurId]);
+    if (lignes[0]) return lignes[0].id;
+    const [r] = await pool.query('INSERT INTO cart (utilisateur_id) VALUES (?)', [utilisateurId]);
+    return r.insertId;
+}
+
+// Liste le contenu du panier avec les infos produit (jointures cart -> cart_items -> produits)
 async function lister(utilisateurId) {
     const [lignes] = await pool.query(
-        `SELECT pa.produit_id AS produitId, pa.quantite, pa.options,
+        `SELECT ci.produit_id AS produitId, ci.quantite, ci.options,
                 p.nom, p.slug, p.prix, p.images, p.stock, p.options AS produitOptions
-         FROM panier pa
-         JOIN produits p ON p.id = pa.produit_id
-         WHERE pa.utilisateur_id = ?
-         ORDER BY pa.ajoute_le`,
+         FROM cart c
+         JOIN cart_items ci ON ci.cart_id = c.id
+         JOIN produits p ON p.id = ci.produit_id
+         WHERE c.utilisateur_id = ?
+         ORDER BY ci.ajoute_le`,
         [utilisateurId]
     );
     return lignes;
 }
 
 // Ajoute un produit OU augmente la quantité s'il est déjà présent.
-// (grâce à la clé unique utilisateur+produit + ON DUPLICATE KEY)
 async function ajouter(utilisateurId, produitId, quantite, options) {
+    const cartId = await getOrCreateCartId(utilisateurId);
     await pool.query(
-        `INSERT INTO panier (utilisateur_id, produit_id, quantite, options)
+        `INSERT INTO cart_items (cart_id, produit_id, quantite, options)
          VALUES (?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE quantite = quantite + VALUES(quantite), options = VALUES(options)`,
-        [utilisateurId, produitId, quantite, JSON.stringify(options || {})]
+        [cartId, produitId, quantite, JSON.stringify(options || {})]
     );
 }
 
 // Définit la quantité exacte d'une ligne du panier
 async function modifierQuantite(utilisateurId, produitId, quantite) {
-    const [resultat] = await pool.query(
-        `UPDATE panier SET quantite = ? WHERE utilisateur_id = ? AND produit_id = ?`,
+    const [r] = await pool.query(
+        `UPDATE cart_items ci
+         JOIN cart c ON c.id = ci.cart_id
+         SET ci.quantite = ?
+         WHERE c.utilisateur_id = ? AND ci.produit_id = ?`,
         [quantite, utilisateurId, produitId]
     );
-    return resultat.affectedRows > 0;
+    return r.affectedRows > 0;
 }
 
 // Retire une ligne du panier
 async function retirer(utilisateurId, produitId) {
-    const [resultat] = await pool.query(
-        `DELETE FROM panier WHERE utilisateur_id = ? AND produit_id = ?`,
+    const [r] = await pool.query(
+        `DELETE ci FROM cart_items ci
+         JOIN cart c ON c.id = ci.cart_id
+         WHERE c.utilisateur_id = ? AND ci.produit_id = ?`,
         [utilisateurId, produitId]
     );
-    return resultat.affectedRows > 0;
+    return r.affectedRows > 0;
 }
 
-// Vide complètement le panier
+// Vide complètement le panier de l'utilisateur
 async function vider(utilisateurId) {
-    await pool.query('DELETE FROM panier WHERE utilisateur_id = ?', [utilisateurId]);
+    await pool.query(
+        `DELETE ci FROM cart_items ci
+         JOIN cart c ON c.id = ci.cart_id
+         WHERE c.utilisateur_id = ?`,
+        [utilisateurId]
+    );
 }
 
 module.exports = { lister, ajouter, modifierQuantite, retirer, vider };

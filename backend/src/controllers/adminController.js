@@ -1,67 +1,70 @@
 // ============================================================
-//  Logique métier : espace administrateur.
-//  Toutes ces routes sont protégées par verifierToken + verifierAdmin.
+//  Contrôleur : espace administrateur.
+//  Délègue à statService (stats/logs) et utilisateurService (comptes).
+//  Toutes les routes sont protégées par verifierToken + verifierAdmin.
 // ============================================================
 
-const pool = require('../config/db');
+const statService = require('../services/statService');
+const utilisateurService = require('../services/utilisateurService');
 const Commande = require('../models/commandeModel');
-const Utilisateur = require('../models/utilisateurModel');
 const Message = require('../models/messageModel');
 
-// Statuts de commande autorisés (doivent correspondre à l'ENUM de la table)
-const STATUTS = ['en cours', 'expédiée', 'livré', 'annulée'];
+const STATUTS = ['en attente', 'payée', 'expédiée', 'livrée', 'annulée'];
 
 // GET /api/admin/stats  -> chiffres clés du tableau de bord
 async function stats(req, res) {
-    // Une requête d'agrégation par indicateur. [[x]] = première ligne du résultat.
-    // COALESCE(..,0) évite NULL si la table est vide.
-    const [[produits]]     = await pool.query('SELECT COUNT(*) AS n, COALESCE(SUM(stock),0) AS stock FROM produits'); // nb produits + stock cumulé
-    const [[commandes]]    = await pool.query('SELECT COUNT(*) AS n, COALESCE(SUM(total),0) AS ca FROM commandes');   // nb commandes + chiffre d'affaires
-    const [[utilisateurs]] = await pool.query("SELECT COUNT(*) AS n FROM utilisateurs WHERE role = 'client'");        // nb clients (hors admins)
-    const [[messages]]     = await pool.query('SELECT COUNT(*) AS n FROM messages_contact');                          // nb messages reçus
-    const [[stockBas]]     = await pool.query('SELECT COUNT(*) AS n FROM produits WHERE stock <= 5');                 // produits à réapprovisionner
+    res.json(await statService.dashboard());
+}
 
-    // On renvoie un objet simple, prêt à afficher côté front
-    res.json({
-        nbProduits:      produits.n,
-        stockTotal:      produits.stock,
-        produitsStockBas: stockBas.n,
-        nbCommandes:     commandes.n,
-        chiffreAffaires: Number(commandes.ca),
-        nbClients:       utilisateurs.n,
-        nbMessages:      messages.n
-    });
+// GET /api/admin/statistics  -> agrégations (top produits, CA/mois, visites)
+async function statistiques(req, res) {
+    res.json(await statService.statistiques());
+}
+
+// GET /api/admin/logs  -> derniers logs applicatifs
+async function logs(req, res) {
+    res.json(await statService.logs(req.query.limite));
 }
 
 // GET /api/admin/commandes  -> toutes les commandes
 async function listerCommandes(req, res) {
-    const commandes = await Commande.listerToutes();
-    res.json(commandes);
+    res.json(await Commande.listerToutes());
 }
 
 // PUT /api/admin/commandes/:id  { statut }
 async function modifierStatutCommande(req, res) {
     const { statut } = req.body;
-    if (!STATUTS.includes(statut)) {
-        return res.status(400).json({ erreur: 'Statut invalide.' });
-    }
+    if (!STATUTS.includes(statut)) throw { statut: 400, message: 'Statut invalide.' };
     const ok = await Commande.modifierStatut(req.params.id, statut);
-    if (!ok) {
-        return res.status(404).json({ erreur: 'Commande introuvable.' });
-    }
+    if (!ok) throw { statut: 404, message: 'Commande introuvable.' };
     res.json({ message: 'Statut mis à jour.' });
 }
 
-// GET /api/admin/utilisateurs  -> liste des comptes
+// GET /api/admin/utilisateurs
 async function listerUtilisateurs(req, res) {
-    const utilisateurs = await Utilisateur.listerTous();
-    res.json(utilisateurs);
+    res.json(await utilisateurService.lister());
+}
+
+// PUT /api/admin/utilisateurs/:id  { prenom, nom, email, role }
+async function modifierUtilisateur(req, res) {
+    await utilisateurService.modifier(req.params.id, req.body);
+    res.json({ message: 'Utilisateur mis à jour.' });
+}
+
+// DELETE /api/admin/utilisateurs/:id
+async function supprimerUtilisateur(req, res) {
+    await utilisateurService.supprimer(req.params.id, req.utilisateur.id);
+    res.json({ message: 'Utilisateur supprimé.' });
 }
 
 // GET /api/admin/messages  -> messages de contact reçus
 async function listerMessages(req, res) {
-    const messages = await Message.listerTous();
-    res.json(messages);
+    res.json(await Message.listerTous());
 }
 
-module.exports = { stats, listerCommandes, modifierStatutCommande, listerUtilisateurs, listerMessages };
+module.exports = {
+    stats, statistiques, logs,
+    listerCommandes, modifierStatutCommande,
+    listerUtilisateurs, modifierUtilisateur, supprimerUtilisateur,
+    listerMessages
+};

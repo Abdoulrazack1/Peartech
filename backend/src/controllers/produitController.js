@@ -1,59 +1,48 @@
 // ============================================================
-//  Logique métier : produits.
-//  Lecture ouverte à tous ; création/modification/suppression admin.
+//  Contrôleur : produits (délègue à produitService).
+//  Lecture publique ; création/modification/suppression admin.
 // ============================================================
 
-const Produit = require('../models/produitModel');
+const service = require('../services/produitService');
 
-// GET /api/produits?categorie=apple&recherche=ipad&nouveaute=1&bestseller=1
+// GET /api/produits?categorie=&recherche=&marque=&prixMin=&prixMax=&tri=&page=&limit=
 async function lister(req, res) {
-    const filtres = {
-        categorie: req.query.categorie,
-        recherche: req.query.recherche,
-        nouveaute: req.query.nouveaute === '1',
-        bestseller: req.query.bestseller === '1'
-    };
-    const produits = await Produit.lister(filtres);
-    res.json(produits);
+    const r = await service.lister(req.query);
+    // Réponse paginée si demandée, sinon simple tableau (rétro-compatible)
+    if (r.paginated) return res.json({ data: r.data, total: r.total, page: r.page, limit: r.limit });
+    res.json(r.data);
 }
 
-// GET /api/produits/:id  (accepte un id numérique ou un slug)
-async function trouver(req, res) {
-    const cle = req.params.id;
-    const produit = /^\d+$/.test(cle)
-        ? await Produit.trouverParId(cle)
-        : await Produit.trouverParSlug(cle);
+// GET /api/produits/marques  -> liste des marques (pour le filtre)
+async function marques(req, res) {
+    res.json(await service.marques());
+}
 
-    if (!produit) {
-        return res.status(404).json({ erreur: 'Produit introuvable.' });
-    }
+// GET /api/produits/:id  (id numérique ou slug)
+async function trouver(req, res) {
+    const produit = await service.trouver(req.params.id);
+    if (!produit) throw { statut: 404, message: 'Produit introuvable.' };
     res.json(produit);
 }
 
 // POST /api/produits  (admin)
 async function creer(req, res) {
-    const id = await Produit.creer(req.body);
-    const produit = await Produit.trouverParId(id);
+    const produit = await service.creer(req.body);
     res.status(201).json({ message: 'Produit créé.', produit });
 }
 
 // PUT /api/produits/:id  (admin)
 async function modifier(req, res) {
-    const ok = await Produit.modifier(req.params.id, req.body);
-    if (!ok) {
-        return res.status(404).json({ erreur: 'Produit introuvable.' });
-    }
-    const produit = await Produit.trouverParId(req.params.id);
+    const produit = await service.modifier(req.params.id, req.body);
+    if (!produit) throw { statut: 404, message: 'Produit introuvable.' };
     res.json({ message: 'Produit mis à jour.', produit });
 }
 
 // DELETE /api/produits/:id  (admin)
 async function supprimer(req, res) {
-    const ok = await Produit.supprimer(req.params.id);
-    if (!ok) {
-        return res.status(404).json({ erreur: 'Produit introuvable.' });
-    }
+    const ok = await service.supprimer(req.params.id);
+    if (!ok) throw { statut: 404, message: 'Produit introuvable.' };
     res.json({ message: 'Produit supprimé.' });
 }
 
-module.exports = { lister, trouver, creer, modifier, supprimer };
+module.exports = { lister, marques, trouver, creer, modifier, supprimer };

@@ -11,6 +11,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const pool = require('./src/config/db');
+const journal = require('./src/middlewares/journal');
 const { routeIntrouvable, gestionErreurs } = require('./src/middlewares/erreur');
 
 const app = express();
@@ -20,6 +21,7 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());                              // en-têtes HTTP de sécurité
 app.use(cors({ origin: process.env.FRONT_URL || '*' })); // autorise le front à appeler l'API
 app.use(express.json());                        // lecture du corps JSON des requêtes
+app.use(journal);                               // journalise visites + erreurs (logs/statistiques)
 
 // --- Route d'accueil / vérification ---
 app.get('/', (req, res) => {
@@ -28,7 +30,8 @@ app.get('/', (req, res) => {
         version: '1.0.0',
         documentation: 'Voir le README.md',
         routes: ['/api/produits', '/api/categories', '/api/auth', '/api/favoris',
-                 '/api/panier', '/api/commandes', '/api/adresses', '/api/contact']
+                 '/api/panier', '/api/commandes', '/api/reviews', '/api/adresses',
+                 '/api/contact', '/api/admin']
     });
 });
 
@@ -39,6 +42,7 @@ app.use('/api/categories', require('./src/routes/categorieRoutes'));
 app.use('/api/favoris', require('./src/routes/favoriRoutes'));
 app.use('/api/panier', require('./src/routes/panierRoutes'));
 app.use('/api/commandes', require('./src/routes/commandeRoutes'));
+app.use('/api/reviews', require('./src/routes/reviewRoutes'));
 app.use('/api/adresses', require('./src/routes/adresseRoutes'));
 app.use('/api/contact', require('./src/routes/messageRoutes'));
 app.use('/api/admin', require('./src/routes/adminRoutes'));

@@ -13,8 +13,7 @@ const a = require('../middlewares/asyncHandler');
 
 const router = express.Router();
 
-// Limite les tentatives de connexion (protection contre la force brute) :
-// max 10 essais par tranche de 15 minutes et par adresse IP.
+// Anti force brute : max 10 tentatives de connexion / 15 min / IP
 const limiteurConnexion = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 10,
@@ -42,6 +41,13 @@ router.post('/connexion',
     ],
     valider,
     a(auth.connexion)
+);
+
+// --- Rafraîchissement de l'access token ---
+router.post('/refresh',
+    [ body('refreshToken').notEmpty().withMessage('Refresh token obligatoire.') ],
+    valider,
+    a(auth.rafraichir)
 );
 
 // --- Profil (routes protégées par token) ---

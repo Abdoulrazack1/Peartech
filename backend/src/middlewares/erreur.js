@@ -24,6 +24,11 @@ function routeIntrouvable(req, res) {
 
 // Dernier filet de sécurité : toute erreur non gérée arrive ici.
 function gestionErreurs(err, req, res, next) {
+    // Erreur "métier" levée par un service : { statut, message }
+    if (err && err.statut) {
+        return res.status(err.statut).json({ erreur: err.message });
+    }
+    // Erreur inattendue (bug, SQL…) : on masque le détail au client
     console.error('Erreur serveur :', err.message);
     res.status(500).json({ erreur: 'Une erreur interne est survenue.' });
 }

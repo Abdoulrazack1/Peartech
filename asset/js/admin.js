@@ -107,6 +107,7 @@
                     <div class="admin-brand">PearTech<span> Admin</span></div>
                     <nav>
                         <button data-sec="dashboard" class="active">Tableau de bord</button>
+                        <button data-sec="statistiques">Statistiques</button>
                         <button data-sec="produits">Produits</button>
                         <button data-sec="commandes">Commandes</button>
                         <button data-sec="utilisateurs">Utilisateurs</button>
@@ -141,11 +142,12 @@
     // Aiguille vers la fonction de chargement de la section demandée
     function show(sec) {
         content().innerHTML = '<p class="loading">Chargement…</p>';
-        if (sec === 'dashboard')        loadDashboard();
-        else if (sec === 'produits')    loadProduits();
-        else if (sec === 'commandes')   loadCommandes();
-        else if (sec === 'utilisateurs')loadUtilisateurs();
-        else if (sec === 'messages')    loadMessages();
+        if (sec === 'dashboard')         loadDashboard();
+        else if (sec === 'statistiques') loadStatistiques();
+        else if (sec === 'produits')     loadProduits();
+        else if (sec === 'commandes')    loadCommandes();
+        else if (sec === 'utilisateurs') loadUtilisateurs();
+        else if (sec === 'messages')     loadMessages();
     }
 
     // ── Tableau de bord (chiffres clés) ───────────────────────
@@ -161,13 +163,51 @@
                     ${card('Commandes', s.nbCommandes)}
                     ${card('Chiffre d\'affaires', euro(s.chiffreAffaires))}
                     ${card('Clients', s.nbClients)}
+                    ${card('Avis', s.nbAvis)}
                     ${card('Messages', s.nbMessages)}
+                    ${card('Visites API', s.nbVisites)}
                 </div>`;
         } catch (e) { erreur(e); }
     }
     // Génère une carte "valeur + libellé"
     function card(label, val) {
         return `<div class="card"><div class="card-val">${esc(val)}</div><div class="card-lbl">${esc(label)}</div></div>`;
+    }
+
+    // ── Statistiques détaillées (agrégations) ─────────────────
+    async function loadStatistiques() {
+        try {
+            const s = await PearTechAPI.adminStatistiques();
+            content().innerHTML = `
+                <h1>Statistiques</h1>
+                <h2>Top produits vendus</h2>
+                <table class="tbl">
+                    <thead><tr><th>Produit</th><th>Quantité vendue</th><th>Chiffre d'affaires</th></tr></thead>
+                    <tbody>
+                    ${(s.topProduits || []).map(p => `
+                        <tr><td>${esc(p.nom)}</td><td>${p.quantiteVendue}</td><td>${euro(p.chiffreAffaires)}</td></tr>
+                    `).join('') || '<tr><td colspan="3">Aucune vente.</td></tr>'}
+                    </tbody>
+                </table>
+                <h2 style="margin-top:1.5rem">Chiffre d'affaires par mois</h2>
+                <table class="tbl">
+                    <thead><tr><th>Mois</th><th>Commandes</th><th>Chiffre d'affaires</th></tr></thead>
+                    <tbody>
+                    ${(s.chiffreAffaires || []).map(m => `
+                        <tr><td>${esc(m.mois)}</td><td>${m.nbCommandes}</td><td>${euro(m.chiffreAffaires)}</td></tr>
+                    `).join('') || '<tr><td colspan="3">Aucune donnée.</td></tr>'}
+                    </tbody>
+                </table>
+                <h2 style="margin-top:1.5rem">Pages les plus visitées (${s.nbVisitesTotal} visites)</h2>
+                <table class="tbl">
+                    <thead><tr><th>Route</th><th>Visites</th></tr></thead>
+                    <tbody>
+                    ${(s.visitesParChemin || []).map(v => `
+                        <tr><td>${esc(v.chemin)}</td><td>${v.nbVisites}</td></tr>
+                    `).join('') || '<tr><td colspan="2">Aucune visite.</td></tr>'}
+                    </tbody>
+                </table>`;
+        } catch (e) { erreur(e); }
     }
 
     // ── Produits (Créer / Lire / Modifier / Supprimer) ────────
@@ -329,7 +369,7 @@
     async function loadCommandes() {
         try {
             const cmds = await PearTechAPI.adminCommandes(); // toutes les commandes
-            const statuts = ['en cours', 'expédiée', 'livré', 'annulée']; // valeurs possibles
+            const statuts = ['en attente', 'payée', 'expédiée', 'livrée', 'annulée']; // valeurs possibles
             content().innerHTML = `
                 <h1>Commandes (${cmds.length})</h1>
                 <table class="tbl">
@@ -365,18 +405,36 @@
             content().innerHTML = `
                 <h1>Utilisateurs (${us.length})</h1>
                 <table class="tbl">
-                    <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Rôle</th><th>Inscrit le</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Nom</th><th>Email</th><th>Rôle</th><th>Inscrit le</th><th>Actions</th></tr></thead>
                     <tbody>
                     ${us.map(u => `
                         <tr>
                             <td>${u.id}</td>
                             <td>${esc(u.prenom + ' ' + u.nom)}</td>
                             <td>${esc(u.email)}</td>
-                            <td><span class="badge ${u.role}">${u.role}</span></td>
+                            <td><select data-role="${u.id}">
+                                <option value="client" ${u.role === 'client' ? 'selected' : ''}>client</option>
+                                <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>admin</option>
+                            </select></td>
                             <td>${dateFr(u.creeLe)}</td>
+                            <td class="actions"><button data-del-user="${u.id}" class="danger">Suppr.</button></td>
                         </tr>`).join('')}
                     </tbody>
                 </table>`;
+
+            // Changer le rôle d'un utilisateur
+            content().querySelectorAll('select[data-role]').forEach(sel =>
+                sel.addEventListener('change', async () => {
+                    try { await PearTechAPI.adminUtilisateurModifier(sel.dataset.role, { role: sel.value }); toast('Rôle mis à jour'); }
+                    catch (e) { erreur(e); }
+                }));
+            // Supprimer un utilisateur
+            content().querySelectorAll('[data-del-user]').forEach(b =>
+                b.addEventListener('click', async () => {
+                    if (!confirm('Supprimer cet utilisateur ?')) return;
+                    try { await PearTechAPI.adminUtilisateurSupprimer(b.dataset.delUser); toast('Utilisateur supprimé'); loadUtilisateurs(); }
+                    catch (e) { erreur(e); }
+                }));
         } catch (e) { erreur(e); }
     }
 

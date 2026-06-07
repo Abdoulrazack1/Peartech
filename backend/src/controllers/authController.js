@@ -1,111 +1,44 @@
 // ============================================================
-//  Logique métier : authentification et profil utilisateur.
-//
-//  Sécurité :
-//   - mots de passe hachés avec bcrypt (jamais stockés en clair) ;
-//   - connexion vérifiée avec bcrypt.compare ;
-//   - jeton de session signé avec JSON Web Token (JWT).
+//  Contrôleur : authentification.
+//  Rôle du contrôleur = lire la requête, appeler le service,
+//  renvoyer la réponse. La logique est dans authService.
 // ============================================================
 
-require('dotenv').config();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Utilisateur = require('../models/utilisateurModel');
+const auth = require('../services/authService');
 
-// Génère un token JWT contenant l'id, l'email et le rôle de l'utilisateur
-function genererToken(utilisateur) {
-    return jwt.sign(
-        { id: utilisateur.id, email: utilisateur.email, role: utilisateur.role },
-        process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRES_IN || '2h' }
-    );
-}
-
-// Petit nettoyage : on ne renvoie jamais le mot de passe au client
-function profilPublic(u) {
-    return { id: u.id, prenom: u.prenom, nom: u.nom, email: u.email, role: u.role };
-}
-
-// --- Inscription ---
+// POST /api/auth/inscription
 async function inscription(req, res) {
-    const { prenom, nom, email, motDePasse } = req.body;
-
-    // L'email doit être unique
-    const existant = await Utilisateur.trouverParEmail(email.toLowerCase());
-    if (existant) {
-        return res.status(409).json({ erreur: 'Un compte existe déjà avec cet email.' });
-    }
-
-    // Hachage du mot de passe avant stockage
-    const motDePasseHache = await bcrypt.hash(motDePasse, 10);
-
-    const id = await Utilisateur.creer({
-        prenom, nom, email: email.toLowerCase(), motDePasseHache
-    });
-
-    const utilisateur = { id, prenom, nom, email: email.toLowerCase(), role: 'client' };
-    const token = genererToken(utilisateur);
-
-    res.status(201).json({
-        message: 'Compte créé avec succès.',
-        token,
-        utilisateur: profilPublic(utilisateur)
-    });
+    const r = await auth.inscription(req.body);
+    res.status(201).json({ message: 'Compte créé avec succès.', ...r });
 }
 
-// --- Connexion ---
+// POST /api/auth/connexion
 async function connexion(req, res) {
-    const { email, motDePasse } = req.body;
-
-    const utilisateur = await Utilisateur.trouverParEmail(email.toLowerCase());
-
-    // Message volontairement générique (on ne dit pas si c'est l'email ou le mot de passe)
-    if (!utilisateur) {
-        return res.status(401).json({ erreur: 'Email ou mot de passe incorrect.' });
-    }
-
-    const motDePasseOk = await bcrypt.compare(motDePasse, utilisateur.mot_de_passe);
-    if (!motDePasseOk) {
-        return res.status(401).json({ erreur: 'Email ou mot de passe incorrect.' });
-    }
-
-    const token = genererToken(utilisateur);
-    res.json({
-        message: 'Connexion réussie.',
-        token,
-        utilisateur: profilPublic(utilisateur)
-    });
+    const r = await auth.connexion(req.body);
+    res.json({ message: 'Connexion réussie.', ...r });
 }
 
-// --- Mon profil (utilisateur connecté) ---
+// POST /api/auth/refresh  { refreshToken }
+async function rafraichir(req, res) {
+    const r = await auth.rafraichir(req.body.refreshToken);
+    res.json(r);
+}
+
+// GET /api/auth/profil (connecté)
 async function monProfil(req, res) {
-    const utilisateur = await Utilisateur.trouverParId(req.utilisateur.id);
-    if (!utilisateur) {
-        return res.status(404).json({ erreur: 'Utilisateur introuvable.' });
-    }
-    res.json(utilisateur);
+    res.json(await auth.monProfil(req.utilisateur.id));
 }
 
-// --- Mise à jour des informations personnelles ---
+// PUT /api/auth/profil (connecté)
 async function modifierProfil(req, res) {
-    const { prenom, nom, telephone, naissance } = req.body;
-    await Utilisateur.modifierProfil(req.utilisateur.id, { prenom, nom, telephone, naissance });
+    await auth.modifierProfil(req.utilisateur.id, req.body);
     res.json({ message: 'Profil mis à jour.' });
 }
 
-// --- Changement de mot de passe ---
+// PUT /api/auth/mot-de-passe (connecté)
 async function changerMotDePasse(req, res) {
-    const { ancienMotDePasse, nouveauMotDePasse } = req.body;
-
-    const utilisateur = await Utilisateur.trouverParEmail(req.utilisateur.email);
-    const ok = await bcrypt.compare(ancienMotDePasse, utilisateur.mot_de_passe);
-    if (!ok) {
-        return res.status(401).json({ erreur: 'Mot de passe actuel incorrect.' });
-    }
-
-    const hache = await bcrypt.hash(nouveauMotDePasse, 10);
-    await Utilisateur.modifierMotDePasse(req.utilisateur.id, hache);
+    await auth.changerMotDePasse(req.utilisateur, req.body);
     res.json({ message: 'Mot de passe mis à jour.' });
 }
 
-module.exports = { inscription, connexion, monProfil, modifierProfil, changerMotDePasse };
+module.exports = { inscription, connexion, rafraichir, monProfil, modifierProfil, changerMotDePasse };

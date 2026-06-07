@@ -54,4 +54,22 @@ async function listerTous() {
     return lignes;
 }
 
-module.exports = { trouverParEmail, trouverParId, creer, modifierProfil, modifierMotDePasse, listerTous };
+// Modifie un utilisateur (admin) : prénom, nom, email, rôle
+async function modifierParAdmin(id, u) {
+    const [r] = await pool.query(
+        'UPDATE utilisateurs SET prenom = ?, nom = ?, email = ?, role = ? WHERE id = ?',
+        [u.prenom, u.nom, u.email, u.role, id]
+    );
+    return r.affectedRows > 0;
+}
+
+// Supprime un utilisateur (admin)
+async function supprimer(id) {
+    const [r] = await pool.query('DELETE FROM utilisateurs WHERE id = ?', [id]);
+    return r.affectedRows > 0;
+}
+
+module.exports = {
+    trouverParEmail, trouverParId, creer, modifierProfil, modifierMotDePasse,
+    listerTous, modifierParAdmin, supprimer
+};

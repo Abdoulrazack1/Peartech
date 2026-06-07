@@ -37,6 +37,15 @@
             icon: 'tablet',
             image: '/asset/image/apple/iphone-15-pro.jpg',
             subcategories: ['iPad', 'Samsung Galaxy Tab', 'Amazon Fire', 'Xiaomi', 'Autres']
+        },
+        {
+            id: 'cat_accessoires',
+            name: 'Accessoires',
+            slug: 'accessoires',
+            description: 'Coques, chargeurs, écouteurs et accessoires pour vos appareils',
+            icon: 'headphones',
+            image: '/asset/image/apple/iphone-15-pro-max.jpg',
+            subcategories: ['Coques', 'Chargeurs', 'Écouteurs', 'Câbles', 'Autres']
         }
     ];
 
@@ -1215,6 +1224,96 @@
                 with_ads: [
                     { label: 'Avec publicités', price: 0 },
                     { label: 'Sans publicités', price: 15 }
+                ]
+            }
+        },
+
+        // ---- ACCESSOIRES (3) ----
+        {
+            id: 31,
+            name: 'AirPods Pro (2e génération)',
+            slug: 'airpods-pro-2',
+            categoryId: 'cat_accessoires',
+            basePrice: 279.00,
+            oldPrice: 299.00,
+            specs: {
+                type: 'Écouteurs sans fil',
+                reduction: 'Réduction de bruit active',
+                autonomie: 'Jusqu\'à 6h (30h avec le boîtier)',
+                connectivite: 'Bluetooth 5.3'
+            },
+            description: 'Les AirPods Pro 2 avec réduction de bruit améliorée et audio spatial.',
+            images: [
+                '/asset/image/apple/iphone-15-pro-max.jpg',
+                '/asset/image/apple/iphone-15-pro-max-2.jpg'
+            ],
+            tags: ['apple', 'airpods', 'ecouteurs', 'accessoire'],
+            stock: 50,
+            isNew: true,
+            isBestSeller: true,
+            rating: 4.6,
+            reviews: 512,
+            options: {
+                gravure: [
+                    { label: 'Sans gravure', price: 0 },
+                    { label: 'Gravure personnalisée', price: 0 }
+                ]
+            }
+        },
+        {
+            id: 32,
+            name: 'Chargeur USB-C 35W',
+            slug: 'chargeur-usb-c-35w',
+            categoryId: 'cat_accessoires',
+            basePrice: 59.00,
+            oldPrice: null,
+            specs: {
+                type: 'Chargeur secteur',
+                puissance: '35W',
+                ports: '2x USB-C',
+                compatibilite: 'iPhone, iPad, Android'
+            },
+            description: 'Chargeur double USB-C 35W pour recharger deux appareils à la fois.',
+            images: [
+                '/asset/image/apple/iphone-15-pro.jpg',
+                '/asset/image/apple/iphone-15-pro-2.jpg'
+            ],
+            tags: ['chargeur', 'usb-c', 'accessoire'],
+            stock: 80,
+            isNew: false,
+            isBestSeller: false,
+            rating: 4.2,
+            reviews: 134,
+            options: {}
+        },
+        {
+            id: 33,
+            name: 'Coque silicone Premium',
+            slug: 'coque-silicone-premium',
+            categoryId: 'cat_accessoires',
+            basePrice: 29.00,
+            oldPrice: 39.00,
+            specs: {
+                type: 'Coque de protection',
+                matiere: 'Silicone',
+                compatibilite: 'iPhone 15 / 15 Pro'
+            },
+            description: 'Coque en silicone doux, protection renforcée et toucher agréable.',
+            images: [
+                '/asset/image/apple/iphone-15.jpeg',
+                '/asset/image/apple/iphone-15-2.jpg'
+            ],
+            tags: ['coque', 'protection', 'accessoire'],
+            stock: 120,
+            isNew: false,
+            isBestSeller: false,
+            rating: 3.9,
+            reviews: 76,
+            options: {
+                color: [
+                    { label: 'Noir', price: 0 },
+                    { label: 'Bleu', price: 0 },
+                    { label: 'Rose', price: 0 }
                 ]
             }
         }
