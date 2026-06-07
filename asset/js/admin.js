@@ -1,6 +1,5 @@
 // ============================================================
 //  admin.js — Espace administrateur PearTech
-//
 //  Accessible uniquement aux comptes de rôle "admin".
 //  Consomme les routes /api/admin/* et /api/produits (CRUD).
 // ============================================================
@@ -8,9 +7,9 @@
 (function () {
     'use strict';
 
-    // ── Petites fonctions utilitaires ─────────────────────────
-    const app     = () => document.getElementById('admin-app');     // conteneur racine de la page
-    const content = () => document.getElementById('admin-content'); // zone de contenu (à droite)
+    // ── Utilitaires ───────────────────────────────────────────
+    const app     = () => document.getElementById('admin-app');
+    const content = () => document.getElementById('admin-content');
 
     // Échappe les caractères dangereux pour éviter les injections HTML (XSS)
     function esc(s) {
@@ -22,9 +21,9 @@
     // Formate une date ISO en date/heure française
     function dateFr(d) { return new Date(d).toLocaleString('fr-FR'); }
 
-    // Affiche une petite notification verte en haut à droite (2,5 s)
+    // Affiche une notification temporaire en haut à droite
     function toast(msg) {
-        document.querySelectorAll('.admin-toast').forEach(t => t.remove()); // évite les doublons
+        document.querySelectorAll('.admin-toast').forEach(t => t.remove());
         const t = document.createElement('div');
         t.className = 'admin-toast';
         t.textContent = msg;
@@ -36,25 +35,24 @@
         content().innerHTML = `<p class="err-box">Erreur : ${esc(e.message || 'inconnue')}</p>`;
     }
 
-    // ── Point d'entrée : exécuté quand la page est chargée ────
+    // ── Point d'entrée ────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', init);
 
+    // Affiche l'interface admin si l'utilisateur est admin, sinon l'écran de connexion
     function init() {
-        // Sécurité : sans le client API, on ne peut rien faire
         if (!window.PearTechAPI) {
             app().innerHTML = '<p class="err-box" style="margin:2rem">API indisponible (back-end démarré ?).</p>';
             return;
         }
-        // On vérifie que l'utilisateur est connecté ET administrateur
         const user = PearTechAPI.getUser();
         if (!PearTechAPI.isLoggedIn() || !user || user.role !== 'admin') {
-            renderLogin();   // sinon : écran de connexion admin
+            renderLogin();
         } else {
-            renderLayout();  // sinon : interface d'administration
+            renderLayout();
         }
     }
 
-    // ── Écran de connexion administrateur ─────────────────────
+    // Écran de connexion administrateur
     function renderLogin() {
         app().innerHTML = `
             <div class="admin-login">
@@ -74,15 +72,14 @@
                 </div>
             </div>`;
 
-        // Soumission du formulaire de connexion
         document.getElementById('admin-login-form').addEventListener('submit', async e => {
-            e.preventDefault(); // empêche le rechargement de la page
+            e.preventDefault();
             const email = document.getElementById('al-email').value.trim();
             const pass  = document.getElementById('al-pass').value;
             const errEl = document.getElementById('al-err');
             errEl.hidden = true;
             try {
-                const rep = await PearTechAPI.connexion(email, pass); // appel API (vérifie le mot de passe)
+                const rep = await PearTechAPI.connexion(email, pass);
                 // On refuse l'accès si le compte n'est pas administrateur
                 if (rep.utilisateur.role !== 'admin') {
                     PearTechAPI.clearAuth();
@@ -90,7 +87,7 @@
                     errEl.hidden = false;
                     return;
                 }
-                renderLayout(); // connexion OK : on affiche l'interface
+                renderLayout();
             } catch (err) {
                 errEl.textContent = err.message || 'Connexion impossible.';
                 errEl.hidden = false;
@@ -98,7 +95,7 @@
         });
     }
 
-    // ── Mise en page (menu latéral + zone de contenu) ─────────
+    // Mise en page : menu latéral + zone de contenu
     function renderLayout() {
         const u = PearTechAPI.getUser();
         app().innerHTML = `
@@ -122,7 +119,6 @@
                 <main class="admin-main" id="admin-content"></main>
             </div>`;
 
-        // Clic sur un onglet du menu : on active le bouton et on affiche la section
         app().querySelectorAll('.admin-side nav button').forEach(btn => {
             btn.addEventListener('click', () => {
                 app().querySelectorAll('.admin-side nav button').forEach(b => b.classList.remove('active'));
@@ -130,13 +126,12 @@
                 show(btn.dataset.sec);
             });
         });
-        // Déconnexion : on efface le token et on revient à l'écran de connexion
         document.getElementById('admin-logout').addEventListener('click', () => {
             PearTechAPI.clearAuth();
             renderLogin();
         });
 
-        show('dashboard'); // section affichée par défaut
+        show('dashboard');
     }
 
     // Aiguille vers la fonction de chargement de la section demandée
@@ -150,10 +145,11 @@
         else if (sec === 'messages')     loadMessages();
     }
 
-    // ── Tableau de bord (chiffres clés) ───────────────────────
+    // ── Tableau de bord ───────────────────────────────────────
+    // Charge et affiche les chiffres clés
     async function loadDashboard() {
         try {
-            const s = await PearTechAPI.adminStats(); // récupère les statistiques
+            const s = await PearTechAPI.adminStats();
             content().innerHTML = `
                 <h1>Tableau de bord</h1>
                 <div class="cards">
@@ -174,7 +170,8 @@
         return `<div class="card"><div class="card-val">${esc(val)}</div><div class="card-lbl">${esc(label)}</div></div>`;
     }
 
-    // ── Statistiques détaillées (agrégations) ─────────────────
+    // ── Statistiques (agrégations) ────────────────────────────
+    // Affiche top produits, chiffre d'affaires par mois et pages visitées
     async function loadStatistiques() {
         try {
             const s = await PearTechAPI.adminStatistiques();
@@ -213,12 +210,11 @@
     // ── Produits (Créer / Lire / Modifier / Supprimer) ────────
     let categories = []; // mémorisées pour le formulaire et l'affichage du nom de catégorie
 
+    // Charge le tableau des produits et branche les boutons d'action
     async function loadProduits() {
         try {
-            // On charge en parallèle la liste des produits et des catégories
             const [produits, cats] = await Promise.all([PearTechAPI.produits(), PearTechAPI.categories()]);
             categories = cats;
-            // Tableau des produits
             content().innerHTML = `
                 <div class="head-row">
                     <h1>Produits (${produits.length})</h1>
@@ -242,16 +238,14 @@
                     </tbody>
                 </table>`;
 
-            // Bouton "Ajouter" : ouvre le formulaire vide
             document.getElementById('add-prod').addEventListener('click', () => openProdForm(null));
-            // Boutons "Modifier" : ouvrent le formulaire prérempli
             content().querySelectorAll('[data-edit]').forEach(b =>
                 b.addEventListener('click', () => openProdForm(produits.find(p => p.id == b.dataset.edit))));
-            // Boutons "Supprimer"
             content().querySelectorAll('[data-del]').forEach(b =>
                 b.addEventListener('click', () => delProd(b.dataset.del)));
         } catch (e) { erreur(e); }
     }
+
     // Retrouve le nom d'une catégorie à partir de son id
     function catName(id) { const c = categories.find(c => c.id === id); return c ? c.nom : id; }
 
@@ -262,11 +256,9 @@
         catch (e) { erreur(e); }
     }
 
-    // Ouvre la fenêtre (modale) de création/édition d'un produit.
-    // p = null pour une création, p = produit existant pour une modification.
+    // Ouvre la modale de création (p = null) ou d'édition (p = produit) d'un produit
     function openProdForm(p) {
         const isEdit = !!p;
-        // Liste déroulante des catégories (avec la catégorie du produit présélectionnée)
         const opts = categories.map(c =>
             `<option value="${c.id}" ${p && p.categorieId === c.id ? 'selected' : ''}>${esc(c.nom)}</option>`).join('');
 
@@ -307,11 +299,9 @@
             </div>`;
         document.body.appendChild(modal);
 
-        // Fermeture de la modale (bouton Annuler ou clic en dehors)
         modal.querySelector('#prod-cancel').addEventListener('click', () => modal.remove());
         modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 
-        // Soumission du formulaire produit
         modal.querySelector('#prod-form').addEventListener('submit', async e => {
             e.preventDefault();
             const f = e.target;
@@ -329,7 +319,6 @@
                 return;
             }
 
-            // Construction de l'objet produit à envoyer à l'API
             const payload = {
                 nom:           f.nom.value.trim(),
                 slug:          f.slug.value.trim(),
@@ -342,34 +331,31 @@
                 estNouveau:    f.estNouveau.checked,
                 estBestSeller: f.estBestSeller.checked,
                 description:   f.description.value.trim(),
-                // textarea -> tableau d'URLs (une par ligne, on retire les vides)
                 images:        f.images.value.split('\n').map(s => s.trim()).filter(Boolean),
-                // champ texte -> tableau de tags (séparés par des virgules)
                 tags:          f.tags.value.split(',').map(s => s.trim()).filter(Boolean),
                 specs:         specs,
                 options:       options
             };
 
             try {
-                // PUT si on modifie, POST si on crée
                 if (isEdit) await PearTechAPI.produitModifier(p.id, payload);
                 else        await PearTechAPI.produitCreer(payload);
                 modal.remove();
                 toast(isEdit ? 'Produit modifié' : 'Produit créé');
-                loadProduits(); // on rafraîchit la liste
+                loadProduits();
             } catch (err) {
-                // On affiche les éventuels messages de validation du serveur
                 errEl.textContent = (err.details && err.details.map(d => d.message).join(' ')) || err.message;
                 errEl.hidden = false;
             }
         });
     }
 
-    // ── Commandes (lecture + changement de statut) ────────────
+    // ── Commandes ─────────────────────────────────────────────
+    // Liste les commandes et permet de changer leur statut
     async function loadCommandes() {
         try {
-            const cmds = await PearTechAPI.adminCommandes(); // toutes les commandes
-            const statuts = ['en attente', 'payée', 'expédiée', 'livrée', 'annulée']; // valeurs possibles
+            const cmds = await PearTechAPI.adminCommandes();
+            const statuts = ['en attente', 'payée', 'expédiée', 'livrée', 'annulée'];
             content().innerHTML = `
                 <h1>Commandes (${cmds.length})</h1>
                 <table class="tbl">
@@ -389,7 +375,6 @@
                     </tbody>
                 </table>`;
 
-            // Changer la valeur d'un menu déroulant => met à jour le statut côté serveur
             content().querySelectorAll('select[data-cmd]').forEach(sel =>
                 sel.addEventListener('change', async () => {
                     try { await PearTechAPI.adminCommandeStatut(sel.dataset.cmd, sel.value); toast('Statut mis à jour'); }
@@ -398,7 +383,8 @@
         } catch (e) { erreur(e); }
     }
 
-    // ── Utilisateurs (liste en lecture seule) ─────────────────
+    // ── Utilisateurs ──────────────────────────────────────────
+    // Liste les comptes avec changement de rôle et suppression
     async function loadUtilisateurs() {
         try {
             const us = await PearTechAPI.adminUtilisateurs();
@@ -422,13 +408,11 @@
                     </tbody>
                 </table>`;
 
-            // Changer le rôle d'un utilisateur
             content().querySelectorAll('select[data-role]').forEach(sel =>
                 sel.addEventListener('change', async () => {
                     try { await PearTechAPI.adminUtilisateurModifier(sel.dataset.role, { role: sel.value }); toast('Rôle mis à jour'); }
                     catch (e) { erreur(e); }
                 }));
-            // Supprimer un utilisateur
             content().querySelectorAll('[data-del-user]').forEach(b =>
                 b.addEventListener('click', async () => {
                     if (!confirm('Supprimer cet utilisateur ?')) return;
@@ -438,7 +422,8 @@
         } catch (e) { erreur(e); }
     }
 
-    // ── Messages de contact (liste en lecture seule) ──────────
+    // ── Messages de contact ───────────────────────────────────
+    // Liste les messages reçus
     async function loadMessages() {
         try {
             const ms = await PearTechAPI.adminMessages();
