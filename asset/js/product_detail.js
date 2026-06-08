@@ -92,7 +92,124 @@
 
         // Initialiser les notes personnelles
         initNotes();
+
+        // Charger les avis clients depuis l'API
+        initAvis(product);
     });
+
+    // Charge et affiche les vrais avis du produit (API), avec formulaire de dépôt
+    function initAvis(product) {
+        const liste    = document.getElementById('reviews-list');
+        const formZone = document.getElementById('avis-form-zone');
+        if (!liste || !window.PearTechAPI) return;
+
+        const esc = s => (s == null ? '' : String(s)).replace(/[&<>"]/g,
+            m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+        const etoiles = n => '★'.repeat(Math.round(n)) + `<span style="opacity:.3">${'★'.repeat(5 - Math.round(n))}</span>`;
+
+        injecterStylesAvis();
+
+        // Formulaire : visible si connecté, sinon invitation à se connecter
+        function rendreForm() {
+            if (!PearTechAPI.isLoggedIn()) {
+                formZone.innerHTML = '<p class="avis-hint">Connectez-vous pour laisser un avis. <a href="page_profil.html">Se connecter</a></p>';
+                return;
+            }
+            formZone.innerHTML = `
+                <form id="avis-form" class="avis-form">
+                    <h3>Donner mon avis</h3>
+                    <select id="avis-note">
+                        <option value="5">5 ★ — Excellent</option>
+                        <option value="4">4 ★ — Très bien</option>
+                        <option value="3">3 ★ — Correct</option>
+                        <option value="2">2 ★ — Décevant</option>
+                        <option value="1">1 ★ — Mauvais</option>
+                    </select>
+                    <textarea id="avis-commentaire" rows="3" placeholder="Votre commentaire (optionnel)"></textarea>
+                    <div id="avis-msg" class="avis-msg" hidden></div>
+                    <button type="submit" class="avis-submit">Publier mon avis</button>
+                </form>`;
+
+            document.getElementById('avis-form').addEventListener('submit', async e => {
+                e.preventDefault();
+                const note = parseInt(document.getElementById('avis-note').value);
+                const commentaire = document.getElementById('avis-commentaire').value.trim();
+                const msg = document.getElementById('avis-msg');
+                msg.hidden = true;
+                try {
+                    await PearTechAPI.avisAjouter({ produitId: product.id, note, commentaire });
+                    charger();
+                } catch (err) {
+                    msg.textContent = err.message || 'Erreur lors de l\'envoi de l\'avis.';
+                    msg.hidden = false;
+                }
+            });
+        }
+
+        // Récupère les avis et met à jour la moyenne, la répartition et la liste
+        async function charger() {
+            let avis = [];
+            try { avis = await PearTechAPI.avisProduit(product.id); }
+            catch (e) { liste.innerHTML = '<p>Impossible de charger les avis.</p>'; return; }
+
+            const n = avis.length;
+            const moyEl  = document.getElementById('avis-moyenne');
+            const barsEl = document.getElementById('avis-bars');
+
+            if (n > 0) {
+                const moyenne = avis.reduce((s, a) => s + a.note, 0) / n;
+                if (moyEl) moyEl.textContent = moyenne.toFixed(1);
+                const dist = [0, 0, 0, 0, 0];
+                avis.forEach(a => { if (a.note >= 1 && a.note <= 5) dist[a.note - 1]++; });
+                if (barsEl) barsEl.innerHTML = [5, 4, 3, 2, 1].map(star => {
+                    const pct = Math.round(dist[star - 1] / n * 100);
+                    return `<div class="review-bar-item"><span class="bar-label">${star}★</span>
+                        <div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div><span>${pct}%</span></div>`;
+                }).join('');
+            } else if (barsEl) {
+                barsEl.innerHTML = '';
+            }
+
+            const tabBtn = document.querySelector('.tab-btn[data-tab="reviews"]');
+            if (tabBtn) tabBtn.textContent = `Avis clients (${n})`;
+
+            liste.innerHTML = n === 0
+                ? '<p>Aucun avis pour le moment. Soyez le premier à donner votre avis !</p>'
+                : avis.map(a => `
+                    <div class="review-card">
+                        <div class="review-header">
+                            <span class="review-author">${esc(a.auteur)}</span>
+                            <span class="review-date">${new Date(a.creeLe).toLocaleDateString('fr-FR')}</span>
+                        </div>
+                        <div class="stars">${etoiles(a.note)}</div>
+                        ${a.commentaire ? `<p class="review-text">${esc(a.commentaire)}</p>` : ''}
+                    </div>`).join('');
+        }
+
+        rendreForm();
+        charger();
+    }
+
+    // Injecte les styles du bloc avis (une seule fois)
+    function injecterStylesAvis() {
+        if (document.getElementById('avis-styles')) return;
+        const s = document.createElement('style');
+        s.id = 'avis-styles';
+        s.textContent = `
+            .avis-form { background: var(--card-bg, rgba(0,0,0,.03)); border: 1px solid var(--border-color, #e5e7eb);
+                border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0 1.5rem; }
+            .avis-form h3 { margin: 0 0 .8rem; font-size: 1rem; }
+            .avis-form select, .avis-form textarea { width: 100%; margin-bottom: .7rem; padding: .55rem .7rem;
+                border: 1px solid var(--border-color, #d1d5db); border-radius: 8px; font: inherit; background: var(--bg, #fff); color: inherit; }
+            .avis-submit { background: var(--primary, #3B82F6); color: #fff; border: none; padding: .6rem 1.2rem;
+                border-radius: 8px; cursor: pointer; font-weight: 600; }
+            .avis-submit:hover { opacity: .9; }
+            .avis-msg { color: #ef4444; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+                border-radius: 8px; padding: .5rem .7rem; margin-bottom: .7rem; font-size: .9rem; }
+            .avis-hint { color: var(--text-secondary, #6b7280); margin: 1rem 0 1.5rem; }
+        `;
+        document.head.appendChild(s);
+    }
 
     function generateProductHTML(product) {
         // Calcul du badge de stock
@@ -246,37 +363,12 @@
                 </div>
                 <div class="tab-content" id="tab-reviews">
                     <div class="reviews-summary">
-                        <div class="average-rating">${product.rating}</div>
-                        <div class="review-bars">
-                            ${[5,4,3,2,1].map(star => {
-                                let percent = star === 5 ? 70 : star === 4 ? 20 : star === 3 ? 7 : star === 2 ? 2 : 1;
-                                return `
-                                    <div class="review-bar-item">
-                                        <span class="bar-label">${star}★</span>
-                                        <div class="bar"><div class="bar-fill" style="width: ${percent}%"></div></div>
-                                        <span>${percent}%</span>
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
+                        <div class="average-rating" id="avis-moyenne">${product.rating}</div>
+                        <div class="review-bars" id="avis-bars"></div>
                     </div>
-                    <div class="reviews-list">
-                        <div class="review-card">
-                            <div class="review-header">
-                                <span class="review-author">Jean D.</span>
-                                <span class="review-date">Il y a 2 jours</span>
-                            </div>
-                            <div class="stars">★★★★★</div>
-                            <p class="review-text">Idéal pour le télétravail. Silencieux, très léger et l'écran est parfait.</p>
-                        </div>
-                        <div class="review-card">
-                            <div class="review-header">
-                                <span class="review-author">Marie L.</span>
-                                <span class="review-date">Il y a 1 semaine</span>
-                            </div>
-                            <div class="stars">★★★★☆</div>
-                            <p class="review-text">Parfait en déplacement, l'autonomie tient la journée.</p>
-                        </div>
+                    <div id="avis-form-zone"></div>
+                    <div class="reviews-list" id="reviews-list">
+                        <p>Chargement des avis…</p>
                     </div>
                 </div>
                 <div class="tab-content" id="tab-faq">
