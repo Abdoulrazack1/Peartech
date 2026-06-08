@@ -1379,15 +1379,72 @@ a {
 .footer {
     background: var(--secondary);
     border-top: 1px solid var(--border);
-    padding: var(--spacing-xl) 0 var(--spacing-md);
+    padding: 0 0 var(--spacing-md);
     margin-top: var(--spacing-xl);
 }
 
+/* Bandeau réassurance (livraison, paiement, retours, SAV) */
+.footer-reassurance {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: var(--spacing-xl);
+}
+
+.reassurance-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.reassurance-item svg { color: var(--primary); flex-shrink: 0; }
+.reassurance-item strong { display: block; font-size: 0.9rem; color: var(--text-primary); }
+.reassurance-item span { font-size: 0.78rem; color: var(--text-secondary); }
+
 .footer-grid {
-    display: grid;                                             /* 3 colonnes */
-    grid-template-columns: repeat(3, 1fr);
+    display: grid;                                             /* marque (large) + 3 colonnes de liens */
+    grid-template-columns: 1.8fr 1fr 1fr 1fr;
     gap: var(--spacing-xl);
     margin-bottom: var(--spacing-lg);
+}
+
+/* Colonne marque */
+.footer-brand { max-width: 320px; }
+
+.footer-logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.7rem;
+}
+
+.footer-tagline {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.footer-social { display: flex; gap: 0.6rem; }
+
+.footer-social a {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.footer-social a:hover {
+    color: #fff;
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .footer-column h4 {
@@ -1413,17 +1470,35 @@ a {
 
 .footer-column a:hover {
     color: var(--primary);
+    padding-left: 3px;
 }
 
 .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
     padding-top: var(--spacing-md);
     border-top: 1px solid var(--border);
-    text-align: center;
 }
 
 .footer-bottom p {
     color: var(--text-muted);
     font-size: 0.8rem;
+    margin: 0;
+}
+
+.footer-pay { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+
+.footer-pay span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: rgba(127, 127, 127, 0.12);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.25rem 0.55rem;
 }
 
 /* BREADCRUMB - Global (toutes les pages) */
@@ -1751,7 +1826,8 @@ a {
     .product-footer { flex-wrap: nowrap; gap: 0.4rem; min-height: auto; }
     .product-price { font-size: 1rem; }
     .product-actions { flex-shrink: 0; }
-    .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; } /* 2 colonnes */
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }   /* marque + liens sur 2 colonnes */
+    .footer-brand { grid-column: 1 / -1; max-width: none; }        /* marque en pleine largeur */
 }
 
 @media (max-width: 768px) {
@@ -1762,6 +1838,8 @@ a {
     .collection-banner { flex-direction: column; text-align: center; gap: 1rem; } /* Colonne centrée */
     .newsletter-form { flex-direction: column; }                  /* Formulaire en colonne */
     .footer-grid { grid-template-columns: 1fr; }                  /* 1 colonne */
+    .footer-reassurance { grid-template-columns: 1fr 1fr; gap: 1rem; } /* réassurance 2 colonnes */
+    .footer-bottom { justify-content: center; text-align: center; }
 }
 
 @media (max-width: 640px) {
