@@ -98,6 +98,10 @@
                         <span class="material-symbols-outlined" aria-hidden="true">tablet</span>
                         Tablettes
                     </a>
+                    <a href="page_catalogue.html?categorie=accessoires" class="mobile-nav-item">
+                        <span class="material-symbols-outlined" aria-hidden="true">headphones</span>
+                        Accessoires
+                    </a>
                 </nav>
                 <div class="mobile-actions">
                     <a href="page_profil.html" class="mobile-action-btn">

@@ -1630,6 +1630,16 @@ a {
     justify-content: center;
     font-weight: 700;                                           /* Gras */
     font-size: 1rem;
+    overflow: hidden;                                           /* Évite que le logo déborde */
+    flex-shrink: 0;
+}
+
+/* Contraint le logo dans son badge (sinon l'image s'affiche en taille réelle) */
+.mobile-logo .logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .mobile-logo .logo-title {
@@ -1801,6 +1811,9 @@ a {
     .header-nav { gap: 0.5rem; margin-left: auto; }             /* Ajuste la nav */
     .header-nav .icon-btn { padding: 0.6rem; width: 44px; height: 44px; justify-content: center; } /* Icônes seules */
     .header-nav .icon-btn span:not(.material-symbols-outlined) { display: none; } /* Cache le texte */
+    /* Favoris et Compte sont déjà dans le menu burger : on les masque du header pour l'aérer */
+    .header-nav a[aria-label="Mes favoris"],
+    .header-nav a[aria-label="Mon compte"] { display: none !important; }
     /* Badge en position absolute quand le texte est masqué */
     .header-nav .icon-btn .cart-badge,
     .header-nav .icon-btn .fav-badge {
