@@ -1,0 +1,167 @@
+// Données exhaustives des 9 domaines backend de PearTech.
+// tag = pastille du menu ; acc = niveau d'accès ; chain = chaîne d'appel ;
+// ep = [méthode, chemin, CRUD, rôle] ; rules = règles métier serveur.
+module.exports = [
+  {
+    tag: "Pr", n: "Produits & Catalogue", sub: "Le cœur du site : fiches produits et rayons", acc: "public",
+    chain: ["produitRoutes", "produitController", "produitService", "produitModel", "MySQL"],
+    ep: [
+      ["GET", "/api/produits", "R", "Liste filtrée : catégorie, recherche, marque, prix, tri, pagination"],
+      ["GET", "/api/produits/marques", "R", "Marques distinctes (pour le filtre)"],
+      ["GET", "/api/produits/:id", "R", "Détail par id numérique OU par slug"],
+      ["GET", "/api/categories", "R", "Liste des catégories"],
+      ["GET", "/api/categories/:slug", "R", "Une catégorie par son slug"],
+      ["POST", "/api/produits", "C", "Création produit (admin)"],
+      ["PUT", "/api/produits/:id", "U", "Mise à jour produit (admin)"],
+      ["DELETE", "/api/produits/:id", "D", "Suppression produit (admin)"],
+    ],
+    rules: [
+      "Lecture publique ; création / modification / suppression réservées à l'admin.",
+      "SELECT de colonnes nommées (jamais SELECT *), renommage snake_case → camelCase.",
+      "WHERE construit dynamiquement avec des paramètres ? (anti-injection).",
+      "Tri sur liste blanche (prix, nom, populaire, nouveauté) — pas d'injection ORDER BY.",
+      "Champs specs / options / images / tags stockés en JSON.",
+      "Pagination optionnelle : renvoie { data, total, page, limit }.",
+    ],
+  },
+  {
+    tag: "Pa", n: "Panier", sub: "1 panier par client, recalculé côté serveur", acc: "token",
+    chain: ["panierRoutes", "panierController", "panierService", "panierModel + utils/prix", "cart / cart_items"],
+    ep: [
+      ["GET", "/api/panier", "R", "Contenu + prix unitaires recalculés + total"],
+      ["POST", "/api/panier", "C", "Ajoute un produit (ou cumule la quantité)"],
+      ["PUT", "/api/panier/:produitId", "U", "Définit la quantité exacte d'une ligne"],
+      ["DELETE", "/api/panier/:produitId", "D", "Retire une ligne du panier"],
+      ["DELETE", "/api/panier", "D", "Vide tout le panier"],
+    ],
+    rules: [
+      "Connexion obligatoire (verifierToken sur toutes les routes).",
+      "1 panier (cart) par utilisateur, créé à la volée s'il n'existe pas.",
+      "Vérifie l'existence du produit ET le stock avant ajout / modification.",
+      "Prix unitaire calculé serveur via utils/prix (prix + suppléments d'options).",
+      "ON DUPLICATE KEY : ré-ajouter un produit cumule la quantité.",
+      "Totaux arrondis au centime côté serveur.",
+    ],
+  },
+  {
+    tag: "Av", n: "Avis (Reviews)", sub: "Notes et commentaires clients sur les produits", acc: "token",
+    chain: ["reviewRoutes", "reviewController", "avisService", "reviewModel", "MySQL"],
+    ep: [
+      ["GET", "/api/produits/:id/avis", "R", "Avis publics d'un produit (+ prénom auteur)"],
+      ["POST", "/api/reviews", "C", "Déposer un avis (note 1-5 + commentaire)"],
+      ["PUT", "/api/reviews/:id", "U", "Modifier SON propre avis"],
+      ["DELETE", "/api/reviews/:id", "D", "Supprimer SON propre avis"],
+    ],
+    rules: [
+      "Lecture publique ; écriture réservée aux utilisateurs connectés.",
+      "Note bornée 1 à 5 (validée en route ET en service).",
+      "Clé unique (utilisateur, produit) : 1 seul avis par produit → sinon 409.",
+      "Contrôle de propriété : modifier / supprimer l'avis d'autrui → 403.",
+      "Après chaque écriture : recalcul de la note moyenne + nb_avis du produit.",
+    ],
+  },
+  {
+    tag: "Co", n: "Commandes", sub: "Création transactionnelle, prix recalculés", acc: "token",
+    chain: ["commandeRoutes", "commandeController", "commandeService", "commandeModel + utils", "commandes / articles"],
+    ep: [
+      ["GET", "/api/commandes", "R", "Mes commandes (avec leurs articles)"],
+      ["GET", "/api/commandes/:id", "R", "Détail d'une commande (scopée à moi)"],
+      ["POST", "/api/commandes", "C", "Commander depuis une liste d'articles"],
+      ["POST", "/api/commandes/depuis-panier", "C", "Commander depuis le panier, puis le vider"],
+      ["PUT", "/api/commandes/:id/cancel", "U", "Annuler (remet les produits en stock)"],
+    ],
+    rules: [
+      "Le serveur RECALCULE toujours les prix depuis la base (zéro confiance au client).",
+      "TVA 20 % incluse + frais de port (offerts dès 100 €) via utils/config.",
+      "Création en TRANSACTION : commande + articles + décrément du stock (rollback si erreur).",
+      "Annulation : verrou FOR UPDATE + remise en stock + statut « annulée ».",
+      "Refus d'annuler une commande expédiée / livrée / déjà annulée.",
+      "Email de confirmation simulé via utils/email (Nodemailer).",
+    ],
+  },
+  {
+    tag: "Au", n: "Authentification & Profil", sub: "Comptes, JWT, bcrypt et gestion du profil", acc: "token",
+    chain: ["authRoutes", "authController", "authService", "utilisateurModel", "MySQL"],
+    ep: [
+      ["POST", "/api/auth/inscription", "C", "Créer un compte (hash bcrypt)"],
+      ["POST", "/api/auth/connexion", "R", "Se connecter (rate-limit 10 / 15 min)"],
+      ["POST", "/api/auth/refresh", "R", "Renouveler l'access token"],
+      ["GET", "/api/auth/profil", "R", "Lire mon profil"],
+      ["PUT", "/api/auth/profil", "U", "Modifier mes informations"],
+      ["PUT", "/api/auth/mot-de-passe", "U", "Changer mon mot de passe (vérifie l'ancien)"],
+    ],
+    rules: [
+      "Mots de passe hachés bcrypt (10 tours) — jamais renvoyés au client.",
+      "JWT access court (1 h) + refresh token long (7 j).",
+      "Connexion : message d'erreur générique (ne révèle pas email vs mot de passe).",
+      "Inscription : 409 si l'email existe déjà.",
+      "verifierToken attache req.utilisateur { id, email, role } aux routes protégées.",
+    ],
+  },
+  {
+    tag: "Fa", n: "Favoris", sub: "Produits enregistrés, CRUD simple", acc: "token",
+    chain: ["favoriRoutes", "favoriController", "(CRUD direct)", "favoriModel", "MySQL"],
+    ep: [
+      ["GET", "/api/favoris", "R", "Mes produits favoris"],
+      ["POST", "/api/favoris", "C", "Ajouter un favori"],
+      ["DELETE", "/api/favoris/:produitId", "D", "Retirer un favori"],
+    ],
+    rules: [
+      "Connexion obligatoire ; chaque favori est lié à l'utilisateur.",
+      "Vérifie que le produit existe avant l'ajout.",
+      "Clé unique (utilisateur, produit) + INSERT IGNORE : aucun doublon possible.",
+      "CRUD simple → pas de couche service, le contrôleur appelle directement le modèle.",
+    ],
+  },
+  {
+    tag: "Ad", n: "Adresses de livraison", sub: "Carnet d'adresses, une seule principale", acc: "token",
+    chain: ["adresseRoutes", "adresseController", "(CRUD direct)", "adresseModel", "MySQL"],
+    ep: [
+      ["GET", "/api/adresses", "R", "Mes adresses"],
+      ["POST", "/api/adresses", "C", "Ajouter une adresse"],
+      ["PUT", "/api/adresses/:id", "U", "Modifier une adresse"],
+      ["DELETE", "/api/adresses/:id", "D", "Supprimer une adresse"],
+    ],
+    rules: [
+      "Connexion obligatoire ; tout est scopé par utilisateur_id.",
+      "Une seule adresse « principale » : la définir réinitialise les autres.",
+      "Validation : nom, rue, code postal et ville obligatoires.",
+      "CRUD simple → contrôleur direct vers le modèle, sans service.",
+    ],
+  },
+  {
+    tag: "Ct", n: "Contact / Messages", sub: "Formulaire public, lecture admin", acc: "public",
+    chain: ["messageRoutes", "messageController", "(CRUD direct)", "messageModel", "MySQL"],
+    ep: [
+      ["POST", "/api/contact", "C", "Envoyer un message (formulaire public)"],
+      ["GET", "/api/contact", "R", "Consulter les messages reçus (admin)"],
+    ],
+    rules: [
+      "Envoi ouvert à tous, avec validation (nom, email, sujet, message ≥ 5 caractères).",
+      "Lecture réservée à l'admin (verifierToken + verifierAdmin).",
+      "Stocké dans messages_contact ; visible dans l'espace d'administration.",
+    ],
+  },
+  {
+    tag: "Am", n: "Espace Admin", sub: "Tableau de bord, stats, commandes, comptes", acc: "admin",
+    chain: ["adminRoutes", "adminController", "statService + utilisateurService", "modèles", "MySQL"],
+    ep: [
+      ["GET", "/api/admin/stats", "R", "Chiffres clés du tableau de bord"],
+      ["GET", "/api/admin/statistics", "R", "Top produits, CA / mois, visites"],
+      ["GET", "/api/admin/logs", "R", "Derniers logs applicatifs"],
+      ["GET", "/api/admin/commandes", "R", "Toutes les commandes (tous clients)"],
+      ["PUT", "/api/admin/commandes/:id", "U", "Changer le statut d'une commande"],
+      ["GET", "/api/admin/utilisateurs", "R", "Liste des utilisateurs"],
+      ["PUT", "/api/admin/utilisateurs/:id", "U", "Modifier un utilisateur (rôle…)"],
+      ["DELETE", "/api/admin/utilisateurs/:id", "D", "Supprimer un utilisateur"],
+      ["GET", "/api/admin/messages", "R", "Messages de contact"],
+    ],
+    rules: [
+      "Toutes les routes : verifierToken + verifierAdmin (rôle admin obligatoire).",
+      "Statut de commande validé sur liste blanche (en attente, payée, expédiée, livrée, annulée).",
+      "Un admin ne peut pas supprimer son propre compte.",
+      "Rôle utilisateur validé sur liste blanche (client / admin).",
+      "Stats = agrégations SQL (COUNT, SUM, AVG, GROUP BY) alimentées par le middleware journal.",
+    ],
+  },
+];

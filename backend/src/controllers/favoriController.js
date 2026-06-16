@@ -1,17 +1,19 @@
 // ============================================================
-//  Logique métier : favoris (nécessite d'être connecté).
+//  Contrôleur : favoris (nécessite d'être connecté, délègue au modèle).
 // ============================================================
 
 const Favori = require('../models/favoriModel');
 const Produit = require('../models/produitModel');
 
 // GET /api/favoris
+// Renvoie la liste des produits mis en favori par l'utilisateur connecté.
 async function lister(req, res) {
     const favoris = await Favori.lister(req.utilisateur.id);
     res.json(favoris);
 }
 
 // POST /api/favoris  { produitId }
+// Ajoute un produit aux favoris de l'utilisateur, après avoir vérifié qu'il existe.
 async function ajouter(req, res) {
     const { produitId } = req.body;
 
@@ -26,6 +28,7 @@ async function ajouter(req, res) {
 }
 
 // DELETE /api/favoris/:produitId
+// Retire un produit des favoris ; répond 404 s'il n'y figurait pas.
 async function retirer(req, res) {
     const ok = await Favori.retirer(req.utilisateur.id, req.params.produitId);
     if (!ok) {
