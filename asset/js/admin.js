@@ -7,21 +7,16 @@
 (function () {
     'use strict';
 
-    // ── Utilitaires ───────────────────────────────────────────
     const app     = () => document.getElementById('admin-app');
     const content = () => document.getElementById('admin-content');
 
-    // Échappe les caractères dangereux pour éviter les injections HTML (XSS)
     function esc(s) {
         return (s == null ? '' : String(s)).replace(/[&<>"]/g,
             m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
     }
-    // Formate un nombre en prix français : 1234.5 -> "1 234,50 €"
     function euro(n) { return Number(n).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €'; }
-    // Formate une date ISO en date/heure française
     function dateFr(d) { return new Date(d).toLocaleString('fr-FR'); }
 
-    // Affiche une notification temporaire en haut à droite
     function toast(msg) {
         document.querySelectorAll('.admin-toast').forEach(t => t.remove());
         const t = document.createElement('div');
@@ -30,15 +25,12 @@
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 2500);
     }
-    // Affiche un message d'erreur dans la zone de contenu
     function erreur(e) {
         content().innerHTML = `<p class="err-box">Erreur : ${esc(e.message || 'inconnue')}</p>`;
     }
 
-    // ── Point d'entrée ────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', init);
 
-    // Affiche l'interface admin si l'utilisateur est admin, sinon l'écran de connexion
     function init() {
         if (!window.PearTechAPI) {
             app().innerHTML = '<p class="err-box" style="margin:2rem">API indisponible (back-end démarré ?).</p>';
@@ -52,7 +44,6 @@
         }
     }
 
-    // Écran de connexion administrateur
     function renderLogin() {
         app().innerHTML = `
             <div class="admin-login">
@@ -80,7 +71,6 @@
             errEl.hidden = true;
             try {
                 const rep = await PearTechAPI.connexion(email, pass);
-                // On refuse l'accès si le compte n'est pas administrateur
                 if (rep.utilisateur.role !== 'admin') {
                     PearTechAPI.clearAuth();
                     errEl.textContent = 'Ce compte n\'est pas administrateur.';
@@ -95,7 +85,6 @@
         });
     }
 
-    // Mise en page : menu latéral + zone de contenu
     function renderLayout() {
         const u = PearTechAPI.getUser();
         app().innerHTML = `
@@ -134,7 +123,6 @@
         show('dashboard');
     }
 
-    // Aiguille vers la fonction de chargement de la section demandée
     function show(sec) {
         content().innerHTML = '<p class="loading">Chargement…</p>';
         if (sec === 'dashboard')         loadDashboard();
@@ -146,7 +134,6 @@
     }
 
     // ── Tableau de bord ───────────────────────────────────────
-    // Charge et affiche les chiffres clés
     async function loadDashboard() {
         try {
             const s = await PearTechAPI.adminStats();
@@ -165,13 +152,11 @@
                 </div>`;
         } catch (e) { erreur(e); }
     }
-    // Génère une carte "valeur + libellé"
     function card(label, val) {
         return `<div class="card"><div class="card-val">${esc(val)}</div><div class="card-lbl">${esc(label)}</div></div>`;
     }
 
-    // ── Statistiques (agrégations) ────────────────────────────
-    // Affiche top produits, chiffre d'affaires par mois et pages visitées
+    // ── Statistiques ──────────────────────────────────────────
     async function loadStatistiques() {
         try {
             const s = await PearTechAPI.adminStatistiques();
@@ -207,26 +192,27 @@
         } catch (e) { erreur(e); }
     }
 
-    // ── Produits (Créer / Lire / Modifier / Supprimer) ────────
-    let categories = []; // mémorisées pour le formulaire et l'affichage du nom de catégorie
+    // ── Produits ──────────────────────────────────────────────
+    let categories = [];
 
-    // Charge le tableau des produits et branche les boutons d'action
     async function loadProduits() {
         try {
-            const [produits, cats] = await Promise.all([PearTechAPI.produits(), PearTechAPI.categories()]);
+            const [produits, cats] = await Promise.all([PearTechAPI.produits(''), PearTechAPI.categories()]);
+            const liste = Array.isArray(produits) ? produits : (produits.data || []);
             categories = cats;
             content().innerHTML = `
                 <div class="head-row">
-                    <h1>Produits (${produits.length})</h1>
+                    <h1>Produits (${liste.length})</h1>
                     <button class="btn" id="add-prod">+ Ajouter un produit</button>
                 </div>
                 <table class="tbl">
-                    <thead><tr><th>ID</th><th>Nom</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Actions</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Nom</th><th>Marque</th><th>Catégorie</th><th>Prix</th><th>Stock</th><th>Actions</th></tr></thead>
                     <tbody>
-                    ${produits.map(p => `
+                    ${liste.map(p => `
                         <tr>
                             <td>${p.id}</td>
                             <td>${esc(p.nom)}</td>
+                            <td>${esc(p.marque || '—')}</td>
                             <td>${esc(catName(p.categorieId))}</td>
                             <td>${euro(p.prix)}</td>
                             <td>${p.stock}</td>
@@ -240,25 +226,28 @@
 
             document.getElementById('add-prod').addEventListener('click', () => openProdForm(null));
             content().querySelectorAll('[data-edit]').forEach(b =>
-                b.addEventListener('click', () => openProdForm(produits.find(p => p.id == b.dataset.edit))));
+                b.addEventListener('click', () => openProdForm(liste.find(p => p.id == b.dataset.edit))));
             content().querySelectorAll('[data-del]').forEach(b =>
                 b.addEventListener('click', () => delProd(b.dataset.del)));
         } catch (e) { erreur(e); }
     }
 
-    // Retrouve le nom d'une catégorie à partir de son id
     function catName(id) { const c = categories.find(c => c.id === id); return c ? c.nom : id; }
 
-    // Supprime un produit (après confirmation)
     async function delProd(id) {
         if (!confirm('Supprimer définitivement ce produit ?')) return;
         try { await PearTechAPI.produitSupprimer(id); toast('Produit supprimé'); loadProduits(); }
         catch (e) { erreur(e); }
     }
 
-    // Ouvre la modale de création (p = null) ou d'édition (p = produit) d'un produit
     function openProdForm(p) {
         const isEdit = !!p;
+
+        let imagesExistantes = [];
+        if (p && p.images) {
+            imagesExistantes = Array.isArray(p.images) ? p.images : JSON.parse(p.images || '[]');
+        }
+
         const opts = categories.map(c =>
             `<option value="${c.id}" ${p && p.categorieId === c.id ? 'selected' : ''}>${esc(c.nom)}</option>`).join('');
 
@@ -270,6 +259,7 @@
                 <form id="prod-form">
                     <label>Nom <input name="nom" value="${esc(p ? p.nom : '')}" required></label>
                     <label>Slug (identifiant URL) <input name="slug" value="${esc(p ? p.slug : '')}" required></label>
+                    <label>Marque <input name="marque" value="${esc(p ? p.marque : '')}"></label>
                     <label>Catégorie <select name="categorieId">${opts}</select></label>
                     <div class="row">
                         <label>Prix (€) <input name="prix" type="number" step="0.01" value="${p ? p.prix : ''}" required></label>
@@ -283,7 +273,20 @@
                         <label class="chk"><input type="checkbox" name="estBestSeller" ${p && p.estBestSeller ? 'checked' : ''}> Best-seller</label>
                     </div>
                     <label>Description <textarea name="description">${esc(p ? p.description : '')}</textarea></label>
-                    <label>Images (une URL par ligne) <textarea name="images">${p && Array.isArray(p.images) ? esc(p.images.join('\n')) : ''}</textarea></label>
+                    <label>Images (une URL ou chemin par ligne)
+                        <textarea name="images" id="images-textarea">${esc(imagesExistantes.join('\n'))}</textarea>
+                    </label>
+                    <div class="upload-zone" style="margin-bottom:.75rem">
+                        <label style="font-size:.85rem;color:var(--muted,#888);display:block;margin-bottom:.3rem">
+                            Ou uploader une image locale (JPG, PNG, WEBP — 5 Mo max)
+                        </label>
+                        <div style="display:flex;gap:.5rem;align-items:center">
+                            <input type="file" id="upload-file" accept="image/jpeg,image/png,image/webp,image/gif"
+                                   style="flex:1;font-size:.85rem">
+                            <button type="button" id="upload-btn" class="btn" style="white-space:nowrap">Uploader</button>
+                        </div>
+                        <div id="upload-status" style="font-size:.8rem;margin-top:.3rem"></div>
+                    </div>
                     <label>Tags (séparés par des virgules) <input name="tags" value="${p && Array.isArray(p.tags) ? esc(p.tags.join(', ')) : ''}"></label>
                     <details>
                         <summary>Avancé — caractéristiques / options (format JSON)</summary>
@@ -297,18 +300,60 @@
                     </div>
                 </form>
             </div>`;
+
         document.body.appendChild(modal);
 
+        // ── Fermeture modale ──────────────────────────────────
         modal.querySelector('#prod-cancel').addEventListener('click', () => modal.remove());
         modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 
+        // ── Upload image locale ───────────────────────────────
+        modal.querySelector('#upload-btn').addEventListener('click', async function () {
+            const fileInput = modal.querySelector('#upload-file');
+            const statusEl  = modal.querySelector('#upload-status');
+            const textarea  = modal.querySelector('#images-textarea');
+
+            if (!fileInput.files.length) {
+                statusEl.style.color = '#e55';
+                statusEl.textContent = 'Sélectionne d\'abord un fichier.';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+
+            statusEl.style.color = 'var(--muted,#888)';
+            statusEl.textContent = 'Upload en cours…';
+
+            try {
+                const token = PearTechAPI.getToken();
+                const rep = await fetch('http://localhost:3000/api/admin/upload', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    body: formData
+                });
+                const data = await rep.json();
+                if (!rep.ok) throw new Error(data.erreur || 'Erreur upload');
+
+                const current = textarea.value.trim();
+                textarea.value = current ? current + '\n' + data.chemin : data.chemin;
+
+                statusEl.style.color = '#2a9d5c';
+                statusEl.textContent = '✓ Image uploadée : ' + data.chemin;
+                fileInput.value = '';
+            } catch (err) {
+                statusEl.style.color = '#e55';
+                statusEl.textContent = 'Erreur : ' + err.message;
+            }
+        });
+
+        // ── Soumission formulaire ─────────────────────────────
         modal.querySelector('#prod-form').addEventListener('submit', async e => {
             e.preventDefault();
             const f = e.target;
             const errEl = modal.querySelector('#prod-err');
             errEl.hidden = true;
 
-            // specs et options sont saisis en JSON : on vérifie qu'ils sont valides
             let specs, options;
             try {
                 specs   = JSON.parse(f.specs.value || '{}');
@@ -322,6 +367,7 @@
             const payload = {
                 nom:           f.nom.value.trim(),
                 slug:          f.slug.value.trim(),
+                marque:        f.marque.value.trim() || null,
                 categorieId:   f.categorieId.value,
                 prix:          parseFloat(f.prix.value),
                 ancienPrix:    f.ancienPrix.value ? parseFloat(f.ancienPrix.value) : null,
@@ -351,7 +397,6 @@
     }
 
     // ── Commandes ─────────────────────────────────────────────
-    // Liste les commandes et permet de changer leur statut
     async function loadCommandes() {
         try {
             const cmds = await PearTechAPI.adminCommandes();
@@ -384,7 +429,6 @@
     }
 
     // ── Utilisateurs ──────────────────────────────────────────
-    // Liste les comptes avec changement de rôle et suppression
     async function loadUtilisateurs() {
         try {
             const us = await PearTechAPI.adminUtilisateurs();
@@ -423,7 +467,6 @@
     }
 
     // ── Messages de contact ───────────────────────────────────
-    // Liste les messages reçus
     async function loadMessages() {
         try {
             const ms = await PearTechAPI.adminMessages();
